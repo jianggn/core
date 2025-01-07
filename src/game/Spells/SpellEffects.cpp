@@ -566,6 +566,10 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 else if (m_spellInfo->Id == 1495 || m_spellInfo->Id == 14269 || m_spellInfo->Id == 14270 || m_spellInfo->Id == 14271)
                     // HUNTER - Mongoose Bite : damage bonus 75% attack power
                     damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f);
+                // Explosive Trap
+                else if (m_spellInfo->Id == 13812 || m_spellInfo->Id == 14314 || m_spellInfo->Id == 14315)
+                    // HUNTER - Explosive Trap : direct damage bonus 12.5% hp
+                    damage = damage + (m_casterUnit->GetMaxHealth() * 0.125f);
                 break;
             }
             case SPELLFAMILY_PALADIN:
@@ -6142,8 +6146,16 @@ void Spell::EffectSummonTotem(SpellEffectIndex effIdx)
 
     if (damage)                                             // if not spell info, DB values used
     {
-        pTotem->SetMaxHealth(damage);
-        pTotem->SetHealth(damage);
+        if (m_spellInfo->Id == 5730 || m_spellInfo->Id == 6390 || m_spellInfo->Id == 6391 || m_spellInfo->Id == 6392 || m_spellInfo->Id == 10427 || m_spellInfo->Id == 10428)
+        {
+            pTotem->SetMaxHealth(m_casterUnit->GetMaxHealth() * 0.125f + damage);
+            pTotem->SetHealth(m_casterUnit->GetMaxHealth() * 0.125f + damage);
+        }
+        else
+        {
+            pTotem->SetMaxHealth(damage);
+            pTotem->SetHealth(damage);
+        }
     }
 
     pTotem->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);

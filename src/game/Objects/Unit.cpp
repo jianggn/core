@@ -5494,7 +5494,8 @@ float Unit::SpellDamageBonusTaken(SpellCaster const* pCaster, SpellEntry const* 
 
     // Taken total percent damage auras
     float takenTotalMod = 1.0f;
-    takenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
+    if (!(spellProto->Id == 1949 || spellProto->Id == 11683 ||spellProto->Id == 11684))
+        takenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
 
     // Taken fixed damage bonus auras
     float takenFlatMod = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());

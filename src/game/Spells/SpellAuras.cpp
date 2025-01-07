@@ -4683,6 +4683,20 @@ float Aura::CalculateDotDamage() const
 #endif
             break;
         }
+        case SPELLFAMILY_HUNTER:
+        {
+            // HUNTER - Explosive Trap : dot damage bonus 1.25% hp
+            if (spellProto->Id == 13812 || spellProto->Id == 14314 || spellProto->Id == 14315)
+            {
+                damage += caster->GetMaxHealth() * 0.0125f;
+            }
+            // HUNTER - Immolation Trap : dot damage bonus 5.5% hp
+            else if (spellProto->Id == 13797 || spellProto->Id == 14298 || spellProto->Id == 14299 || spellProto->Id == 14300 || spellProto->Id == 14301)
+            {
+                damage += caster->GetMaxHealth() * 0.055f;
+            }
+            break;
+        }
         case SPELLFAMILY_ROGUE:
         {
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
