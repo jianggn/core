@@ -568,8 +568,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f);
                 // Explosive Trap
                 else if (m_spellInfo->Id == 13812 || m_spellInfo->Id == 14314 || m_spellInfo->Id == 14315)
-                    // HUNTER - Explosive Trap : direct damage bonus 12.5% hp
-                    damage = damage + (m_casterUnit->GetMaxHealth() * 0.125f);
+                    // HUNTER - Explosive Trap : direct damage bonus 15% hp
+                    damage = damage + (m_casterUnit->GetMaxHealth() * 0.15f);
                 break;
             }
             case SPELLFAMILY_PALADIN:
@@ -6146,10 +6146,10 @@ void Spell::EffectSummonTotem(SpellEffectIndex effIdx)
 
     if (damage)                                             // if not spell info, DB values used
     {
-        if (m_spellInfo->Id == 5730 || m_spellInfo->Id == 6390 || m_spellInfo->Id == 6391 || m_spellInfo->Id == 6392 || m_spellInfo->Id == 10427 || m_spellInfo->Id == 10428)
+        if (m_casterUnit->IsPlayer() && (m_spellInfo->Id == 5730 || m_spellInfo->Id == 6390 || m_spellInfo->Id == 6391 || m_spellInfo->Id == 6392 || m_spellInfo->Id == 10427 || m_spellInfo->Id == 10428))
         {
-            pTotem->SetMaxHealth(m_casterUnit->GetMaxHealth() * 0.125f + damage);
-            pTotem->SetHealth(m_casterUnit->GetMaxHealth() * 0.125f + damage);
+            pTotem->SetMaxHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
+            pTotem->SetHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
         }
         else
         {
