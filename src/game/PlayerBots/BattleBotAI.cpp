@@ -1464,7 +1464,7 @@ void BattleBotAI::UpdateInCombatAI_Paladin()
     }
 
     if (m_spells.paladin.pQuZhu &&
-        (me->HasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL) || me->HasAuraType(SPELL_AURA_MOD_SILENCE)) &&
+        (me->HasUnitState(UNIT_STATE_CAN_NOT_REACT_OR_LOST_CONTROL) || me->HasAuraType(SPELL_AURA_MOD_SILENCE)) &&
         !me->HasAura(AURA_WARSONG_FLAG) &&
         !me->HasAura(34047) &&
         CanTryToCastSpell(me, m_spells.paladin.pQuZhu))
