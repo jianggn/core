@@ -456,6 +456,8 @@ void WorldSession::HandlePetUnlearnOpcode(WorldPacket& recvPacket)
     }
 
     uint32 cost = pet->GetResetTalentsCost();
+    if (GetPlayer()->HasAura(34316) || GetPlayer()->HasAura(34317))
+        cost = 0;
 
     if (GetPlayer()->GetMoney() < cost)
     {
@@ -470,7 +472,18 @@ void WorldSession::HandlePetUnlearnOpcode(WorldPacket& recvPacket)
         pet->unlearnSpell(spellId, false);
     }
 
-    pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
+    if (GetPlayer()->HasAura(34316))
+    {
+        pet->SetTP(pet->GetLevel() * pet->GetLoyaltyLevel());
+    }
+    else if (GetPlayer()->HasAura(34317))
+    {
+        pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() + 1));
+    }
+    else
+    {
+        pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
+    }
 
     for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
         if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
