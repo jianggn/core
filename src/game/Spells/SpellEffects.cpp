@@ -4222,45 +4222,47 @@ void Spell::EffectSummonPet(SpellEffectIndex effIdx)
             uint8 type = fields[0].GetUInt8();
             bool aura_34316 = m_casterUnit->HasAura(34316);
             bool aura_34317 = m_casterUnit->HasAura(34317);
+            Pet* pet = m_casterUnit->GetPet();
+            CharmInfo* charmInfo = pet->GetCharmInfo();
             if ((type == 1 || type == 2) && !aura_34316 && !aura_34317)
             {
-                for (PetSpellMap::iterator itr = m_casterUnit->GetPet()->m_petSpells.begin(); itr != m_casterUnit->GetPet()->m_petSpells.end();)
+                for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
                 {
                     uint32 spellId = itr->first;
                     ++itr;
-                    m_casterUnit->GetPet()->unlearnSpell(spellId, false);
+                    pet->unlearnSpell(spellId, false);
                 }
 
-                m_casterUnit->GetPet()->SetTP(m_casterUnit->GetPet()->GetLevel() * (m_casterUnit->GetPet()->GetLoyaltyLevel() - 1));
-                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", m_casterUnit->GetPet()->GetCharmInfo()->GetPetNumber(), m_casterUnit->GetGUIDLow(), 0);
+                pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
+                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 0);
 
                 for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
-                    if (UnitActionBarEntry const* ab = m_casterUnit->GetPet()->GetCharmInfo()->GetActionBarEntry(i))
+                    if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
                         if (ab->GetAction() && ab->IsActionBarForSpell())
-                            m_casterUnit->GetPet()->GetCharmInfo()->SetActionBar(i, 0, ACT_DISABLED);
+                            charmInfo->SetActionBar(i, 0, ACT_DISABLED);
 
-                m_casterUnit->GetPet()->LearnPetPassives();
+                pet->LearnPetPassives();
 
                 ToPlayer(m_casterUnit)->PetSpellInitialize();
             }
             else if (type == 2 && aura_34316 && !aura_34317)
             {
-                for (PetSpellMap::iterator itr = m_casterUnit->GetPet()->m_petSpells.begin(); itr != m_casterUnit->GetPet()->m_petSpells.end();)
+                for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
                 {
                     uint32 spellId = itr->first;
                     ++itr;
-                    m_casterUnit->GetPet()->unlearnSpell(spellId, false);
+                    pet->unlearnSpell(spellId, false);
                 }
 
-                m_casterUnit->GetPet()->SetTP(m_casterUnit->GetPet()->GetLevel() * m_casterUnit->GetPet()->GetLoyaltyLevel());
-                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", m_casterUnit->GetPet()->GetCharmInfo()->GetPetNumber(), m_casterUnit->GetGUIDLow(), 1);
+                pet->SetTP(pet->GetLevel() * pet->GetLoyaltyLevel());
+                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 1);
 
                 for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
-                    if (UnitActionBarEntry const* ab = m_casterUnit->GetPet()->GetCharmInfo()->GetActionBarEntry(i))
+                    if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
                         if (ab->GetAction() && ab->IsActionBarForSpell())
-                            m_casterUnit->GetPet()->GetCharmInfo()->SetActionBar(i, 0, ACT_DISABLED);
+                            charmInfo->SetActionBar(i, 0, ACT_DISABLED);
 
-                m_casterUnit->GetPet()->LearnPetPassives();
+                pet->LearnPetPassives();
 
                 ToPlayer(m_casterUnit)->PetSpellInitialize();
             }
