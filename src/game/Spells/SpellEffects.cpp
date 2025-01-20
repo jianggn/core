@@ -434,7 +434,28 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             }
 
             case SPELLFAMILY_MAGE:
+            {
+                if (!m_casterUnit)
+                    break;
+                // Multi Cast
+                if (m_casterUnit->HasAura(34318) && m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES, CF_MAGE_FIREBALL, CF_MAGE_FROSTBOLT>())
+                {
+                    uint32 randomchance = urand(0, 100);
+                    if (randomchance >= 95)
+                    {
+                        damage *= 4;
+                    }
+                    else if (randomchance >= 85 && randomchance < 95)
+                    {
+                        damage *= 3;
+                    }
+                    else if (randomchance >= 65 && randomchance < 85)
+                    {
+                        damage *= 2;
+                    }
+                }
                 break;
+            }
             case SPELLFAMILY_WARRIOR:
             {
                 if (!m_casterUnit)
