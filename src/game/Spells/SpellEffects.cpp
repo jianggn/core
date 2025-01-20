@@ -4215,56 +4215,58 @@ void Spell::EffectSummonPet(SpellEffectIndex effIdx)
 
     if (m_spellInfo->Id == 883 && m_casterUnit->IsPlayer())
     {
-        std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT type FROM `hunter_pet_train_points` WHERE `pet_guid`='%u' and `owner_guid`='%u'", m_casterUnit->GetPet()->GetCharmInfo()->GetPetNumber(), m_casterUnit->GetGUIDLow());
-        if (result)
+        if (Pet* pet = m_casterUnit->GetPet())
         {
-            Field* fields = result->Fetch();
-            uint8 type = fields[0].GetUInt8();
-            bool aura_34316 = m_casterUnit->HasAura(34316);
-            bool aura_34317 = m_casterUnit->HasAura(34317);
-            Pet* pet = m_casterUnit->GetPet();
             CharmInfo* charmInfo = pet->GetCharmInfo();
-            if ((type == 1 || type == 2) && !aura_34316 && !aura_34317)
+            std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT type FROM `hunter_pet_train_points` WHERE `pet_guid`='%u' and `owner_guid`='%u'", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow());
+            if (result)
             {
-                for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
+                Field* fields = result->Fetch();
+                uint8 type = fields[0].GetUInt8();
+                bool aura_34316 = m_casterUnit->HasAura(34316);
+                bool aura_34317 = m_casterUnit->HasAura(34317);
+                if ((type == 1 || type == 2) && !aura_34316 && !aura_34317)
                 {
-                    uint32 spellId = itr->first;
-                    ++itr;
-                    pet->unlearnSpell(spellId, false);
+                    for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
+                    {
+                        uint32 spellId = itr->first;
+                        ++itr;
+                        pet->unlearnSpell(spellId, false);
+                    }
+
+                    pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
+                    CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 0);
+
+                    for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
+                        if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
+                            if (ab->GetAction() && ab->IsActionBarForSpell())
+                                charmInfo->SetActionBar(i, 0, ACT_DISABLED);
+
+                    pet->LearnPetPassives();
+
+                    ToPlayer(m_casterUnit)->PetSpellInitialize();
                 }
-
-                pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
-                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 0);
-
-                for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
-                    if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
-                        if (ab->GetAction() && ab->IsActionBarForSpell())
-                            charmInfo->SetActionBar(i, 0, ACT_DISABLED);
-
-                pet->LearnPetPassives();
-
-                ToPlayer(m_casterUnit)->PetSpellInitialize();
-            }
-            else if (type == 2 && aura_34316 && !aura_34317)
-            {
-                for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
+                else if (type == 2 && aura_34316 && !aura_34317)
                 {
-                    uint32 spellId = itr->first;
-                    ++itr;
-                    pet->unlearnSpell(spellId, false);
+                    for (PetSpellMap::iterator itr = pet->m_petSpells.begin(); itr != pet->m_petSpells.end();)
+                    {
+                        uint32 spellId = itr->first;
+                        ++itr;
+                        pet->unlearnSpell(spellId, false);
+                    }
+
+                    pet->SetTP(pet->GetLevel() * pet->GetLoyaltyLevel());
+                    CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 1);
+
+                    for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
+                        if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
+                            if (ab->GetAction() && ab->IsActionBarForSpell())
+                                charmInfo->SetActionBar(i, 0, ACT_DISABLED);
+
+                    pet->LearnPetPassives();
+
+                    ToPlayer(m_casterUnit)->PetSpellInitialize();
                 }
-
-                pet->SetTP(pet->GetLevel() * pet->GetLoyaltyLevel());
-                CharacterDatabase.PExecute("replace into `hunter_pet_train_points` (`pet_guid`, `owner_guid`, `type`) VALUES (%u, %u, %u)", charmInfo->GetPetNumber(), m_casterUnit->GetGUIDLow(), 1);
-
-                for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
-                    if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
-                        if (ab->GetAction() && ab->IsActionBarForSpell())
-                            charmInfo->SetActionBar(i, 0, ACT_DISABLED);
-
-                pet->LearnPetPassives();
-
-                ToPlayer(m_casterUnit)->PetSpellInitialize();
             }
         }
     }
