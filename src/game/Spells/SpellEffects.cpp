@@ -435,23 +435,30 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
 
             case SPELLFAMILY_MAGE:
             {
-                if (!m_casterUnit)
-                    break;
                 // Multi Cast
-                if (m_casterUnit->HasAura(34318) && m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES, CF_MAGE_FIREBALL, CF_MAGE_FROSTBOLT>())
+                if (Player* pPlayer = ToPlayer(m_casterUnit))
                 {
-                    uint32 randomchance = urand(0, 100);
-                    if (randomchance >= 95)
+                    if (pPlayer->HasAura(34318) && m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES, CF_MAGE_FIREBALL, CF_MAGE_FROSTBOLT>())
                     {
-                        damage *= 4;
-                    }
-                    else if (randomchance >= 85 && randomchance < 95)
-                    {
-                        damage *= 3;
-                    }
-                    else if (randomchance >= 65 && randomchance < 85)
-                    {
-                        damage *= 2;
+                        uint32 randomchance = urand(1, 100);
+                        // 3% chances deal 4 times damage
+                        if (randomchance >= 98)
+                        {
+                            damage *= 4;
+                            pPlayer->GetSession()->SendNotification("Multi Cast X4!");
+                        }
+                        // 6% chances deal 3 times damage
+                        else if (randomchance >= 92 && randomchance < 98)
+                        {
+                            damage *= 3;
+                            pPlayer->GetSession()->SendNotification("Multi Cast X3!");
+                        }
+                        // 12% chances deal 2 times damage
+                        else if (randomchance >= 80 && randomchance < 92)
+                        {
+                            damage *= 2;
+                            pPlayer->GetSession()->SendNotification("Multi Cast X2!");
+                        }
                     }
                 }
                 break;
@@ -589,8 +596,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.75f);
                 // Explosive Trap
                 else if (m_spellInfo->Id == 13812 || m_spellInfo->Id == 14314 || m_spellInfo->Id == 14315)
-                    // HUNTER - Explosive Trap : direct damage bonus 15% hp
-                    damage = damage + (m_casterUnit->GetMaxHealth() * 0.15f);
+                    // HUNTER - Explosive Trap : direct damage bonus 15% hp and mana
+                    damage = damage + ((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f);
                 break;
             }
             case SPELLFAMILY_PALADIN:
