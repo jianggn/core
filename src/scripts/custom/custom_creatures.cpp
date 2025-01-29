@@ -69,6 +69,9 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
             bool has_26038 = player->HasItemCount(26038, 1, true);
             bool has_26044_1 = player->HasItemCount(26044, 1, true);
             bool has_26044_2 = player->HasItemCount(26044, 2, true);
+            bool has_26045 = player->HasItemCount(26045, 1, true);
+            bool has_26046 = player->HasItemCount(26046, 1, true);
+            bool has_26047 = player->HasItemCount(26047, 1, true);
             switch (player->GetClass())
             {
                 // WARRIOR
@@ -622,14 +625,37 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                 // PRIEST
                 case 5:
                     // 有0件
-                    if (!has_26029)
+                    if (!has_26029 && !has_26046)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26029);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26046);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    // 有1件
+                    else if (!has_26029 && has_26046)
                     {
                         player->AddItem(26029);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
-                    // 有1件
-                    else if (has_26029)
+                    else if (has_26029 && !has_26046)
+                    {
+                        player->AddItem(26046);
+                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                        player->CLOSE_GOSSIP_MENU();
+                    }
+                    // 有2件
+                    else if (has_26029 && has_26046)
                     {
                         player->GetSession()->SendNotification("已集齐职业橙装，奖励1000金币。");
                         player->ModifyMoney(1000 * GOLD);
@@ -741,14 +767,37 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                 // MAGE
                 case 8:
                     // 有0件
-                    if (!has_26029)
+                    if (!has_26029 && !has_26045)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26029);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26045);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    // 有1件
+                    else if (!has_26029 && has_26045)
                     {
                         player->AddItem(26029);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
-                    // 有1件
-                    else if (has_26029)
+                    else if (has_26029 && !has_26045)
+                    {
+                        player->AddItem(26045);
+                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                        player->CLOSE_GOSSIP_MENU();
+                    }
+                    // 有2件
+                    else if (has_26029 && has_26045)
                     {
                         player->GetSession()->SendNotification("已集齐职业橙装，奖励1000金币。");
                         player->ModifyMoney(1000 * GOLD);
@@ -759,14 +808,37 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                 // WARLOCK
                 case 9:
                     // 有0件
-                    if (!has_26029)
+                    if (!has_26029 && !has_26047)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26029);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26047);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    // 有1件
+                    else if (!has_26029 && has_26047)
                     {
                         player->AddItem(26029);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
-                    // 有1件
-                    else if (has_26029)
+                    else if (has_26029 && !has_26047)
+                    {
+                        player->AddItem(26047);
+                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                        player->CLOSE_GOSSIP_MENU();
+                    }
+                    // 有2件
+                    else if (has_26029 && has_26047)
                     {
                         player->GetSession()->SendNotification("已集齐职业橙装，奖励1000金币。");
                         player->ModifyMoney(1000 * GOLD);
