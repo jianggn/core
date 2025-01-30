@@ -2003,6 +2003,9 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
 
     // Get Data Needed for Diminishing Returns, some effects may have multiple auras, so this must be done on spell hit, not aura add
     m_diminishGroup = m_spellInfo->GetDiminishingReturnsGroup(m_triggeredByAuraSpell);
+    // Fingerslayer Blade - item 26044
+    if (m_spellInfo->IsFitToFamilyMask<CF_MAGE_POLYMORPH>() && pRealUnitCaster->HasAura(34319))
+        m_diminishGroup = DIMINISHING_NONE;
     m_diminishLevel = unit->GetDiminishing(m_diminishGroup);
 
     // Apply additional spell effects to target
