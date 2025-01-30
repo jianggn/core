@@ -6266,6 +6266,13 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             }
 
             uint32 pdamage = ditheru(std::max(fdamage, 0.f)); // prevent negative damage due to sickness
+            // Scarlet Rot - item 26047
+            // Warlock Corruption/Immolate/Curse Of Agony Can Crit
+            if (pdamage && spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && spellProto->IsFitToFamilyMask<CF_WARLOCK_CORRUPTION, CF_WARLOCK_IMMOLATE, CF_WARLOCK_CURSE_OF_AGONY>() && pCaster->HasAura(34321))
+            {
+                if (pCaster->IsSpellCrit(target, spellProto, GetSchoolMask(spellProto->School), BASE_ATTACK))
+                    pdamage = pCaster->SpellCriticalDamageBonus(spellProto, pdamage, target, nullptr);
+            }
             uint32 const originalDamage = pdamage;
 
             target->CalculateDamageAbsorbAndResist(pCaster, spellProto->GetSpellSchoolMask(), DOT, pdamage, &absorb, &resist, spellProto);
