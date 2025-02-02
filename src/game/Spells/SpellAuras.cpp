@@ -6266,13 +6266,19 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             }
 
             uint32 pdamage = ditheru(std::max(fdamage, 0.f)); // prevent negative damage due to sickness
+            // Tentacle Sword
+            if (pCaster->GetEntry() == 200017 && spellProto->Id == 18807)
+            {
+                if (Unit* pOwner = pCaster->GetOwner())
+                    pdamage = ditheru(pdamage + (pOwner->GetArmor() * 0.015f) + (pOwner->GetMaxHealth() * 0.0225f));
+            }
             // Scarlet Rot - item 26047
             // Warlock Corruption/Immolate/Curse Of Agony Can Crit
             // Galaxy - item 26046
             // Priest Shadow Word Pain/Mind Flay Can Crit
             // Vizjerah's Summoning - set 561
             // Druid Rake/Rip Can Crit
-            if ((spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && spellProto->IsFitToFamilyMask<CF_WARLOCK_CORRUPTION, CF_WARLOCK_IMMOLATE, CF_WARLOCK_CURSE_OF_AGONY>() && pCaster->HasAura(34321)) || (spellProto->SpellFamilyName == SPELLFAMILY_PRIEST && spellProto->IsFitToFamilyMask<CF_PRIEST_SHADOW_WORD_PAIN, CF_PRIEST_MIND_FLAY>() && pCaster->HasAura(34320)) || (spellProto->SpellFamilyName == SPELLFAMILY_DRUID && spellProto->IsFitToFamilyMask<CF_DRUID_RAKE_CLAW, CF_DRUID_RIP_BITE>() && pCaster->HasAura(34184)))
+            if ((pCaster->HasAura(34321) && spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && spellProto->IsFitToFamilyMask<CF_WARLOCK_CORRUPTION, CF_WARLOCK_IMMOLATE, CF_WARLOCK_CURSE_OF_AGONY>()) || (pCaster->HasAura(34320) && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST && spellProto->IsFitToFamilyMask<CF_PRIEST_SHADOW_WORD_PAIN, CF_PRIEST_MIND_FLAY>()) || (pCaster->HasAura(34184) && spellProto->SpellFamilyName == SPELLFAMILY_DRUID && spellProto->IsFitToFamilyMask<CF_DRUID_RAKE_CLAW, CF_DRUID_RIP_BITE>()))
             {
                 if (pCaster->IsSpellCrit(target, spellProto, GetSchoolMask(spellProto->School), BASE_ATTACK))
                     pdamage = pCaster->SpellCriticalDamageBonus(spellProto, pdamage, target, nullptr);
