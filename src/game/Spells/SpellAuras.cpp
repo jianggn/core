@@ -6270,7 +6270,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             if (pCaster->GetEntry() == 200017 && spellProto->Id == 18807)
             {
                 if (Unit* pOwner = pCaster->GetOwner())
-                    pdamage = ditheru(pdamage + (pOwner->GetArmor() * 0.006f) + (pOwner->GetMaxHealth() * 0.009f));
+                    pdamage = ditheru(pdamage + (pOwner->GetArmor() * 0.01f) + (pOwner->GetMaxHealth() * 0.01f));
             }
             // Scarlet Rot - item 26047
             // Warlock Corruption/Immolate/Curse Of Agony Can Crit
