@@ -4625,6 +4625,9 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, effIdx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
+    // Hunter - Split Shot - 34322
+    if (m_spellInfo->Id == 75 && m_casterUnit->HasAura(34322))
+        bonus *= 0.75f;
     // prevent negative damage
     m_damage += bonus > 0.f ? bonus : 0.f;
 }
