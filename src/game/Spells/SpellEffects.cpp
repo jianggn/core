@@ -4627,7 +4627,7 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
 
     // Hunter - Split Shot - 34322
     if (m_spellInfo->Id == 75 && m_casterUnit->HasAura(34322))
-        bonus *= 0.75f;
+        bonus *= 0.7f;
     // prevent negative damage
     m_damage += bonus > 0.f ? bonus : 0.f;
 }
