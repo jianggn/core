@@ -6278,7 +6278,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             // Priest Shadow Word Pain/Mind Flay Can Crit
             // Vizjerah's Summoning - set 561
             // Druid Rake/Rip Can Crit
-            if ((pCaster->HasAura(34321) && spellProto->SpellFamilyName == SPELLFAMILY_WARLOCK && spellProto->IsFitToFamilyMask<CF_WARLOCK_CORRUPTION, CF_WARLOCK_IMMOLATE, CF_WARLOCK_CURSE_OF_AGONY>()) || (pCaster->HasAura(34320) && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST && spellProto->IsFitToFamilyMask<CF_PRIEST_SHADOW_WORD_PAIN, CF_PRIEST_MIND_FLAY>()) || (pCaster->HasAura(34184) && spellProto->SpellFamilyName == SPELLFAMILY_DRUID && spellProto->IsFitToFamilyMask<CF_DRUID_RAKE_CLAW, CF_DRUID_RIP_BITE>()))
+            if ((pCaster->HasAura(34321) && spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_CORRUPTION, CF_WARLOCK_IMMOLATE, CF_WARLOCK_CURSE_OF_AGONY>()) || (pCaster->HasAura(34320) && spellProto->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_SHADOW_WORD_PAIN, CF_PRIEST_MIND_FLAY>()) || (pCaster->HasAura(34184) && spellProto->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW, CF_DRUID_RIP_BITE>()))
             {
                 if (pCaster->IsSpellCrit(target, spellProto, GetSchoolMask(spellProto->School), BASE_ATTACK))
                     pdamage = pCaster->SpellCriticalDamageBonus(spellProto, pdamage, target, nullptr);
@@ -8571,6 +8571,12 @@ void SpellAuraHolder::CalculateHeartBeat(Unit* caster, Unit* target)
 
     _heartBeatRandValue = 0;
 
+    // Fingerslayer Blade - item 26044
+    if (caster)
+    {
+        if (m_spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && caster->HasAura(34319))
+            return;
+    }
     // Permanent effects and positive spells don't have resist heartbeats.
     // The aura is checked for being positive in Aura::Aura rather than here since the last-added Aura is not yet in m_auras
     if (!m_permanent && m_maxDuration > 10000)
