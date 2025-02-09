@@ -678,7 +678,7 @@ void AddSC_stratholme()
 
     newscript = new Script;
     newscript->Name = "go_stratholme_postbox";
-    newscript->GOOpen = &GOOpen_go_stratholme_postbox;
+    newscript->pGOOpen = &GOOpen_go_stratholme_postbox;
     newscript->RegisterSelf();
 
     newscript = new Script;

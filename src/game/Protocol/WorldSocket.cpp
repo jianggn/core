@@ -34,14 +34,14 @@
 
 template class MangosSocket<WorldSession, WorldSocket, AuthCrypt>;
 
-int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
+int WorldSocket::ProcessIncoming(WorldPacket* newPct)
 {
-    MANGOS_ASSERT(new_pct);
+    MANGOS_ASSERT(newPct);
 
     // manage memory ;)
-    std::unique_ptr<WorldPacket> aptr(new_pct);
+    std::unique_ptr<WorldPacket> aptr(newPct);
 
-    const ACE_UINT16 opcode = new_pct->GetOpcode();
+    const ACE_UINT16 opcode = newPct->GetOpcode();
 
     if (opcode >= NUM_MSG_TYPES)
     {
@@ -52,31 +52,31 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     if (closing_)
         return -1;
 
-    new_pct->FillPacketTime(WorldTimer::getMSTime());
+    newPct->FillPacketTime(WorldTimer::getMSTime());
 
     try
     {
         switch (opcode)
         {
             case CMSG_PING:
-                return HandlePing(*new_pct);
+                return HandlePing(*newPct);
             case CMSG_AUTH_SESSION:
-                if (m_Session)
+                if (m_session)
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSocket::ProcessIncoming: Player send CMSG_AUTH_SESSION again");
                     return -1;
                 }
 
-                return HandleAuthSession(*new_pct);
+                return HandleAuthSession(*newPct);
             default:
             {
-                GuardType lock(m_SessionLock);
+                GuardType lock(m_sessionLock);
 
-                if (m_Session != nullptr)
+                if (m_session != nullptr)
                 {
                     // WARNINIG here we call it with locks held.
                     // Its possible to cause deadlock if QueuePacket calls back
-                    m_Session->QueuePacket(std::move(aptr));
+                    m_session->QueuePacket(std::move(aptr));
                     return 0;
                 }
                 else
@@ -90,17 +90,17 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     catch (ByteBufferException &)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet (opcode: %u) from client %s, accountid=%i.",
-                      opcode, GetRemoteAddress().c_str(), m_Session ? m_Session->GetAccountId() : -1);
+                      opcode, GetRemoteAddress().c_str(), m_session ? m_session->GetAccountId() : -1);
         if (sLog.HasLogLevelOrHigher(LOG_LVL_DEBUG))
         {
             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Dumping error-causing packet:");
-            new_pct->hexlike();
+            newPct->hexlike();
         }
 
         if (sWorld.getConfig(CONFIG_BOOL_KICK_PLAYER_ON_BAD_PACKET))
         {
             sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Disconnecting session [account id %i / address %s] for badly formatted packet.",
-                       m_Session ? m_Session->GetAccountId() : -1, GetRemoteAddress().c_str());
+                       m_session ? m_session->GetAccountId() : -1, GetRemoteAddress().c_str());
 
             return -1;
         }
@@ -258,7 +258,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     Crypto::Hash::SHA1::Generator sha;
 
     uint32 t = 0;
-    uint32 seed = m_Seed;
+    uint32 seed = m_seed;
 
     sha.UpdateData(account);
     sha.UpdateData((uint8 *) &t, 4);
@@ -313,23 +313,23 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale), -1);
+    ACE_NEW_RETURN(m_session, WorldSession(id, this, AccountTypes(security), mutetime, locale), -1);
 
-    m_Crypt.SetKey(K.AsByteArray());
-    m_Crypt.Init();
+    m_crypt.SetKey(K.AsByteArray());
+    m_crypt.Init();
 
-    m_Session->SetUsername(account);
-    m_Session->SetGameBuild(clientBuild);
-    m_Session->SetAccountFlags(accFlags);
-    m_Session->SetOS(clientOs);
-    m_Session->SetPlatform(clientPlatform);
-    m_Session->SetVerifiedEmail(verifiedEmail);
-    m_Session->SetSessionKey(K);
-    m_Session->LoadGlobalAccountData();
-    m_Session->LoadTutorialsData();
+    m_session->SetUsername(account);
+    m_session->SetGameBuild(clientBuild);
+    m_session->SetAccountFlags(accFlags);
+    m_session->SetOS(clientOs);
+    m_session->SetPlatform(clientPlatform);
+    m_session->SetVerifiedEmail(verifiedEmail);
+    m_session->SetSessionKey(K);
+    m_session->LoadGlobalAccountData();
+    m_session->LoadTutorialsData();
     sAccountMgr.UpdateAccountData(id, account, email, verifiedEmail, AccountTypes(security));
 
-    sWorld.AddSession(m_Session);
+    sWorld.AddSession(m_session);
 
     // Create and send the Addon packet
     if (sAddOnHandler.BuildAddonPacket(&recvPacket, &addonPacket))
@@ -351,26 +351,26 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
     recvPacket >> latency;
 #endif
 
-    if (m_LastPingTime == ACE_Time_Value::zero)
-        m_LastPingTime = ACE_OS::gettimeofday();  // for 1st ping
+    if (m_lastPingTime == ACE_Time_Value::zero)
+        m_lastPingTime = ACE_OS::gettimeofday();  // for 1st ping
     else
     {
-        ACE_Time_Value cur_time = ACE_OS::gettimeofday();
-        ACE_Time_Value diff_time(cur_time);
-        diff_time -= m_LastPingTime;
-        m_LastPingTime = cur_time;
+        ACE_Time_Value curTime = ACE_OS::gettimeofday();
+        ACE_Time_Value diffTime(curTime);
+        diffTime -= m_lastPingTime;
+        m_lastPingTime = curTime;
 
-        if (diff_time < ACE_Time_Value(27))
+        if (diffTime < ACE_Time_Value(27))
         {
-            ++m_OverSpeedPings;
+            ++m_overSpeedPings;
 
             uint32 max_count = sWorld.getConfig(CONFIG_UINT32_MAX_OVERSPEED_PINGS);
 
-            if (max_count && m_OverSpeedPings > max_count)
+            if (max_count && m_overSpeedPings > max_count)
             {
-                GuardType lock(m_SessionLock);
+                GuardType lock(m_sessionLock);
 
-                if (m_Session && m_Session->GetSecurity() == SEC_PLAYER)
+                if (m_session && m_session->GetSecurity() == SEC_PLAYER)
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSocket::HandlePing: Player kicked for "
                                   "overspeeded pings address = %s",
@@ -381,19 +381,19 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
             }
         }
         else
-            m_OverSpeedPings = 0;
+            m_overSpeedPings = 0;
     }
 
     // critical section
     {
-        GuardType lock(m_SessionLock);
+        GuardType lock(m_sessionLock);
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-        if (m_Session)
-            m_Session->SetLatency(latency);
+        if (m_session)
+            m_session->SetLatency(latency);
         else
 #else
-        if (!m_Session)
+        if (!m_session)
 #endif
         {
             sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldSocket::HandlePing: peer sent CMSG_PING, "
@@ -418,7 +418,7 @@ int WorldSocket::SendStartupPacket()
 {
     // Send startup packet.
     WorldPacket packet(SMSG_AUTH_CHALLENGE, 4);
-    packet << m_Seed;
+    packet << m_seed;
 
     return SendPacket(packet);
 }

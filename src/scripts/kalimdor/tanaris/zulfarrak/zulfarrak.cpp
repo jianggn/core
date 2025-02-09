@@ -555,7 +555,7 @@ void AddSC_go_shallow_grave()
     Script* pNewScript;
     pNewScript = new Script;
     pNewScript->Name = "go_shallow_grave";
-    pNewScript->GOOpen = &OnGossipHello_go_shallow_grave;
+    pNewScript->pGOOpen = &OnGossipHello_go_shallow_grave;
     pNewScript->RegisterSelf();
 }
 /*######

@@ -2009,10 +2009,10 @@ bool ScriptMgr::OnGameObjectOpen(Player* pPlayer, GameObject* pGameObject)
 {
     Script* pTempScript = m_scripts[pGameObject->GetGOInfo()->ScriptId];
 
-    if (!pTempScript || !pTempScript->GOOpen)
+    if (!pTempScript || !pTempScript->pGOOpen)
         return false;
 
-    return pTempScript->GOOpen(pPlayer, pGameObject);
+    return pTempScript->pGOOpen(pPlayer, pGameObject);
 }
 
 bool ScriptMgr::OnGameObjectUse(Player* pPlayer, GameObject* pGameObject)
