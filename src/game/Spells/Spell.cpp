@@ -5942,8 +5942,10 @@ SpellCastResult Spell::CheckCast(bool strict)
         if (strict && m_casterUnit)
         {
             if (m_casterUnit && m_casterUnit->IsInCombat() && m_spellInfo->IsNonCombatSpell())
-                return SPELL_FAILED_AFFECTING_COMBAT;
-
+            {
+                if (!(m_casterUnit->HasAura(34325) && m_spellInfo->IsFitToFamily<SPELLFAMILY_HUNTER, CF_HUNTER_TRAPS>()))
+                    return SPELL_FAILED_AFFECTING_COMBAT;
+            }
             // only check at first call, Stealth auras are already removed at second call
             // for now, ignore triggered spells
             //if (strict)
