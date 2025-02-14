@@ -45,29 +45,29 @@ public:
 
     MirrorTimer(Type type) : m_type(type), m_scale(-1), m_spellId(0), m_status(UNCHANGED), m_active(false), m_frozen(false) {}
 
-    inline bool     IsActive() const { return m_active; }
-    inline bool     IsRegenerating() const { return (m_scale > 0); }
-    inline bool     IsFrozen() const { return (m_frozen && !IsRegenerating()); }
+    bool     IsActive() const { return m_active; }
+    bool     IsRegenerating() const { return (m_scale > 0); }
+    bool     IsFrozen() const { return (m_frozen && !IsRegenerating()); }
 
-    inline Type     GetType() const { return m_type; }
-    inline uint32   GetRemaining() const { return (m_tracker.GetInterval() - m_tracker.GetCurrent()); }
-    inline uint32   GetDuration() const { return m_tracker.GetInterval(); }
-    inline int32    GetScale() const { return m_scale; }
-    inline uint32   GetSpellId() const { return m_spellId; }
+    Type     GetType() const { return m_type; }
+    uint32   GetRemaining() const { return (m_tracker.GetInterval() - m_tracker.GetCurrent()); }
+    uint32   GetDuration() const { return m_tracker.GetInterval(); }
+    int32    GetScale() const { return m_scale; }
+    uint32   GetSpellId() const { return m_spellId; }
 
-    inline Status   FetchStatus();
+    Status   FetchStatus();
 
-    inline void Stop();
+    void Stop();
 
-    inline void Start(uint32 interval, uint32 spellId = 0);
-    inline void Start(uint32 current, uint32 max, uint32 spellId);
+    void Start(uint32 interval, uint32 spellId = 0);
+    void Start(uint32 current, uint32 max, uint32 spellId);
 
-    inline void SetRemaining(uint32 duration);
-    inline void SetDuration(uint32 duration);
+    void SetRemaining(uint32 duration);
+    void SetDuration(uint32 duration);
 
-    inline void SetFrozen(bool state);
+    void SetFrozen(bool state);
 
-    inline void SetScale(int32 scale);
+    void SetScale(int32 scale);
 
     bool Update(uint32 diff);
 
