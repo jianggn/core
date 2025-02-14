@@ -5942,10 +5942,8 @@ SpellCastResult Spell::CheckCast(bool strict)
         if (strict && m_casterUnit)
         {
             if (m_casterUnit && m_casterUnit->IsInCombat() && m_spellInfo->IsNonCombatSpell())
-            {
-                if (!(m_casterUnit->HasAura(34325) && m_spellInfo->IsFitToFamily<SPELLFAMILY_HUNTER, CF_HUNTER_TRAPS>()))
-                    return SPELL_FAILED_AFFECTING_COMBAT;
-            }
+                return SPELL_FAILED_AFFECTING_COMBAT;
+
             // only check at first call, Stealth auras are already removed at second call
             // for now, ignore triggered spells
             //if (strict)
@@ -6017,6 +6015,25 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_TARGET_AURASTATE;
                 break;
             }
+            // Frost Trap
+            case 13809:
+            // Freezing Trap
+            case 1499:
+            case 14310:
+            case 14311:
+            // Explosive Trap
+            case 13813:
+            case 14316:
+            case 14317:
+            // Immolation Trap
+            case 13795:
+            case 14302:
+            case 14303:
+            case 14304:
+            case 14305:
+                if (m_casterUnit->IsInCombat() && !m_casterUnit->HasAura(34325))
+                    return SPELL_FAILED_AFFECTING_COMBAT;
+                break;
         }
 
         // Loatheb Corrupted Mind spell failed
