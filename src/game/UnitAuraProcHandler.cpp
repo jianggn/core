@@ -25,6 +25,7 @@
 #include "Player.h"
 #include "Spell.h"
 #include "SpellAuras.h"
+#include "SpellModifier.h"
 #include "SpellMgr.h"
 #include "Util.h"
 #include "World.h"
