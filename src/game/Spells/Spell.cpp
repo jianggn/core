@@ -45,6 +45,7 @@
 #include "PathFinder.h"
 #include "CharacterDatabaseCache.h"
 #include "ZoneScript.h"
+#include "TradeData.h"
 
 using namespace Spells;
 

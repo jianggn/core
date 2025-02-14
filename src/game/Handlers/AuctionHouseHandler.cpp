@@ -28,6 +28,7 @@
 #include "ObjectGuid.h"
 #include "Player.h"
 #include "AuctionHouseMgr.h"
+#include "TransactionLog.h"
 #include "Mail.h"
 #include "Util.h"
 #include "Chat.h"

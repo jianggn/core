@@ -51,6 +51,7 @@ class SqlResultQueue;
 class QueryResult;
 class World;
 class MovementBroadcaster;
+struct PlayerTransactionData;
 
 World& GetSWorld();
 
@@ -668,27 +669,6 @@ public:
 private:
     uint32 m_accountId;
     WorldPacket m_data;
-};
-
-struct TransactionPart
-{
-    static int const MAX_TRANSACTION_ITEMS = 6;
-    TransactionPart()
-    {
-        memset(this, 0, sizeof(TransactionPart));
-    }
-    uint32 lowGuid;
-    uint32 money;
-    uint32 spell;
-    uint16 itemsEntries[MAX_TRANSACTION_ITEMS];
-    uint8 itemsCount[MAX_TRANSACTION_ITEMS];
-    uint32 itemsGuid[MAX_TRANSACTION_ITEMS];
-};
-
-struct PlayerTransactionData
-{
-    char const* type;
-    TransactionPart parts[2];
 };
 
 // Storage class for commands issued for delayed execution

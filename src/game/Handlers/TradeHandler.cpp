@@ -31,6 +31,8 @@
 #include "SocialMgr.h"
 #include "Language.h"
 #include "Map.h"
+#include "TradeData.h"
+#include "TransactionLog.h"
 
 #include <regex>
 

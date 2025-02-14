@@ -39,6 +39,7 @@
 #include "Chat.h"
 #include "Anticheat.h"
 #include "AccountMgr.h"
+#include "TransactionLog.h"
 #include "Database/DatabaseImpl.h"
 
 void WorldSession::SendMailResult(uint32 mailId, MailResponseType mailAction, MailResponseResult mailError, uint32 equipError, uint32 item_guid, uint32 item_count)

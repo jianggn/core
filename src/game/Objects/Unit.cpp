@@ -34,6 +34,7 @@
 #include "Spell.h"
 #include "Group.h"
 #include "SpellAuras.h"
+#include "SpellModifier.h"
 #include "ObjectAccessor.h"
 #include "CreatureAI.h"
 #include "GameObjectAI.h"

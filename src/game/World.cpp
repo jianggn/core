@@ -34,6 +34,7 @@
 #include "WorldPacket.h"
 #include "Weather.h"
 #include "Player.h"
+#include "TransactionLog.h"
 #include "Group.h"
 #include "AccountMgr.h"
 #include "AuctionHouseMgr.h"

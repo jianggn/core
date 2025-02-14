@@ -5279,7 +5279,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                         return;
 
                     // Guard spellIds map [Pledge of Friendship , Pledge of Adoration]
-                    std::map<uint32, std::vector<uint32>> loveAirSpellsMapForFaction = {
+                    static std::map<uint32, std::vector<uint32>> const loveAirSpellsMapForFaction = {
                             {11, {27242, 27510}},   // Stormwind
                             {85, {27247, 27507}},   // Orgrimmar
                             {57, {27244, 27506}},   // Ironforge
@@ -5332,15 +5332,23 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                         return;
 
                     // Civilian spellIds map [Gift of Friendship , Gift of Adoration]
-                    std::map<uint32, std::vector<uint32>> loveAirSpellsMapForFaction = {
-                            {12, {27525, 27509}},   // Stormwind
-                            {29, {27523, 27505}},   // Orgrimmar orcs
-                            {55, {27520, 27503}},   // Ironforge dwarves
-                            {68, {27529, 27512}},   // Undercity
-                            {80, {27519, 26901}},   // Darnassus
-                            {104, {27524, 27511}},  // Thunderbluff
-                            {126, {27523, 27505}},  // Orgrimmar trolls
-                            {875, {27520, 27503}}   // Ironforge gnomes
+                    static std::map<uint32, std::vector<uint32>> const loveAirSpellsMapForFaction = {
+                        { 12,{ 27525, 27509 } },   // Stormwind
+                        { 29,{ 27523, 27505 } },   // Orgrimmar orcs
+                        { 55,{ 27520, 27503 } },   // Ironforge dwarves
+                        { 57,{ 27520, 27503 } },   // Ironforge dwarves
+                        { 68,{ 27529, 27512 } },   // Undercity
+                        { 80,{ 27519, 26901 } },   // Darnassus
+                        { 83,{ 27523, 27505 } },   // Orgrimmar orcs
+                        { 85,{ 27523, 27505 } },   // Orgrimmar orcs
+                        { 104,{ 27524, 27511 } },  // Thunderbluff
+                        { 105,{ 27524, 27511 } },  // Thunderbluff
+                        { 123,{ 27525, 27509 } },  // Stormwind
+                        { 126,{ 27523, 27505 } },  // Orgrimmar trolls
+                        { 412,{ 27524, 27511 } },  // Thunderbluff
+                        { 875,{ 27520, 27503 } },  // Ironforge gnomes
+                        { 876,{ 27523, 27505 } },  // Orgrimmar trolls
+                        { 1215,{ 27523, 27505 } }  // Orgrimmar orcs
                     };
 
                     auto itr = loveAirSpellsMapForFaction.find(m_caster->GetFactionTemplateId());

@@ -31,6 +31,7 @@
 #include "PlayerAI.h"
 #include "UpdateMask.h"
 #include "Spell.h"
+#include "SpellModifier.h"
 #include "DynamicObject.h"
 #include "Group.h"
 #include "ObjectAccessor.h"

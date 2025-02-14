@@ -25,6 +25,8 @@
 #include "SpellAuraDefines.h"
 #include "DBCEnums.h"
 #include "ObjectGuid.h"
+#include "SharedDefines.h"
+#include "UnitDefines.h"
 
 /**
  * Used to modify what an Aura does to a player/npc.
@@ -74,6 +76,10 @@ struct HeartBeatData
 };
 
 class Unit;
+class Item;
+class WorldObject;
+class DynamicObject;
+class SpellCaster;
 class SpellEntry;
 struct SpellModifier;
 struct ProcTriggerSpell;
