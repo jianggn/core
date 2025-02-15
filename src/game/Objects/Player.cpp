@@ -813,7 +813,7 @@ void Player::SetWaterBreathingIntervalMultiplier(float multiplier)
 
     m_environmentBreathingMultiplier = multiplier;
 
-    if (const uint32 interval = GetWaterBreathingInterval())
+    if (uint32 const interval = GetWaterBreathingInterval())
     {
         m_mirrorTimers[MirrorTimer::BREATH].SetDuration(interval);
         m_mirrorTimers[MirrorTimer::BREATH].SetScale(IsUnderwater() ? -1 : 10);
@@ -937,8 +937,8 @@ void Player::UpdateMirrorTimers(uint32 diff, bool send/* = true*/)
 {
     for (auto& timer : m_mirrorTimers)
     {
-        const MirrorTimer::Type type = timer.GetType();
-        const bool active = timer.IsActive();
+        MirrorTimer::Type const type = timer.GetType();
+        bool const active = timer.IsActive();
 
         if (active || CheckMirrorTimerActivation(type))
         {

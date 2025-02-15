@@ -71,8 +71,8 @@ enum
  * https://www.youtube.com/watch?v=REmX3uRTFkQ. The video is slightly sped up, so time was counted by the ticking of buffs on the player.
  * More confirmation from classic sniffs https://i.imgur.com/YIA8veT.png
  */
-const uint32_t SUBMERGE_ANIMATION_INVIS    = 2000;
-const uint32_t SWEEP_TIMER                 = 20500;
+uint32 const SUBMERGE_ANIMATION_INVIS    = 2000;
+uint32 const SWEEP_TIMER                 = 20500;
 
 struct boss_ouroAI : public ScriptedAI
 {

@@ -116,8 +116,8 @@ bool MirrorTimer::Update(uint32 diff)
         if (!m_tracker.Passed())
             return true;
 
-        const uint32 interval = m_tracker.GetInterval();
-        const uint32 overflow = (m_tracker.GetCurrent() - interval);
+        uint32 const interval = m_tracker.GetInterval();
+        uint32 const overflow = (m_tracker.GetCurrent() - interval);
 
         m_tracker.SetCurrent(interval);
 
@@ -135,7 +135,7 @@ bool MirrorTimer::Update(uint32 diff)
     }
     else                // Timer regenerating
     {
-        const uint32 current = m_tracker.GetCurrent();
+        uint32 const current = m_tracker.GetCurrent();
 
         if (current > diff)
         {

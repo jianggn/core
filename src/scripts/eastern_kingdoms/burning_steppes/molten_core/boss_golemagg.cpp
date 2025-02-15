@@ -169,7 +169,7 @@ struct boss_golemaggAI : public ScriptedAI
 
     void UpdateEvents()
     {
-        while (const uint32 eventId = m_CombatEvents.ExecuteEvent())
+        while (uint32 const eventId = m_CombatEvents.ExecuteEvent())
         {
             switch (eventId)
             {
@@ -306,7 +306,7 @@ struct mob_core_ragerAI : public ScriptedAI
 
     void UpdateEvents()
     {
-        while (const uint32 eventId = m_CombatEvents.ExecuteEvent())
+        while (uint32 const eventId = m_CombatEvents.ExecuteEvent())
         {
             switch (eventId)
             {

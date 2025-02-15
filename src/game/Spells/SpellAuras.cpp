@@ -419,14 +419,14 @@ AreaAura::AreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *cu
     {
         case SPELL_EFFECT_APPLY_AREA_AURA_PARTY:
             m_areaAuraType = AREA_AURA_PARTY;
-            if (target->GetCharmerOrOwnerOrSelf()->GetTypeId() == TYPEID_UNIT)
+            if (target->GetCharmerOrOwnerOrOwnGuid().IsCreature())
                 m_areaAuraType = AREA_AURA_CREATURE_GROUP;
             if (target->GetTypeId() == TYPEID_UNIT && ((Creature*)target)->IsTotem())
                 m_modifier.m_auraname = SPELL_AURA_NONE;
             break;
         case SPELL_EFFECT_APPLY_AREA_AURA_RAID:
             m_areaAuraType = AREA_AURA_RAID;
-            if (target->GetCharmerOrOwnerOrSelf()->GetTypeId() == TYPEID_UNIT)
+            if (target->GetCharmerOrOwnerOrOwnGuid().IsCreature())
                 m_areaAuraType = AREA_AURA_CREATURE_GROUP;
             if (target->GetTypeId() == TYPEID_UNIT && ((Creature*)target)->IsTotem())
                 m_modifier.m_auraname = SPELL_AURA_NONE;
@@ -3741,7 +3741,7 @@ void Aura::HandleFeignDeath(bool apply, bool Real)
                 // World of Warcraft Client Patch 1.7.0 (2005-09-13)
                 // - Feign death is no longer resisted by players.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-                if (!pCreature || refTarget->GetCharmerOrOwnerOrSelf()->IsPlayer())
+                if (!pCreature || refTarget->GetCharmerOrOwnerGuid().IsPlayer())
                 {
                     pReference = pReference->next();
                     continue;

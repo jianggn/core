@@ -7293,7 +7293,7 @@ SpellCastResult Spell::CheckPetCast(Unit* target)
     if (!m_casterUnit->IsAlive())
         return SPELL_FAILED_CASTER_DEAD;
 
-    //prevent spellcast interruption by another spellcast
+    // prevent spellcast interruption by another spellcast
     if (m_casterUnit->IsNonMeleeSpellCasted(false))
         return SPELL_FAILED_SPELL_IN_PROGRESS;
 
@@ -7302,9 +7302,10 @@ SpellCastResult Spell::CheckPetCast(Unit* target)
 
     if (m_casterUnit->IsCreature() && (((Creature*)m_casterUnit)->IsPet() || m_casterUnit->IsCharmed()))
     {
-        //dead owner (pets still alive when owners ressed?)
-        if (m_casterUnit->GetCharmerOrOwner() && !m_casterUnit->GetCharmerOrOwner()->IsAlive())
-            return SPELL_FAILED_CASTER_DEAD;
+        // dead owner (pets still alive when owners ressed?)
+        if (Unit* pOwner = m_casterUnit->GetCharmerOrOwner())
+            if (!pOwner->IsAlive())
+                return SPELL_FAILED_CASTER_DEAD;
 
         if (!target && m_targets.getUnitTarget())
             target = m_targets.getUnitTarget();

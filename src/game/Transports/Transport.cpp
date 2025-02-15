@@ -285,7 +285,7 @@ void Transport::Update(uint32 /*update_diff*/, uint32 /*time_diff*/)
     if (m_pathProgress >= currentMsTime) // map transition and update happened in same tick due to MT
         return;
 
-    const uint32 diff = currentMsTime - m_pathProgress;
+    uint32 const diff = currentMsTime - m_pathProgress;
 
     if (IsMoving() || !m_pendingStop)
         m_pathProgress = currentMsTime;

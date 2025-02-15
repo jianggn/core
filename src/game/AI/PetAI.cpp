@@ -62,7 +62,8 @@ PetAI::PetAI(Creature* c) : CreatureAI(c), m_updateAlliesTimer(0)
 bool PetAI::_needToStop() const
 {
     // This is needed for charmed creatures, as once their target was reset other effects can trigger threat
-    if (m_creature->IsCharmed() && m_creature->GetVictim() == m_creature->GetCharmer())
+    if (m_creature->IsCharmed() && m_creature->GetVictim() &&
+        m_creature->GetVictim()->GetObjectGuid() == m_creature->GetCharmerGuid())
         return true;
 
     // Stop attacking when player is mounted

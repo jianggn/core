@@ -3153,7 +3153,7 @@ void World::AddAsyncTask(std::function<void()> task) {
     _asyncTasks.push_back(std::move(task));
 }
 
-void World::LogMoneyTrade(ObjectGuid sender, ObjectGuid receiver, uint32 amount, const char* type, uint32 dataInt)
+void World::LogMoneyTrade(ObjectGuid sender, ObjectGuid receiver, uint32 amount, char const* type, uint32 dataInt)
 {
     if (!LogsDatabase || !getConfig(CONFIG_BOOL_LOGSDB_TRADES))
         return;

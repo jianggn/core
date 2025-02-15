@@ -556,7 +556,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                             //BattleGround gameobjects case
                             if (((Player*)ok)->InBattleGround())
                                 if (BattleGround* bg = ((Player*)ok)->GetBattleGround())
-                                    bg->HandleTriggerBuff(GetObjectGuid());
+                                    bg->HandleTriggerBuff(this);
                         }
 
                         // TODO: all traps can be activated, also those without spell.

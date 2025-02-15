@@ -16,7 +16,7 @@
 
 using namespace Geometry;
 
-const char* GetMovementCheatName(CheatType flagId)
+char const* GetMovementCheatName(CheatType flagId)
 {
     switch (flagId)
     {

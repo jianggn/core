@@ -452,11 +452,13 @@ struct npc_creeping_doomAI : public ScriptedAI
 
     void DamageTaken(Unit* pDoneBy, uint32 &uiDamage) override
     {
-        Unit* pOwner = m_creature->GetCharmerOrOwner();
-        if (pDoneBy && pOwner)
+        if (pDoneBy)
         {
-            pOwner->AddThreat(pDoneBy);
-            pOwner->SetInCombatWith(pDoneBy);
+            if (Unit* pOwner = m_creature->GetCharmerOrOwner())
+            {
+                pOwner->AddThreat(pDoneBy);
+                pOwner->SetInCombatWith(pDoneBy);
+            }
         }
         ScriptedAI::DamageTaken(pDoneBy, uiDamage);
     }

@@ -32,7 +32,7 @@ EndContentData */
 // Full quest event implementation (Missing Diplomat part 14 id:1265).
 // Author: Kampeador
 //-----------------------------------------------------------------------------
-static const Position tervoshSpawnPoint = { -3476.860840f, -4106.740723f, 17.107151f, 5.420159f };
+static Position const tervoshSpawnPoint = { -3476.860840f, -4106.740723f, 17.107151f, 5.420159f };
 
 enum
 {
