@@ -905,6 +905,24 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 34326:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // unsummon all old totems
+                    uint32 reward_mana = 0;
+                    for (int slot = TOTEM_SLOT_FIRE; slot < MAX_TOTEM_SLOT; slot++)
+                    {
+                        if (Totem *OldTotem = m_casterUnit->GetTotem(TotemSlot(slot)))
+                        {
+                            OldTotem->UnSummon();
+                            reward_mana++;
+                        }
+                    }
+                    reward_mana *= m_casterUnit->GetLevel();
+                    m_casterUnit->ModifyPower(POWER_MANA, reward_mana);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
