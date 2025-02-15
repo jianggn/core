@@ -8573,9 +8573,10 @@ void SpellAuraHolder::CalculateHeartBeat(Unit* caster, Unit* target)
     _heartBeatRandValue = 0;
 
     // Fingerslayer Blade - item 26044
+    // Improved Sap - talent 14095
     if (caster)
     {
-        if (m_spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && caster->HasAura(34319))
+        if ((m_spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && caster->HasAura(34319)) || (m_spellProto->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && caster->HasAura(14095)))
             return;
     }
     // Permanent effects and positive spells don't have resist heartbeats.
