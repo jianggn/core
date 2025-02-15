@@ -5884,6 +5884,9 @@ void Spell::EffectAddComboPoints(SpellEffectIndex /*effIdx*/)
     if (damage <= 0)
         return;
 
+    if (m_spellInfo->Id == 14183 && (unitTarget->HasAura(6770) || unitTarget->HasAura(2070) || unitTarget->HasAura(11297)))
+        damage += 1.0f;
+
     ((Player*)m_caster)->AddComboPoints(unitTarget, damage);
     ((Player*)m_caster)->SetUInt64Value(PLAYER_FIELD_COMBO_TARGET, unitTarget->GetGUID());
 }
