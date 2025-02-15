@@ -921,6 +921,8 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     reward_mana *= m_casterUnit->GetLevel();
                     m_casterUnit->ModifyPower(POWER_MANA, reward_mana);
+                    if (m_casterUnit->HasAura(6495))
+                        m_casterUnit->RemoveAurasDueToSpell(6495);
                     return;
                 }
                 case 8344: // Universal Remote
