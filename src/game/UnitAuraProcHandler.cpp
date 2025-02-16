@@ -983,6 +983,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (this->HasUnitState(UNIT_STATE_STUNNED) || this->HasUnitState(UNIT_STATE_ROOT))
                     {
                         basepoints[0] = dither(this->GetMaxHealth() * 0.05f);
+                        basepoints[1] = 100;
                         target = this;
                         triggered_spell_id = 34328;
                     }
