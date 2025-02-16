@@ -925,6 +925,14 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         m_casterUnit->RemoveAurasDueToSpell(6495);
                     return;
                 }
+                case 34330:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Tie Lao Lv
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34331, -(static_cast<Player*>(m_caster)->GetShieldBlockValue()), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
