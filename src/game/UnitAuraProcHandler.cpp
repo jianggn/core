@@ -977,6 +977,19 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34272;
                     break;                               // no hidden cooldown
                 }
+                // Ao Xue Zhan Yi
+                case 34327:
+                {
+                    if (this->HasUnitState(UNIT_STATE_STUNNED) || this->HasUnitState(UNIT_STATE_ROOT))
+                    {
+                        basepoints[0] = dither(this->GetMaxHealth() * 0.05f);
+                        target = this;
+                        triggered_spell_id = 34328;
+                    }
+                    else
+                        return SPELL_AURA_PROC_FAILED;
+                    break;
+                }
                 // Obsidian Armor (Justice Bearer`s Pauldrons shoulder)
                 case 27539:
                 {
