@@ -283,6 +283,9 @@ Aura::Aura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBas
 
     damage *= GetStackAmount();
 
+    if (caster && holder->GetAuraScript())
+        damage = holder->GetAuraScript()->OnAuraValueCalculate(this, caster, target, spellproto, eff, castItem, damage);
+
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "Aura: construct Spellid : %u, Aura : %u Target : %d Damage : %d", spellproto->Id, spellproto->EffectApplyAuraName[eff], spellproto->EffectImplicitTargetA[eff], damage);
 
     SetModifier(AuraType(spellproto->EffectApplyAuraName[eff]), damage, spellproto->EffectAmplitude[eff], spellproto->EffectMiscValue[eff]);
@@ -493,10 +496,14 @@ Unit* SingleEnemyTargetAura::GetTriggerTarget() const
 
 Aura* CreateAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder* holder, Unit* target, Unit* caster, Item* castItem)
 {
+    Aura* pAura;
     if (IsAreaAuraEffect(spellproto->Effect[eff]))
-        return new AreaAura(spellproto, eff, currentBasePoints, holder, target, caster, castItem);
-
-    return new Aura(spellproto, eff, currentBasePoints, holder, target, caster, castItem);
+        pAura = new AreaAura(spellproto, eff, currentBasePoints, holder, target, caster, castItem);
+    else
+        pAura = new Aura(spellproto, eff, currentBasePoints, holder, target, caster, castItem);
+    if (holder->GetAuraScript())
+        holder->GetAuraScript()->OnAuraInit(pAura);
+    return pAura;
 }
 
 SpellAuraHolder* CreateSpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, WorldObject* realCaster, Item* castItem)
@@ -731,6 +738,9 @@ void AreaAura::Update(uint32 diff)
 
             for (auto const& target : targets)
             {
+                if (GetAuraScript() && !GetAuraScript()->OnAreaAuraCheckTarget(this, target))
+                    continue;
+
                 // default flag is to apply aura to current iteration target, set to
                 // false if an area aura of the same spellid exists on the target
                 bool apply = true;
@@ -924,8 +934,13 @@ void Aura::ApplyModifier(bool apply, bool Real, bool skipCheckExclusive)
         return;
     }
     m_applied = apply;
+
+    if (GetAuraScript())
+        GetAuraScript()->OnBeforeApply(this, apply);
     if (aura < TOTAL_AURAS)
         (this->*AuraHandler [aura])(apply, Real);
+    if (GetAuraScript())
+        GetAuraScript()->OnAfterApply(this, apply);
 
     if (!apply && !skipCheckExclusive && IsExclusive())
         ExclusiveAuraUnapply();
@@ -1669,6 +1684,9 @@ void Aura::TriggerSpell()
         }
     }
 
+    if (GetAuraScript())
+        GetAuraScript()->OnPeriodicTrigger(this, triggerCaster, triggerTarget, triggerTargetObject, triggeredSpellInfo);
+
     // All ok cast by default case
     if (triggeredSpellInfo)
     {
@@ -1685,7 +1703,7 @@ void Aura::TriggerSpell()
         else
             triggerCaster->CastSpell(triggerTarget, triggeredSpellInfo, true, pItem, this, casterGUID);
     }
-    else
+    else if (!GetAuraScript()) // if scripter scripted spell, it is handled somehow
     {
         if (Unit* caster = GetCaster())
         {
@@ -6246,6 +6264,9 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     fdamage = target->GetMaxHealth() * (m_modifier.m_amount > 0 ? m_modifier.m_amount : 0) / 100;
             }
 
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
+
             // Consecration: recalculate the damage on each tick
             if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_CONSECRATION>())
                 fdamage = pCaster->SpellDamageBonusDone(target, GetSpellProto(), GetEffIndex(), m_currentBasePoints, DOT, GetStackAmount());
@@ -6356,8 +6377,12 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             int32 resist = 0;
             CleanDamage cleanDamage =  CleanDamage(0, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
 
-            uint32 pdamage = ditheru(m_modifier.m_amount > 0 ? m_modifier.m_amount : 0);
-            pdamage = target->SpellDamageBonusTaken(pCaster, spellProto, GetEffIndex(), pdamage, DOT, GetStackAmount());
+            float fdamage = ditheru(m_modifier.m_amount > 0 ? m_modifier.m_amount : 0);
+
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
+
+            uint32 pdamage = target->SpellDamageBonusTaken(pCaster, spellProto, GetEffIndex(), fdamage, DOT, GetStackAmount());
             uint32 const originalDamage = pdamage;
 
             target->CalculateDamageAbsorbAndResist(pCaster, spellProto->GetSpellSchoolMask(), DOT, pdamage, &absorb, &resist, spellProto);
@@ -6441,6 +6466,9 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             else
                 amount = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
 #endif
+
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, amount);
 
             float fdamage;
             if (m_modifier.m_auraname == SPELL_AURA_OBS_MOD_HEALTH)
@@ -6546,12 +6574,15 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             }
 
             // ignore non positive values (can be result apply spellmods to aura damage
-            uint32 pdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
+            float fdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
 
-            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s power leech of %s for %u dmg inflicted by %u",
-                              GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), pdamage, GetId());
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
 
-            int32 drain_amount = target->GetPower(power) > pdamage ? pdamage : target->GetPower(power);
+            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s power leech of %s for %g dmg inflicted by %u",
+                              GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), fdamage, GetId());
+
+            int32 drain_amount = target->GetPower(power) > fdamage ? fdamage : target->GetPower(power);
 
             target->ModifyPower(power, -drain_amount);
 
@@ -6615,12 +6646,6 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 }
             }
 
-            // ignore non positive values (can be result apply spellmods to aura damage
-            uint32 pdamage = ditheru(m_modifier.m_amount > 0 ? m_modifier.m_amount : 0);
-
-            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s energize %s for %u dmg inflicted by %u",
-                              GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), pdamage, GetId());
-
             if (m_modifier.m_miscvalue < 0 || m_modifier.m_miscvalue >= MAX_POWERS)
                 break;
 
@@ -6629,10 +6654,19 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             if (target->GetMaxPower(power) == 0)
                 break;
 
-            SpellPeriodicAuraLogInfo pInfo(this, pdamage, 0, 0, 0.0f);
+            // ignore non positive values (can be result apply spellmods to aura damage
+            float fdamage = ditheru(m_modifier.m_amount > 0 ? m_modifier.m_amount : 0);
+
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
+
+            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s energize %s for %g dmg inflicted by %u",
+                              GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), fdamage, GetId());
+
+            SpellPeriodicAuraLogInfo pInfo(this, fdamage, 0, 0, 0.0f);
             target->SendPeriodicAuraLog(&pInfo);
 
-            int32 gain = target->ModifyPower(power, pdamage);
+            int32 gain = target->ModifyPower(power, fdamage);
 
             // 1.9 - Mana regeneration over time will no longer generate threat.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
@@ -6661,16 +6695,19 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 }
             }
 
+            if (target->GetMaxPower(POWER_MANA) == 0)
+                break;
+
             // ignore non positive values (can be result apply spellmods to aura damage
             float amount = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
+
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, amount);
 
             uint32 pdamage = ditheru(target->GetMaxPower(POWER_MANA) * amount / 100);
 
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s energize %s for %u mana inflicted by %u",
                               GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), pdamage, GetId());
-
-            if (target->GetMaxPower(POWER_MANA) == 0)
-                break;
 
             SpellPeriodicAuraLogInfo pInfo(this, pdamage, 0, 0, 0.0f);
             target->SendPeriodicAuraLog(&pInfo);
@@ -6701,14 +6738,17 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 }
             }
 
-            float pdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
-
             Powers powerType = Powers(m_modifier.m_miscvalue);
 
             if (!target->IsAlive() || target->GetPowerType() != powerType)
                 return;
 
-            uint32 gain = uint32(-target->ModifyPower(powerType, -dither(pdamage)));
+            float fdamage = m_modifier.m_amount > 0 ? m_modifier.m_amount : 0;
+
+            if (GetAuraScript())
+                GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
+
+            uint32 gain = uint32(-target->ModifyPower(powerType, -dither(fdamage)));
 
             gain = ditheru(gain * spellProto->EffectMultipleValue[GetEffIndex()]);
 
@@ -6789,10 +6829,16 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
         default:
             break;
     }
+
+    if (GetAuraScript())
+        GetAuraScript()->OnPeriodicTickEnd(this);
 }
 
 void Aura::PeriodicDummyTick()
 {
+    if (GetAuraScript())
+        GetAuraScript()->OnPeriodicDummy(this);
+
     SpellEntry const* spell = GetSpellProto();
     Unit* target = GetTarget();
     switch (spell->SpellFamilyName)
@@ -7080,7 +7126,7 @@ bool Aura::IsLastAuraOnHolder()
 }
 
 SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit* target, Unit* caster, Item *castItem, WorldObject* pRealCaster) :
-    m_spellProto(spellproto), m_target(target), m_castItemGuid(castItem ? castItem->GetObjectGuid() : ObjectGuid()),
+    m_spellProto(spellproto), m_auraScript(sScriptMgr.GetAuraScript(spellproto)), m_target(target), m_castItemGuid(castItem ? castItem->GetObjectGuid() : ObjectGuid()),
     m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0),
     m_stackAmount(1), m_removeMode(AURA_REMOVE_BY_DEFAULT), m_AuraDRGroup(DIMINISHING_NONE), m_timeCla(1000),
     m_permanent(false), m_isRemovedOnShapeLost(true), m_deleted(false), m_in_use(0),
@@ -7119,7 +7165,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit* target, Uni
 
     Unit* unitCaster = caster && caster->isType(TYPEMASK_UNIT) ? (Unit*)caster : nullptr;
 
-    m_duration = m_maxDuration = spellproto->CalculateDuration(unitCaster);
+    m_duration = m_maxDuration = spellproto->CalculateDuration(unitCaster, target, m_auraScript);
 
     // Checking visual because of The Green Tower shield equip effect and Natural Shapeshifter talent.
     if (m_maxDuration == -1 || (m_isPassive && (spellproto->DurationIndex == 0 || !spellproto->SpellVisual)))
@@ -7165,6 +7211,9 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit* target, Uni
             break;
         
     }
+
+    if (m_auraScript)
+        m_auraScript->OnHolderInit(this, caster);
 }
 
 void SpellAuraHolder::AddAura(Aura* aura, SpellEffectIndex index)
@@ -7424,6 +7473,8 @@ void SpellAuraHolder::SetStackAmount(uint32 stackAmount)
             {
                 int32 bp = aur->GetBasePoints();
                 float amount = m_stackAmount * caster->CalculateSpellEffectValue(target, m_spellProto, SpellEffectIndex(i), &bp);
+                if (m_auraScript)
+                    amount = m_auraScript->OnAuraValueCalculate(aur, caster, target, GetSpellProto(), SpellEffectIndex(i), nullptr, amount);
                 // Reapply if amount change
                 if (amount != aur->GetModifier()->m_amount)
                 {

@@ -1913,12 +1913,17 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
             if (remainingDamage < currentAbsorb)
                 currentAbsorb = remainingDamage;
 
+            bool dropCharge = true;
+            if ((*i)->GetAuraScript())
+                (*i)->GetAuraScript()->OnAbsorb((*i), currentAbsorb, remainingDamage, dropCharge, damagetype);
+
             remainingDamage -= currentAbsorb;
 
             // Reduce shield amount
             mod->m_amount -= currentAbsorb;
-            if ((*i)->GetHolder()->DropAuraCharge())
+            if (dropCharge && (*i)->GetHolder()->DropAuraCharge())
                 mod->m_amount = 0;
+
             // Need remove it later
             if (mod->m_amount <= 0)
                 existExpired = true;
@@ -1992,6 +1997,9 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
                 int32 manaReduction = dither(currentAbsorb * manaMultiplier);
                 ApplyPowerMod(POWER_MANA, manaReduction, false);
             }
+
+            if ((*i)->GetAuraScript())
+                (*i)->GetAuraScript()->OnManaAbsorb((*i), currentAbsorb, remainingDamage);
 
             (*i)->GetModifier()->m_amount -= currentAbsorb;
             if ((*i)->GetModifier()->m_amount <= 0)
@@ -4617,8 +4625,13 @@ void Unit::HandleTriggers(Unit* pVictim, uint32 procExtra, uint32 amount, uint32
             if ((triggeredByAura->GetSpellProto()->TargetAuraState == AURA_STATE_HEALTHLESS_20_PERCENT) && (!itr.target || !itr.target->HasAuraState(AURA_STATE_HEALTHLESS_20_PERCENT)))
                 continue;
 
-            SpellAuraProcResult procResult = (*caster.*AuraProcHandler[auraModifier->m_auraname])(itr.target, amount, originalAmount, triggeredByAura, procSpell, itr.procFlag, procExtra, cooldown);
-            switch (procResult)
+            optional<SpellAuraProcResult> procResult;
+            if (triggeredByHolder->GetAuraScript())
+                procResult = triggeredByHolder->GetAuraScript()->OnProc(caster, itr.target, amount, originalAmount, triggeredByAura, procSpell, itr.procFlag, procExtra, cooldown);
+            if (!procResult.has_value())
+                procResult = (*caster.*AuraProcHandler[auraModifier->m_auraname])(itr.target, amount, originalAmount, triggeredByAura, procSpell, itr.procFlag, procExtra, cooldown);
+
+            switch (procResult.value())
             {
                 case SPELL_AURA_PROC_CANT_TRIGGER:
                     continue;

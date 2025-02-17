@@ -188,20 +188,6 @@ enum AttackPowerModIndex
 
 uint32 CreateProcExtendMask(SpellNonMeleeDamage* damageInfo, SpellMissInfo missCondition);
 
-enum SpellProcEventTriggerCheck
-{
-    SPELL_PROC_TRIGGER_FAILED       = 0,
-    SPELL_PROC_TRIGGER_ROLL_FAILED  = 1,
-    SPELL_PROC_TRIGGER_OK           = 2,
-};
-
-enum SpellAuraProcResult
-{
-    SPELL_AURA_PROC_OK              = 0,                    // proc was processed, will remove charges
-    SPELL_AURA_PROC_FAILED          = 1,                    // proc failed - if at least one aura failed the proc, charges won't be taken
-    SPELL_AURA_PROC_CANT_TRIGGER    = 2                     // aura can't trigger - skip charges taking, move to next aura if exists
-};
-
 typedef SpellAuraProcResult(Unit::*pAuraProcHandler)(Unit* pVictim, uint32 amount, uint32 originalAmount, Aura* triggeredByAura, SpellEntry const* procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
 extern pAuraProcHandler AuraProcHandler[TOTAL_AURAS];
 

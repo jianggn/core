@@ -24,8 +24,13 @@
 #include "Policies/Singleton.h"
 #include "DBCEnums.h"
 #include "ScriptCommands.h"
+#include "UnitDefines.h"
 #include "SpellDefines.h"
+#include "SharedDefines.h"
+#include "nonstd/optional.hpp"
 #include <atomic>
+
+using nonstd::optional;
 
 struct AreaTriggerEntry;
 class Aura;
@@ -41,6 +46,7 @@ class InstanceData;
 class Item;
 class Map;
 class Quest;
+class SpellAuraHolder;
 class SpellCastTargets;
 class SpellEntry;
 class Spell;
@@ -160,6 +166,42 @@ struct SpellScript
     virtual void OnSummon(Spell* /*spell*/, GameObject* /*summon*/) const {}
 };
 
+struct AuraScript
+{
+    virtual ~AuraScript() = default;
+
+    // called on SpellAuraHolder creation - caster can be nullptr
+    virtual void OnHolderInit(SpellAuraHolder* /*holder*/, WorldObject* /*caster*/) const {}
+    // called after end of aura object constructor
+    virtual void OnAuraInit(Aura* /*aura*/) const {}
+    // called during any event that calculates aura modifier amount - caster can be nullptr
+    virtual int32 OnAuraValueCalculate(Aura* /*aura*/, Unit* /*caster*/, Unit* /*target*/, SpellEntry const* /*spellProto*/, SpellEffectIndex /*effIdx*/, Item* /*castItem*/, int32 value) const { return value; }
+    // called during duration calculation - target can be nullptr for channel duration calculation
+    virtual int32 OnDurationCalculate(WorldObject const* /*caster*/, Unit const* /*target*/, int32 duration) const { return duration; }
+    //called in Aura::ApplyModifier
+    virtual void OnBeforeApply(Aura* /*aura*/, bool /*apply*/) const {}
+    // called in Aura::ApplyModifier
+    virtual void OnAfterApply(Aura* /*aura*/, bool /*apply*/) const {}
+    // called during proc eligibility checking, pOwner is the unit on which the aura is applied
+    virtual optional<SpellProcEventTriggerCheck> OnCheckProc(Unit const* /*pOwner*/, Unit* /*pVictim*/, SpellAuraHolder* /*holder*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procExtra*/, WeaponAttackType /*attType*/, bool /*isVictim*/) const { optional<SpellProcEventTriggerCheck> nothing; return nothing; }
+    // called before proc handler, pOwner is the unit on which the aura is applied
+    virtual optional<SpellAuraProcResult> OnProc(Unit* /*pOwner*/, Unit* /*pVictim*/, uint32 /*amount*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/) const { optional<SpellAuraProcResult> nothing; return nothing; }
+    // called on absorb of this aura
+    virtual void OnAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/, bool& /*dropCharge*/, DamageEffectType /*damageType*/) const {}
+    // called on mana shield absorb of this aura
+    virtual void OnManaAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/) const {}
+    // called on periodic auras which need amount calculation (damage, heal, burn, drain)
+    virtual void OnPeriodicCalculateAmount(Aura* /*aura*/, float& /*amount*/) const {}
+    // called on periodic spell trigger
+    virtual void OnPeriodicTrigger(Aura* /*aura*/, Unit* caster, Unit* target, WorldObject* targetObject, SpellEntry const* spellInfo) const {}
+    // called on periodic dummy
+    virtual void OnPeriodicDummy(Aura* /*aura*/) const {}
+    // called on periodic tick end
+    virtual void OnPeriodicTickEnd(Aura* /*aura*/) const {}
+    // called on AreaAura target checking
+    virtual bool OnAreaAuraCheckTarget(Aura const* aura, Unit* target) const { return true; }
+};
+
 struct Script
 {
     Script() :
@@ -170,7 +212,7 @@ struct Script
         pProcessEventId(nullptr), pGOQuestAccept(nullptr),
         pEffectDummyCreature(nullptr), pEffectDummyGameObj(nullptr),
         pEffectAuraDummy(nullptr), pGOOpen(nullptr),
-        GOGetAI(nullptr), GetAI(nullptr), GetInstanceData(nullptr), GetSpellScript(nullptr)
+        GOGetAI(nullptr), GetAI(nullptr), GetInstanceData(nullptr), GetSpellScript(nullptr), GetAuraScript(nullptr)
     {}
 
     std::string Name;
@@ -201,6 +243,7 @@ struct Script
     CreatureAI* (*GetAI)(Creature*);
     InstanceData* (*GetInstanceData)(Map*);
     SpellScript* (*GetSpellScript)(SpellEntry const*);
+    AuraScript* (*GetAuraScript)(SpellEntry const*);
 
     void RegisterSelf(bool reportUnused = true);
 };
@@ -295,6 +338,7 @@ class ScriptMgr
         GameObjectAI* GetGameObjectAI(GameObject* pGob);
         InstanceData* CreateInstanceData(Map* pMap);
         SpellScript* GetSpellScript(SpellEntry const* pSpell);
+        AuraScript* GetAuraScript(SpellEntry const* pSpell);
 
         bool OnGossipHello(Player* pPlayer, Creature* pCreature);
         bool OnGossipHello(Player* pPlayer, GameObject* pGameObject);

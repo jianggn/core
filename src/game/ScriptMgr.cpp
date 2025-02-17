@@ -1857,6 +1857,16 @@ SpellScript* ScriptMgr::GetSpellScript(SpellEntry const* pSpell)
     return pTempScript->GetSpellScript(pSpell);
 }
 
+AuraScript* ScriptMgr::GetAuraScript(SpellEntry const* pSpell)
+{
+    Script* pTempScript = m_scripts[pSpell->ScriptId];
+
+    if (!pTempScript || !pTempScript->GetAuraScript)
+        return nullptr;
+
+    return pTempScript->GetAuraScript(pSpell);
+}
+
 bool ScriptMgr::OnGossipHello(Player* pPlayer, Creature* pCreature)
 {
     Script* pTempScript = m_scripts[pCreature->GetScriptId()];
