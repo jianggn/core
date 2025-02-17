@@ -171,35 +171,35 @@ struct AuraScript
     virtual ~AuraScript() = default;
 
     // called on SpellAuraHolder creation - caster can be nullptr
-    virtual void OnHolderInit(SpellAuraHolder* /*holder*/, WorldObject* /*caster*/) const {}
+    virtual void OnHolderInit(SpellAuraHolder* /*holder*/, WorldObject* /*caster*/) {}
     // called after end of aura object constructor
-    virtual void OnAuraInit(Aura* /*aura*/) const {}
+    virtual void OnAuraInit(Aura* /*aura*/) {}
     // called during any event that calculates aura modifier amount - caster can be nullptr
-    virtual int32 OnAuraValueCalculate(Aura* /*aura*/, Unit* /*caster*/, Unit* /*target*/, SpellEntry const* /*spellProto*/, SpellEffectIndex /*effIdx*/, Item* /*castItem*/, int32 value) const { return value; }
+    virtual int32 OnAuraValueCalculate(Aura* /*aura*/, Unit* /*caster*/, Unit* /*target*/, SpellEntry const* /*spellProto*/, SpellEffectIndex /*effIdx*/, Item* /*castItem*/, int32 value) { return value; }
     // called during duration calculation - target can be nullptr for channel duration calculation
-    virtual int32 OnDurationCalculate(WorldObject const* /*caster*/, Unit const* /*target*/, int32 duration) const { return duration; }
+    virtual int32 OnDurationCalculate(WorldObject const* /*caster*/, Unit const* /*target*/, int32 duration) { return duration; }
     //called in Aura::ApplyModifier
-    virtual void OnBeforeApply(Aura* /*aura*/, bool /*apply*/) const {}
+    virtual void OnBeforeApply(Aura* /*aura*/, bool /*apply*/) {}
     // called in Aura::ApplyModifier
-    virtual void OnAfterApply(Aura* /*aura*/, bool /*apply*/) const {}
+    virtual void OnAfterApply(Aura* /*aura*/, bool /*apply*/) {}
     // called during proc eligibility checking, pOwner is the unit on which the aura is applied
-    virtual optional<SpellProcEventTriggerCheck> OnCheckProc(Unit const* /*pOwner*/, Unit* /*pVictim*/, SpellAuraHolder* /*holder*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procExtra*/, WeaponAttackType /*attType*/, bool /*isVictim*/) const { optional<SpellProcEventTriggerCheck> nothing; return nothing; }
+    virtual optional<SpellProcEventTriggerCheck> OnCheckProc(Unit const* /*pOwner*/, Unit* /*pVictim*/, SpellAuraHolder* /*holder*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procExtra*/, WeaponAttackType /*attType*/, bool /*isVictim*/) { optional<SpellProcEventTriggerCheck> nothing; return nothing; }
     // called before proc handler, pOwner is the unit on which the aura is applied
-    virtual optional<SpellAuraProcResult> OnProc(Unit* /*pOwner*/, Unit* /*pVictim*/, uint32 /*amount*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/) const { optional<SpellAuraProcResult> nothing; return nothing; }
+    virtual optional<SpellAuraProcResult> OnProc(Unit* /*pOwner*/, Unit* /*pVictim*/, uint32 /*amount*/, int32 /*originalAmount*/, Aura* /*triggeredByAura*/, SpellEntry const* /*procSpell*/, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/) { optional<SpellAuraProcResult> nothing; return nothing; }
     // called on absorb of this aura
-    virtual void OnAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/, bool& /*dropCharge*/, DamageEffectType /*damageType*/) const {}
+    virtual void OnAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/, bool& /*dropCharge*/, DamageEffectType /*damageType*/) {}
     // called on mana shield absorb of this aura
-    virtual void OnManaAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/) const {}
+    virtual void OnManaAbsorb(Aura* /*aura*/, int32& /*currentAbsorb*/, int32& /*remainingDamage*/) {}
     // called on periodic auras which need amount calculation (damage, heal, burn, drain)
-    virtual void OnPeriodicCalculateAmount(Aura* /*aura*/, float& /*amount*/) const {}
+    virtual void OnPeriodicCalculateAmount(Aura* /*aura*/, float& /*amount*/) {}
     // called on periodic spell trigger
-    virtual void OnPeriodicTrigger(Aura* /*aura*/, Unit* caster, Unit* target, WorldObject* targetObject, SpellEntry const* spellInfo) const {}
+    virtual void OnPeriodicTrigger(Aura* /*aura*/, Unit* caster, Unit* target, WorldObject* targetObject, SpellEntry const*& spellInfo) {}
     // called on periodic dummy
-    virtual void OnPeriodicDummy(Aura* /*aura*/) const {}
+    virtual void OnPeriodicDummy(Aura* /*aura*/) {}
     // called on periodic tick end
-    virtual void OnPeriodicTickEnd(Aura* /*aura*/) const {}
+    virtual void OnPeriodicTickEnd(Aura* /*aura*/) {}
     // called on AreaAura target checking
-    virtual bool OnAreaAuraCheckTarget(Aura const* aura, Unit* target) const { return true; }
+    virtual bool OnAreaAuraCheckTarget(Aura const* aura, Unit* target) { return true; }
 };
 
 struct Script

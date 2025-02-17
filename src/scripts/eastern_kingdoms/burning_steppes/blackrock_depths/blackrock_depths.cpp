@@ -2265,10 +2265,6 @@ CreatureAI* GetAI_npc_tobias_seecher(Creature* pCreature)
     return new npc_tobias_seecherAI(pCreature);
 }
 
-/*
- *
- */
-
 struct go_cell_doorAI : GameObjectAI
 {
     explicit go_cell_doorAI(GameObject* pGo) : GameObjectAI(pGo)
@@ -2298,9 +2294,41 @@ GameObjectAI* GetAI_go_cell_door(GameObject* pGo)
     return new go_cell_doorAI(pGo);
 }
 
-/*
- *
- */
+// 27673 - Five Fat Finger Exploding Heart Technique
+struct FiveFatFingerExplodingHeartTechniqueScript : public AuraScript
+{
+    Position m_originalPosition;
+
+    void OnAuraInit(Aura* aura) final
+    {
+        m_originalPosition = aura->GetTarget()->GetPosition();
+    }
+
+    void OnPeriodicTrigger(Aura* aura, Unit* caster, Unit* target, WorldObject* targetObject, SpellEntry const*& spellInfo) final
+    {
+        if (aura->GetStackAmount() < 5)
+            return;
+
+        // 5 steps 5 yards?
+        if (aura->GetTarget()->GetDistance(m_originalPosition) >= 5.0f)
+            spellInfo = sSpellMgr.GetSpellEntry(27676); // Exploding Heart
+    }
+
+    void OnPeriodicTickEnd(Aura* aura) final
+    {
+        if (aura->GetStackAmount() < 5)
+            return;
+
+        // 5 steps 5 yards?
+        if (aura->GetTarget()->GetDistance(m_originalPosition) >= 5.0f)
+            aura->GetTarget()->RemoveAurasDueToSpell(aura->GetId());
+    }
+};
+
+AuraScript* GetScript_FiveFatFingerExplodingHeartTechnique(SpellEntry const*)
+{
+    return new FiveFatFingerExplodingHeartTechniqueScript();
+}
 
 void AddSC_blackrock_depths()
 {
@@ -2406,5 +2434,10 @@ void AddSC_blackrock_depths()
     newscript = new Script;
     newscript->Name = "go_cell_door";
     newscript->GOGetAI = &GetAI_go_cell_door;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_five_fat_finger_exploding_heart_technique";
+    newscript->GetAuraScript = &GetScript_FiveFatFingerExplodingHeartTechnique;
     newscript->RegisterSelf();
 }

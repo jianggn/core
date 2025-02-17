@@ -639,6 +639,27 @@ bool AreaTrigger_at_irontree_wood(Player* pPlayer, AreaTriggerEntry const* pAt)
     return false;
 }
 
+// 6946 - Curse of the Bleakheart
+struct CurseOfTheBleakheartScript : public AuraScript
+{
+    void OnBeforeApply(Aura* aura, bool apply) final
+    {
+        if (apply && aura->GetEffIndex() == EFFECT_INDEX_0)
+            aura->SetPeriodicTimer(5 * IN_MILLISECONDS);
+    }
+
+    void OnPeriodicDummy(Aura* aura) final
+    {
+        if (roll_chance_i(5))
+            aura->GetTarget()->CastSpell(aura->GetTarget(), 6945, true, nullptr, aura);
+    }
+};
+
+AuraScript* GetScript_CurseOfTheBleakheart(SpellEntry const*)
+{
+    return new CurseOfTheBleakheartScript();
+}
+
 void AddSC_felwood()
 {
     Script* newscript;
@@ -675,4 +696,9 @@ void AddSC_felwood()
     newscript->Name = "at_irontree_wood";
     newscript->pAreaTrigger = &AreaTrigger_at_irontree_wood;
     newscript->RegisterSelf(); 
+
+    newscript = new Script;
+    newscript->Name = "spell_curse_of_bleakheart";
+    newscript->GetAuraScript = &GetScript_CurseOfTheBleakheart;
+    newscript->RegisterSelf();
 }

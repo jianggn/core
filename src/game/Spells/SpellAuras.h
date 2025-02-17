@@ -487,6 +487,12 @@ class Aura
             if (uint32 maxticks = GetAuraMaxTicks())
                 m_periodicTick = maxticks - GetAuraDuration() / m_modifier.periodictime;
         }
+        void SetPeriodicTimer(uint32 periodicTimerMs)
+        {
+            m_isPeriodic = true;
+            m_periodicTimer = periodicTimerMs;
+            m_modifier.periodictime = periodicTimerMs;
+        }
 
         bool IsPositive() const { return m_positive; }
         bool IsPersistent() const { return m_isPersistent; }
