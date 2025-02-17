@@ -250,6 +250,7 @@ set (SCRIPTS_SRCS
     kalimdor/thousand_needles/thousand_needles.cpp
     kalimdor/ungoro_crater/ungoro_crater.cpp
     kalimdor/winterspring/winterspring.cpp
+    spells/spell_hunter.cpp
     world/areatrigger_scripts.cpp
     world/elemental_invasions.cpp
     world/fireworks_show.cpp

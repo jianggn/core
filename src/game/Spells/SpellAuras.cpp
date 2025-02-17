@@ -3909,40 +3909,6 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
 
         if (!target->HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_PENDING_ROOT))         // prevent allow move if have also root effect
             target->SetRooted(false);
-
-        // Wyvern Sting
-        if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_HUNTER, CF_HUNTER_MISC>())
-        {
-            Unit* caster = GetCaster();
-            if (!caster || caster->GetTypeId() != TYPEID_PLAYER)
-                return;
-
-            uint32 spell_id = 0;
-
-            switch (GetId())
-            {
-                case 19386:
-                    spell_id = 24131;
-                    break;
-                case 24132:
-                    spell_id = 24134;
-                    break;
-                case 24133:
-                    spell_id = 24135;
-                    break;
-                default:
-                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell selection called for unexpected original spell %u, new spell for this spell family?", GetId());
-                    return;
-            }
-
-            SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell_id);
-
-            if (!spellInfo)
-                return;
-
-            caster->CastSpell(target, spellInfo, true, nullptr, this);
-            return;
-        }
     }
 }
 
