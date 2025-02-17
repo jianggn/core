@@ -2085,6 +2085,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 if (m_removeMode == AURA_REMOVE_BY_EXPIRE)
                 {
                     if (Unit* caster = GetCaster())
+                    {
                         if (Player* casterPlayer = caster->ToPlayer())
                         {
                             if (casterPlayer->IsAlive() && !casterPlayer->IsInCombat() && !casterPlayer->IsTaxiFlying())
@@ -2095,15 +2096,16 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                 else
                                 {
                                     // If there is no nearby graveyard, player's ghost would spawn at the same spot.
-                                    WorldSafeLocsEntry const* ClosestGrave = casterPlayer->GetTeamId() ? sWorldSafeLocsStore.LookupEntry(10) : sWorldSafeLocsStore.LookupEntry(4);
-                                    if (ClosestGrave)
+                                    WorldSafeLocsEntry const* pClosestGrave = casterPlayer->GetTeamId() == TEAM_HORDE ? sWorldSafeLocsStore.LookupEntry(10) : sWorldSafeLocsStore.LookupEntry(4);
+                                    if (pClosestGrave)
                                     {
                                         casterPlayer->SetHealth(1);
-                                        casterPlayer->TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(ClosestGrave->ID), 0);
+                                        casterPlayer->TeleportTo(pClosestGrave->map_id, pClosestGrave->x, pClosestGrave->y, pClosestGrave->z, sObjectMgr.GetWorldSafeLocFacing(pClosestGrave->ID), 0);
                                     }
                                 }
                             }
                         }
+                    }
                 }
                 return;
             }

@@ -443,7 +443,7 @@ void TicketMgr::ShowEscalatedList(ChatHandler& handler) const
             handler.PSendSysMessage(LANG_COMMAND_TICKETESCALATED_TICKET, itr.second->FormatMessageString(handler).c_str(), itr.second->GetNeededSecurityLevel());
 }
 
-void TicketMgr::SendTicket(WorldSession* session, GmTicket* ticket) const
+void TicketMgr::SendTicket(WorldSession* session, GmTicket const* ticket) const
 {
     WorldPacket data(SMSG_GMTICKET_GETTICKET, (ticket ? (4 + 4 + 1 + 4 + 4 + 4 + 1 + 1) : 4));
 

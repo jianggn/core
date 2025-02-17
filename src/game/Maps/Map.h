@@ -244,7 +244,7 @@ struct ScriptedEvent
 
     void SendEventToAllTargets(uint32 uiData);
 
-    void SetSourceObject(WorldObject* pSource)
+    void SetSourceObject(WorldObject const* pSource)
     {
         if (pSource && pSource->IsInWorld() && (pSource->GetMap() == &m_Map))
         {
@@ -252,7 +252,7 @@ struct ScriptedEvent
         }
     }
 
-    void SetTargetObject(WorldObject* pTarget)
+    void SetTargetObject(WorldObject const* pTarget)
     {
         if (pTarget && pTarget->IsInWorld() && (pTarget->GetMap() == &m_Map))
         {
@@ -260,7 +260,7 @@ struct ScriptedEvent
         }
     }
 
-    void AddOrUpdateExtraTarget(WorldObject* pObject, uint32 failureCondition, uint32 failureScript, uint32 successCondition, uint32 successScript)
+    void AddOrUpdateExtraTarget(WorldObject const* pObject, uint32 failureCondition, uint32 failureScript, uint32 successCondition, uint32 successScript)
     {
         if (!pObject || !pObject->IsInWorld() || (pObject->GetMap() != &m_Map))
             return;

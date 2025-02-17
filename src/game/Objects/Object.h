@@ -458,7 +458,7 @@ class WorldObject : public Object
         {
             public:
                 explicit UpdateHelper(WorldObject* obj) : m_obj(obj) {}
-                ~UpdateHelper() { }
+                ~UpdateHelper() = default;
 
                 void Update(uint32 time_diff)
                 {

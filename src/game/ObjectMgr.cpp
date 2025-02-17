@@ -6663,52 +6663,50 @@ public:
         {
             Field* fields = result->Fetch();
 
-            Mail* m = new Mail;
-            m->messageID = fields[0].GetUInt32();
-            m->messageType = fields[1].GetUInt8();
-            m->sender = fields[2].GetUInt32();
-            m->receiverGuid = ObjectGuid(HIGHGUID_PLAYER, fields[3].GetUInt32());
+            Mail m = Mail();
+            m.messageID = fields[0].GetUInt32();
+            m.messageType = fields[1].GetUInt8();
+            m.sender = fields[2].GetUInt32();
+            m.receiverGuid = ObjectGuid(HIGHGUID_PLAYER, fields[3].GetUInt32());
             bool has_items = fields[5].GetBool();
-            m->expire_time = (time_t)fields[6].GetUInt64();
-            m->deliver_time = 0;
-            m->COD = fields[7].GetUInt32();
-            m->checked = fields[8].GetUInt32();
-            m->mailTemplateId = fields[9].GetInt16();
+            m.expire_time = (time_t)fields[6].GetUInt64();
+            m.deliver_time = 0;
+            m.COD = fields[7].GetUInt32();
+            m.checked = fields[8].GetUInt32();
+            m.mailTemplateId = fields[9].GetInt16();
 
-            if (serverUp && sObjectAccessor.FindPlayerNotInWorld(m->receiverGuid))
+            if (serverUp && sObjectAccessor.FindPlayerNotInWorld(m.receiverGuid))
             {
                 // Online player. We wait for him to logout to send the mail back (ie next call)
                 ++skippedCount;
-                delete m;
                 continue;
             }
-            //delete or return mail:
+
+            // delete or return mail:
             if (has_items)
             {
                 SingleMailReturner* returner = new SingleMailReturner();
                 // if it is mail from non-player, or if it's already return mail, it shouldn't be returned, but deleted
-                if (m->messageType != MAIL_NORMAL || (m->checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
+                if (m.messageType != MAIL_NORMAL || (m.checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
                     returner->returnToLowGuid = 0;
                 else
                 {
                     returner->basetime = basetime;
-                    returner->returnToLowGuid = m->sender;
+                    returner->returnToLowGuid = m.sender;
                 }
-                returner->receiverGuid = m->receiverGuid;
-                returner->itemTextId = m->itemTextId;
-                returner->messageID = m->messageID;
-                CharacterDatabase.AsyncPQueryUnsafe(returner, &SingleMailReturner::Callback, "SELECT `item_guid` FROM `mail_items` WHERE `mail_id`='%u'", m->messageID);
-                delete m;
+                returner->receiverGuid = m.receiverGuid;
+                returner->itemTextId = m.itemTextId;
+                returner->messageID = m.messageID;
+                CharacterDatabase.AsyncPQueryUnsafe(returner, &SingleMailReturner::Callback, "SELECT `item_guid` FROM `mail_items` WHERE `mail_id`='%u'", m.messageID);
                 continue;
             }
 
-            if (m->itemTextId)
-                CharacterDatabase.PExecute("DELETE FROM `item_text` WHERE `id` = '%u'", m->itemTextId);
+            if (m.itemTextId)
+                CharacterDatabase.PExecute("DELETE FROM `item_text` WHERE `id` = '%u'", m.itemTextId);
 
             // deletemail = true;
-            // delmails << m->messageID << ", ";
-            CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", m->messageID);
-            delete m;
+            // delmails << m.messageID << ", ";
+            CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `id` = '%u'", m.messageID);
             
         }
         while (result->NextRow());

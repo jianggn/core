@@ -785,9 +785,9 @@ void BattleGround::RewardMark(Player* pPlayer, bool winner)
         return;
 
     if (winner)
-        RewardSpellCast(pPlayer, pPlayer->GetTeamId() ? GetHordeWinSpell() : GetAllianceWinSpell());
+        RewardSpellCast(pPlayer, pPlayer->GetTeamId() == TEAM_HORDE ? GetHordeWinSpell() : GetAllianceWinSpell());
     else
-        RewardSpellCast(pPlayer, pPlayer->GetTeamId() ? GetHordeLoseSpell() : GetAllianceLoseSpell());
+        RewardSpellCast(pPlayer, pPlayer->GetTeamId() == TEAM_HORDE ? GetHordeLoseSpell() : GetAllianceLoseSpell());
 }
 
 void BattleGround::RewardSpellCast(Player* pPlayer, uint32 spellId)
