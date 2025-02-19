@@ -9105,11 +9105,11 @@ bool Spell::ShouldRemoveStealthAuras()
         {
             // Check for Improved Sap
             if (m_casterUnit->HasAura(14076))  // Rank 1
-                doUnaura = !roll_chance_u(30);
+                doUnaura = !roll_chance_u(50);
             else if (m_casterUnit->HasAura(14094))  // Rank 2
-                doUnaura = !roll_chance_u(60);
+                doUnaura = !roll_chance_u(100);
             else if (m_casterUnit->HasAura(14095))  // Rank 3
-                doUnaura = !roll_chance_u(90);
+                doUnaura = !roll_chance_u(100);
         }
 
         return doUnaura;
