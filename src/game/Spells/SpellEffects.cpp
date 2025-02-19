@@ -929,7 +929,15 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
                     // Kang Mo Qi Shu
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34337, -dither((static_cast<Player*>(m_caster)->GetStat(STAT_STRENGTH) + static_cast<Player*>(m_caster)->GetStat(STAT_AGILITY) + static_cast<Player*>(m_caster)->GetStat(STAT_STAMINA) + static_cast<Player*>(m_caster)->GetStat(STAT_INTELLECT) + static_cast<Player*>(m_caster)->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
+                    return;
+                }
+                case 34339:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Zi Ran Zhi Xu
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34340, -dither((m_casterUnit->GetArmor() + m_casterUnit->GetMaxHealth()) * 0.01f), {}, {}, true);
                     return;
                 }
                 case 8344: // Universal Remote
