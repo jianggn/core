@@ -924,6 +924,14 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34331, -(static_cast<Player*>(m_caster)->GetShieldBlockValue()), {}, {}, true);
                     return;
                 }
+                case 34336:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Kang Mo Qi Shu
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34337, -dither((static_cast<Player*>(m_caster)->GetStat(STAT_STRENGTH) + static_cast<Player*>(m_caster)->GetStat(STAT_AGILITY) + static_cast<Player*>(m_caster)->GetStat(STAT_STAMINA) + static_cast<Player*>(m_caster)->GetStat(STAT_INTELLECT) + static_cast<Player*>(m_caster)->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
