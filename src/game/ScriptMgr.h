@@ -149,11 +149,11 @@ struct SpellScript
     // called before effect execution
     virtual void OnEffectExecute(Spell* /*spell*/, SpellEffectIndex /*effIdx*/) const {}
     // called in targeting to determine radius for spell
-    virtual void OnSetTargetMap(Spell* /*spell*/, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& /*unMaxTargets*/) const {}
+    virtual void OnSetTargetMap(Spell* /*spell*/, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& /*unMaxTargets*/, bool& /*selectClosestTargets*/) const {}
     // called on Unit Spell::CheckTarget
-    virtual bool OnCheckTarget(const Spell* /*spell*/, GameObject* /*target*/, SpellEffectIndex /*eff*/) const { return true; }
+    virtual bool OnCheckTarget(Spell const* /*spell*/, GameObject* /*target*/, SpellEffectIndex /*eff*/) const { return true; }
     // called on GO Spell::AddGOTarget
-    virtual bool OnCheckTarget(const Spell* /*spell*/, Unit* /*target*/, SpellEffectIndex /*eff*/) const { return true; }
+    virtual bool OnCheckTarget(Spell const* /*spell*/, Unit* /*target*/, SpellEffectIndex /*eff*/) const { return true; }
     // called in Spell::cast on all successful checks and after taking reagents
     virtual void OnCast(Spell* /*spell*/) const {}
     // called in Spell::DoAllEffectOnTarget, for Unit case right before damage/heal is dealt and procs happen

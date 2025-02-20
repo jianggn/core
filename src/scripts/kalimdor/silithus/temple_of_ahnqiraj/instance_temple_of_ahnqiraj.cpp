@@ -863,6 +863,29 @@ CreatureAI* GetAI_qirajiMindslayer(Creature* pCreature)
     return new AI_QirajiMindslayer(pCreature);
 }
 
+// 26457 - Drain Mana (Obsidian Eradicator)
+// 26559 - Drain Mana (Obsidian Nullifier)
+struct AQ40DrainManaScript : SpellScript
+{
+    void OnSetTargetMap(Spell* spell, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& unMaxTargets, bool& /*selectClosestTargets*/) const final
+    {
+        unMaxTargets = 12;
+    }
+
+    bool OnCheckTarget(Spell const* /*spell*/, Unit* target, SpellEffectIndex /*eff*/) const final
+    {
+        // Avoid targeting players with no mana
+        if (target->GetPowerType() != POWER_MANA || target->GetPowerPercent(POWER_MANA) < 1.0f)
+            return false;
+        return true;
+    }
+};
+
+SpellScript* GetScript_AQ40DrainMana(SpellEntry const*)
+{
+    return new AQ40DrainManaScript();
+}
+
 void AddSC_instance_temple_of_ahnqiraj()
 {
     Script* pNewScript;
@@ -882,4 +905,8 @@ void AddSC_instance_temple_of_ahnqiraj()
     pNewScript->GetAI = &GetAI_qirajiMindslayer;
     pNewScript->RegisterSelf();
 
+    pNewScript = new Script;
+    pNewScript->Name = "spell_aq40_drain_mana";
+    pNewScript->GetSpellScript = &GetScript_AQ40DrainMana;
+    pNewScript->RegisterSelf();
 }

@@ -1065,6 +1065,29 @@ CreatureAI* GetAI_QirajiSwarmguard(Creature* pCreature)
     return new QirajiSwarmguardAI(pCreature);
 }
 
+// 25676 - Drain Mana (Obsidian Destroyer)
+// 25754 - Drain Mana (Moam)
+struct AQ20DrainManaScript : SpellScript
+{
+    void OnSetTargetMap(Spell* spell, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& unMaxTargets, bool& /*selectClosestTargets*/) const final
+    {
+        unMaxTargets = 6;
+    }
+
+    bool OnCheckTarget(Spell const* /*spell*/, Unit* target, SpellEffectIndex /*eff*/) const final
+    {
+        // Avoid targeting players with no mana
+        if (target->GetPowerType() != POWER_MANA || target->GetPowerPercent(POWER_MANA) < 1.0f)
+            return false;
+        return true;
+    }
+};
+
+SpellScript* GetScript_AQ20DrainMana(SpellEntry const*)
+{
+    return new AQ20DrainManaScript();
+}
+
 void AddSC_ruins_of_ahnqiraj()
 {
     Script* newscript;
@@ -1126,5 +1149,10 @@ void AddSC_ruins_of_ahnqiraj()
     newscript = new Script;
     newscript->Name = "boss_tuubid";
     newscript->GetAI = &GetAI_Tuubid;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_aq20_drain_mana";
+    newscript->GetSpellScript = &GetScript_AQ20DrainMana;
     newscript->RegisterSelf();
 }

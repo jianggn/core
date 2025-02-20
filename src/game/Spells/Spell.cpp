@@ -538,53 +538,6 @@ void Spell::FillTargetMap()
                     case TARGET_ENUM_UNITS_ENEMY_AOE_AT_SRC_LOC:
                         SetTargetMap(SpellEffectIndex(i), m_spellInfo->EffectImplicitTargetA[i], tmpUnitMap);
                         SetTargetMap(SpellEffectIndex(i), m_spellInfo->EffectImplicitTargetB[i], tmpUnitMap);
-                        switch (m_spellInfo->Id)
-                        {
-                            case 5246:
-                                // Exception: Intimidating Shout
-                                // The AoE fear does not apply to spell main target (that is stunned by another aura)
-                                for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
-                                {
-                                    if (*itr == m_targets.getUnitTarget())
-                                        itr = tmpUnitMap.erase(itr);
-                                    else
-                                        ++itr;
-                                }
-                                break;
-                            case 25676:                                         // Drain Mana
-                            case 25754:
-                            case 26457:
-                            case 26559:
-                                // Avoid targeting players with no mana
-                                for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
-                                {
-                                    if ((*itr)->GetPowerType() != POWER_MANA || (*itr)->GetPowerPercent(POWER_MANA) < 1.0f)
-                                        itr = tmpUnitMap.erase(itr);
-                                    else
-                                        ++itr;
-                                }
-                                break;
-                            case 27831:
-                                // Shadow Bolt volley which should only target players with the Shadow Mark debuff
-                                for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
-                                {
-                                    if (!(*itr)->HasAura(27825)) // Shadow Mark
-                                        itr = tmpUnitMap.erase(itr);
-                                    else
-                                        ++itr;
-                                }
-                                break;
-                            case 29484:
-                                // Maexxna Web Spray should not hit players under Web Wrap or Petrification
-                                for (UnitList::iterator itr = tmpUnitMap.begin(); itr != tmpUnitMap.end();)
-                                {
-                                    if ((*itr)->HasAura(17624) || (*itr)->HasAura(28622))
-                                        itr = tmpUnitMap.erase(itr);
-                                    else
-                                        ++itr;
-                                }
-                                break;
-                        }
                         break;
                     case TARGET_LOCATION_UNIT_MINION_POSITION:
                     case TARGET_LOCATION_CASTER_FRONT_RIGHT:
@@ -2362,115 +2315,10 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
     }
 
     uint32 unMaxTargets = m_spellInfo->MaxAffectedTargets;
-
-    // custom target amount cases
-    switch (m_spellInfo->SpellFamilyName)
-    {
-        case SPELLFAMILY_GENERIC:
-        {
-            switch (m_spellInfo->Id)
-            {
-                case 802:                                   // Mutate Bug (AQ40, Emperor Vek'nilash)
-                case 804:                                   // Explode Bug (AQ40, Emperor Vek'lor)
-                case 23138:                                 // Gate of Shazzrah (MC, Shazzrah)
-                case 24781:                                 // Dream Fog (Emerald Dragons)
-                //case 28560:                                 // Summon Blizzard (Naxx, Sapphiron)
-                    unMaxTargets = 1;
-                    break;
-                case 25676:                                 // Drain Mana
-                case 25754:
-                    unMaxTargets = 6;
-                    break;
-                case 26457:                                 // Drain Mana
-                case 26559:
-                    unMaxTargets = 12;
-                    break;
-                case 10258:                                 // Awaken Vault Warder (Uldaman)
-                    unMaxTargets = 2;
-                    break;
-                case 28542:                                 // Life Drain (Naxx, Sapphiron)
-                    unMaxTargets = urand(7, 10);
-                    break;
-                case 28796:                                 // Poison Bolt Volley (Naxx, Faerlina)
-                    unMaxTargets = 10;
-                    break;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-
-    // custom radius cases
-    switch (m_spellInfo->SpellFamilyName)
-    {
-        case SPELLFAMILY_GENERIC:
-        {
-            switch (m_spellInfo->Id)
-            {
-                case 28241:                                 // Poison (Naxxramas, Grobbulus Cloud)
-                {
-                    // Spell states 30yd radius, which you would think is the max radius once its all grown,
-                    // however, the visual of the spell goes no further than ~20yd, so lets stop it there.
-                    // It will instantly get a 2(?) yd radius, and grow to 20 from there
-                    if (m_casterUnit)
-                    {
-                        if (SpellAuraHolder* auraHolder = m_casterUnit->GetSpellAuraHolder(28158))
-                        {
-                            int const maxDur = auraHolder->GetAuraMaxDuration();
-                            int const currTick = maxDur - auraHolder->GetAuraDuration();
-                            radius = 18.0f / maxDur*currTick + 2;
-                            //radius = 0.5f * (60000 - auraHolder->GetAuraDuration()) * 0.001f;
-                        }
-                    }
-
-                    break;
-                }
-                case 29310:                                 // Mana Burn (Heigan, naxxramas)
-                    // Without a bigger raidus its possible to tank heigan in one corner of the platform, and have ranged stay in the other corner
-                    radius = 28.0f;
-                    break;
-                default:
-                    break;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-
-    if (m_spellScript)
-        m_spellScript->OnSetTargetMap(this, effIndex, targetMode, radius, unMaxTargets);
-
     bool selectClosestTargets = false;
 
-    // custom selection cases
-    switch (m_spellInfo->SpellFamilyName)
-    {
-        case SPELLFAMILY_GENERIC:
-        {
-            switch (m_spellInfo->Id)
-            {
-                case 26052:                                 // Poison Bolt Volley (AQ40, Princess Huhuran)
-                case 29213:                                 // Curse of the Plaguebringer (Naxxramas, Noth the Plaguebringer)
-                    selectClosestTargets = true;
-                    break;
-            }
-            break;
-        }
-        case SPELLFAMILY_HUNTER:
-        {
-            switch (m_spellInfo->Id)
-            {
-                case 26180:                                 // Wyvern Sting (AQ40, Princess Huhuran)
-                    selectClosestTargets = true;
-                    break;
-            }
-            break;
-        }
-        default:
-            break;
-    }
+    if (m_spellScript)
+        m_spellScript->OnSetTargetMap(this, effIndex, targetMode, radius, unMaxTargets, selectClosestTargets);
 
     switch (targetMode)
     {

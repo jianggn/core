@@ -262,9 +262,35 @@ struct MutatingInjectionScript : public AuraScript
     }
 };
 
+// 28241 - Poison (Naxxramas, Grobbulus Cloud)
+struct GrobbulusCloudPoisonScript : SpellScript
+{
+    void OnSetTargetMap(Spell* spell, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& radius, uint32& /*unMaxTargets*/, bool& /*selectClosestTargets*/) const final
+    {
+        // Spell states 30yd radius, which you would think is the max radius once its all grown,
+        // however, the visual of the spell goes no further than ~20yd, so lets stop it there.
+        // It will instantly get a 2(?) yd radius, and grow to 20 from there
+        if (spell->m_casterUnit)
+        {
+            if (SpellAuraHolder* auraHolder = spell->m_casterUnit->GetSpellAuraHolder(28158))
+            {
+                const int maxDur = auraHolder->GetAuraMaxDuration();
+                const int currTick = maxDur - auraHolder->GetAuraDuration();
+                radius = 18.0f / maxDur * currTick + 2;
+                //radius = 0.5f * (60000 - auraHolder->GetAuraDuration()) * 0.001f;
+            }
+        }
+    }
+};
+
 AuraScript* GetScript_MutatingInjection(SpellEntry const*)
 {
     return new MutatingInjectionScript();
+}
+
+SpellScript* GetScript_GrobbulusCloudPoison(SpellEntry const*)
+{
+    return new GrobbulusCloudPoisonScript();
 }
 
 void AddSC_boss_grobbulus()
@@ -279,5 +305,10 @@ void AddSC_boss_grobbulus()
     pNewScript = new Script;
     pNewScript->Name = "spell_mutating_injection";
     pNewScript->GetAuraScript = &GetScript_MutatingInjection;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "spell_grobbulus_cloud_poison";
+    pNewScript->GetSpellScript = &GetScript_GrobbulusCloudPoison;
     pNewScript->RegisterSelf();
 }

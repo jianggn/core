@@ -938,6 +938,34 @@ CreatureAI* GetAI_twinsBug(Creature* pCreature)
     return new mob_TwinsBug(pCreature);
 }
 
+// 802 -  Mutate Bug (AQ40, Emperor Vek'nilash)
+struct EmperorMutateBugScript : SpellScript
+{
+    void OnSetTargetMap(Spell* spell, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& unMaxTargets, bool& /*selectClosestTargets*/) const final
+    {
+        unMaxTargets = 1;
+    }
+};
+
+SpellScript* GetScript_EmperorMutateBug(SpellEntry const*)
+{
+    return new EmperorMutateBugScript();
+}
+
+// 804 -  Explode Bug (AQ40, Emperor Vek'lor)
+struct EmperorExplodeBugScript : SpellScript
+{
+    void OnSetTargetMap(Spell* spell, SpellEffectIndex /*effIdx*/, uint32& /*targetMode*/, float& /*radius*/, uint32& unMaxTargets, bool& /*selectClosestTargets*/) const final
+    {
+        unMaxTargets = 1;
+    }
+};
+
+SpellScript* GetScript_EmperorExplodeBug(SpellEntry const*)
+{
+    return new EmperorExplodeBugScript();
+}
+
 void AddSC_boss_twinemperors()
 {
     Script* newscript;
@@ -955,5 +983,15 @@ void AddSC_boss_twinemperors()
     newscript = new Script;
     newscript->Name = "mob_twins_bug";
     newscript->GetAI = &GetAI_twinsBug;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_emperor_mutate_bug";
+    newscript->GetSpellScript = &GetScript_EmperorMutateBug;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_emperor_explode_bug";
+    newscript->GetSpellScript = &GetScript_EmperorExplodeBug;
     newscript->RegisterSelf();
 }

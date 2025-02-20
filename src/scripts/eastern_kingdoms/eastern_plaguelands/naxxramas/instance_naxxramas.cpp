@@ -2072,6 +2072,23 @@ AuraScript* GetScript_GargoyleStoneform(SpellEntry const*)
     return new GargoyleStoneformScript();
 }
 
+// 27831 - Shadow Bolt Volley (Naxx, Unrelenting Rider)
+struct UnrelentingRiderShadowBoltVolleyScript : SpellScript
+{
+    bool OnCheckTarget(Spell const* /*spell*/, Unit* target, SpellEffectIndex /*eff*/) const final
+    {
+        // Shadow Bolt volley which should only target players with the Shadow Mark debuff
+        if (!target->HasAura(27825)) // Shadow Mark
+            return false;
+        return true;
+    }
+};
+
+SpellScript* GetScript_UnrelentingRiderShadowBoltVolley(SpellEntry const*)
+{
+    return new UnrelentingRiderShadowBoltVolleyScript();
+}
+
 void AddSC_instance_naxxramas()
 {
     Script* pNewScript;
@@ -2121,5 +2138,10 @@ void AddSC_instance_naxxramas()
     pNewScript = new Script;
     pNewScript->Name = "spell_gargoyle_stoneform";
     pNewScript->GetAuraScript = &GetScript_GargoyleStoneform;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "spell_unrelenting_rider_shadow_bolt_volley";
+    pNewScript->GetSpellScript = &GetScript_UnrelentingRiderShadowBoltVolley;
     pNewScript->RegisterSelf();
 }
