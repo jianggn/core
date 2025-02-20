@@ -34,6 +34,99 @@ SpellScript* GetScript_WarriorIntimidatingShout(SpellEntry const*)
     return new WarriorIntimidatingShoutScript();
 }
 
+// 23881, 23892, 23893, 23894 - Bloodthirst
+struct WarriorBloodthirstScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            float attackPower = spell->m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK);
+            if (spell->GetUnitTarget())
+                attackPower += spell->m_casterUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS, spell->GetUnitTarget()->GetCreatureTypeMask());
+            spell->damage = spell->damage * attackPower / 100;
+        }
+    }
+};
+
+SpellScript* GetScript_WarriorBloodthirst(SpellEntry const*)
+{
+    return new WarriorBloodthirstScript();
+}
+
+// 23922, 23923, 23924, 23925 - Shield Slam
+struct WarriorShieldSlamScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_1 && spell->m_casterUnit)
+        {
+            spell->damage += spell->m_casterUnit->GetShieldBlockValue();
+        }
+    }
+};
+
+SpellScript* GetScript_WarriorShieldSlam(SpellEntry const*)
+{
+    return new WarriorShieldSlamScript();
+}
+
+// 20647 - Execute
+struct WarriorExecuteDamageScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            spell->m_casterUnit->SetPower(POWER_RAGE, 0);
+        }
+    }
+};
+
+SpellScript* GetScript_WarriorExecuteDamage(SpellEntry const*)
+{
+    return new WarriorExecuteDamageScript();
+}
+
+// 5308, 20658, 20660, 20661, 20662 - Execute
+struct WarriorExecuteDummyScript : SpellScript
+{
+    void OnCast(Spell* spell) const final
+    {
+        if (!spell->GetUnitTarget() || !spell->m_casterUnit)
+            return;
+        
+        int32 basePoints0 = spell->m_currentBasePoints[0] + dither(spell->m_casterUnit->GetPower(POWER_RAGE) * spell->m_spellInfo->DmgMultiplier[0]);
+        // m_casterUnit->SetPower(POWER_RAGE, 0); // Done in spell 20647
+        spell->m_casterUnit->CastCustomSpell(spell->GetUnitTarget(), 20647, basePoints0, {}, {}, true, nullptr);
+    }
+};
+
+SpellScript* GetScript_WarriorExecuteDummy(SpellEntry const*)
+{
+    return new WarriorExecuteDummyScript();
+}
+
+// 21977 - Warrior's Wrath
+struct WarriorWrathScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0)
+        {
+            if (!spell->GetUnitTarget())
+                return;
+
+            spell->m_caster->CastSpell(spell->GetUnitTarget(), 21887, true); // spell mod
+        }
+    }
+};
+
+SpellScript* GetScript_WarriorWrath(SpellEntry const*)
+{
+    return new WarriorWrathScript();
+}
+
 void AddSC_warrior_spell_scripts()
 {
     Script* newscript;
@@ -41,5 +134,30 @@ void AddSC_warrior_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_intimidating_shout";
     newscript->GetSpellScript = &GetScript_WarriorIntimidatingShout;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_bloodthirst";
+    newscript->GetSpellScript = &GetScript_WarriorBloodthirst;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_shield_slam";
+    newscript->GetSpellScript = &GetScript_WarriorShieldSlam;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_execute_damage";
+    newscript->GetSpellScript = &GetScript_WarriorExecuteDamage;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_execute_dummy";
+    newscript->GetSpellScript = &GetScript_WarriorExecuteDummy;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_wrath";
+    newscript->GetSpellScript = &GetScript_WarriorWrath;
     newscript->RegisterSelf();
 }

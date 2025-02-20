@@ -622,6 +622,27 @@ CreatureAI* GetAI_npc_corrupted_totem(Creature* pCreature)
     return new npc_corrupted_totemAI(pCreature);
 }
 
+// 23424 - Nefarian Class Call Shaman Corrupted Totems
+struct NefarianCorruptedTotemsScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0)
+        {
+            if (!spell->m_casterUnit)
+                return;
+
+            uint32 spellId = PickRandomValue(23419, 23420, 23422, 23423);
+            spell->m_casterUnit->CastSpell(spell->m_casterUnit, spellId, true);
+        }
+    }
+};
+
+SpellScript* GetScript_NefarianCorruptedTotems(SpellEntry const*)
+{
+    return new NefarianCorruptedTotemsScript();
+}
+
 void AddSC_boss_nefarian()
 {
     Script* pNewScript;
@@ -634,5 +655,10 @@ void AddSC_boss_nefarian()
     pNewScript = new Script;
     pNewScript->Name = "npc_corrupted_totem";
     pNewScript->GetAI = &GetAI_npc_corrupted_totem;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "spell_nefarian_corrupted_totems";
+    pNewScript->GetSpellScript = &GetScript_NefarianCorruptedTotems;
     pNewScript->RegisterSelf();
 }
