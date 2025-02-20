@@ -61,7 +61,8 @@ struct WarriorShieldSlamScript : SpellScript
     {
         if (effIdx == EFFECT_INDEX_1 && spell->m_casterUnit)
         {
-            spell->damage += spell->m_casterUnit->GetShieldBlockValue();
+            // Warrior - Shield Slam : damage bonus 7.5% max health
+            spell->damage += (spell->m_casterUnit->GetShieldBlockValue() + (spell->m_casterUnit->GetMaxHealth() * 0.075f));
         }
     }
 };
