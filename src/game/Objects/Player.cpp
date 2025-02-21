@@ -4787,6 +4787,52 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 
 void Player::KillPlayer()
 {
+    // Hardcore Challenger Death Announce
+    if (GetLevel()<60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
+    {
+        std::string str = "The fallen leaves tell a story. \nLevel ";
+        str.append(std::to_string(GetLevel()));
+        std::string className = "";
+        switch (GetClass())
+        {
+          case 1:
+            className = "Warrior";
+            break;
+          case 2:
+            className = "Paladin";
+            break;
+          case 3:
+            className = "Hunter";
+            break;
+          case 4:
+            className = "Rogue";
+            break;
+          case 5:
+            className = "Priest";
+            break;
+          case 7:
+            className = "Shaman";
+            break;
+          case 8:
+            className = "Mage";
+            break;
+          case 9:
+            className = "Warlock";
+            break;
+          case 11:
+            className = "Druid";
+            break;
+        }
+        str.append(" "+className+", Hardcore Challenger ");
+        str.append(GetName());
+        str.append(" died at ");
+        const auto *areaEntry = AreaEntry::GetById(GetAreaId());
+        std::string areaName = areaEntry->Name;
+        sObjectMgr.GetAreaLocaleString(areaEntry->Id, m_session->GetSessionDbLocaleIndex(), &areaName);
+        str.append(areaName+". \nR.I.P.");
+        sWorld.SendServerMessage(SERVER_MSG_CUSTOM, str.c_str());
+    }
+
     SetDeathState(CORPSE);
     //SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_IN_PVP);
 
