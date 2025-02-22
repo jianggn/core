@@ -8520,7 +8520,7 @@ void SpellAuraHolder::CalculateHeartBeat(Unit* caster, Unit* target)
                 || m_spellProto->Id == 13327) // Reckless Charge
         {
             // Only update the random value if a player is involved
-            if (target->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (target->IsCharmerOrOwnerPlayerOrPlayerItself())
                 _heartBeatRandValue = rand_norm_f() * 100.0f;
         }
         // For PvE/effects on NPCs. Doesn't affect certain spells with DR (For example: Fear being dispelled by damage).

@@ -133,7 +133,7 @@ void AddSC_warrior_spell_scripts()
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "spell_intimidating_shout";
+    newscript->Name = "spell_warrior_intimidating_shout";
     newscript->GetSpellScript = &GetScript_WarriorIntimidatingShout;
     newscript->RegisterSelf();
 

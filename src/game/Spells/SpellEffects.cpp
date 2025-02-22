@@ -265,39 +265,7 @@ void Spell::EffectResurrectNew(SpellEffectIndex effIdx)
 
 void Spell::EffectInstaKill(SpellEffectIndex /*effIdx*/)
 {
-    if (!unitTarget)
-        return;
-
-    // Demonic Sacrifice
-    if (m_spellInfo->Id == 18788 && unitTarget->IsCreature() && m_casterUnit)
-    {
-        uint32 entry = unitTarget->GetEntry();
-        uint32 spellId;
-        switch (entry)
-        {
-            case   416:
-                spellId = 18789;
-                break;               //imp
-            case   417:
-                spellId = 18792;
-                break;               //fellhunter
-            case  1860:
-                spellId = 18790;
-                break;               //void
-            case  1863:
-                spellId = 18791;
-                break;               //succubus
-            default:
-                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "EffectInstaKill: Unhandled creature entry (%u) case.", entry);
-                return;
-        }
-
-        m_casterUnit->CastSpell(m_casterUnit, spellId, true);
-    }
-
-    // The alive check should be after the Demonic Sacrifice code to allow warlock to get
-    // both shields if he uses it at the same time as Voidwalker's Sacrifice.
-    if (!unitTarget->IsAlive())
+    if (!unitTarget || !unitTarget->IsAlive())
         return;
 
     if (m_caster == unitTarget)                             // prevent interrupt message

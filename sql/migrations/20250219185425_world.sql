@@ -26,7 +26,7 @@ UPDATE `spell_template` SET `script_name`='spell_emperor_mutate_bug' WHERE `entr
 UPDATE `spell_template` SET `script_name`='spell_emperor_explode_bug' WHERE `entry`=804;
 UPDATE `spell_template` SET `script_name`='spell_maexxna_web_spray' WHERE `entry`=29484;
 UPDATE `spell_template` SET `script_name`='spell_unrelenting_rider_shadow_bolt_volley' WHERE `entry`=27831;
-UPDATE `spell_template` SET `script_name`='spell_intimidating_shout' WHERE `entry`=5246;
+UPDATE `spell_template` SET `script_name`='spell_warrior_intimidating_shout' WHERE `entry`=5246;
 
 
 -- End of migration.
