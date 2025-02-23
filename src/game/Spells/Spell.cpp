@@ -7522,7 +7522,7 @@ SpellCastResult Spell::CheckRange(bool strict)
     return SPELL_CAST_OK;
 }
 
-uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spell* spell, Item* castItem, bool casting)
+uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spell* spell, Item* castItem, bool dropModCharge)
 {
     if (!caster)
         return 0;
@@ -7569,24 +7569,18 @@ uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spel
                 return 0;
         }
     }
+
     SpellSchools school = GetFirstSchoolInMask(spell ? spell->m_spellSchoolMask : spellInfo->GetSpellSchoolMask());
+
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     // Flat mod from caster auras by spell school
     powerCost += caster->GetInt32Value(UNIT_FIELD_POWER_COST_MODIFIER + school);
 #endif
 
-    // Apply cost mod by spell unless delayed
+    // Apply cost mod by spell
     if (spell)
-    {
         if (Player* modOwner = caster->GetSpellModOwner())
-        {
-            // avoid consuming procs during prepare for melee swing spells
-            if (casting || !spellInfo->IsNextMeleeSwingSpell())
-            {
-                modOwner->ApplySpellMod(spellInfo->Id, SPELLMOD_COST, powerCost, spell);
-            }
-        }
-    }
+            modOwner->ApplySpellMod(spellInfo->Id, SPELLMOD_COST, powerCost, spell, dropModCharge);
 
     if (spellInfo->Attributes & SPELL_ATTR_SCALES_WITH_CREATURE_LEVEL)
         powerCost = int32(powerCost / (1.117f * spellInfo->spellLevel / caster->GetLevel() - 0.1327f));
@@ -7595,8 +7589,10 @@ uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spel
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     powerCost = int32(powerCost * (1.0f + caster->GetFloatValue(UNIT_FIELD_POWER_COST_MULTIPLIER + school)));
 #endif
+
     if (powerCost < 0)
         powerCost = 0;
+
     return powerCost;
 }
 

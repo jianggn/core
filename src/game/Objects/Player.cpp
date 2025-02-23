@@ -22587,7 +22587,7 @@ void Player::CastHighestStealthRank()
     CastSpell(nullptr, stealthSpellEntry, true);
 }
 
-template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell)
+template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &basevalue, Spell* spell, bool dropCharge)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
     if (!spellInfo || spellInfo->HasAttribute(SPELL_ATTR_EX3_IGNORE_CASTER_MODIFIERS)) return 0;
@@ -22613,13 +22613,16 @@ template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &bas
             totalpct += mod->value;
         }
 
+        if (dropCharge)
+        {
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
-        // World of Warcraft Client Patch 1.11.0 (2006-06-20)
-        // - Nature's Grace: You will no longer consume this effect when casting a 
-        //   spell which was made instant by Nature's Swiftness.
-        if (!((mod->op == SPELLMOD_CASTING_TIME) && (mod->type == SPELLMOD_FLAT) && HasInstantCastingSpellMod(spellInfo)))
+            // World of Warcraft Client Patch 1.11.0 (2006-06-20)
+            // - Nature's Grace: You will no longer consume this effect when casting a 
+            //   spell which was made instant by Nature's Swiftness.
+            if (!((mod->op == SPELLMOD_CASTING_TIME) && (mod->type == SPELLMOD_FLAT) && HasInstantCastingSpellMod(spellInfo)))
 #endif
-            DropModCharge(mod, spell);
+                DropModCharge(mod, spell);
+        }
 
         // Nostalrius : fix ecorce (22812 - +1sec incant) + rapidite nature (17116 - sorts instant) = 0sec de cast
         if (mod->op == SPELLMOD_CASTING_TIME && mod->type == SPELLMOD_PCT && mod->value == -100)
@@ -22635,9 +22638,9 @@ template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &bas
     return T(diff);
 }
 
-template int32 Player::ApplySpellMod(uint32 spellId, SpellModOp op, int32& basevalue, Spell* spell);
-template uint32 Player::ApplySpellMod(uint32 spellId, SpellModOp op, uint32& basevalue, Spell* spell);
-template float Player::ApplySpellMod(uint32 spellId, SpellModOp op, float& basevalue, Spell* spell);
+template int32 Player::ApplySpellMod(uint32 spellId, SpellModOp op, int32& basevalue, Spell* spell, bool dropCharge);
+template uint32 Player::ApplySpellMod(uint32 spellId, SpellModOp op, uint32& basevalue, Spell* spell, bool dropCharge);
+template float Player::ApplySpellMod(uint32 spellId, SpellModOp op, float& basevalue, Spell* spell, bool dropCharge);
 
 static char const* type_strings[] =
 {
