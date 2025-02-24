@@ -1214,7 +1214,20 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (basepoints[0] < 1)
                         basepoints[0] = 1;
 
-                    pVictim->CastCustomSpell(pVictim, 15290, basepoints[0], {}, {}, true, castItem, triggeredByAura);
+                    // 34341 - Shadow Distortion
+                    if (pVictim->HasAura(34341))
+                    {
+                        // mana amount
+                        basepoints[1] = dither(amount / 20);
+                        if (basepoints[1] < 1)
+                            basepoints[1] = 1;
+                        pVictim->CastCustomSpell(pVictim, 34342, basepoints[0], basepoints[1], {}, true, castItem, triggeredByAura);
+                    }
+                    else
+                    {
+                        pVictim->CastCustomSpell(pVictim, 15290, basepoints[0], {}, {}, true, castItem, triggeredByAura);
+                    }
+
                     return SPELL_AURA_PROC_OK;                                // no hidden cooldown
                 }
                 // Oracle Healing Bonus ("Garments of the Oracle" set)
