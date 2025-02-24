@@ -2448,6 +2448,10 @@ void Spell::EffectApplyAura(SpellEffectIndex effIdx)
     if (unitTarget->HasMorePowerfulSpellActive(m_spellInfo))
         return;
 
+    // 34344 - Spirit Contract
+    if (m_spellInfo->Id == 34344 && unitTarget->GetEntry() != 200010)
+        return;
+
     Unit* caster = GetAffectiveCaster();
     if (!caster)
     {
