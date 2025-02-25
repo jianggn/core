@@ -858,6 +858,17 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                         triggered_spell_id = 34011;
                     break;                               // no hidden cooldown
                 }
+                // Druid: Starscourge
+                case 34351:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    target = pVictim;
+                    triggered_spell_id = 34352;
+                    break;                               // no hidden cooldown
+                }
                 // Shaman: thundercloud
                 case 34206:
                 {
