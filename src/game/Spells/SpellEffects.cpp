@@ -384,6 +384,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     }
                     case 34296: // Crusader Strike
                     {
+                        if (m_casterUnit->HasAura(34353))
+                            damage = 50.0f;
                         float attackPower = m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK);
                         if (unitTarget)
                             attackPower += m_casterUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS, unitTarget->GetCreatureTypeMask());

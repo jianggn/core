@@ -911,6 +911,15 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34125;
                     break;                               // no hidden cooldown
                 }
+                // Paladin - Incandescence
+                case 34353:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return ((spellEntry.Id == 34296) && spellEntry.GetRecoveryTime() > 0); };
+                    static_cast<Player*>(this)->RemoveSomeCooldown(cdCheck);
+                    return SPELL_AURA_PROC_OK;
+                }
                 // Druid - Newborn
                 case 34346:
                 {
