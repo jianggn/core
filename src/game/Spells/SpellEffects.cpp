@@ -892,6 +892,14 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34340, -dither((m_casterUnit->GetArmor() + m_casterUnit->GetMaxHealth()) * 0.01f), {}, {}, true);
                     return;
                 }
+                case 34348:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Newborn
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34349, dither(m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)

@@ -900,6 +900,15 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34125;
                     break;                               // no hidden cooldown
                 }
+                // Druid - Newborn
+                case 34346:
+                {
+                    // mana amount
+                    basepoints[0] = dither(triggerAmount * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34347;
+                    break;                               // no hidden cooldown
+                }
                 // Hunter - Synergy - Rank1
                 case 34297:
                 {
