@@ -943,6 +943,25 @@ CreatureAI* GetAI_npc_simone_the_inconspicuous(Creature* pCreature)
     return new npc_simone_the_inconspicuousAI(pCreature);
 }
 
+// 23206 - Chain Lightning (Simone the Seductress)
+struct SimoneSeductressChainLightningScript : public SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // reduce damage by 75% if target has Aspect of the Wild (Rank 2)
+            if (spell->GetUnitTarget()->HasAura(20190))
+                spell->damage *= 0.25;
+        }
+    }
+};
+
+SpellScript* GetScript_SimoneSeductressChainLightning(SpellEntry const*)
+{
+    return new SimoneSeductressChainLightningScript();
+}
+
 void AddSC_ungoro_crater()
 {
     Script* newscript;
@@ -984,5 +1003,10 @@ void AddSC_ungoro_crater()
     newscript = new Script;
     newscript->Name = "mob_captured_felwood_ooze";
     newscript->GetAI = &GetAI_mob_captured_felwood_ooze;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_simone_seductress_chain_lightning";
+    newscript->GetSpellScript = &GetScript_SimoneSeductressChainLightning;
     newscript->RegisterSelf();
 }

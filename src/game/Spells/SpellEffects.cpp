@@ -308,80 +308,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             {
                 switch (m_spellInfo->Id)                    // better way to check unknown
                 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-                    // Meteor like spells (divided damage to targets)
-                    case 24340:
-                    case 26558:
-                    case 28884:     // Meteor
-                    case 26789:                             // Shard of the Fallen Star
-                    {
-                        uint32 count = 0;
-                        for (const auto& ihit : m_UniqueTargetInfo)
-                            if (ihit.effectMask & (1 << effect_idx))
-                                ++count;
-
-                        damage /= count;                    // divide to all targets
-                        break;
-                    }
-#endif
-                    // percent from health with min
-                    case 25599:                             // Thundercrash
-                    {
-                        damage = unitTarget->GetHealth() / 2.F;
-                        if (damage < 200)
-                            damage = 200;
-                        break;
-                    }
-                    case 23206:                             // Chain Lightning (Simone the Seductress)
-                    {
-                        if (unitTarget->HasAura(20190))     // reduce damage by 75% if target has Aspect of the Wild (Rank 2)
-                            damage *= 0.25;
-                         break;
-                    }
-                    // Thaddius positive charge tick
-                    case 28062:
-                    {
-                        // Target also has positive charge, so no damage
-                        if (unitTarget->HasAura(28059))
-                            damage = 0;
-                        break;
-                    }
-                    // Thaddius negative charge tick
-                    case 28085:
-                    {
-                        // Target also has negative charge, so no damage
-                        if (unitTarget->HasAura(28084))
-                            damage = 0;
-                        break;
-                    }
-                    case 28375: // Gluth decimate
-                    {
-                        // damage should put target at maximum 5% hp, but not reduce it below that
-                        damage = std::max(0, int32(unitTarget->GetHealth() - uint32(unitTarget->GetMaxHealth() * 0.05f)));
-                        break;
-                    }
-                    case 28206: // Grobbulus Mutagen Explosion
-                    {
-                        // All sources say the explosion should do around 4.5k physical dmg if it runs out,
-                        // but "less" if dispelled. I have been able to find different variations of this spell,
-                        // so the hack has become to set m_triggeredBySpellInfo when casting this spell from Aura::HandleAuraDummy
-                        // when 28169 expires, and NOT set m_triggeredBySpellInfo 28169 is dispelled.
-                        if (m_triggeredBySpellInfo)
-                            damage = damage * 1.5f;
-                        else
-                            damage = damage / 1.5f;
-                        break;
-                    }
-                    case 27812: // Kel'Thuzad Void Blast
-                    {
-                        // If target has the chains of kel'thuzad aura the spell should not do any damage.
-                        // This check should not be necessary as you should be friendly to the caster of
-                        // the spell, but some bug caused players to take damage anyway, and even if that is fixed,
-                        // this is a safetycheck.
-                        if (unitTarget->HasAura(28410))
-                            damage = 0;
-                        break;
-                    }
                     case 34296: // Crusader Strike
                     {
                         if (m_casterUnit->HasAura(34353))
@@ -392,11 +318,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         damage = damage * attackPower / 100;
                         if (unitTarget->HasAura(21183) || unitTarget->HasAura(20188) || unitTarget->HasAura(20300) || unitTarget->HasAura(20301) || unitTarget->HasAura(20302) || unitTarget->HasAura(20303))
                             damage = damage * 1.5f;
-                        break;
-                    }
-                    case 24933:                             // Cannon (Darkmoon Steam Tonk)
-                    {
-                        m_caster->CastSpell(unitTarget, 27766, true);
                         break;
                     }
                 }

@@ -1119,6 +1119,28 @@ void instance_naxxramas::OnKTAreaTrigger(AreaTriggerEntry const* pAT)
     }
 }
 
+// 27812 - Void Blast (Kel'Thuzad)
+struct KelThuzadVoidBlastScript : public SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // If target has the chains of kel'thuzad aura the spell should not do any damage.
+            // This check should not be necessary as you should be friendly to the caster of
+            // the spell, but some bug caused players to take damage anyway, and even if that is fixed,
+            // this is a safetycheck.
+            if (spell->GetUnitTarget()->HasAura(28410))
+                spell->damage = 0;
+        }
+    }
+};
+
+SpellScript* GetScript_KelThuzadVoidBlast(SpellEntry const*)
+{
+    return new KelThuzadVoidBlastScript();
+}
+
 void AddSC_boss_kelthuzad()
 {
     Script* NewScript;
@@ -1151,5 +1173,10 @@ void AddSC_boss_kelthuzad()
     NewScript = new Script;
     NewScript->Name = "mob_shadow_fissure";
     NewScript->GetAI = &GetAI_mob_shadow_fissure;
+    NewScript->RegisterSelf();
+
+    NewScript = new Script;
+    NewScript->Name = "spell_kelthuzad_void_blast";
+    NewScript->GetSpellScript = &GetScript_KelThuzadVoidBlast;
     NewScript->RegisterSelf();
 }

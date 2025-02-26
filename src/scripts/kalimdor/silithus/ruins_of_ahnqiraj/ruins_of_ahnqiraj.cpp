@@ -1088,6 +1088,32 @@ SpellScript* GetScript_AQ20DrainMana(SpellEntry const*)
     return new AQ20DrainManaScript();
 }
 
+// 25599 - Thundercrash
+struct RajaxxThundercrashScript : public SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // percent from health with min
+            int32 damage = spell->GetUnitTarget()->GetHealth() / 2;
+            if (damage < 200)
+                damage = 200;
+
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_11_2
+            spell->damage = damage;
+#else
+            spell->m_caster->CastCustomSpell(spell->GetUnitTarget(), 25598, damage, {}, {}, true);
+#endif
+        }
+    }
+};
+
+SpellScript* GetScript_RajaxxThundercrash(SpellEntry const*)
+{
+    return new RajaxxThundercrashScript();
+}
+
 void AddSC_ruins_of_ahnqiraj()
 {
     Script* newscript;
@@ -1154,5 +1180,10 @@ void AddSC_ruins_of_ahnqiraj()
     newscript = new Script;
     newscript->Name = "spell_aq20_drain_mana";
     newscript->GetSpellScript = &GetScript_AQ20DrainMana;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_rajaxx_thundercrash";
+    newscript->GetSpellScript = &GetScript_RajaxxThundercrash;
     newscript->RegisterSelf();
 }

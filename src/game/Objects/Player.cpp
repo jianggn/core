@@ -22002,7 +22002,7 @@ void Player::RewardHonor(Unit const* pVictim, uint32 groupSize)
         return;
 
     // Honorless Target
-    if (pVictim->HasAura(2479, EFFECT_INDEX_0))
+    if (pVictim->HasAuraType(SPELL_AURA_NO_PVP_CREDIT))
         return;
 
     if (pVictim->GetTypeId() == TYPEID_UNIT)
@@ -22036,7 +22036,7 @@ void Player::RewardHonorOnDeath()
     if (sWorld.GetWowPatch() < WOW_PATCH_104 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_TIMELINE))
         return;
 
-    if (GetAura(2479, EFFECT_INDEX_0))             // Honorless Target
+    if (HasAuraType(SPELL_AURA_NO_PVP_CREDIT)) // Honorless Target
         return;
 
     // " you need to be alive and close by at the time of the kill to get your share of the Honor"
