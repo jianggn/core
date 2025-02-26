@@ -823,6 +823,14 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34349, dither(m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
                     return;
                 }
+                case 34355:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Lightforge Armor
+                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34356, dither(m_casterUnit->GetArmor() * 0.08f), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
