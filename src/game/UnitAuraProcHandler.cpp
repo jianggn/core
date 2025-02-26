@@ -1860,9 +1860,18 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 a
                     uint32 originalSpellId;
                     switch (procSpell->Id)
                     {
-                        case 25914: originalSpellId = 20473; break;
-                        case 25913: originalSpellId = 20929; break;
-                        case 25903: originalSpellId = 20930; break;
+                        case 25914:
+                        case 25912:
+                            originalSpellId = 20473;
+                            break;
+                        case 25913:
+                        case 25911:
+                            originalSpellId = 20929;
+                            break;
+                        case 25903:
+                        case 25902:
+                            originalSpellId = 20930;
+                            break;
                         default:
                             sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Unit::HandleProcTriggerSpell: Spell %u not handled in HShock", procSpell->Id);
                             return SPELL_AURA_PROC_FAILED;
