@@ -911,6 +911,15 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34125;
                     break;                               // no hidden cooldown
                 }
+                // Paladin - Passion
+                case 34357:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == SPELLFAMILY_PALADIN && spellEntry.SpellFamilyFlags == 0x200000 && spellEntry.GetRecoveryTime() > 0); };
+                    static_cast<Player*>(this)->RemoveSomeCooldown(cdCheck);
+                    return SPELL_AURA_PROC_OK;
+                }
                 // Paladin - Incandescence
                 case 34353:
                 {
