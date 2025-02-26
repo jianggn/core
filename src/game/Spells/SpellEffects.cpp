@@ -310,6 +310,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 {
                     case 34296: // Crusader Strike
                     {
+                        if (!m_casterUnit)
+                            break;
                         if (m_casterUnit->HasAura(34353))
                             damage = 50.0f;
                         float attackPower = m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK);
@@ -326,6 +328,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
 
             case SPELLFAMILY_MAGE:
             {
+                if (!m_casterUnit)
+                    break;
                 // Multi Cast
                 if (Player* pPlayer = ToPlayer(m_casterUnit))
                 {
@@ -369,6 +373,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 // Conflagrate - consumes Immolate/Curse of Agony/Corruption
                 if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_CONFLAGRATE>())
                 {
+                    if (!m_casterUnit)
+                        break;
                     // for caster applied auras only
                     Unit::AuraList const& mPeriodic = unitTarget->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
                     float coefficientImmolate = 0.0f, coefficientCurseOfAgony = 0.0f, coefficientCorruption = 0.0f;
@@ -406,6 +412,17 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         }
                     }
                     damage = damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption);
+                    // Wildfire - Conflagrate
+                    if (m_casterUnit->HasAura(34359) && unitTarget->GetHealthPercent() < 50.0f)
+                        damage = damage * 1.3f;
+                }
+                // Wildfire - Immolate + Searing Pain + Soul Fire
+                else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_IMMOLATE, CF_WARLOCK_SEARING_PAIN>() || m_spellInfo->SpellIconID == 184)
+                {
+                    if (!m_casterUnit)
+                        break;
+                    if (m_casterUnit->HasAura(34359) && unitTarget->GetHealthPercent() < 50.0f)
+                        damage = damage * 1.3f;
                 }
                 break;
             }
@@ -434,13 +451,16 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 else if (m_spellInfo->Id == 779 || m_spellInfo->Id == 780 || m_spellInfo->Id == 769 || m_spellInfo->Id == 9754 || m_spellInfo->Id == 9908)
                 {
                     // DRUID - Swipe : damage bonus 2.5% armor
-                    if (unitTarget)
+                    if (m_casterUnit)
                         damage += (m_casterUnit->GetArmor() + (unitTarget->GetArmor() >= m_casterUnit->GetArmor() ? 0 : (m_casterUnit->GetArmor() - unitTarget->GetArmor()))) * 0.025f;
                 }
                 // Rake
                 else if (m_spellInfo->Id == 1822 || m_spellInfo->Id == 1823 || m_spellInfo->Id == 1824 || m_spellInfo->Id == 9904)
+                {
                     // DRUID - Rake : damage bonus 3.5% attack power
-                    damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.035f);
+                    if (m_casterUnit)
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.035f);
+                }
                 break;
             }
             case SPELLFAMILY_ROGUE:
@@ -463,16 +483,25 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             {
                 // Counterattack
                 if (m_spellInfo->Id == 19306 || m_spellInfo->Id == 20909 || m_spellInfo->Id == 20910)
+                {
                     // HUNTER - Counterattack : damage bonus 45% attack power
-                    damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45f);
+                    if (m_casterUnit)
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45f);
+                }
                 // Mongoose Bite
                 else if (m_spellInfo->Id == 1495 || m_spellInfo->Id == 14269 || m_spellInfo->Id == 14270 || m_spellInfo->Id == 14271)
+                {
                     // HUNTER - Mongoose Bite : damage bonus 60% attack power
-                    damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.6f);
+                    if (m_casterUnit)
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.6f);
+                }
                 // Explosive Trap
                 else if (m_spellInfo->Id == 13812 || m_spellInfo->Id == 14314 || m_spellInfo->Id == 14315)
+                {
                     // HUNTER - Explosive Trap : direct damage bonus 15% hp and mana
-                    damage = damage + ((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f);
+                    if (m_casterUnit)
+                        damage = damage + ((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f);
+                }
                 break;
             }
             case SPELLFAMILY_PALADIN:
