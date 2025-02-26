@@ -1792,6 +1792,18 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
         }
         case SPELLFAMILY_WARLOCK:
         {
+            // Fel Domination
+            if (m_spellInfo->Id == 18708)
+            {
+                if (!m_casterUnit)
+                    return;
+                if (m_casterUnit->HasAura(34358))
+                {
+                    auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return ((spellEntry.Id == 34020) && spellEntry.GetRecoveryTime() > 0); };
+                    static_cast<Player*>(m_caster)->RemoveSomeCooldown(cdCheck);
+                }
+                return;
+            }
             // Life Tap
             if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_LIFE_TAP>())
             {
