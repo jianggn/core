@@ -890,6 +890,17 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         m_casterUnit->CastCustomSpell(m_casterUnit, 34363, dither(m_casterUnit->GetPower(POWER_MANA) * 0.12f), {}, {}, true);
                     return;
                 }
+                case 34365:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Path Of Flames
+                    m_casterUnit->CastSpell(m_casterUnit, 5579, true);
+                    m_casterUnit->CastSpell(m_casterUnit, 34366, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
