@@ -724,8 +724,10 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Stoneform : restore hp based on armor (0.05*armor per second)
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34198, static_cast<uint32>(static_cast<Player*>(m_caster)->GetArmor() * 0.05f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34198, dither(m_casterUnit->GetArmor() * 0.05f), {}, {}, true);
                     return;
                 }
                 case 34202:
@@ -741,18 +743,20 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
-                    if (static_cast<Player*>(m_caster)->GetPowerType() != POWER_MANA)
+                    if (m_casterUnit->GetPowerType() != POWER_MANA)
                         return;
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34205, static_cast<uint32>(static_cast<Player*>(m_caster)->GetPower(POWER_MANA) * 0.1f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34205, dither(m_casterUnit->GetPower(POWER_MANA) * 0.1f), {}, {}, true);
                     return;
                 }
                 case 34281:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // petdamage
-                    if (static_cast<Player*>(m_caster)->GetPet())
-                        static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34282, static_cast<Player*>(m_caster)->HasAura_34165_34166_total(), {}, {}, true);
+                    if (m_casterUnit->GetPet())
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34282, m_casterUnit->HasAura_34165_34166_total(), {}, {}, true);
                     return;
                 }
                 case 34294:
@@ -804,6 +808,8 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // unsummon all old totems
                     uint32 reward_mana = 0;
                     for (int slot = TOTEM_SLOT_FIRE; slot < MAX_TOTEM_SLOT; slot++)
@@ -824,40 +830,64 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Tie Lao Lv
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34331, -(static_cast<Player*>(m_caster)->GetShieldBlockValue()), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34331, -(m_casterUnit->GetShieldBlockValue()), {}, {}, true);
                     return;
                 }
                 case 34336:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Kang Mo Qi Shu
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
                     return;
                 }
                 case 34339:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Zi Ran Zhi Xu
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34340, -dither((m_casterUnit->GetArmor() + m_casterUnit->GetMaxHealth()) * 0.01f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither((m_casterUnit->GetArmor() + m_casterUnit->GetMaxHealth()) * 0.01f), {}, {}, true);
                     return;
                 }
                 case 34348:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Newborn
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34349, dither(m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
+                    // 50% STAMINA
+                    // 75% INTELLECT
+                    // 100% STAT_SPIRIT
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34349, dither((m_casterUnit->GetStat(STAT_STAMINA) * 0.5f) + (m_casterUnit->GetStat(STAT_INTELLECT) * 0.75f) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
                     return;
                 }
                 case 34355:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
+                    if (!m_casterUnit)
+                        return;
                     // Lightforge Armor
-                    static_cast<Player*>(m_caster)->CastCustomSpell(static_cast<Player*>(m_caster), 34356, dither(m_casterUnit->GetArmor() * 0.08f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34356, dither(m_casterUnit->GetArmor() * 0.08f), {}, {}, true);
+                    return;
+                }
+                case 34362:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Ion Shell
+                    if (m_casterUnit->HasAura(324) || m_casterUnit->HasAura(325) || m_casterUnit->HasAura(905) || m_casterUnit->HasAura(945) || m_casterUnit->HasAura(8134) || m_casterUnit->HasAura(10431) || m_casterUnit->HasAura(10432))
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34363, dither(m_casterUnit->GetPower(POWER_MANA) * 0.12f), {}, {}, true);
                     return;
                 }
                 case 8344: // Universal Remote
