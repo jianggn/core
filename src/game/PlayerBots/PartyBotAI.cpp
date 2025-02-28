@@ -839,14 +839,14 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                 auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
                 if (!auraList.empty())
                 {
-                    bool oldStateNoCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
-                    bool oldStateNoPower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+                    bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
+                    bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
                     me->CastSpell(me, (*auraList.begin())->GetId(), true);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateNoCastTime);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStateNoPower);
-                }
+                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
+                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                } 
             }
         }
         else if (me->IsMounted())
