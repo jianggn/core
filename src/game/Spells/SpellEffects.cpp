@@ -786,7 +786,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                             if (pCaster->GetDistance(x,y,z) <= 50.0f)
                             {
                                 pCaster->TeleportTo(pCaster->GetMapId(), x, y, z, o);
-                                pCaster->CastSpell(pCaster, 5579, true);
+                                pCaster->CastSpell(pCaster, 34369, true);
                             }
                             else
                             {
@@ -897,7 +897,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Path Of Flames
-                    m_casterUnit->CastSpell(m_casterUnit, 5579, true);
+                    m_casterUnit->CastSpell(m_casterUnit, 34369, true);
                     m_casterUnit->CastSpell(m_casterUnit, 34366, true);
                     return;
                 }
