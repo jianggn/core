@@ -669,11 +669,12 @@ void Spell::FillTargetMap()
 
 SpellCastResult Spell::CheckScriptTargeting(SpellEffectIndex effIndex, uint32 chainTargets, float radius, uint32 targetMode, UnitList& tempUnitList)
 {
+    /*
     if (m_spellInfo->Id == 24934)
     {
         return SPELL_CAST_OK;
     }
-
+    */
     SpellScriptTargetBounds bounds = sSpellMgr.GetSpellScriptTargetBounds(m_spellInfo->Id);
 
     if (bounds.first == bounds.second)
