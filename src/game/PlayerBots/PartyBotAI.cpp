@@ -2929,6 +2929,7 @@ void PartyBotAI::UpdateInCombatAI_Warlock()
         }
 
         if (m_spells.warlock.pConflagrate &&
+            (pVictim->GetHealthPercent() < 90.0f) &&
             CanTryToCastSpell(pVictim, m_spells.warlock.pConflagrate))
         {
             if (DoCastSpell(pVictim, m_spells.warlock.pConflagrate) == SPELL_CAST_OK)
