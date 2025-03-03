@@ -1806,6 +1806,14 @@ void PartyBotAI::UpdateInCombatAI_Mage()
                 return;
         }
 
+        if (m_spells.mage.pDetectMagic &&
+            CanTryToCastSpell(pVictim, m_spells.mage.pDetectMagic) &&
+            !pVictim->HasAura(m_spells.mage.pDetectMagic->Id))
+        {
+            if (DoCastSpell(pVictim, m_spells.mage.pDetectMagic) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.mage.pBlinkDagger &&
             CanTryToCastSpell(me, m_spells.mage.pBlinkDagger) &&
             ((me->GetHealthPercent() < 75.0f) || (me->GetPowerPercent(POWER_MANA) < 75.0f)))
