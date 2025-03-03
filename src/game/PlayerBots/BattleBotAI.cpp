@@ -1671,6 +1671,13 @@ void BattleBotAI::UpdateInCombatAI_Shaman()
 
 void BattleBotAI::UpdateOutOfCombatAI_Hunter()
 {
+    if (m_spells.hunter.pTrueshotAura &&
+        CanTryToCastSpell(me, m_spells.hunter.pTrueshotAura))
+    {
+        if (DoCastSpell(me, m_spells.hunter.pTrueshotAura) == SPELL_CAST_OK)
+            return;
+    }
+
     if (m_spells.hunter.pAspectOfTheCheetah &&
        !me->IsMounted() &&
         CanTryToCastSpell(me, m_spells.hunter.pAspectOfTheCheetah))
@@ -1744,6 +1751,14 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
                 return;
         }
 
+        if (m_spells.hunter.pScatterShot &&
+            pVictim->IsMoving() && (pVictim->GetVictim() == me) &&
+            CanTryToCastSpell(pVictim, m_spells.hunter.pScatterShot))
+        {
+            if (DoCastSpell(pVictim, m_spells.hunter.pScatterShot) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.hunter.pAimedShot &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pAimedShot))
         {
@@ -1797,6 +1812,14 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
 
         if (pVictim->CanReachWithMeleeAutoAttack(me))
         {
+            if (m_spells.hunter.pDeterrence &&
+                CanTryToCastSpell(pVictim, m_spells.hunter.pDeterrence) &&
+                (pVictim->GetVictim() == me))
+            {
+                if (DoCastSpell(pVictim, m_spells.hunter.pDeterrence) == SPELL_CAST_OK)
+                    return;
+            }
+
             if (me->HasUnitState(UNIT_STATE_ROOT))
             {
                 if (m_spells.hunter.pMongooseBite &&

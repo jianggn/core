@@ -1489,6 +1489,13 @@ void PartyBotAI::UpdateInCombatAI_Shaman()
 
 void PartyBotAI::UpdateOutOfCombatAI_Hunter()
 {
+    if (m_spells.hunter.pTrueshotAura &&
+        CanTryToCastSpell(me, m_spells.hunter.pTrueshotAura))
+    {
+        if (DoCastSpell(me, m_spells.hunter.pTrueshotAura) == SPELL_CAST_OK)
+            return;
+    }
+
     if (m_spells.hunter.pAspectOfTheHawk &&
         CanTryToCastSpell(me, m_spells.hunter.pAspectOfTheHawk))
     {
@@ -1571,6 +1578,14 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
                 return;
         }
 
+        if (m_spells.hunter.pScatterShot &&
+            pVictim->IsMoving() && (pVictim->GetVictim() == me) &&
+            CanTryToCastSpell(pVictim, m_spells.hunter.pScatterShot))
+        {
+            if (DoCastSpell(pVictim, m_spells.hunter.pScatterShot) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.hunter.pAimedShot &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pAimedShot))
         {
@@ -1635,6 +1650,13 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
 
         if (pVictim->CanReachWithMeleeAutoAttack(me))
         {
+            if (m_spells.hunter.pDeterrence &&
+                CanTryToCastSpell(pVictim, m_spells.hunter.pDeterrence) &&
+                (pVictim->GetVictim() == me))
+            {
+                DoCastSpell(pVictim, m_spells.hunter.pDeterrence);
+            }
+
             if (m_spells.hunter.pWingClip &&
                 CanTryToCastSpell(pVictim, m_spells.hunter.pWingClip))
             {

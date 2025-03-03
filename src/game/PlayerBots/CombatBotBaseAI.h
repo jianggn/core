@@ -351,6 +351,9 @@ public:
             SpellEntry const* pFeignDeath;
             SpellEntry const* pScareBeast;
             SpellEntry const* pVolley;
+            SpellEntry const* pTrueshotAura;
+            SpellEntry const* pDeterrence;
+            SpellEntry const* pScatterShot;
         } hunter;
         struct
         {

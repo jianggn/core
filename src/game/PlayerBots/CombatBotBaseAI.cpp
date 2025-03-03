@@ -674,6 +674,21 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(m_spells.hunter.pVolley))
                         m_spells.hunter.pVolley = pSpellEntry;
                 }
+                else if (pSpellEntry->SpellName[0].find("Trueshot Aura") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.hunter.pTrueshotAura))
+                        m_spells.hunter.pTrueshotAura = pSpellEntry;
+                }
+                else if (pSpellEntry->SpellName[0].find("Deterrence") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.hunter.pDeterrence))
+                        m_spells.hunter.pDeterrence = pSpellEntry;
+                }
+                else if (pSpellEntry->SpellName[0].find("Scatter Shot") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.hunter.pScatterShot))
+                        m_spells.hunter.pScatterShot = pSpellEntry;
+                }
                 break;
             }
             case CLASS_MAGE:
