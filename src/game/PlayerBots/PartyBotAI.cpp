@@ -3547,6 +3547,15 @@ void PartyBotAI::UpdateInCombatAI_Rogue()
                     return;
             }
 
+            if (m_spells.rogue.pSmokeBomb &&
+                !pVictim->HasAura(m_spells.rogue.pSmokeBomb->Id) &&
+                ((GetAttackersInRangeCount(10.0f) > 2) || IsMeleeDamageClass(pVictim->GetClass())) &&
+                CanTryToCastSpell(me, m_spells.rogue.pSmokeBomb))
+            {
+                if (DoCastSpell(me, m_spells.rogue.pSmokeBomb) == SPELL_CAST_OK)
+                    return;
+            }
+
             if (m_spells.rogue.pColdBlood &&
                 CanTryToCastSpell(me, m_spells.rogue.pColdBlood))
             {

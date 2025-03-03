@@ -1408,6 +1408,11 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(m_spells.rogue.pSprint))
                         m_spells.rogue.pSprint = pSpellEntry;
                 }
+                else if (pSpellEntry->SpellName[0].find("Smoke Bomb") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.rogue.pSmokeBomb))
+                        m_spells.rogue.pSmokeBomb = pSpellEntry;
+                }
                 else if (pSpellEntry->SpellName[0].find("Deadly Poison") != std::string::npos)
                 {
                     hasDeadlyPoison = true;

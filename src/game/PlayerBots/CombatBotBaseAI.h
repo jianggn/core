@@ -508,6 +508,7 @@ public:
             SpellEntry const* pSprint;
             SpellEntry const* pMainHandPoison;
             SpellEntry const* pOffHandPoison;
+            SpellEntry const* pSmokeBomb;
         } rogue;
         struct
         {
