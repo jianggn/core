@@ -1360,6 +1360,13 @@ void BattleBotAI::UpdateInCombatAI_Paladin()
             if (DoCastSpell(pVictim, m_spells.paladin.pHammerOfJustice) == SPELL_CAST_OK)
                 return;
         }
+        if (m_spells.paladin.pRepentance &&
+            pVictim->IsNonMeleeSpellCasted() &&
+            CanTryToCastSpell(pVictim, m_spells.paladin.pRepentance))
+        {
+            if (DoCastSpell(pVictim, m_spells.paladin.pRepentance) == SPELL_CAST_OK)
+                return;
+        }
         if (m_spells.paladin.pHammerOfWrath &&
             pVictim->GetHealthPercent() < 20.0f &&
             CanTryToCastSpell(pVictim, m_spells.paladin.pHammerOfWrath))
