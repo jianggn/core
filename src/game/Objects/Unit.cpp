@@ -5218,8 +5218,12 @@ void Unit::Uncharm()
     if (Unit* charm = GetCharm())
     {
         charm->RemoveCharmAuras();
+
         // Pet posses is not a typical charm
         charm->RemoveSpellsCausingAura(SPELL_AURA_MOD_POSSESS_PET);
+
+        // This effect uses a dummy on the caster
+        RemoveSummonPossessedAuras();
     }
 }
 
@@ -5228,6 +5232,22 @@ void Unit::RemoveCharmAuras(AuraRemoveMode mode)
     RemoveSpellsCausingAura(SPELL_AURA_MOD_POSSESS, mode);
     RemoveSpellsCausingAura(SPELL_AURA_MOD_CHARM, mode);
     RemoveSpellsCausingAura(SPELL_AURA_AOE_CHARM, mode);
+}
+
+void  Unit::RemoveSummonPossessedAuras(AuraRemoveMode mode)
+{
+    // these spells use dummy aura
+    for (AuraList::const_iterator iter = m_modAuras[SPELL_AURA_DUMMY].begin(); iter != m_modAuras[SPELL_AURA_DUMMY].end();)
+    {
+        if (!(*iter)->GetSpellProto()->HasEffect(SPELL_EFFECT_SUMMON_POSSESSED))
+        {
+            ++iter;
+            continue;
+        }
+
+        RemoveAurasDueToSpell((*iter)->GetId(), nullptr, mode);
+        iter = m_modAuras[SPELL_AURA_DUMMY].begin();
+    }
 }
 
 void Unit::SetPet(Pet* pet)

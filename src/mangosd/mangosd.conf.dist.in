@@ -526,6 +526,11 @@ DebuffLimit = 0
 #        Default: "Scripts.log"
 #                 "" - Empty name disable creating log file
 #
+#    LogFile.Movement
+#        Log file for movement errors and debug info
+#        Default: "Movement.log"
+#                 "" - Empty name disable creating log file
+#
 #    LogFile.Chat
 #        Log file for player chat.
 #        Default: "Chat.log"
@@ -665,6 +670,7 @@ LogFile.Timestamp = 0
 LogFile.Basic = "Server.log"
 LogFile.Anticheat = "Anticheat.log"
 LogFile.Scripts = "Scripts.log"
+LogFile.Movement = "Movement.log"
 LogFile.Chat = "Chat.log"
 LogFile.Bg = "Bg.log"
 LogFile.Char = "Char.log"

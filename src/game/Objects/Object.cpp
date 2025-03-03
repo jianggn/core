@@ -2486,9 +2486,9 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
         GetMap()->GetCreatureLinkingHolder()->DoCreatureLinkingEvent(LINKING_EVENT_RESPAWN, pCreature);
 
     pCreature->SetWorldMask(GetWorldMask());
-    // return the creature therewith the summoner has access to it
-
     IncrementSummonCounter();
+
+    // return the creature therewith the summoner has access to it
     return pCreature;
 }
 

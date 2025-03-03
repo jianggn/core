@@ -17793,27 +17793,59 @@ Creature* Player::SummonPossessedMinion(uint32 creatureId, uint32 spellId, float
     if (!GetCharmGuid().IsEmpty())
         return nullptr;
 
-    Creature* pCreature = SummonCreature(creatureId, x, y, z, ang, TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN, duration, false, 0, nullptr, GetTransport());
-
-    if (!pCreature)
+    CreatureInfo const* cinfo = sObjectMgr.GetCreatureTemplate(creatureId);
+    if (!cinfo)
+    {
+        sLog.Out(LOG_DBERROR, LOG_LVL_MINIMAL, "WorldObject::SummonCreature: Creature (Entry: %u) not existed for summoner: %s. ", creatureId, GetGuidStr().c_str());
         return nullptr;
+    }
 
-    pCreature->SetFactionTemporary(GetFactionTemplateId(), TEMPFACTION_NONE);     // set same faction as player
-    pCreature->SetCharmerGuid(GetObjectGuid());                         // save guid of the charmer
+    uint32 const currentSummonCount = GetCreatureSummonCount();
+    if (currentSummonCount >= GetCreatureSummonLimit())
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "WorldObject::SummonCreature: %s in (map %u, instance %u) attempted to summon Creature (Entry: %u), but already has %u active summons",
+            GetGuidStr().c_str(), GetMapId(), GetInstanceId(), creatureId, currentSummonCount);
+
+        // Alert GMs in the next tick if we don't already have an alert scheduled
+        if (!m_summonLimitAlert)
+            m_summonLimitAlert = 1;
+
+        return nullptr;
+    }
+
+    TemporarySummon* pCreature = new TemporarySummon(GetObjectGuid());
+
+    CreatureCreatePos pos(GetMap(), x, y, z, ang);
+
+    if (x == 0.0f && y == 0.0f && z == 0.0f)
+        pos = CreatureCreatePos(this, GetOrientation(), CONTACT_DISTANCE, ang);
+
+    if (!pCreature->Create(GetMap()->GenerateLocalLowGuid(cinfo->GetHighGuid()), pos, cinfo, creatureId))
+    {
+        delete pCreature;
+        return nullptr;
+    }
+
+    if (GetTransport())
+        GetTransport()->AddPassenger(pCreature);
+
+    pCreature->SetSummonPoint(pos);
+    pCreature->SetFactionTemporary(GetFactionTemplateId(), TEMPFACTION_NONE); // set same faction as player
+    pCreature->SetCharmerGuid(GetObjectGuid());                               // save guid of the charmer
     pCreature->SetPossessorGuid(GetObjectGuid());
-    pCreature->SetUInt32Value(UNIT_CREATED_BY_SPELL, spellId);          // set the spell id used to create this
-    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);          // set flag for client that mean this unit is controlled by a player
-    pCreature->AddUnitState(UNIT_STATE_POSSESSED);                       // also set internal unit state flag
-    pCreature->SetLevel(GetLevel());                                    // set level to same level than summoner TODO:: not sure its always the case...
-    pCreature->SetWalk(IsWalking(), true);                              // sync the walking state with the summoner
-    SetCharmGuid(pCreature->GetObjectGuid());                           // save guid of charmed creature
-
+    pCreature->SetUInt32Value(UNIT_CREATED_BY_SPELL, spellId);                // set the spell id used to create this
+    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED);                // set flag for client that mean this unit is controlled by a player
+    pCreature->AddUnitState(UNIT_STATE_POSSESSED);                            // also set internal unit state flag
+    pCreature->SetLevel(GetLevel());                                          // set level to same level than summoner TODO:: not sure its always the case...
+    pCreature->SetWalk(IsWalking(), true);                                    // sync the walking state with the summoner
+    SetCharmGuid(pCreature->GetObjectGuid());                                 // save guid of charmed creature
+    pCreature->SetWorldMask(GetWorldMask());
+    pCreature->Summon(TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN, duration);     // add to map
+    IncrementSummonCounter();
     UnsummonPetTemporaryIfAny();
-
-    GetCamera().SetView(pCreature);                         // modify camera view to the creature view
-    pCreature->UpdateControl();                             // transfer client control to the creature after altering flags
-    SetMover(pCreature);                                    // set mover so now we know that creature is "moved" by this unit
-    SendForcedObjectUpdate();
+    GetCamera().SetView(pCreature); // modify camera view to the creature view
+    pCreature->UpdateControl();     // transfer client control to the creature
+    SetMover(pCreature);            // set mover so now we know that creature is "moved" by this unit
 
     // Initialize pet bar
     if (CharmInfo* charmInfo = pCreature->InitCharmInfo(pCreature))
@@ -20330,8 +20362,18 @@ void Player::SetClientControl(Unit const* target, uint8 allowMove) const
 
 Unit* Player::GetConfirmedMover() const
 {
+    // no mover client side, is this a fake client?
+    if (!m_session->GetClientMoverGuid())
+        return nullptr;
+
+    // all is good
     if (m_mover->GetObjectGuid() == m_session->GetClientMoverGuid())
         return m_mover;
+
+    // client has not yet confirmed mover change but is allowed to move self
+    if (IsControlledByOwnClient() && !GetPossessorGuid() && !GetCharmerGuid())
+        return (Unit*)this;
+
     return nullptr;
 }
 
@@ -21210,6 +21252,12 @@ void Player::SendChannelUpdate(uint32 time) const
     WorldPacket data(MSG_CHANNEL_UPDATE, 4);
     data << uint32(time);
     SendDirectMessage(&data);
+}
+
+void Player::UpdateChannelStartPosition()
+{
+    if (m_currentSpells[CURRENT_CHANNELED_SPELL])
+        m_currentSpells[CURRENT_CHANNELED_SPELL]->UpdateCastStartPosition();
 }
 
 bool Player::HasMovementFlag(MovementFlags f) const
@@ -22659,7 +22707,8 @@ static char const* type_strings[] =
     "GM",
     "GMCritical",
     "Anticheat",
-    "Scripts"
+    "Scripts",
+    "Movement"
 };
 
 static_assert(sizeof(type_strings) / sizeof(type_strings[0]) == LOG_TYPE_MAX, "type_strings must be updated");
