@@ -3829,7 +3829,8 @@ void PartyBotAI::UpdateInCombatAI_Druid()
             if (HealInjuredTargetDirect(pTarget))
                 return;
 
-        if (Unit* pFriend = me->FindLowestHpFriendlyUnit(30.0f, 50, true))
+        // Swiftmend - 18562
+        if (Unit* pFriend = me->FindLowestHpFriendlyUnit(30.0f, 25, true))
         {
             if (m_spells.druid.pSwiftmend &&
                 CanTryToCastSpell(pFriend, m_spells.druid.pSwiftmend))
