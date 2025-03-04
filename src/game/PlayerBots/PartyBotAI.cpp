@@ -4082,6 +4082,14 @@ void PartyBotAI::UpdateInCombatAI_Druid()
                     return;
             }
 
+            if (m_spells.druid.pInnervate &&
+               (me->GetPowerPercent(POWER_MANA) < 50.0f) &&
+                CanTryToCastSpell(me, m_spells.druid.pInnervate))
+            {
+                if (DoCastSpell(me, m_spells.druid.pInnervate) == SPELL_CAST_OK)
+                    return;
+            }
+
             if (m_spells.druid.pFaerieFire &&
                (pVictim->GetClass() == CLASS_ROGUE) &&
                 CanTryToCastSpell(pVictim, m_spells.druid.pFaerieFire))
