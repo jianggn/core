@@ -539,6 +539,7 @@ public:
             SpellEntry const* pEntanglingRoots;
             SpellEntry const* pHibernate;
             SpellEntry const* pSwiftmend;
+            SpellEntry const* pOmenOfClarity;
             // Cat
             SpellEntry const* pProwl;
             SpellEntry const* pPounce;

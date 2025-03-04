@@ -3673,6 +3673,13 @@ void BattleBotAI::UpdateOutOfCombatAI_Druid()
             return;
     }
 
+    if (m_spells.druid.pOmenOfClarity &&
+        CanTryToCastSpell(me, m_spells.druid.pOmenOfClarity))
+    {
+        if (DoCastSpell(me, m_spells.druid.pOmenOfClarity) == SPELL_CAST_OK)
+            return;
+    }
+
     if (m_isBuffing &&
        (!m_spells.druid.pMarkoftheWild ||
         !me->HasGCD(m_spells.druid.pMarkoftheWild)))
