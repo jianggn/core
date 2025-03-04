@@ -1484,6 +1484,14 @@ void PartyBotAI::UpdateInCombatAI_Shaman()
 
     if (GetRole() == ROLE_HEALER)
     {
+        if (m_spells.shaman.pLightningShield &&
+            !me->HasAura(m_spells.shaman.pLightningShield->Id) &&
+            CanTryToCastSpell(me, m_spells.shaman.pLightningShield))
+        {
+            if (DoCastSpell(me, m_spells.shaman.pLightningShield) == SPELL_CAST_OK)
+                return;
+        }
+
         if (FindAndHealInjuredAlly(50.0f, 90.0f))
             return;
 

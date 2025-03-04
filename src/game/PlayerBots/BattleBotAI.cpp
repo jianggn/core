@@ -1673,6 +1673,14 @@ void BattleBotAI::UpdateInCombatAI_Shaman()
             return;
     }
 
+    if (m_spells.shaman.pLightningShield &&
+        !me->HasAura(m_spells.shaman.pLightningShield->Id) &&
+        CanTryToCastSpell(me, m_spells.shaman.pLightningShield))
+    {
+        if (DoCastSpell(me, m_spells.shaman.pLightningShield) == SPELL_CAST_OK)
+            return;
+    }
+
     FindAndHealInjuredAlly(40.0f);
 }
 
