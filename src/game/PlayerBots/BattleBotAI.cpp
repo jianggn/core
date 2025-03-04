@@ -3783,6 +3783,16 @@ void BattleBotAI::UpdateInCombatAI_Druid()
         if (FindAndHealInjuredAlly(80.0f))
             return;
 
+        if (Unit* pFriend = me->FindLowestHpFriendlyUnit(30.0f, 50, true))
+        {
+            if (m_spells.druid.pSwiftmend &&
+                CanTryToCastSpell(pFriend, m_spells.druid.pSwiftmend))
+            {
+                if (DoCastSpell(pFriend, m_spells.druid.pSwiftmend) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+
         // Dispels
        SpellEntry const* pDispelSpell = m_spells.druid.pAbolishPoison ?
                                          m_spells.druid.pAbolishPoison :
