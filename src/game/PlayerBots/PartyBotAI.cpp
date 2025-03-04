@@ -1555,10 +1555,19 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
             }
         }
 
-        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == IDLE_MOTION_TYPE
-            && me->GetDistance(pVictim) > 30.0f)
+        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == IDLE_MOTION_TYPE &&
+            me->GetDistance(pVictim) > 30.0f)
         {
             me->GetMotionMaster()->MoveChase(pVictim, 25.0f);
+        }
+        else if (!me->HasUnitState(UNIT_STATE_ROOT) &&
+                (me->GetCombatDistance(pVictim) < 8.0f) &&
+                (GetRole() != ROLE_MELEE_DPS) &&
+                me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE)
+        {
+            me->SetCasterChaseDistance(25.0f);
+            if (RunAwayFromTarget(pVictim))
+                return;
         }
 
         if (m_spells.hunter.pVolley &&
@@ -1698,18 +1707,6 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
                 if (DoCastSpell(me, m_spells.hunter.pAspectOfTheHawk) == SPELL_CAST_OK)
                     return;
             }
-        }
-
-        if (!me->HasUnitState(UNIT_STATE_ROOT) &&
-            (me->GetCombatDistance(pVictim) < 8.0f) &&
-            (GetRole() != ROLE_MELEE_DPS) &&
-             me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE)
-        {
-            if (!me->IsStopped())
-                me->StopMoving();
-            me->GetMotionMaster()->Clear();
-            if (RunAwayFromTarget(pVictim))
-                return;
         }
     }
 }
