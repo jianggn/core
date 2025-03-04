@@ -1562,11 +1562,6 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(m_spells.druid.pHibernate))
                         m_spells.druid.pHibernate = pSpellEntry;
                 }
-                else if (pSpellEntry->SpellName[0].find("Swiftmend") != std::string::npos)
-                {
-                    if (IsHigherRankSpell(m_spells.druid.pSwiftmend))
-                        m_spells.druid.pSwiftmend = pSpellEntry;
-                }
                 else if (pSpellEntry->SpellName[0].find("Omen of Clarity") != std::string::npos)
                 {
                     if (IsHigherRankSpell(m_spells.druid.pOmenOfClarity))

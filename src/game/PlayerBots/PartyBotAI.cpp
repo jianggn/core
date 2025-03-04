@@ -3826,6 +3826,13 @@ void PartyBotAI::UpdateInCombatAI_Druid()
             }
         }
 
+        if (m_spells.druid.pNaturesSwiftness &&
+            CanTryToCastSpell(me, m_spells.druid.pNaturesSwiftness))
+        {
+            if (DoCastSpell(me, m_spells.druid.pNaturesSwiftness) == SPELL_CAST_OK)
+                return;
+        }
+
         // Prioritize applying HoTs.
         if (Unit* pTarget = SelectPeriodicHealTarget(80.0f, 90.0f))
             if (HealInjuredTargetPeriodic(pTarget))
@@ -3835,17 +3842,6 @@ void PartyBotAI::UpdateInCombatAI_Druid()
         if (Unit* pTarget = SelectHealTarget(60.0f, 70.0f))
             if (HealInjuredTargetDirect(pTarget))
                 return;
-
-        // Swiftmend - 18562
-        if (Unit* pFriend = me->FindLowestHpFriendlyUnit(30.0f, 25, true))
-        {
-            if (m_spells.druid.pSwiftmend &&
-                CanTryToCastSpell(pFriend, m_spells.druid.pSwiftmend))
-            {
-                if (DoCastSpell(pFriend, m_spells.druid.pSwiftmend) == SPELL_CAST_OK)
-                    return;
-            }
-        }
 
         // Dispels
         SpellEntry const* pDispelSpell = m_spells.druid.pAbolishPoison ?
@@ -4101,7 +4097,7 @@ void PartyBotAI::UpdateInCombatAI_Druid()
             }
 
             if (m_spells.druid.pInnervate &&
-               (me->GetPowerPercent(POWER_MANA) < 50.0f) &&
+               (me->GetPowerPercent(POWER_MANA) < 65.0f) &&
                 CanTryToCastSpell(me, m_spells.druid.pInnervate))
             {
                 if (DoCastSpell(me, m_spells.druid.pInnervate) == SPELL_CAST_OK)
