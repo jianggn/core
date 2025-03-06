@@ -32,9 +32,9 @@ struct DruidFerociousBiteScript : SpellScript
             // - Ferocious Bite: Book of Ferocious Bite (Rank 5) now drops off The
             //   Beast in Black Rock Spire. In addition, Ferocious Bite now increases
             //   in potency with greater attack power.
-            // ( AP * 3% * combo + energy * 2,7 + damage )
+            // ( AP * 4% * combo + energy * 2,7 + damage )
             if (uint32 combo = ((Player*)pPlayer)->GetComboPoints())
-                spell->damage += pPlayer->GetTotalAttackPowerValue(BASE_ATTACK) * combo * 0.03f;
+                spell->damage += pPlayer->GetTotalAttackPowerValue(BASE_ATTACK) * combo * 0.04f;
 #endif
             spell->damage += pPlayer->GetPower(POWER_ENERGY) * spell->m_spellInfo->DmgMultiplier[effIdx];
             pPlayer->SetPower(POWER_ENERGY, 0);
