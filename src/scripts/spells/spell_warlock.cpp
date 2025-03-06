@@ -54,6 +54,34 @@ SpellScript* GetScript_WarlockDemonicSacrifice(SpellEntry const*)
     return new WarlockDemonicSacrificeScript();
 }
 
+// 17962, 18930, 18931, 18932 - Conflagrate
+struct WarlockConflagrateScript : SpellScript
+{
+    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // for caster applied auras only
+            Unit::AuraList const& mPeriodic = spell->GetUnitTarget()->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+            for (const auto i : mPeriodic)
+            {
+                // Immolate
+                if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_IMMOLATE>() &&
+                    i->GetCasterGuid() == spell->m_caster->GetObjectGuid())
+                {
+                    spell->GetUnitTarget()->RemoveAurasByCasterSpell(i->GetId(), spell->m_caster->GetObjectGuid());
+                    break;
+                }
+            }
+        }
+    }
+};
+
+SpellScript* GetScript_WarlockConflagrate(SpellEntry const*)
+{
+    return new WarlockConflagrateScript();
+}
+
 void AddSC_warlock_spell_scripts()
 {
     Script* newscript;
@@ -61,5 +89,10 @@ void AddSC_warlock_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_warlock_demonic_sacrifice";
     newscript->GetSpellScript = &GetScript_WarlockDemonicSacrifice;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warlock_conflagrate";
+    newscript->GetSpellScript = &GetScript_WarlockConflagrate;
     newscript->RegisterSelf();
 }

@@ -505,8 +505,10 @@ class Spell
 
         Spell** m_selfContainer = nullptr;                  // pointer to our spell container (if applicable)
 
-        //Spell data
+        // Spell data
+    public:
         WeaponAttackType m_attackType;                      // For weapon based attack
+    protected:
         uint32 m_powerCost = 0;                             // Calculated spell cost     initialized only in Spell::prepare
         int32 m_casttime = 0;                               // Calculated spell cast time initialized only in Spell::prepare
         int32 m_duration = 0;

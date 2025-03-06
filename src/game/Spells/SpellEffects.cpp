@@ -373,54 +373,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             }
             case SPELLFAMILY_WARLOCK:
             {
-                // Conflagrate - consumes Immolate/Curse of Agony/Corruption
-                if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_CONFLAGRATE>())
-                {
-                    if (!m_casterUnit)
-                        break;
-                    // for caster applied auras only
-                    Unit::AuraList const& mPeriodic = unitTarget->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
-                    float coefficientImmolate = 0.0f, coefficientCurseOfAgony = 0.0f, coefficientCorruption = 0.0f;
-                    for (const auto i : mPeriodic)
-                    {
-                        // Immolate
-                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_IMMOLATE>() &&
-                            i->GetCasterGuid() == m_caster->GetObjectGuid())
-                        {
-                            unitTarget->RemoveAurasByCasterSpell(i->GetId(), m_caster->GetObjectGuid());
-                            coefficientImmolate = 1.0f;
-                            break;
-                        }
-                    }
-                    for (const auto i : mPeriodic)
-                    {
-                        // Curse of Agony
-                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_CURSE_OF_AGONY>() &&
-                            i->GetCasterGuid() == m_caster->GetObjectGuid())
-                        {
-                            unitTarget->RemoveAurasByCasterSpell(i->GetId(), m_caster->GetObjectGuid());
-                            coefficientCurseOfAgony = 2.0f;
-                            break;
-                        }
-                    }
-                    for (const auto i : mPeriodic)
-                    {
-                        // Corruption
-                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_CORRUPTION>() &&
-                            i->GetCasterGuid() == m_caster->GetObjectGuid())
-                        {
-                            unitTarget->RemoveAurasByCasterSpell(i->GetId(), m_caster->GetObjectGuid());
-                            coefficientCorruption = 1.5f;
-                            break;
-                        }
-                    }
-                    damage = damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption);
-                    // Wildfire - Conflagrate
-                    if (m_casterUnit->HasAura(34359) && unitTarget->GetHealthPercent() < 50.0f)
-                        damage = damage * 1.3f;
-                }
                 // Wildfire - Immolate + Searing Pain + Soul Fire
-                else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_IMMOLATE, CF_WARLOCK_SEARING_PAIN>() || m_spellInfo->SpellIconID == 184)
+                if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_IMMOLATE, CF_WARLOCK_SEARING_PAIN>() || m_spellInfo->SpellIconID == 184)
                 {
                     if (!m_casterUnit)
                         break;
@@ -431,27 +385,8 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             }
             case SPELLFAMILY_DRUID:
             {
-                // Ferocious Bite
-                if (m_spellInfo->IsFitToFamilyMask<CF_DRUID_RIP_BITE>() && m_spellInfo->SpellVisual == 6587)
-                {
-                    Player* pPlayer = m_caster->ToPlayer();
-                    if (!pPlayer)
-                        break;
-
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
-                    // World of Warcraft Client Patch 1.12.0 (2006-08-22)
-                    // - Ferocious Bite: Book of Ferocious Bite (Rank 5) now drops off The
-                    //   Beast in Black Rock Spire. In addition, Ferocious Bite now increases
-                    //   in potency with greater attack power.
-                    // ( AP * 4% * combo + energy * 2,7 + damage )
-                    if (uint32 combo = ((Player*)pPlayer)->GetComboPoints())
-                        damage += pPlayer->GetTotalAttackPowerValue(BASE_ATTACK) * combo * 0.04f;
-#endif
-                    damage += pPlayer->GetPower(POWER_ENERGY) * m_spellInfo->DmgMultiplier[effect_idx];
-                    pPlayer->SetPower(POWER_ENERGY, 0);
-                }
                 // Swipe
-                else if (m_spellInfo->Id == 779 || m_spellInfo->Id == 780 || m_spellInfo->Id == 769 || m_spellInfo->Id == 9754 || m_spellInfo->Id == 9908)
+                if (m_spellInfo->Id == 779 || m_spellInfo->Id == 780 || m_spellInfo->Id == 769 || m_spellInfo->Id == 9754 || m_spellInfo->Id == 9908)
                 {
                     // DRUID - Swipe : damage bonus 2.5% armor
                     if (m_casterUnit)
@@ -464,22 +399,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     if (m_casterUnit)
                         damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.035f);
                 }
-                break;
-            }
-            case SPELLFAMILY_ROGUE:
-            {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
-                // World of Warcraft Client Patch 1.12.0 (2006-08-22)
-                // - Eviscerate: Manual of Eviscerate (Rank 9) now drops off Blackhand
-                //   Assassins in Black Rock Spire.In addition, Eviscerate now increases
-                //   in potency with greater attack power.
-                if (m_spellInfo->IsFitToFamilyMask<CF_ROGUE_EVISCERATE>())
-                {
-                    if (Player* pPlayer = m_caster->ToPlayer())
-                        if (uint32 combo = pPlayer->GetComboPoints())
-                            damage += pPlayer->GetTotalAttackPowerValue(BASE_ATTACK) * combo * 0.03f;
-                }
-#endif
                 break;
             }
             case SPELLFAMILY_HUNTER:
@@ -504,27 +423,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     // HUNTER - Explosive Trap : direct damage bonus 15% hp and mana
                     if (m_casterUnit)
                         damage = damage + ((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f);
-                }
-                break;
-            }
-            case SPELLFAMILY_PALADIN:
-            {
-                // Hammer of Wrath - receive bonus from spell damage
-                if (m_spellInfo->SpellIconID == 42)
-                {
-                    m_attackType = BASE_ATTACK;    // Set as base attack to benefit from melee crit
-                    damage = m_caster->SpellDamageBonusDone(unitTarget, m_spellInfo, effect_idx, damage, SPELL_DIRECT_DAMAGE);
-                    damage = unitTarget->SpellDamageBonusTaken(m_caster, m_spellInfo, effect_idx, damage, SPELL_DIRECT_DAMAGE);
-                }
-                // Judgement of Command - receive bonus from spell damage
-                else if (m_spellInfo->SpellIconID == 561)
-                {
-                    // base damage halved if target not stunned.
-                    if (!unitTarget->HasUnitState(UNIT_STATE_STUNNED | UNIT_STATE_PENDING_STUNNED))
-                        damage = damage * 0.5f;
-
-                    damage = m_caster->SpellDamageBonusDone(unitTarget, m_spellInfo, effect_idx, damage, SPELL_DIRECT_DAMAGE);
-                    damage = unitTarget->SpellDamageBonusTaken(m_caster, m_spellInfo, effect_idx, damage, SPELL_DIRECT_DAMAGE);
                 }
                 break;
             }
@@ -2075,58 +1973,6 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
         }
         case SPELLFAMILY_PALADIN:
         {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
-            switch (m_spellInfo->SpellIconID)
-            {
-                case 156:                                   // Holy Shock
-                {
-                    if (!unitTarget)
-                        return;
-
-                    int hurt;
-                    int heal;
-
-                    switch (m_spellInfo->Id)
-                    {
-                        case 20473:
-                            hurt = 25912;
-                            heal = 25914;
-                            break;
-                        case 20929:
-                            hurt = 25911;
-                            heal = 25913;
-                            break;
-                        case 20930:
-                            hurt = 25902;
-                            heal = 25903;
-                            break;
-                        default:
-                            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Spell::EffectDummy: Spell %u not handled in HS", m_spellInfo->Id);
-                            return;
-                    }
-
-                    if (m_caster->IsFriendlyTo(unitTarget))
-                        m_caster->CastSpell(unitTarget, heal, true);
-                    else
-                        m_caster->CastSpell(unitTarget, hurt, true);
-
-                    return;
-                }
-                case 561:                                   // Judgement of command
-                {
-                    if (!unitTarget)
-                        return;
-
-                    uint32 spellId = m_currentBasePoints[effIdx];
-                    SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellId);
-                    if (!pSpellEntry)
-                        return;
-
-                    m_caster->CastSpell(unitTarget, pSpellEntry, true, nullptr);
-                    return;
-                }
-            }
-#endif
             break;
         }
         case SPELLFAMILY_SHAMAN:
