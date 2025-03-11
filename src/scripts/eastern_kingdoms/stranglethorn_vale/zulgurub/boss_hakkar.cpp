@@ -32,10 +32,10 @@ enum
     // Emotes
     // ------
 
-    SAY_AGGRO                   = -1309020,
-    SAY_FLEEING                 = -1309021,
-    SAY_MINION_DESTROY          = -1309022,                //where does it belong?
-    SAY_PROTECT_ALTAR           = -1309023,                //where does it belong?
+    SAY_AGGRO                   = 10447,
+    SAY_FLEEING                 = 10635,
+    SAY_MINION_DESTROY          = 10594,                //where does it belong?
+    SAY_PROTECT_ALTAR           = 10546,                //where does it belong?
     /*
     /run PlaySoundFile("SOUND\\CREATURE\\HAKKAR\\VO_ZG2_HAKKAR_DEFEAT_01.ogg");
     /run PlaySoundFile("SOUND\\CREATURE\\HAKKAR\\VO_ZG2_HAKKAR_DEFEAT_02.ogg");

@@ -787,7 +787,7 @@ class World
 
         void SendWorldText(int32 string_id, ...);
         void SendWorldTextToBGAndQueue(int32 string_id, uint32 queuedPlayerLevel, uint32 queueType, ...);
-        void SendBroadcastTextToWorld(uint32 textId);
+        void SendBroadcastTextToWorld(uint32 textId, ObjectGuid senderGuid = ObjectGuid());
 
         // Only for GMs with ticket notification ON
         void SendGMTicketText(int32 string_id, ...);

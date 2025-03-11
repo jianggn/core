@@ -1859,7 +1859,7 @@ bool GossipSelect_npc_MasterCraftsmanOmarion(Player* pPlayer, Creature* pCreatur
     // if rep < honored, spit on player and be done with it.
     if (argentDawnRep < BOOK_REQ_RANK)
     {
-        DoScriptText(-1999913, pCreature, pPlayer); // spit on player
+        // DoScriptText(-1999913, pCreature, pPlayer); // spit on player -- Not in sniffs. Need confirmation
         pPlayer->CLOSE_GOSSIP_MENU();
         return true;
     }

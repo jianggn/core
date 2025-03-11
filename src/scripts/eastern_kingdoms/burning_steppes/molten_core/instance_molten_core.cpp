@@ -27,6 +27,10 @@ EndScriptData */
 #define NPC_FLAMEWAKER_HEALER    11663
 #define NPC_FLAMEWAKER_ELITE     11664
 
+enum
+{
+    SAY_DOMO    = 7566
+};
 struct sSpawnLocation
 {
     uint32 m_uiEntry;
@@ -660,7 +664,7 @@ bool GOHello_go_rune_MC(Player* pPlayer, GameObject* pGo)
         {
             pInstance->SetData(TypeDomoSpawn, DONE);
             if (Creature* Domo = pPlayer->SummonCreature(NPC_DOMO, 758.089f, -1176.71f, -118.640f, 3.12414f, TEMPSUMMON_MANUAL_DESPAWN, 2 * HOUR * IN_MILLISECONDS))
-                DoScriptText(-1409004, Domo);
+                DoScriptText(SAY_DOMO, Domo);
         }
     }
 
