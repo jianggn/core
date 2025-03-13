@@ -3688,8 +3688,8 @@ void Spell::EffectSummonGuardian(SpellEffectIndex effIdx)
         {
             case 17166: // Release Umi's Yeti - Quest Are We There, Yeti? Part 3
             {
-                spawnCreature->MonsterTextEmote(-1900169);
-                spawnCreature->MonsterSay(-1900170);
+                spawnCreature->MonsterTextEmote(6327);
+                spawnCreature->MonsterSay(9055);
 
                 switch (spawnCreature->GetAreaId())
                 {
@@ -3697,7 +3697,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex effIdx)
                         if (Creature* pCreature = spawnCreature->FindNearestCreature(10977, 30.0f, true)) // NPC_QUIXXIL
                         {
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterSay(-1900171);
+                            pCreature->MonsterSay(6314);
                             pCreature->SetWalk(false);
                             pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
@@ -3706,7 +3706,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex effIdx)
                         if (Creature* pCreature = spawnCreature->FindNearestCreature(7583, 30.0f, true)) // NPC_SPRINKLE
                         {
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterTextEmote(-1900172);
+                            pCreature->MonsterTextEmote(6301);
                             pCreature->SetWalk(false);
                             pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
@@ -3715,7 +3715,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex effIdx)
                         if (Creature* pCreature = spawnCreature->FindNearestCreature(10978, 30.0f, true)) // NPC_LEGACKI
                         {
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterTextEmote(-1900173);
+                            pCreature->MonsterTextEmote(6306);
                             pCreature->SetWalk(false);
                             pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
