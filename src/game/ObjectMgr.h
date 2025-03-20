@@ -55,6 +55,23 @@ struct GameTele
 
 typedef std::unordered_map<uint32, GameTele > GameTeleMap;
 
+struct AreaTriggerEntry
+{
+    uint32    id;
+    uint32    map_id;
+    std::string name;
+    float     x;
+    float     y;
+    float     z;
+    float     radius;
+    float     box_x;           // extent x edge
+    float     box_y;           // extent y edge
+    float     box_z;           // extent z edge
+    float     box_orientation; // extent rotation by about z axis
+};
+
+bool IsPointInAreaTriggerZone(AreaTriggerEntry const* atEntry, uint32 mapid, float x, float y, float z, float delta = 0.0f);
+
 struct AreaTriggerTeleport
 {
     std::string message;

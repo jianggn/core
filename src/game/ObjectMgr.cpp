@@ -6734,6 +6734,48 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
         CharacterDatabase.AsyncPQueryUnsafe(cb, &OldMailsReturner::Callback, "SELECT `id`, `message_type`, `sender_guid`, `receiver_guid`, `item_text_id`, `has_items`, `expire_time`, `cod`, `checked`, `mail_template_id` FROM `mail` WHERE `expire_time` < '" UI64FMTD "' ORDER BY `expire_time`", (uint64)basetime);
 }
 
+bool IsPointInAreaTriggerZone(AreaTriggerEntry const* atEntry, uint32 mapid, float x, float y, float z, float delta)
+{
+    if (mapid != atEntry->map_id)
+        return false;
+
+    if (atEntry->radius > 0)
+    {
+        // if we have radius check it
+        float dist2 = (x - atEntry->x) * (x - atEntry->x) + (y - atEntry->y) * (y - atEntry->y) + (z - atEntry->z) * (z - atEntry->z);
+        if (dist2 > (atEntry->radius + delta) * (atEntry->radius + delta))
+            return false;
+    }
+    else
+    {
+        // we have only extent
+
+        // rotate the players position instead of rotating the whole cube, that way we can make a simplified
+        // is-in-cube check and we have to calculate only one point instead of 4
+
+        // 2PI = 360, keep in mind that ingame orientation is counter-clockwise
+        double rotation = 2 * M_PI - atEntry->box_orientation;
+        double sinVal = sin(rotation);
+        double cosVal = cos(rotation);
+
+        float playerBoxDistX = x - atEntry->x;
+        float playerBoxDistY = y - atEntry->y;
+
+        float dx = float(playerBoxDistX * cosVal - playerBoxDistY * sinVal);
+        float dy = float(playerBoxDistY * cosVal + playerBoxDistX * sinVal);
+
+        // box edges are parallel to coordiante axis, so we can treat every dimension independently :D
+        float dz = z - atEntry->z;
+
+        if ((fabs(dx) > atEntry->box_x / 2 + delta) ||
+                (fabs(dy) > atEntry->box_y / 2 + delta) ||
+                (fabs(dz) > atEntry->box_z / 2 + delta))
+            return false;
+    }
+
+    return true;
+}
+
 void ObjectMgr::LoadAreaTriggers()
 {
     std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT * FROM `areatrigger_template` t1 WHERE `build`=(SELECT max(`build`) FROM `areatrigger_template` t2 WHERE t1.`id`=t2.`id` && `build` <= %u)", SUPPORTED_CLIENT_BUILD));
@@ -6759,15 +6801,16 @@ void ObjectMgr::LoadAreaTriggers()
         uint32 triggerId = fields[0].GetUInt32();
 
         areaTrigger.id = triggerId;
-        areaTrigger.mapid = fields[2].GetUInt32();
-        areaTrigger.x = fields[3].GetFloat();
-        areaTrigger.y = fields[4].GetFloat();
-        areaTrigger.z = fields[5].GetFloat();
-        areaTrigger.radius = fields[6].GetFloat();
-        areaTrigger.box_x = fields[7].GetFloat();
-        areaTrigger.box_y = fields[8].GetFloat();
-        areaTrigger.box_z = fields[9].GetFloat();
-        areaTrigger.box_orientation = fields[10].GetFloat();
+        areaTrigger.name = fields[2].GetCppString();
+        areaTrigger.map_id = fields[3].GetUInt32();
+        areaTrigger.x = fields[4].GetFloat();
+        areaTrigger.y = fields[5].GetFloat();
+        areaTrigger.z = fields[6].GetFloat();
+        areaTrigger.radius = fields[7].GetFloat();
+        areaTrigger.box_x = fields[8].GetFloat();
+        areaTrigger.box_y = fields[9].GetFloat();
+        areaTrigger.box_z = fields[10].GetFloat();
+        areaTrigger.box_orientation = fields[11].GetFloat();
 
 
         m_AreaTriggersMap[triggerId] = areaTrigger;
@@ -7417,7 +7460,7 @@ AreaTriggerTeleport const* ObjectMgr::GetGoBackTrigger(uint32 map_id) const
         if (itr.second.destination.mapId == uint32(mapEntry->ghostEntranceMap))
         {
             AreaTriggerEntry const* atEntry = GetAreaTrigger(itr.first);
-            if (atEntry && atEntry->mapid == map_id)
+            if (atEntry && atEntry->map_id == map_id)
                 return &itr.second;
         }
     }
