@@ -3809,6 +3809,14 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder* holder)
                 sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "SpellAuraHolder (Spell %u) is in process but attempt removed at SpellAuraHolder (Spell %u) adding, need add stack rule for Unit::RemoveNoStackAurasDueToAuraHolder", i.second->GetId(), holder->GetId());
                 continue;
             }
+
+            // 20142 - Improved Devotion Aura - rank 5
+            if (spellId_spec == SPELL_AURA && i_spellId_spec == SPELL_AURA)
+                if (Player *pPlayer = holder->GetCaster()->ToPlayer())
+                    if (pPlayer->HasAura(20142))
+                        if ((spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_DEVOTION_AURA>() && !i_spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_DEVOTION_AURA>()) || (!spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_DEVOTION_AURA>() && i_spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_DEVOTION_AURA>()))
+                            continue;
+
             sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "[STACK][%u/%u] SpellSpecPerTarget ou SpellSpecPerCaster", spellId, i_spellId);
             aurasToRemove.emplace_back(i_spellId, i.second->GetCasterGuid());
             continue;

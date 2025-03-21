@@ -4198,6 +4198,39 @@ bool Player::ResetTalents(bool noCost)
         }
     }
 
+    // due to talent : 20142 - Improved Devotion Aura - rank 5
+    if (HasAura(20142))
+    {
+        if (HasAura(465))
+        {
+            RemoveAurasDueToSpell(465);
+        }
+        else if (HasAura(10290))
+        {
+            RemoveAurasDueToSpell(10290);
+        }
+        else if (HasAura(643))
+        {
+            RemoveAurasDueToSpell(643);
+        }
+        else if (HasAura(10291))
+        {
+            RemoveAurasDueToSpell(10291);
+        }
+        else if (HasAura(1032))
+        {
+            RemoveAurasDueToSpell(1032);
+        }
+        else if (HasAura(10292))
+        {
+            RemoveAurasDueToSpell(10292);
+        }
+        else if (HasAura(10293))
+        {
+            RemoveAurasDueToSpell(10293);
+        }
+    }
+
     for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
     {
         TalentEntry const* talentInfo = sTalentStore.LookupEntry(i);
