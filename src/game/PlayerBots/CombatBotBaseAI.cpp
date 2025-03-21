@@ -320,6 +320,8 @@ void CombatBotBaseAI::PopulateSpellData()
                 {
                     if (IsHigherRankSpell(pDevotionAura))
                         pDevotionAura = pSpellEntry;
+                    if (IsHigherRankSpell(m_spells.paladin.pImprovedDevotionAura))
+                        m_spells.paladin.pImprovedDevotionAura = pSpellEntry;
                 }
                 else if (pSpellEntry->SpellName[0].find("Retribution Aura") != std::string::npos)
                 {
@@ -1743,8 +1745,11 @@ void CombatBotBaseAI::PopulateSpellData()
             }
 
             std::vector<SpellEntry const*> auras;
-            if (pDevotionAura)
-                auras.push_back(pDevotionAura);
+            if (!me->HasAura(20142))
+            {
+                if (pDevotionAura)
+                    auras.push_back(pDevotionAura);
+            }
             if (pConcentrationAura)
                 auras.push_back(pConcentrationAura);
             if (pRetributionAura)

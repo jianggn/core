@@ -289,6 +289,7 @@ public:
         } raw;
         struct
         {
+            SpellEntry const* pImprovedDevotionAura;
             SpellEntry const* pAura;
             SpellEntry const* pQuZhu;
             SpellEntry const* pShiZiJunDaJi;

@@ -1001,6 +1001,16 @@ void PartyBotAI::UpdateInCombatAI()
 
 void PartyBotAI::UpdateOutOfCombatAI_Paladin()
 {
+    if (me->HasAura(20142))
+    {
+        if (m_spells.paladin.pImprovedDevotionAura &&
+            CanTryToCastSpell(me, m_spells.paladin.pImprovedDevotionAura))
+        {
+            if (DoCastSpell(me, m_spells.paladin.pImprovedDevotionAura) == SPELL_CAST_OK)
+                return;
+        }
+    }
+
     if (m_spells.paladin.pAura &&
         CanTryToCastSpell(me, m_spells.paladin.pAura))
     {
