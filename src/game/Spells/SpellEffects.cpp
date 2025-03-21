@@ -321,9 +321,9 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         if (unitTarget->HasAura(21183) || unitTarget->HasAura(20188) || unitTarget->HasAura(20300) || unitTarget->HasAura(20301) || unitTarget->HasAura(20302) || unitTarget->HasAura(20303))
                             damage = damage * 1.5f;
                         if (unitTarget->HasAura(20185) || unitTarget->HasAura(20344) || unitTarget->HasAura(20345) || unitTarget->HasAura(20346))
-                            m_casterUnit->ModifyHealth(dither(m_casterUnit->GetMaxHealth() * 0.05f));
+                            m_casterUnit->ModifyHealth(dither(m_casterUnit->GetMaxHealth() * 0.06f));
                         if (unitTarget->HasAura(20186) || unitTarget->HasAura(20354) || unitTarget->HasAura(20355))
-                            m_casterUnit->ModifyPower(POWER_MANA, dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.04f));
+                            m_casterUnit->ModifyPower(POWER_MANA, dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f));
                         break;
                     }
                 }
