@@ -312,6 +312,19 @@ void ObjectMgr::LoadAllIdentifiers()
         } while (result->NextRow());
     }
 
+    m_ConditionIdSet.clear();
+    result = WorldDatabase.Query("SELECT DISTINCT `condition_entry` FROM `conditions`");
+
+    if (result)
+    {
+        do
+        {
+            fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            m_ConditionIdSet.insert(id);
+        } while (result->NextRow());
+    }
+
     sSpellMgr.LoadExistingSpellIds();
 }
 
@@ -6811,7 +6824,35 @@ void ObjectMgr::LoadAreaTriggers()
         areaTrigger.box_y = fields[9].GetFloat();
         areaTrigger.box_z = fields[10].GetFloat();
         areaTrigger.box_orientation = fields[11].GetFloat();
+        areaTrigger.cooldown = fields[12].GetUInt32();
+        areaTrigger.condition_id = fields[13].GetUInt32();
+        areaTrigger.script_id = fields[14].GetUInt32();
+        char const* scriptName = fields[15].GetString();
+        areaTrigger.script_name = GetScriptId(scriptName);
 
+        if (areaTrigger.condition_id)
+        {
+            if (!IsExistingConditionId(areaTrigger.condition_id))
+            {
+                sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "AreaTrigger %u has non-existing condition %u assigned.", areaTrigger.id, areaTrigger.condition_id);
+                areaTrigger.condition_id = 0;
+            }
+            
+            if (!areaTrigger.script_id && !areaTrigger.script_name)
+            {
+                sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "AreaTrigger %u has condition %u assigned but no script.", areaTrigger.id, areaTrigger.condition_id);
+                areaTrigger.condition_id = 0;
+            }
+        }
+
+        if (areaTrigger.cooldown)
+        {
+            if (!areaTrigger.script_id && !areaTrigger.script_name)
+            {
+                sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "AreaTrigger %u has cooldown %u assigned but no script.", areaTrigger.id, areaTrigger.cooldown);
+                areaTrigger.cooldown = 0;
+            }
+        }
 
         m_AreaTriggersMap[triggerId] = areaTrigger;
 

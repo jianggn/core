@@ -2669,6 +2669,29 @@ void Map::ScriptsProcess()
     }
 }
 
+void Map::StartAreaTriggerScript(AreaTriggerEntry const* pTrigger, Player* pPlayer)
+{
+    if (pTrigger->condition_id && !IsConditionSatisfied(pTrigger->condition_id, pPlayer, pPlayer->GetMap(), pPlayer, CONDITION_FROM_AREATRIGGER))
+        return;
+
+    if (pTrigger->cooldown)
+    {
+        time_t& currentCooldownTime = m_areaTriggerCooldowns[pTrigger->id];
+        if (currentCooldownTime > sWorld.GetGameTime())
+            return;
+
+        currentCooldownTime = sWorld.GetGameTime() + pTrigger->cooldown;
+    }
+
+    // call c++ script if any
+    if (sScriptMgr.OnAreaTrigger(pPlayer, pTrigger))
+        return;
+
+    // call db script if any
+    if (pTrigger->script_id)
+        ScriptsStart(sAreaTriggerScripts, pTrigger->script_id, pPlayer->GetObjectGuid(), pPlayer->GetObjectGuid());
+}
+
 /**
  * Function return player that in world at CURRENT map
  *
