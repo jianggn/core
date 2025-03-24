@@ -323,7 +323,7 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         if (unitTarget->HasAura(20185) || unitTarget->HasAura(20344) || unitTarget->HasAura(20345) || unitTarget->HasAura(20346))
                             m_casterUnit->ModifyHealth(dither(m_casterUnit->GetMaxHealth() * 0.06f));
                         if (unitTarget->HasAura(20186) || unitTarget->HasAura(20354) || unitTarget->HasAura(20355))
-                            m_casterUnit->ModifyPower(POWER_MANA, dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f));
+                            m_casterUnit->ModifyPower(POWER_MANA, (dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f) + 75));
                         break;
                     }
                 }
