@@ -253,8 +253,11 @@ set (SCRIPTS_SRCS
     spells/spell_druid.cpp
     spells/spell_hunter.cpp
     spells/spell_item.cpp
+    spells/spell_mage.cpp
     spells/spell_paladin.cpp
+    spells/spell_priest.cpp
     spells/spell_rogue.cpp
+    spells/spell_shaman.cpp
     spells/spell_special.cpp
     spells/spell_warlock.cpp
     spells/spell_warrior.cpp
