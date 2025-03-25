@@ -5610,7 +5610,7 @@ bool Unit::IsSpellCrit(Unit const* pVictim, SpellEntry const* spellProto, SpellS
                 else if (IsPet() && GetOwnerGuid().IsPlayer() && (spellProto->Id == 34060 || spellProto->Id == 34061 || spellProto->Id == 3110 || spellProto->Id == 7799 || spellProto->Id == 7800 || spellProto->Id == 7801 || spellProto->Id == 7802 || spellProto->Id == 11762 || spellProto->Id == 11763 || spellProto->Id == 7814 || spellProto->Id == 7815 || spellProto->Id == 7816 || spellProto->Id == 11778 || spellProto->Id == 11779 || spellProto->Id == 11780 || spellProto->Id == 34085 || spellProto->Id == 34091))
                 {
                     Player* pOwner = ::ToPlayer(GetOwner());
-                    critChance = pOwner->GetSpellCritPercent(GetFirstSchoolInMask(schoolMask)) * 0.35 + GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, schoolMask);
+                    critChance = pOwner->GetSpellCritPercent(GetFirstSchoolInMask(schoolMask)) * 0.35 + GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, schoolMask) + 5.0f;
                 }
                 else
                     critChance = GetSpellCritPercent(GetFirstSchoolInMask(schoolMask));
