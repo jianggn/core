@@ -2823,25 +2823,25 @@ float Unit::GetUnitCriticalChance(WeaponAttackType attackType, Unit const* pVict
     }
     else if (IsPet() && GetOwnerGuid().IsPlayer() && (GetEntry() == 200010 || GetEntry() == 1860 || GetEntry() == 1863 || GetEntry() == 417))
     {
-        crit = 10.0f;
+        crit = 4.0f;
         Player* pOwner = ::ToPlayer(GetOwner());
         crit += pOwner->GetSpellCritPercent(SPELL_SCHOOL_HOLY) * 0.35 + GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PERCENT);
     }
     else if (IsPet() && GetOwnerGuid().IsPlayer() && (GetEntry() == 200011 || GetEntry() == 200013))
     {
-        crit = 5.0f;
+        crit = 2.0f;
         Player* pOwner = ::ToPlayer(GetOwner());
         crit += pOwner->GetSpellCritPercent(SPELL_SCHOOL_HOLY) * 0.35 + pOwner->GetFloatValue(PLAYER_CRIT_PERCENTAGE) * 0.35 + GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PERCENT);
     }
     else if (IsPet() && GetOwnerGuid().IsPlayer() && (GetEntry() == 200014 || GetEntry() == 200015))
     {
-        crit = 5.0f;
+        crit = 3.0f;
         Player* pOwner = ::ToPlayer(GetOwner());
         crit += pOwner->GetFloatValue(PLAYER_CRIT_PERCENTAGE) * 0.35 + GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PERCENT);
     }
     else if (IsPet() && GetOwnerGuid().IsPlayer() && (ToPet()->getPetType() == HUNTER_PET))
     {
-        crit = 10.0f;
+        crit = 5.0f;
         Player* pOwner = ::ToPlayer(GetOwner());
         crit += pOwner->GetFloatValue(PLAYER_CRIT_PERCENTAGE) * 0.35 + GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PERCENT);
     }
