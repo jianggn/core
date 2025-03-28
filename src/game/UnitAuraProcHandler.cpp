@@ -1399,6 +1399,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 Item *item = ((Player*)this)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
                 float speed = (item ? item->GetProto()->Delay : BASE_ATTACK_TIME) / 1000.0f;
 
+                // Improved Seal of Righteousness - 20332
+                if (this->HasAura(20332))
+                    triggerAmount += this->GetMaxPower(POWER_MANA);
+
                 float minDmg = triggerAmount / 87.0f;
                 float maxDmg = triggerAmount / 25.0f;
 
@@ -2042,14 +2046,14 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit* pVictim, uint32 
     SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
     float fdamage = CalculateSpellEffectValue(pVictim, spellInfo, triggeredByAura->GetEffIndex());
 
-    // Paladin - Holy Shield : damage bonus 20% max health
+    // Paladin - Holy Shield : damage bonus 7.5% max health and 5% armor
     switch (spellInfo->Id)
     {
         case 20925: // Rank 1
         case 20927: // Rank 2
         case 20928: // Rank 3
         {
-            fdamage += triggeredByAura->GetCaster()->GetMaxHealth() * 0.2f;
+            fdamage += (triggeredByAura->GetCaster()->GetMaxHealth() * 0.075f + triggeredByAura->GetCaster()->GetArmor() * 0.05f);
         }
         break; 
     }
