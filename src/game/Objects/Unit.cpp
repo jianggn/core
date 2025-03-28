@@ -4387,16 +4387,16 @@ int32 Unit::HasAura_34155_34156_total() const
 
 int32 Unit::HasAura_34165_34166_total() const
 {
-    int32 total = 0;
+    float total = 0.0f;
     AuraList const& mTotalAuraList = GetAurasByType(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE);
     for (const auto& i : mTotalAuraList)
     {
         if (i->GetId() == 34165)
-            total += 1;
+            total += 1.5f;
         else if (i->GetId() == 34166)
-            total += 2;
+            total += 3.0f;
     }
-    return total;
+    return dither(total);
 }
 
 bool Unit::HasAura(uint32 spellId, SpellEffectIndex effIndex) const
