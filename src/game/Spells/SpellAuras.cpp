@@ -2195,6 +2195,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             switch (GetId())
             {
                 case 6606:                                  // Self Visual - Sleep Until Cancelled (DND)
+                case 16093:
+                case 14915:
                 {
                     if (apply)
                     {
@@ -2207,6 +2209,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                     return;
                 }
+				
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
                 case 24658:                                 // Unstable Power
                 {
