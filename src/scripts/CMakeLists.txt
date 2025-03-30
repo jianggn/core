@@ -44,7 +44,6 @@ set (SCRIPTS_SRCS
     custom/event_attack_city.cpp
     custom/gmisland.cpp
     custom/npc_escort.cpp
-    custom/zero_creatures.cpp
     custom/npc_j_eevee.cpp
     dota/emerald_sanctum/boss_dragon_knight_green.cpp
     dota/emerald_sanctum/boss_dragon_knight_red.cpp
