@@ -4599,6 +4599,25 @@ void Aura::HandlePeriodicHeal(bool apply, bool /*Real*/)
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         m_modifier.m_amount = caster->SpellHealingBonusDone(target, GetSpellProto(), GetEffIndex(), m_modifier.m_amount, DOT, GetStackAmount());
 #endif
+
+        // hunter - Mend Pet - 33% owner's health and mana bonus
+        if (caster->IsPlayer())
+        {
+            switch (GetId())
+            {
+                case 136:
+                case 3111:
+                case 3661:
+                case 3662:
+                case 13542:
+                case 13543:
+                case 13544:
+                {
+                    m_modifier.m_amount += (caster->GetMaxHealth() + caster->GetMaxPower(POWER_MANA)) * 0.066f;
+                    break;
+                }
+            }
+        }
     }
 }
 
