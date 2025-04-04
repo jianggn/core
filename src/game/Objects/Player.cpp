@@ -20211,7 +20211,7 @@ void Player::RewardSinglePlayerAtKill(Unit const* pVictim)
     uint32 xp = PvP ? 0 : MaNGOS::XP::Gain(this, static_cast<Creature const*>(pVictim));
     
     //Double Experience
-    if(HasItemCount(26002, 1))
+    if(HasItemCount(26002, 1) || HasItemCount(26048, 1))
     {
         xp = xp * 2;
     }
@@ -20231,7 +20231,7 @@ void Player::RewardSinglePlayerAtKill(Unit const* pVictim)
             {
                 //Double Experience
                 uint32 xp_pet = MaNGOS::XP::Gain(pet, static_cast<Creature const*>(pVictim));
-                if(HasItemCount(26002, 1))
+                if(HasItemCount(26002, 1) || HasItemCount(26048, 1))
                 {
                     xp_pet = xp_pet * 2;
                 }
