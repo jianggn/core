@@ -4591,31 +4591,31 @@ void Aura::HandlePeriodicHeal(bool apply, bool /*Real*/)
         if (!caster)
             return;
 
+        SpellEntry const* spellProto = GetSpellProto();
+
         // World of Warcraft Client Patch 1.11.0 (2006-06-20)
         // - Periodic Healing: Spells which do periodic healing will now have
         //   their strength determined at the moment they are cast.Changing the
         //   amount of bonus healing you have during the duration of the periodic
         //   spell will have no impact on how much it heals for.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
-        m_modifier.m_amount = caster->SpellHealingBonusDone(target, GetSpellProto(), GetEffIndex(), m_modifier.m_amount, DOT, GetStackAmount());
+        m_modifier.m_amount = caster->SpellHealingBonusDone(target, spellProto, GetEffIndex(), m_modifier.m_amount, DOT, GetStackAmount());
 #endif
 
-        // hunter - Mend Pet - 33% owner's health and mana bonus
         if (caster->IsPlayer())
         {
-            switch (GetId())
+            switch (spellProto->SpellFamilyName)
             {
-                case 136:
-                case 3111:
-                case 3661:
-                case 3662:
-                case 13542:
-                case 13543:
-                case 13544:
-                {
-                    m_modifier.m_amount += (caster->GetMaxHealth() + caster->GetMaxPower(POWER_MANA)) * 0.066f;
+                case SPELLFAMILY_HUNTER:
+                    // hunter - Mend Pet - 20% owner's health and mana bonus
+                    if (spellProto->IsFitToFamilyMask<CF_HUNTER_MEND_PET>())
+                    {
+                        m_modifier.m_amount += (caster->GetMaxHealth() + caster->GetMaxPower(POWER_MANA)) * 0.04f;
+                        break;
+                    }
                     break;
-                }
+                default:
+                    break;
             }
         }
     }
