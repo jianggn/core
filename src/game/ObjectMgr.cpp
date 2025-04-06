@@ -8224,6 +8224,35 @@ uint32 ObjectMgr::GeneratePetNumber()
     return m_NextPetNumber++;
 }
 
+static std::string GeneratePlayerName()
+{
+    static char const vowels[] = { 'a', 'e', 'i', 'o', 'u' };
+    static char const consonants[] = { 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z' };
+
+    uint32 const length = urand(sWorld.getConfig(CONFIG_UINT32_MIN_PLAYER_NAME), MAX_PLAYER_NAME);
+    std::string name;
+    name.resize(length);
+
+    bool useVowel = urand(0, 1) != 0;
+    for (uint32 i = 0; i < length; ++i)
+    {
+        name[i] = useVowel ? vowels[urand(0, sizeof(vowels) - 1)] : consonants[urand(0, sizeof(consonants) - 1)];
+        useVowel = !useVowel;
+    }
+
+    return name;
+};
+
+std::string ObjectMgr::GenerateFreePlayerName()
+{
+    std::string name;
+    do
+    {
+        name = GeneratePlayerName();
+    } while (sObjectMgr.GetPlayerGuidByName(name));
+    return name;
+}
+
 std::string ObjectMgr::GeneratePetName(uint32 entry)
 {
     std::vector<std::string>& list0 = m_PetHalfNameMap0[entry];
