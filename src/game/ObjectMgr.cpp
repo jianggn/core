@@ -8248,7 +8248,8 @@ std::string ObjectMgr::GenerateFreePlayerName()
     std::string name;
     do
     {
-        name = GeneratePlayerName();
+        //name = GeneratePlayerName();
+        name = GeneratePetName(2000);
     } while (sObjectMgr.GetPlayerGuidByName(name));
     return name;
 }
