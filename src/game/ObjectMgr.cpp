@@ -8246,11 +8246,22 @@ static std::string GeneratePlayerName()
 std::string ObjectMgr::GenerateFreePlayerName()
 {
     std::string name;
-    do
+    bool CallGeneratePlayerName = false;
+    for (uint32 i = 0; i < 200; ++i)
     {
-        //name = GeneratePlayerName();
         name = GeneratePetName(2000);
-    } while (sObjectMgr.GetPlayerGuidByName(name));
+        if (!sObjectMgr.GetPlayerGuidByName(name))
+            break;
+        if (i == 199)
+            CallGeneratePlayerName = true;
+    }
+    if (CallGeneratePlayerName)
+    {
+        do
+        {
+            name = GeneratePlayerName();
+        } while (sObjectMgr.GetPlayerGuidByName(name));
+    }
     return name;
 }
 
