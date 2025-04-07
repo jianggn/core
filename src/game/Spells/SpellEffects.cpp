@@ -1996,17 +1996,6 @@ void Spell::EffectApplyAura(SpellEffectIndex effIdx)
 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "Spell: Aura is: %u [Spell%u:DiminishingGroup%u]", m_spellInfo->EffectApplyAuraName[effIdx], m_spellInfo->Id, m_diminishGroup);
 
-    // Gnomish Death Ray
-    // rarely has a chance of dealing double damage, 14.29% chance (guess)
-    // for now we use linear level scaling, but this is likely incorrect (hp pools don't scale exactly linearly)
-    // there is some speculation that this should be tied to Engineering skill level, but since you don't need Engineering to use the item at all this seems doubtful
-    if (m_spellInfo->Id == 13278)
-        m_currentBasePoints[effIdx] = effIdx == EFFECT_INDEX_0 ? int32(urand(600, 1200) * (caster->GetLevel() / 60.0f)) * (!urand(0,6) ? 2 : 1)
-                                                                 : m_currentBasePoints[EFFECT_INDEX_0] * 0.1249f;
-    // Paladin T3 JoL
-    else if (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_WISDOM_LIGHT>() && m_spellInfo->SpellIconID == 299 && m_casterUnit && m_casterUnit->HasAura(28775))
-        m_currentBasePoints[effIdx] = 20;
-
     Aura* aur = CreateAura(m_spellInfo, effIdx, &m_currentBasePoints[effIdx], m_spellAuraHolder, unitTarget, caster, m_CastItem);
     m_spellAuraHolder->AddAura(aur, effIdx);
 }

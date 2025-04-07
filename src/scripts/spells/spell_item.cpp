@@ -249,6 +249,62 @@ SpellScript* GetScript_EverlookTransporter(SpellEntry const*)
     return new EverlookTransporterScript();
 }
 
+enum
+{
+    SPELL_GDR_CHANNEL = 13278,
+    SPELL_GDR_PERIODIC_DAMAGE = 13493,
+    SPELL_GDR_DAMAGE_HIT = 13279,
+};
+
+struct GDRChannelScript : public SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_1)
+            spell->GetCaster()->CastSpell(nullptr, SPELL_GDR_PERIODIC_DAMAGE, true);
+        return true;
+    }
+};
+
+SpellScript* GetScript_GDRChannel(SpellEntry const*)
+{
+    return new GDRChannelScript();
+}
+
+struct GDRPeriodicDamageScript : public AuraScript
+{
+    int32 dmg = 0;
+
+    int32 OnAuraValueCalculate(Aura* /*aura*/, Unit* /*caster*/, Unit* /*target*/, SpellEntry const* /*spellProto*/, SpellEffectIndex /*effIdx*/, Item* /*castItem*/, int32 /*value*/) final
+    {
+        return urand(100, 500);
+    }
+
+    void OnPeriodicCalculateAmount(Aura* aura, float& amount) final
+    {
+        Spell* channel = aura->GetTarget()->GetCurrentSpell(CURRENT_CHANNELED_SPELL);
+        if (!channel || channel->m_spellInfo->Id != SPELL_GDR_CHANNEL)
+            amount = 0;
+
+        dmg += amount;
+    }
+
+    void OnAfterApply(Aura* aura, bool apply) final
+    {
+        if (!apply && aura->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE && dmg)
+        {
+            if (ObjectGuid targetGuid = aura->GetTarget()->GetTargetGuid())
+                if (Unit* pTarget = aura->GetTarget()->GetMap()->GetUnit(targetGuid))
+                    aura->GetTarget()->CastCustomSpell(pTarget, SPELL_GDR_DAMAGE_HIT, dmg, {}, {}, true);
+        }
+    }
+};
+
+AuraScript* GetScript_GDRPeriodicDamage(SpellEntry const*)
+{
+    return new GDRPeriodicDamageScript();
+}
+
 void AddSC_item_spell_scripts()
 {
     Script* newscript;
@@ -296,5 +352,15 @@ void AddSC_item_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_everlook_transporter";
     newscript->GetSpellScript = &GetScript_EverlookTransporter;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_gdr_channel";
+    newscript->GetSpellScript = &GetScript_GDRChannel;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_gdr_periodic";
+    newscript->GetAuraScript = &GetScript_GDRPeriodicDamage;
     newscript->RegisterSelf();
 }

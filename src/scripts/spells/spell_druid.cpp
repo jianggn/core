@@ -59,7 +59,7 @@ struct DruidFerociousBiteScript : SpellScript
                     damageSpellId = 22862;
                     break;
                 default:
-                    return;
+                    return true;
             }
 
             int32 dmg = pPlayer->GetPower(POWER_ENERGY) * spell->m_spellInfo->DmgMultiplier[effIdx];

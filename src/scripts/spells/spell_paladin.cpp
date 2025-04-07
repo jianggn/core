@@ -125,6 +125,26 @@ SpellScript* GetScript_PaladinHolyShock(SpellEntry const*)
     return new PaladinHolyShockScript();
 }
 
+// 20185, 20344, 20345, 20346, 25751 - Judgement of Light
+struct PaladinJudgementOfLightProcAuraScript : SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            // Paladin T3 JoL
+            if (spell->m_casterUnit->HasAura(28775))
+                spell->m_currentBasePoints[effIdx] = 20;
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_PaladinJudgementOfLightProcAura(SpellEntry const*)
+{
+    return new PaladinJudgementOfLightProcAuraScript();
+}
+
 void AddSC_paladin_spell_scripts()
 {
     Script* newscript;
@@ -147,5 +167,10 @@ void AddSC_paladin_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_paladin_holy_shock";
     newscript->GetSpellScript = &GetScript_PaladinHolyShock;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_paladin_judgement_of_light_proc_aura";
+    newscript->GetSpellScript = &GetScript_PaladinJudgementOfLightProcAura;
     newscript->RegisterSelf();
 }
