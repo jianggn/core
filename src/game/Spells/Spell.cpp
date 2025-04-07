@@ -5689,7 +5689,9 @@ void Spell::HandleEffects(Unit* pUnitTarget, Item *pItemTarget, GameObject* pGOT
     if (eff < TOTAL_SPELL_EFFECTS)
     {
         if (m_spellScript)
-            m_spellScript->OnEffectExecute(this, i);
+            if (!m_spellScript->OnEffectExecute(this, i))
+                return;
+
         (*this.*SpellEffects[eff])(i);
     }
     else

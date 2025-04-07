@@ -19,13 +19,13 @@
 // 22568, 22827, 22828, 22829, 31018 - Ferocious Bite
 struct DruidFerociousBiteScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
             Player* pPlayer = spell->m_caster->ToPlayer();
             if (!pPlayer)
-                return;
+                return true;
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
 
@@ -67,6 +67,7 @@ struct DruidFerociousBiteScript : SpellScript
 #endif
             pPlayer->SetPower(POWER_ENERGY, 0);
         }
+        return true;
     }
 };
 
@@ -78,7 +79,7 @@ SpellScript* GetScript_DruidFerociousBite(SpellEntry const*)
 // 5229 - Enrage
 struct DruidEnrageScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
         if (effIdx == EFFECT_INDEX_1 && spell->GetUnitTarget())
@@ -88,6 +89,7 @@ struct DruidEnrageScript : SpellScript
             spell->GetUnitTarget()->CastCustomSpell(spell->GetUnitTarget(), 25503, reductionMod, {}, {}, true);
         }
 #endif
+        return true;
     }
 };
 

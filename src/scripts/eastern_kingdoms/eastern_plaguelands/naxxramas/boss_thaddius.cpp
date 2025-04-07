@@ -1090,7 +1090,7 @@ CreatureAI* GetAI_boss_thaddius(Creature* pCreature)
 // 28062 - Positive Charge (Thaddius)
 struct ThaddiusPositiveChargeScript : public SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
@@ -1098,6 +1098,7 @@ struct ThaddiusPositiveChargeScript : public SpellScript
             if (spell->GetUnitTarget()->HasAura(28059))
                 spell->damage = 0;
         }
+        return true;
     }
 };
 
@@ -1109,7 +1110,7 @@ SpellScript* GetScript_ThaddiusPositiveCharge(SpellEntry const*)
 // 28085 - Negative Charge (Thaddius)
 struct ThaddiusNegativeChargeScript : public SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
@@ -1117,6 +1118,7 @@ struct ThaddiusNegativeChargeScript : public SpellScript
             if (spell->GetUnitTarget()->HasAura(28084))
                 spell->damage = 0;
         }
+        return true;
     }
 };
 

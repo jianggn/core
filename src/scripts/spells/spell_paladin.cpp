@@ -19,7 +19,7 @@
 // 24239, 24274, 24275 - Hammer of Wrath
 struct PaladinHammerOfWrathScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
@@ -27,6 +27,7 @@ struct PaladinHammerOfWrathScript : SpellScript
             spell->damage = spell->m_caster->SpellDamageBonusDone(spell->GetUnitTarget(), spell->m_spellInfo, effIdx, spell->damage, SPELL_DIRECT_DAMAGE);
             spell->damage = spell->GetUnitTarget()->SpellDamageBonusTaken(spell->m_caster, spell->m_spellInfo, effIdx, spell->damage, SPELL_DIRECT_DAMAGE);
         }
+        return true;
     }
 };
 
@@ -38,7 +39,7 @@ SpellScript* GetScript_PaladinHammerOfWrath(SpellEntry const*)
 // 20467, 20963, 20964, 20965, 20966 - Judgement of Command
 struct PaladinJudgementOfCommandDamageScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
@@ -49,6 +50,7 @@ struct PaladinJudgementOfCommandDamageScript : SpellScript
             spell->damage = spell->m_caster->SpellDamageBonusDone(spell->GetUnitTarget(), spell->m_spellInfo, effIdx, spell->damage, SPELL_DIRECT_DAMAGE);
             spell->damage = spell->GetUnitTarget()->SpellDamageBonusTaken(spell->m_caster, spell->m_spellInfo, effIdx, spell->damage, SPELL_DIRECT_DAMAGE);
         }
+        return true;
     }
 };
 
@@ -60,17 +62,18 @@ SpellScript* GetScript_PaladinJudgementOfCommandDamage(SpellEntry const*)
 // 20425, 20961, 20962, 20967, 20968 - Judgement of Command
 struct PaladinJudgementOfCommandDummyScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
             uint32 spellId = spell->m_currentBasePoints[effIdx];
             SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellId);
             if (!pSpellEntry)
-                return;
+                return false;
 
             spell->m_caster->CastSpell(spell->GetUnitTarget(), pSpellEntry, true, nullptr);
         }
+        return true;
     }
 };
 
@@ -82,7 +85,7 @@ SpellScript* GetScript_PaladinJudgementOfCommandDummy(SpellEntry const*)
 // 20473, 20929, 20930 - Holy Shock
 struct PaladinHolyShockScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
@@ -105,7 +108,7 @@ struct PaladinHolyShockScript : SpellScript
                     break;
                 default:
                     sLog.Out(LOG_SCRIPTS, LOG_LVL_ERROR, "Spell::EffectDummy: Spell %u not handled in HS", spell->m_spellInfo->Id);
-                    return;
+                    return false;
             }
 
             if (spell->m_caster->IsFriendlyTo(spell->GetUnitTarget()))
@@ -113,6 +116,7 @@ struct PaladinHolyShockScript : SpellScript
             else
                 spell->m_caster->CastSpell(spell->GetUnitTarget(), hurt, true);
         }
+        return true;
     }
 };
 

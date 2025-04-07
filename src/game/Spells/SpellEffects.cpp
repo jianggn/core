@@ -1825,64 +1825,6 @@ void Spell::EffectTriggerSpell(SpellEffectIndex effIdx)
 
     uint32 triggeredSpellId = m_spellInfo->EffectTriggerSpell[effIdx];
 
-    // special cases
-    switch (m_spellInfo->Id)
-    {
-        // The Only Cure is More Green Glow quest 2962
-        case 12709:
-            m_caster->CastSpell(unitTarget, (urand(0, 2) ? 11638 : 11637), true, m_CastItem, nullptr, m_originalCasterGUID);
-            return;
-        // Linken's Boomerang: 10% chance to proc stun, 3% chance to proc disarm (dubious numbers)
-        case 15712:
-            if (triggeredSpellId == 15753)
-            {
-                if (urand(0, 10))
-                    return;
-            }
-            else if (triggeredSpellId == 15752)
-            {
-                if (urand(0, 30))
-                    return;
-            }
-
-            break;
-    }
-    switch (triggeredSpellId)
-    {
-        // Item [Scorpid Surprise] - Heals 294 damage over 21 sec, assuming you don't bite down on a poison sac.
-        // 10% proc rate (no source !)
-        case 6411:
-            if (urand(0, 10))
-                return;
-            break;
-        // Vanish
-        case 18461:
-        {
-            unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_ROOT);
-            unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_DECREASE_SPEED);
-
-            // World of Warcraft Client Patch 1.12.0 (2006-08-22)
-            // -  Vanish now removes effects that allow the caster to always remain
-            //    aware of their target(currently Hunter's Mark and Mind Vision).
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
-            unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_STALKED);
-#endif
-
-            if (Player* pPlayer = unitTarget->ToPlayer())
-                pPlayer->CastHighestStealthRank();
-
-            return;
-        }
-        // Brittle Armor - (need add max stack of 24575 Brittle Armor)
-        case 29284:
-            m_caster->CastSpell(unitTarget, 24575, true, m_CastItem, nullptr, m_originalCasterGUID);
-            return;
-        // Mercurial Shield - (need add max stack of 26464 Mercurial Shield)
-        case 29286:
-            m_caster->CastSpell(unitTarget, 26464, true, m_CastItem, nullptr, m_originalCasterGUID);
-            return;
-    }
-
     // normal case
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(triggeredSpellId);
     if (!spellInfo)
@@ -1985,7 +1927,7 @@ void Spell::EffectTeleportUnits(SpellEffectIndex effIdx)
                 unitTarget->NearTeleportTo(*st, TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET | (unitTarget == m_caster ? TELE_TO_SPELL : 0));
             else if (unitTarget->GetTypeId() == TYPEID_PLAYER)
                 ((Player*)unitTarget)->TeleportTo(*st, unitTarget == m_caster ? TELE_TO_SPELL : 0);
-            break;
+            return;
         }
         case TARGET_LOCATION_CASTER_DEST:
         {
@@ -2017,19 +1959,6 @@ void Spell::EffectTeleportUnits(SpellEffectIndex effIdx)
             // Teleport
             unitTarget->NearTeleportTo(x, y, z, orientation, TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET | (unitTarget == m_caster ? TELE_TO_SPELL : 0));
             return;
-        }
-    }
-
-    // post effects for TARGET_LOCATION_DATABASE
-    if (m_spellInfo->Id == 23442 && m_casterUnit)
-    {
-        int32 r = irand(0, 119);
-        if (r >= 70)                                    // 7/12 success
-        {
-            if (r < 100)                                // 4/12 evil twin
-                m_casterUnit->CastSpell(m_casterUnit, 23445, true);
-            else                                        // 1/12 fire
-                m_casterUnit->CastSpell(m_casterUnit, 23449, true);
         }
     }
 }

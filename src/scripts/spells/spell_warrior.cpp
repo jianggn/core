@@ -37,7 +37,7 @@ SpellScript* GetScript_WarriorIntimidatingShout(SpellEntry const*)
 // 23881, 23892, 23893, 23894 - Bloodthirst
 struct WarriorBloodthirstScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
         {
@@ -46,6 +46,7 @@ struct WarriorBloodthirstScript : SpellScript
                 attackPower += spell->m_casterUnit->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_MELEE_ATTACK_POWER_VERSUS, spell->GetUnitTarget()->GetCreatureTypeMask());
             spell->damage = spell->damage * attackPower / 100;
         }
+        return true;
     }
 };
 
@@ -57,13 +58,14 @@ SpellScript* GetScript_WarriorBloodthirst(SpellEntry const*)
 // 23922, 23923, 23924, 23925 - Shield Slam
 struct WarriorShieldSlamScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_1 && spell->m_casterUnit)
         {
             // Warrior - Shield Slam : damage bonus 7.5% max health
             spell->damage += (spell->m_casterUnit->GetShieldBlockValue() + (spell->m_casterUnit->GetMaxHealth() * 0.075f));
         }
+        return true;
     }
 };
 
@@ -75,12 +77,13 @@ SpellScript* GetScript_WarriorShieldSlam(SpellEntry const*)
 // 20647 - Execute
 struct WarriorExecuteDamageScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
         {
             spell->m_casterUnit->SetPower(POWER_RAGE, 0);
         }
+        return true;
     }
 };
 
@@ -111,15 +114,16 @@ SpellScript* GetScript_WarriorExecuteDummy(SpellEntry const*)
 // 21977 - Warrior's Wrath
 struct WarriorWrathScript : SpellScript
 {
-    void OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
         if (effIdx == EFFECT_INDEX_0)
         {
             if (!spell->GetUnitTarget())
-                return;
+                return false;
 
             spell->m_caster->CastSpell(spell->GetUnitTarget(), 21887, true); // spell mod
         }
+        return true;
     }
 };
 
