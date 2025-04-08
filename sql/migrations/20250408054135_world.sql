@@ -18,6 +18,7 @@ UPDATE `spell_template` SET `script_name`='spell_av_create_shredder' WHERE `entr
 UPDATE `spell_template` SET `script_name`='spell_target_dummy' WHERE `entry` IN (4071, 4072, 19805);
 UPDATE `spell_template` SET `script_name`='spell_eye_of_naxxramas_summon_rockwing_gargoyles' WHERE `entry`=16381;
 UPDATE `spell_template` SET `script_name`='spell_chained_essence_of_eranikus' WHERE `entry`=12766;
+UPDATE `spell_template` SET `script_name`='spell_release_umis_yeti' WHERE `entry`=17166;
 UPDATE `spell_template` SET `script_name`='spell_vanquished_tentacle_of_cthun' WHERE `entry`=26391;
 
 
