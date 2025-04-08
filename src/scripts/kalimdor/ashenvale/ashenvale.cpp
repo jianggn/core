@@ -283,7 +283,7 @@ enum FeeroIronhandData
 static float const aSummonPositions[2][2] =
 {
     {30.0f, 1.25f},
-    {15.0f, 0.95f}//30.0f is in the tree and gets stuck with fathfinding
+    {5.0f, 0.95f}//30.0f is in the tree and gets stuck with fathfinding
 };
 
 // Hardcoded positions for the last 3 mobs
