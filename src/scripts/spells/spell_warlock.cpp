@@ -198,6 +198,42 @@ SpellScript* GetScript_WarlockCurseOfAgonyDummy(SpellEntry const*)
     return new WarlockCurseOfAgonyDummyScript();
 }
 
+// 19505, 19731, 19734, 19736 - Devour Magic
+struct WarlockDevourMagicScript : SpellScript
+{
+    void OnSuccessfulDispel(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            uint32 healSpell;
+            switch (spell->m_spellInfo->Id)
+            {
+                case 19505:
+                    healSpell = 19658;
+                    break;
+                case 19731:
+                    healSpell = 19732;
+                    break;
+                case 19734:
+                    healSpell = 19733;
+                    break;
+                case 19736:
+                    healSpell = 19735;
+                    break;
+                default:
+                    sLog.Out(LOG_SCRIPTS, LOG_LVL_DEBUG, "Spell for Devour Magic %d not handled in Spell::EffectDispel", spell->m_spellInfo->Id);
+                    return;
+            }
+            spell->m_casterUnit->CastSpell(spell->m_casterUnit, healSpell, true);
+        }
+    }
+};
+
+SpellScript* GetScript_WarlockDevourMagic(SpellEntry const*)
+{
+    return new WarlockDevourMagicScript();
+}
+
 void AddSC_warlock_spell_scripts()
 {
     Script* newscript;
@@ -220,5 +256,10 @@ void AddSC_warlock_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_warlock_curse_of_agony_dummy";
     newscript->GetSpellScript = &GetScript_WarlockCurseOfAgonyDummy;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warlock_devour_magic";
+    newscript->GetSpellScript = &GetScript_WarlockDevourMagic;
     newscript->RegisterSelf();
 }

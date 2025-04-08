@@ -145,6 +145,26 @@ SpellScript* GetScript_PaladinJudgementOfLightProcAura(SpellEntry const*)
     return new PaladinJudgementOfLightProcAuraScript();
 }
 
+// 20267, 20341, 20342, 20343 - Judgement of Light
+struct PaladinJudgementOfLightHealScript : SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0)
+        {
+            // Extra heal stored in m_triggeredByAuraBasePoints
+            if (spell->m_triggeredByAuraBasePoints > 0)
+                spell->damage += spell->m_triggeredByAuraBasePoints;
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_PaladinJudgementOfLightHeal(SpellEntry const*)
+{
+    return new PaladinJudgementOfLightHealScript();
+}
+
 void AddSC_paladin_spell_scripts()
 {
     Script* newscript;
@@ -172,5 +192,10 @@ void AddSC_paladin_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_paladin_judgement_of_light_proc_aura";
     newscript->GetSpellScript = &GetScript_PaladinJudgementOfLightProcAura;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_paladin_judgement_of_light_heal";
+    newscript->GetSpellScript = &GetScript_PaladinJudgementOfLightHeal;
     newscript->RegisterSelf();
 }

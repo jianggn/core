@@ -2130,56 +2130,6 @@ void Spell::EffectHeal(SpellEffectIndex effIdx)
             return;
 
         float addhealth = damage;
-
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
-        // Swiftmend - consumes Regrowth or Rejuvenation
-        if (m_spellInfo->Id == 18562)
-        {
-            Unit::AuraList const& RejorRegr = unitTarget->GetAurasByType(SPELL_AURA_PERIODIC_HEAL);
-            // find most short by duration
-            Aura* targetAura = nullptr;
-            for (const auto i : RejorRegr)
-            {
-                // Regrowth or Rejuvenation
-                if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_REJUVENATION, CF_DRUID_REGROWTH>())
-                    if (!targetAura || i->GetAuraDuration() < targetAura->GetAuraDuration())
-                        targetAura = i;
-            }
-
-            if (!targetAura)
-            {
-                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Target (GUID: %u TypeId: %u) has aurastate AURA_STATE_SWIFTMEND but no matching aura.", unitTarget->GetGUIDLow(), unitTarget->GetTypeId());
-                return;
-            }
-            int idx = 0;
-            while (idx < 3)
-            {
-                if (targetAura->GetSpellProto()->EffectApplyAuraName[idx] == SPELL_AURA_PERIODIC_HEAL)
-                    break;
-                idx++;
-            }
-
-            float tickheal = targetAura->GetModifier()->m_amount;
-            int32 tickcount = 0;
-            // Regrowth : 0x40
-            // "18 sec of Regrowth" -> 6 ticks
-            if (targetAura->GetSpellProto()->IsFitToFamilyMask<CF_DRUID_REGROWTH>())
-                tickcount = 6;
-            // Rejuvenation : 0x10
-            // "12 sec of Rejuvenation" -> 4 ticks
-            if (targetAura->GetSpellProto()->IsFitToFamilyMask<CF_DRUID_REJUVENATION>())
-                tickcount = 4;
-
-            unitTarget->RemoveAurasDueToSpell(targetAura->GetId());
-
-            addhealth += tickheal * tickcount;
-        }
-#endif
-
-        // JoL - Extra heal stored in m_triggeredByAuraBasePoints
-        if (m_spellInfo->SpellIconID == 299 && m_spellInfo->SpellVisual == 5560 && m_spellInfo->SpellFamilyFlags == 0 && m_triggeredByAuraBasePoints > 0)
-            addhealth += m_triggeredByAuraBasePoints;
-
         addhealth = caster->SpellHealingBonusDone(unitTarget, m_spellInfo, effIdx, addhealth, HEAL, 1, this);
         addhealth = unitTarget->SpellHealingBonusTaken(caster, m_spellInfo, effIdx, addhealth, HEAL, 1, this);
 
@@ -2397,9 +2347,6 @@ void Spell::EffectEnergize(SpellEffectIndex effIdx)
     if (unitTarget->GetMaxPower(power) == 0)
         return;
 
-    if (m_spellInfo->Id == 2687)
-        unitTarget->SetInCombatState();
-
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
     ExecuteLogInfo info(unitTarget->GetObjectGuid());
     info.energize.amount = damage;
@@ -2436,12 +2383,6 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype, LockType lockType)
                 if (lockType == LOCKTYPE_DISARM_TRAP)
                 {
                     gameObjTarget->SetLootState(GO_JUST_DEACTIVATED);
-                    return;
-                }
-                else if ((m_spellInfo->Id == 15748) || (m_spellInfo->Id == 16028)) // Freeze Rookery Egg
-                {
-                    if (gameObjTarget->getLootState() == GO_READY)
-                        gameObjTarget->UseDoorOrButton(0, true);
                     return;
                 }
                 else if (gameObjTarget->GetEntry() == 178559) // Larva Spewer
@@ -2926,6 +2867,7 @@ void Spell::EffectDispel(SpellEffectIndex effIdx)
                     successList.emplace_back(holder, 1);
             }
         }
+
         // Send success log and really remove auras
         if (!successList.empty())
         {
@@ -2935,7 +2877,7 @@ void Spell::EffectDispel(SpellEffectIndex effIdx)
             data << unitTarget->GetPackGUID();              // Victim GUID
             data << m_caster->GetPackGUID();                // Caster GUID
 #else
-            data << unitTarget->GetGUID();              // Victim GUID
+            data << unitTarget->GetGUID();                  // Victim GUID
 #endif
             data << uint32(count);
             for (const auto& j : successList)
@@ -2947,45 +2889,10 @@ void Spell::EffectDispel(SpellEffectIndex effIdx)
             m_caster->SendMessageToSet(&data, true);
 
             // On success dispel
-            // Devour Magic
-            if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->Category == SPELLCATEGORY_HEALING_SPELL)
-            {
-                if (!m_casterUnit)
-                    return;
-
-                uint32 healSpell = 0;
-                uint32 basePoint = 0;
-                switch (m_spellInfo->Id)
-                {
-                    case 19505:
-                        healSpell = 19658;
-                        basePoint = 234;
-                        break;
-                    case 19731:
-                        healSpell = 19732;
-                        basePoint = 319;
-                        break;
-                    case 19734:
-                        healSpell = 19733;
-                        basePoint = 438;
-                        break;
-                    case 19736:
-                        healSpell = 19735;
-                        basePoint = 579;
-                        break;
-                    default:
-                        sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Spell for Devour Magic %d not handled in Spell::EffectDispel", m_spellInfo->Id);
-                        break;
-                }
-                if (healSpell)
-                {
-                    // Devour Magic - 35% max health bonus
-                    uint32 modPoint = basePoint + dither(m_casterUnit->GetMaxHealth() * 0.35f);
-                    //m_casterUnit->CastSpell(m_casterUnit, healSpell, true);
-                    m_casterUnit->CastCustomSpell(m_casterUnit, healSpell, modPoint, {}, {}, true, nullptr);
-                }
-            }
+            if (m_spellScript)
+                m_spellScript->OnSuccessfulDispel(this, effIdx);
         }
+
         // Send fail log to client
         if (!failList.empty())
         {
@@ -3152,41 +3059,6 @@ void Spell::EffectSummonWild(SpellEffectIndex effIdx)
                 summon->SetLootRecipient(m_casterUnit);
             }
 
-            // Exception for Alterac Shredder. The second effect of the spell (possess) can't target the shredder
-            // because it is not summoned at target selection phase.
-            switch (m_spellInfo->Id)
-            {
-                // Both sides
-                case 21544:
-                case 21565:
-                    summon->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->EffectTriggerSpell[1]);
-                    summon->SetCreatorGuid(m_caster->GetObjectGuid());
-                    break;
-                // Target Dummy
-                case 4071:
-                case 4072:
-                case 19805:
-                    summon->SetFactionTemporary(m_caster->GetFactionTemplateId(), TEMPFACTION_NONE);
-                    summon->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
-                    break;
-                // Rockwing Gargoyle
-                case 16381:
-                    if (m_casterUnit)
-                    {
-                        if (Unit* pTarget = m_casterUnit->GetAttackerForHelper())
-                            summon->AI()->AttackStart(pTarget);
-                    }
-                    break;
-                // Chained Essence of Eranikus
-                case 12766:
-                    if (m_casterUnit)
-                    {
-                        uint32 textId = PickRandomValue(4438, 4439, 4440, 4441, 4442, 4443, 4444, 4445);
-                        summon->MonsterWhisper(textId, m_casterUnit);
-                    }
-                    break;
-            }
-
             // UNIT_FIELD_CREATEDBY are not set for these kind of spells.
             // Does exceptions exist? If so, what are they?
             // summon->SetCreatorGuid(m_caster->GetObjectGuid());
@@ -3333,56 +3205,6 @@ void Spell::EffectSummonGuardian(SpellEffectIndex effIdx)
         // Notify Summoner
         if (m_casterUnit->IsCreature() && ((Creature*)m_casterUnit)->AI())
             ((Creature*)m_casterUnit)->AI()->JustSummoned(spawnCreature);
-
-        switch (m_spellInfo->Id)
-        {
-            case 17166: // Release Umi's Yeti - Quest Are We There, Yeti? Part 3
-            {
-                spawnCreature->MonsterTextEmote(6327);
-                spawnCreature->MonsterSay(9055);
-
-                switch (spawnCreature->GetAreaId())
-                {
-                    case 541: // Un'Goro Crater
-                        if (Creature* pCreature = spawnCreature->FindNearestCreature(10977, 30.0f, true)) // NPC_QUIXXIL
-                        {
-                            spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterSay(6314);
-                            pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
-                        }
-                        break;
-                    case 976: // Tanaris
-                        if (Creature* pCreature = spawnCreature->FindNearestCreature(7583, 30.0f, true)) // NPC_SPRINKLE
-                        {
-                            spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterTextEmote(6301);
-                            pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
-                        }
-                        break;
-                    case 2255: // Winterspring
-                        if (Creature* pCreature = spawnCreature->FindNearestCreature(10978, 30.0f, true)) // NPC_LEGACKI
-                        {
-                            spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
-                            pCreature->MonsterTextEmote(6306);
-                            pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
-                        }
-                        break;
-                }
-                break;
-            }
-            case 26391: // Vanquished Tentacle
-            {
-                CharmInfo *charmInfo = spawnCreature->GetCharmInfo();
-                charmInfo->SetIsAtStay(true);
-                charmInfo->SetCommandState(COMMAND_STAY);
-                charmInfo->SetIsCommandFollow(false);
-                charmInfo->SaveStayPosition();
-                break;
-            }
-        }
 
         if (count == 0)
             AddExecuteLogInfo(effIdx, ExecuteLogInfo(spawnCreature->GetObjectGuid()));

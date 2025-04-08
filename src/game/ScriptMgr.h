@@ -165,6 +165,8 @@ struct SpellScript
     virtual void OnSummon(Spell* /*spell*/, Creature* /*summon*/) const {}
     // called after summoning a gameobject
     virtual void OnSummon(Spell* /*spell*/, GameObject* /*summon*/) const {}
+    // called from dispel effect handler if we successfully remove a debuff
+    virtual void OnSuccessfulDispel(Spell* /*spell*/, SpellEffectIndex /*effIdx*/) const {}
 };
 
 struct AuraScript

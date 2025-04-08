@@ -98,6 +98,65 @@ SpellScript* GetScript_DruidEnrage(SpellEntry const*)
     return new DruidEnrageScript();
 }
 
+// 18562 - Swiftmend
+struct DruidSwiftmendScript : SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // find shortest duration heal
+            Aura* targetAura = nullptr;
+            Unit::AuraList const& periodicHeals = spell->GetUnitTarget()->GetAurasByType(SPELL_AURA_PERIODIC_HEAL);
+            for (const auto i : periodicHeals)
+            {
+                // Regrowth or Rejuvenation
+                if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_REJUVENATION, CF_DRUID_REGROWTH>())
+                    if (!targetAura || i->GetAuraDuration() < targetAura->GetAuraDuration())
+                        targetAura = i;
+            }
+
+            if (!targetAura)
+            {
+                sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Target (GUID: %u TypeId: %u) has aurastate AURA_STATE_SWIFTMEND but no matching aura.", spell->GetUnitTarget()->GetGUIDLow(), spell->GetUnitTarget()->GetTypeId());
+                return false;
+            }
+
+            int idx = 0;
+            while (idx < 3)
+            {
+                if (targetAura->GetSpellProto()->EffectApplyAuraName[idx] == SPELL_AURA_PERIODIC_HEAL)
+                    break;
+                idx++;
+            }
+
+            float tickheal = targetAura->GetModifier()->m_amount;
+            int32 tickcount = 0;
+            // Regrowth : 0x40
+            // "18 sec of Regrowth" -> 6 ticks
+            if (targetAura->GetSpellProto()->IsFitToFamilyMask<CF_DRUID_REGROWTH>())
+                tickcount = 6;
+            // Rejuvenation : 0x10
+            // "12 sec of Rejuvenation" -> 4 ticks
+            if (targetAura->GetSpellProto()->IsFitToFamilyMask<CF_DRUID_REJUVENATION>())
+                tickcount = 4;
+
+            // consumes Regrowth or Rejuvenation
+            spell->GetUnitTarget()->RemoveAurasDueToSpell(targetAura->GetId());
+
+            spell->damage += tickheal * tickcount;
+        }
+#endif
+        return true;
+    }
+};
+
+SpellScript* GetScript_DruidSwiftmend(SpellEntry const*)
+{
+    return new DruidSwiftmendScript();
+}
+
 void AddSC_druid_spell_scripts()
 {
     Script* newscript;
@@ -110,5 +169,10 @@ void AddSC_druid_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_druid_enrage";
     newscript->GetSpellScript = &GetScript_DruidEnrage;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_druid_swiftmend";
+    newscript->GetSpellScript = &GetScript_DruidSwiftmend;
     newscript->RegisterSelf();
 }

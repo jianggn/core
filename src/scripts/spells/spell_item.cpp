@@ -305,6 +305,106 @@ AuraScript* GetScript_GDRPeriodicDamage(SpellEntry const*)
     return new GDRPeriodicDamageScript();
 }
 
+// 4071 - Target Dummy
+// 4072 - Advanced Target Dummy
+// 19805 - Masterwork Target Dummy
+struct TargetDummyScript : SpellScript
+{
+    void OnSummon(Spell* spell, Creature* summon) const final
+    {
+        summon->SetFactionTemporary(spell->m_caster->GetFactionTemplateId(), TEMPFACTION_NONE);
+        summon->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+    }
+};
+
+SpellScript* GetScript_TargetDummy(SpellEntry const*)
+{
+    return new TargetDummyScript();
+}
+
+// 12766 - Poison Cloud (Chained Essence of Eranikus)
+struct ChainedEssenceOfEranikusScript : SpellScript
+{
+    void OnSummon(Spell* spell, Creature* summon) const final
+    {
+        if (spell->m_casterUnit)
+        {
+            uint32 textId = PickRandomValue(4438, 4439, 4440, 4441, 4442, 4443, 4444, 4445);
+            summon->MonsterWhisper(textId, spell->m_casterUnit);
+        }
+    }
+};
+
+SpellScript* GetScript_ChainedEssenceOfEranikus(SpellEntry const*)
+{
+    return new ChainedEssenceOfEranikusScript();
+}
+
+// 17166 - Release Umi's Yeti
+struct ReleaseUmisYetiScript : SpellScript
+{
+    void OnSummon(Spell* spell, Creature* summon) const final
+    {
+        // Release Umi's Yeti - Quest Are We There, Yeti? Part 3
+        summon->MonsterTextEmote(6327);
+        summon->MonsterSay(9055);
+
+        switch (summon->GetAreaId())
+        {
+            case 541: // Un'Goro Crater
+                if (Creature* pCreature = summon->FindNearestCreature(10977, 30.0f, true)) // NPC_QUIXXIL
+                {
+                    summon->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
+                    pCreature->MonsterSay(6314);
+                    pCreature->SetWalk(false);
+                    pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
+                }
+                break;
+            case 976: // Tanaris
+                if (Creature* pCreature = summon->FindNearestCreature(7583, 30.0f, true)) // NPC_SPRINKLE
+                {
+                    summon->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
+                    pCreature->MonsterTextEmote(6301);
+                    pCreature->SetWalk(false);
+                    pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
+                }
+                break;
+            case 2255: // Winterspring
+                if (Creature* pCreature = summon->FindNearestCreature(10978, 30.0f, true)) // NPC_LEGACKI
+                {
+                    summon->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
+                    pCreature->MonsterTextEmote(6306);
+                    pCreature->SetWalk(false);
+                    pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
+                }
+                break;
+        }
+    }
+};
+
+SpellScript* GetScript_ReleaseUmisYeti(SpellEntry const*)
+{
+    return new ReleaseUmisYetiScript();
+}
+
+// 26391 - Tentacle Call (Vanquished Tentacle of C'Thun)
+struct VanquishedTentacleofCthunScript : SpellScript
+{
+    void OnSummon(Spell* spell, Creature* summon) const final
+    {
+        CharmInfo *charmInfo = summon->GetCharmInfo();
+        charmInfo->SetIsAtStay(true);
+        charmInfo->SetCommandState(COMMAND_STAY);
+        charmInfo->SetIsCommandFollow(false);
+        charmInfo->SaveStayPosition();
+    }
+};
+
+SpellScript* GetScript_VanquishedTentacleofCthun(SpellEntry const*)
+{
+    return new VanquishedTentacleofCthunScript();
+}
+
 void AddSC_item_spell_scripts()
 {
     Script* newscript;
@@ -362,5 +462,25 @@ void AddSC_item_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_gdr_periodic";
     newscript->GetAuraScript = &GetScript_GDRPeriodicDamage;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_target_dummy";
+    newscript->GetSpellScript = &GetScript_TargetDummy;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_chained_essence_of_eranikus";
+    newscript->GetSpellScript = &GetScript_ChainedEssenceOfEranikus;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_release_umis_yeti";
+    newscript->GetSpellScript = &GetScript_ReleaseUmisYeti;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_vanquished_tentacle_of_cthun";
+    newscript->GetSpellScript = &GetScript_VanquishedTentacleofCthun;
     newscript->RegisterSelf();
 }

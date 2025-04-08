@@ -116,11 +116,8 @@ struct WarriorWrathScript : SpellScript
 {
     bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
     {
-        if (effIdx == EFFECT_INDEX_0)
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
         {
-            if (!spell->GetUnitTarget())
-                return false;
-
             spell->m_caster->CastSpell(spell->GetUnitTarget(), 21887, true); // spell mod
         }
         return true;
@@ -130,6 +127,24 @@ struct WarriorWrathScript : SpellScript
 SpellScript* GetScript_WarriorWrath(SpellEntry const*)
 {
     return new WarriorWrathScript();
+}
+
+// 2687 - Bloodrage
+struct WarriorBloodrageScript : SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            spell->GetUnitTarget()->SetInCombatState();
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_WarriorBloodrage(SpellEntry const*)
+{
+    return new WarriorBloodrageScript();
 }
 
 void AddSC_warrior_spell_scripts()
@@ -164,5 +179,10 @@ void AddSC_warrior_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_warrior_wrath";
     newscript->GetSpellScript = &GetScript_WarriorWrath;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warrior_bloodrage";
+    newscript->GetSpellScript = &GetScript_WarriorBloodrage;
     newscript->RegisterSelf();
 }
