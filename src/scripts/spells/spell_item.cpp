@@ -405,6 +405,54 @@ SpellScript* GetScript_VanquishedTentacleofCthun(SpellEntry const*)
     return new VanquishedTentacleofCthunScript();
 }
 
+// 8342 - Defibrillate (Goblin Jumper Cables)
+struct GoblinJumperCablesScript : public SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            // Defibrillate (Goblin Jumper Cables) have 33% chance on success
+            if (roll_chance_i(67))
+            {
+                if (spell->m_casterUnit)
+                    spell->m_casterUnit->CastSpell(spell->m_casterUnit, 8338, true, spell->m_CastItem);
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_GoblinJumperCables(SpellEntry const*)
+{
+    return new GoblinJumperCablesScript();
+}
+
+// 22999 - Defibrillate (Goblin Jumper Cables XL)
+struct GoblinJumperCablesXLScript : public SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
+        {
+            // Defibrillate (Goblin Jumper Cables XL) have 50% chance on success
+            if (roll_chance_i(50))
+            {
+                if (spell->m_casterUnit)
+                    spell->m_casterUnit->CastSpell(spell->m_casterUnit, 23055, true, spell->m_CastItem);
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_GoblinJumperCablesXL(SpellEntry const*)
+{
+    return new GoblinJumperCablesXLScript();
+}
+
 void AddSC_item_spell_scripts()
 {
     Script* newscript;
@@ -482,5 +530,15 @@ void AddSC_item_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_vanquished_tentacle_of_cthun";
     newscript->GetSpellScript = &GetScript_VanquishedTentacleofCthun;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_goblin_jumper_cables";
+    newscript->GetSpellScript = &GetScript_GoblinJumperCables;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_goblin_jumper_cables_xl";
+    newscript->GetSpellScript = &GetScript_GoblinJumperCablesXL;
     newscript->RegisterSelf();
 }

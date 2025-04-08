@@ -165,6 +165,39 @@ SpellScript* GetScript_PaladinJudgementOfLightHeal(SpellEntry const*)
     return new PaladinJudgementOfLightHealScript();
 }
 
+// 20178 - Reckoning
+struct PaladinReckoningScript : SpellScript
+{
+    bool OnEffectExecute(Spell* spell, SpellEffectIndex effIdx) const final
+    {
+        if (effIdx == EFFECT_INDEX_0 && spell->GetUnitTarget())
+        {
+            // World of Warcraft Client Patch 1.3.0 (2005-03-22)
+            // - Fixed a bug where abilities that give extra attacks, like the paladin
+            //   Reckoning talent, could cause the following swing to take longer than
+            //   it should.
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_2_4
+            spell->GetUnitTarget()->ResetAttackTimer();
+#endif
+
+            // It was possible to stack infinite extra attacks in early vanilla.
+            // https://www.youtube.com/watch?v=TqPQ4SNmx2c
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
+            if (spell->GetUnitTarget()->GetExtraAttacks() < 4)
+#endif
+                spell->GetUnitTarget()->AddExtraAttack();
+
+            return false;
+        }
+        return true;
+    }
+};
+
+SpellScript* GetScript_PaladinReckoning(SpellEntry const*)
+{
+    return new PaladinReckoningScript();
+}
+
 void AddSC_paladin_spell_scripts()
 {
     Script* newscript;
@@ -197,5 +230,10 @@ void AddSC_paladin_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_paladin_judgement_of_light_heal";
     newscript->GetSpellScript = &GetScript_PaladinJudgementOfLightHeal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_paladin_reckoning";
+    newscript->GetSpellScript = &GetScript_PaladinReckoning;
     newscript->RegisterSelf();
 }

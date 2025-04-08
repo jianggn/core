@@ -242,6 +242,27 @@ SpellScript* GetScript_WarlockDevourMagic(SpellEntry const*)
     return new WarlockDevourMagicScript();
 }
 
+// 1122, 24670 - Inferno
+struct WarlockInfernoScript : SpellScript
+{
+    void OnSummon(Spell* spell, Creature* summon) const final
+    {
+        // Enslave demon effect, without mana cost and cooldown
+        spell->m_caster->CastSpell(summon, 20882, true);
+
+        // Short root spell on infernal from sniffs
+        summon->CastSpell(summon, 22707, true);
+
+        // Inferno effect
+        summon->CastSpell(summon, 22703, true);
+    }
+};
+
+SpellScript* GetScript_WarlockInferno(SpellEntry const*)
+{
+    return new WarlockInfernoScript();
+}
+
 void AddSC_warlock_spell_scripts()
 {
     Script* newscript;
@@ -269,5 +290,10 @@ void AddSC_warlock_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_warlock_devour_magic";
     newscript->GetSpellScript = &GetScript_WarlockDevourMagic;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_warlock_inferno";
+    newscript->GetSpellScript = &GetScript_WarlockInferno;
     newscript->RegisterSelf();
 }
