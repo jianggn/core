@@ -206,25 +206,33 @@ struct WarlockDevourMagicScript : SpellScript
         if (effIdx == EFFECT_INDEX_0 && spell->m_casterUnit)
         {
             uint32 healSpell;
+            uint32 basePoint = 0;
             switch (spell->m_spellInfo->Id)
             {
                 case 19505:
                     healSpell = 19658;
+                    basePoint = 234;
                     break;
                 case 19731:
                     healSpell = 19732;
+                    basePoint = 319;
                     break;
                 case 19734:
                     healSpell = 19733;
+                    basePoint = 438;
                     break;
                 case 19736:
                     healSpell = 19735;
+                    basePoint = 579;
                     break;
                 default:
                     sLog.Out(LOG_SCRIPTS, LOG_LVL_DEBUG, "Spell for Devour Magic %d not handled in Spell::EffectDispel", spell->m_spellInfo->Id);
                     return;
             }
-            spell->m_casterUnit->CastSpell(spell->m_casterUnit, healSpell, true);
+            // Devour Magic - 33% max health bonus
+            uint32 modPoint = basePoint + dither(spell->m_casterUnit->GetMaxHealth() * 0.33f);
+            //spell->m_casterUnit->CastSpell(spell->m_casterUnit, healSpell, true);
+            spell->m_casterUnit->CastCustomSpell(spell->m_casterUnit, healSpell, modPoint, {}, {}, true, nullptr);
         }
     }
 };
