@@ -726,6 +726,7 @@ class WorldSession
         void HandleGetMailList(WorldPacket& recv_data);
         void HandleSendMail(WorldPacket& recv_data);
         class AsyncMailSendRequest;
+        void HandleSendMailRequest(AsyncMailSendRequest* req);
         void HandleSendMailCallback(AsyncMailSendRequest* req);
         void HandleMailTakeMoney(WorldPacket& recv_data);
         void HandleMailTakeItem(WorldPacket& recv_data);
