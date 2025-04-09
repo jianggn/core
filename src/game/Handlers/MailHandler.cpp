@@ -223,7 +223,6 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_MAIL) == 1 && pHardcoreChallengerSender->GetLevel()<60 && pHardcoreChallengerSender->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
         {
             SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
-            delete req;
             return;
         }
     }
@@ -235,7 +234,6 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_MAIL) == 1 && hardcoreChallengerReceiverResult->Fetch()[0].GetUInt32() == req->receiver)
         {
             SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
-            delete req;
             return;
         }
     }
@@ -250,7 +248,6 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
                 if (it->GetLootingTime())
                 {
                     SendMailResult(0, MAIL_SEND, MAIL_ERR_EQUIP_ERROR);
-                    delete req;
                     return;
                 }
             }
