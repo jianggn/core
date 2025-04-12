@@ -1147,15 +1147,15 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
         travelboots = 10000 * GOLD;
     if (travelboots >= GOLD)
     {
-        costprice = std::to_string(travelboots / GOLD) + "金币" + std::to_string((travelboots % GOLD) / SILVER) + "银币" + std::to_string(travelboots % SILVER) + "铜币";
+        costprice = "传送费用：" + std::to_string(travelboots / GOLD) + "金币" + std::to_string((travelboots % GOLD) / SILVER) + "银币" + std::to_string(travelboots % SILVER) + "铜币";
     }
     else if (travelboots >= SILVER && travelboots < GOLD)
     {
-        costprice = std::to_string(travelboots / SILVER) + "银币" + std::to_string(travelboots % SILVER) + "铜币";
+        costprice = "传送费用：" + std::to_string(travelboots / SILVER) + "银币" + std::to_string(travelboots % SILVER) + "铜币";
     }
     else if (travelboots < SILVER)
     {
-        costprice = std::to_string(travelboots) + "铜币";
+        costprice = "传送费用：" + std::to_string(travelboots) + "铜币";
     }
 
     switch (action)
@@ -1301,7 +1301,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1311,7 +1311,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1321,7 +1321,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1334,7 +1334,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1344,7 +1344,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1354,7 +1354,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1369,7 +1369,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1379,7 +1379,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1389,7 +1389,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1402,7 +1402,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1412,7 +1412,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1422,7 +1422,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1435,7 +1435,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1445,7 +1445,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1455,7 +1455,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1465,7 +1465,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1475,7 +1475,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1485,7 +1485,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1495,7 +1495,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1505,7 +1505,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1515,7 +1515,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1528,7 +1528,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1538,7 +1538,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1548,7 +1548,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1558,7 +1558,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1568,7 +1568,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             //player->CLOSE_GOSSIP_MENU();
             //if(player->GetMoney() < travelboots)
             //{
-            //    player->GetSession()->SendNotification(costprice);
+            //    player->GetSession()->SendNotification(costprice.c_str());
             //    break;
             //}
             //player->ModifyMoney(-travelboots);
@@ -1578,7 +1578,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1588,7 +1588,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1598,7 +1598,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1608,7 +1608,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1618,7 +1618,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1628,7 +1628,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1638,7 +1638,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1648,7 +1648,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1658,7 +1658,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1668,7 +1668,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1678,7 +1678,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1688,7 +1688,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1698,7 +1698,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1708,7 +1708,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1718,7 +1718,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1728,7 +1728,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1738,7 +1738,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1748,7 +1748,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1758,7 +1758,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1768,7 +1768,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1778,7 +1778,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1788,7 +1788,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1798,7 +1798,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1808,7 +1808,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1818,7 +1818,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1828,7 +1828,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1838,7 +1838,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1848,7 +1848,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1858,7 +1858,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1868,7 +1868,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1878,7 +1878,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1888,7 +1888,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1898,7 +1898,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1908,7 +1908,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1918,7 +1918,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1928,7 +1928,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1938,7 +1938,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1948,7 +1948,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1958,7 +1958,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1968,7 +1968,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1978,7 +1978,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1988,7 +1988,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -1998,7 +1998,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2008,7 +2008,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2018,7 +2018,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2028,7 +2028,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2038,7 +2038,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2048,7 +2048,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2058,7 +2058,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2068,7 +2068,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2078,7 +2078,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2088,7 +2088,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2098,7 +2098,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2108,7 +2108,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2118,7 +2118,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2128,7 +2128,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2138,7 +2138,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2148,7 +2148,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2158,7 +2158,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
@@ -2168,7 +2168,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->CLOSE_GOSSIP_MENU();
             if(player->GetMoney() < travelboots)
             {
-                player->GetSession()->SendNotification(costprice);
+                player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
             player->ModifyMoney(-travelboots);
