@@ -4987,7 +4987,11 @@ struct AV_mineNpcAI : public ScriptedAI
         Map* m = m_creature->GetMap();
         if (!m->IsBattleGround())
             return 0;
+
         BattleGroundAV* bgAv = dynamic_cast<BattleGroundAV*>(((BattleGroundMap*)m)->GetBG());
+        if (!bgAv)
+            return 0;
+
         uint32 m_factionId;
         if (m_creature->GetFactionTemplateId() == 85)
             m_factionId = 1;
