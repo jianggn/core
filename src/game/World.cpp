@@ -635,6 +635,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_BUFF_JIEFUFUTI,    "Buff.JieFuFuTi",  99);
 
+    setConfig(CONFIG_UINT32_PRICE_TRAVELBOOTS,    "Price.TravelBoots",  50000);
+
     setConfig(CONFIG_HARDCORECHALLENGER_BAN_INVITE,    "HardcoreChallenger.Ban.Invite",  1);
     setConfig(CONFIG_HARDCORECHALLENGER_BAN_PARTYBOT,    "HardcoreChallenger.Ban.PartyBot",  1);
     setConfig(CONFIG_HARDCORECHALLENGER_BAN_TRADE,    "HardcoreChallenger.Ban.Trade",  1);

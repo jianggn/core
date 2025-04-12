@@ -3036,6 +3036,8 @@ BotLootMoney = 0
 
 Buff.JieFuFuTi = 99
 
+Price.TravelBoots = 50000
+
 HardcoreChallenger.Ban.Invite = 1
 HardcoreChallenger.Ban.PartyBot = 1
 HardcoreChallenger.Ban.Trade = 1
