@@ -1231,6 +1231,8 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->ADD_GOSSIP_ITEM(5, "仇恨熔炉 60级",   GOSSIP_SENDER_MAIN, 1271);
             player->ADD_GOSSIP_ITEM(5, "冬幕谷 60级",    GOSSIP_SENDER_MAIN, 1272);
             player->ADD_GOSSIP_ITEM(5, "亚楠镇 60级",           GOSSIP_SENDER_MAIN, 1273);
+            player->ADD_GOSSIP_ITEM(5, "凄凉山 60级",           GOSSIP_SENDER_MAIN, 1274);
+            player->ADD_GOSSIP_ITEM(5, "修道院 60级",           GOSSIP_SENDER_MAIN, 1275);
             player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5551);
             player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
 
@@ -1833,6 +1835,26 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             }
             player->ModifyMoney(-travelboots);
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -733.396729f, 1536.514160f, 16.620735f, 0.00f);
+            break;
+        case 1274:// Teleport player to DesolateMountain
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, 2948.08f, -4261.04f, 103.785f, 0.00f);
+            break;
+        case 1275:// Teleport player to Monastery
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 2875.06f, -633.725f, 137.839f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
             player->CLOSE_GOSSIP_MENU();
@@ -2491,6 +2513,96 @@ bool GossipSelect_Yarntown(Player *player, Creature *_Creature, uint32 sender, u
     // Main menu
     if (sender == GOSSIP_SENDER_MAIN)
         SendDefaultMenu_Yarntown(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Elder_Timbermaw(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 37)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开凄凉山",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "醉里挑灯看剑，梦回吹角连营。",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Elder_Timbermaw(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, 2948.08f, -4261.04f, 103.785f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：凄凉山",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(37, 322.27f, 170.297f, 234.934f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Elder_Timbermaw(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Elder_Timbermaw(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Scarlet_Traitor(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 44)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开修道院",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "黑厂，快跑！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Scarlet_Traitor(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 2875.06f, -633.725f, 137.839f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：修道院",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(44, 78.3392f, -0.845785f, 18.6771f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Scarlet_Traitor(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Scarlet_Traitor(player, _Creature, action);
 
     return true;
 }
@@ -3385,6 +3497,18 @@ void AddSC_custom_creatures()
     newscript->Name = "npc_yarntown";
     newscript->pGossipHello = &GossipHello_Yarntown;
     newscript->pGossipSelect = &GossipSelect_Yarntown;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_elder_timbermaw";
+    newscript->pGossipHello = &GossipHello_Elder_Timbermaw;
+    newscript->pGossipSelect = &GossipSelect_Elder_Timbermaw;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_scarlet_traitor";
+    newscript->pGossipHello = &GossipHello_Scarlet_Traitor;
+    newscript->pGossipSelect = &GossipSelect_Scarlet_Traitor;
     newscript->RegisterSelf(false);
 
     newscript = new Script;
