@@ -2521,11 +2521,11 @@ bool GossipHello_Elder_Timbermaw(Player *player, Creature *_Creature)
 {
     if (player->GetMapId() == 37)
     {
-        player->ADD_GOSSIP_ITEM(5, "离开凄凉山",               GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(5, "离开凄凉山（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
     }
     else
     {
-        player->ADD_GOSSIP_ITEM(7, "醉里挑灯看剑，梦回吹角连营。",               GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(7, "缓缓飘落的枫叶像思念。",               GOSSIP_SENDER_MAIN, 2);
     }
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
@@ -2566,7 +2566,7 @@ bool GossipHello_Scarlet_Traitor(Player *player, Creature *_Creature)
 {
     if (player->GetMapId() == 44)
     {
-        player->ADD_GOSSIP_ITEM(5, "离开修道院",               GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(5, "离开修道院（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
     }
     else
     {
