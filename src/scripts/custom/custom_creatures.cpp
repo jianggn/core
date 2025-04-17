@@ -1233,6 +1233,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->ADD_GOSSIP_ITEM(5, "亚楠镇 60级",           GOSSIP_SENDER_MAIN, 1273);
             player->ADD_GOSSIP_ITEM(5, "凄凉山 60级",           GOSSIP_SENDER_MAIN, 1274);
             player->ADD_GOSSIP_ITEM(5, "修道院 60级",           GOSSIP_SENDER_MAIN, 1275);
+            player->ADD_GOSSIP_ITEM(5, "德拉诺 60级",           GOSSIP_SENDER_MAIN, 1276);
             player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5551);
             player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
 
@@ -1855,6 +1856,16 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             }
             player->ModifyMoney(-travelboots);
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 2875.06f, -633.725f, 137.839f, 0.00f);
+            break;
+        case 1276:// Teleport player to Draenor
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -11865.1f, -3203.32f, -22.8171f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
             player->CLOSE_GOSSIP_MENU();
@@ -2525,7 +2536,7 @@ bool GossipHello_Elder_Timbermaw(Player *player, Creature *_Creature)
     }
     else
     {
-        player->ADD_GOSSIP_ITEM(7, "缓缓飘落的枫叶像思念。",               GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(7, "缓缓飘落的枫叶像思念……",               GOSSIP_SENDER_MAIN, 2);
     }
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
@@ -2615,7 +2626,7 @@ bool GossipHello_Tirion_Fordring_Outland(Player *player, Creature *_Creature)
     }
     else
     {
-        player->ADD_GOSSIP_ITEM(7, "勇士们，进攻！",               GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(7, "勇士们，穿越黑暗之门，进攻！",               GOSSIP_SENDER_MAIN, 2);
     }
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
