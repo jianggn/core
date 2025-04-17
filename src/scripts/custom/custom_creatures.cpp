@@ -2301,7 +2301,7 @@ bool GossipHello_Black_Knight(Player *player, Creature *_Creature)
     }
     else
     {
-        player->ADD_GOSSIP_ITEM(7, "卡拉赞之塔曾属于艾泽拉斯大陆上最强的人：星界法师麦迪文。这里只有一条真理：进去以后，你或许永远也无法出来……",               GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(7, "卡拉赞曾属于艾泽拉斯大陆上最强的人：星界法师麦迪文。这里只有一条真理：进去以后，你或许永远也无法出来……",               GOSSIP_SENDER_MAIN, 2);
     }
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
@@ -2316,7 +2316,8 @@ void SendDefaultMenu_Black_Knight(Player *player, Creature *_Creature, uint32 ac
             break;
         case 2:
             player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞之塔",               GOSSIP_SENDER_MAIN, 3);
-            player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞墓穴",             GOSSIP_SENDER_MAIN, 4);
+            player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞下层",               GOSSIP_SENDER_MAIN, 4);
+            player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞墓穴",             GOSSIP_SENDER_MAIN, 5);
             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
             break;
         case 3:
@@ -2329,6 +2330,15 @@ void SendDefaultMenu_Black_Knight(Player *player, Creature *_Creature, uint32 ac
             player->TeleportTo(540, -11039.6f, -1997.65f, 94.0802f, 0.0f);
             break;
         case 4:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(540, -11101.692f, -1997.510f, 49.893f, 0.0f);
+            break;
+        case 5:
             player->CLOSE_GOSSIP_MENU();
             if(player->GetLevel() < 60)
             {
@@ -2536,7 +2546,7 @@ bool GossipHello_Elder_Timbermaw(Player *player, Creature *_Creature)
     }
     else
     {
-        player->ADD_GOSSIP_ITEM(7, "缓缓飘落的枫叶像思念……",               GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(7, "醉卧沙场君莫笑，古来征战几人回？",               GOSSIP_SENDER_MAIN, 2);
     }
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
@@ -2650,7 +2660,7 @@ void SendDefaultMenu_Tirion_Fordring_Outland(Player *player, Creature *_Creature
                 player->GetSession()->SendNotification("You must be at least level 60 to enter.");
                 break;
             }
-            player->TeleportTo(546, -7189.169f, -2878.793f, 13.234f, 0.0f);
+            player->TeleportTo(546, -6080.821f, -2356.988f, 56.089f, 0.0f);
             break;
     }
 }
