@@ -2304,7 +2304,7 @@ void SendDefaultMenu_Black_Knight(Player *player, Creature *_Creature, uint32 ac
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11120.826172f, -2012.403687f, 47.094982f, 0.0f);
             break;
         case 2:
-            player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞下层",               GOSSIP_SENDER_MAIN, 3);
+            player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞之塔",               GOSSIP_SENDER_MAIN, 3);
             player->ADD_GOSSIP_ITEM(5, "传送：卡拉赞墓穴",             GOSSIP_SENDER_MAIN, 4);
             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
             break;
@@ -2603,6 +2603,51 @@ bool GossipSelect_Scarlet_Traitor(Player *player, Creature *_Creature, uint32 se
     // Main menu
     if (sender == GOSSIP_SENDER_MAIN)
         SendDefaultMenu_Scarlet_Traitor(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Tirion_Fordring_Outland(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 546)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开德拉诺（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "勇士们，进攻！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Tirion_Fordring_Outland(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -11865.1f, -3203.32f, -22.8171f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：德拉诺",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(546, -7189.169f, -2878.793f, 13.234f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Tirion_Fordring_Outland(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Tirion_Fordring_Outland(player, _Creature, action);
 
     return true;
 }
@@ -3509,6 +3554,12 @@ void AddSC_custom_creatures()
     newscript->Name = "npc_scarlet_traitor";
     newscript->pGossipHello = &GossipHello_Scarlet_Traitor;
     newscript->pGossipSelect = &GossipSelect_Scarlet_Traitor;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_tirion_fordring_outland";
+    newscript->pGossipHello = &GossipHello_Tirion_Fordring_Outland;
+    newscript->pGossipSelect = &GossipSelect_Tirion_Fordring_Outland;
     newscript->RegisterSelf(false);
 
     newscript = new Script;
