@@ -1648,7 +1648,7 @@ bool ChatHandler::HandleDebugLoSCommand(char*)
 
     if (target->GetDistance(m_session->GetPlayer()) < 0.1f)
     {
-        SendSysMessage("You are to close to the target.");
+        SendSysMessage("You are too close to the target.");
         return false;
     }
 
