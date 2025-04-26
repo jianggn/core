@@ -3837,6 +3837,9 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
     // Hunter - Split Shot - 34322
     if (m_spellInfo->Id == 75 && m_casterUnit->HasAura(34322))
         bonus *= 0.7f;
+    // Morphling - Frostbolt Volley & Frost Nova
+    if ((m_spellInfo->Id == 34060 || m_spellInfo->Id == 34061) && (unitTarget->HasAura(118) || unitTarget->HasAura(12824) || unitTarget->HasAura(12825) || unitTarget->HasAura(12826) || unitTarget->HasAura(28271) || unitTarget->HasAura(28272)))
+        bonus = 0.f;
     // prevent negative damage
     m_damage += bonus > 0.f ? bonus : 0.f;
 }
