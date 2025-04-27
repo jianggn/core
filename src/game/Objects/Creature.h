@@ -228,6 +228,7 @@ class Creature : public Unit
         void LockOutSpells(SpellSchoolMask schoolMask, uint32 duration) final;
         void AddCooldown(SpellEntry const& spellEntry, ItemPrototype const* itemProto = nullptr, bool permanent = false, uint32 forcedDuration = 0) final;
         void StartCooldownForSummoner();
+        void CancelSummonPossessedCharm();
         bool UpdateEntry(uint32 entry, GameEventCreatureData const* eventData = nullptr, bool preserveHPAndPower = true);
 
         void ApplyGameEventSpells(GameEventCreatureData const* eventData, bool activated);
