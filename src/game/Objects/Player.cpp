@@ -1587,8 +1587,45 @@ void Player::AutoReSummonPet()
     uint32 spell = m_petSpell;
     m_petSpell = m_petEntry = 0;
 
-    if (!IsPlayer() || !entry || !spell)
+    if (!IsPlayer() || (IsBot() && (!entry || !spell)))
         return;
+
+    if (!entry || !spell)
+    {
+        switch (GetClass())
+        {
+            case CLASS_WARRIOR:
+                entry = 200015;
+                spell = 34114;
+                break;
+            case CLASS_PALADIN:
+                entry = 200013;
+                spell = 34095;
+                break;
+            case CLASS_ROGUE:
+                entry = 200014;
+                spell = 34102;
+                break;
+            case CLASS_PRIEST:
+                entry = 200010;
+                spell = 34066;
+                break;
+            case CLASS_SHAMAN:
+                entry = 200012;
+                spell = 34084;
+                break;
+            case CLASS_MAGE:
+                entry = 200009;
+                spell = 34059;
+                break;
+            case CLASS_DRUID:
+                entry = 200011;
+                spell = 34077;
+                break;
+            default:
+                return;
+        }
+    }
 
     Player* me = ToPlayer();
     SpellEntry const* spellEntry = sSpellMgr.GetSpellEntry(spell);
