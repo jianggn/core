@@ -8288,7 +8288,7 @@ void ObjectMgr::LoadCorpses()
     //                                                                            0       1                       2                      3                      4                      5                       6
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT `corpse`.`guid`, `player_guid`, `corpse`.`position_x`, `corpse`.`position_y`, `corpse`.`position_z`, `corpse`.`orientation`, `corpse`.`map`, "
     //                      7       8                       9           10        11      12       13      14      15            16            17             18                 19          20
-                          "`time`, `corpse_type`, `corpse`.`instance`, `gender`, `race`, `class`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `equipment_cache`, `guild_id`, `player_flags` FROM `corpse` "
+                          "`time`, `corpse_type`, `corpse`.`instance`, `gender`, `race`, `class`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `equipment_cache`, `guild_id`, `character_flags` FROM `corpse` "
                           "JOIN `characters` ON `player_guid` = `characters`.`guid` "
                           "LEFT JOIN `guild_member` ON `player_guid`=`guild_member`.`guid` WHERE `corpse_type` <> 0"));
 

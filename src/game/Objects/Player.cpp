@@ -97,44 +97,6 @@
 #define SKILL_PERM_BONUS(x)    int16(PAIR32_HIPART(x))
 #define MAKE_SKILL_BONUS(t, p) MAKE_PAIR32(t,p)
 
-// [-ZERO] need recheck, some values known not existed in 1.12.1
-enum CharacterFlags
-{
-    CHARACTER_FLAG_NONE                 = 0x00000000,
-    CHARACTER_FLAG_UNK1                 = 0x00000001,
-    CHARACTER_FLAG_RESTING              = 0x00000002,
-    CHARACTER_LOCKED_FOR_TRANSFER       = 0x00000004,
-    CHARACTER_FLAG_UNK4                 = 0x00000008,
-    CHARACTER_FLAG_UNK5                 = 0x00000010,
-    CHARACTER_FLAG_UNK6                 = 0x00000020,
-    CHARACTER_FLAG_UNK7                 = 0x00000040,
-    CHARACTER_FLAG_UNK8                 = 0x00000080,
-    CHARACTER_FLAG_UNK9                 = 0x00000100,
-    CHARACTER_FLAG_UNK10                = 0x00000200,
-    CHARACTER_FLAG_HIDE_HELM            = 0x00000400,
-    CHARACTER_FLAG_HIDE_CLOAK           = 0x00000800,
-    CHARACTER_FLAG_UNK13                = 0x00001000,
-    CHARACTER_FLAG_GHOST                = 0x00002000,
-    CHARACTER_FLAG_RENAME               = 0x00004000,
-    CHARACTER_FLAG_UNK16                = 0x00008000,
-    CHARACTER_FLAG_UNK17                = 0x00010000,
-    CHARACTER_FLAG_UNK18                = 0x00020000,
-    CHARACTER_FLAG_UNK19                = 0x00040000,
-    CHARACTER_FLAG_UNK20                = 0x00080000,
-    CHARACTER_FLAG_UNK21                = 0x00100000,
-    CHARACTER_FLAG_UNK22                = 0x00200000,
-    CHARACTER_FLAG_UNK23                = 0x00400000,
-    CHARACTER_FLAG_UNK24                = 0x00800000,
-    CHARACTER_FLAG_LOCKED_BY_BILLING    = 0x01000000,
-    CHARACTER_FLAG_DECLINED             = 0x02000000,
-    CHARACTER_FLAG_UNK27                = 0x04000000,
-    CHARACTER_FLAG_UNK28                = 0x08000000,
-    CHARACTER_FLAG_UNK29                = 0x10000000,
-    CHARACTER_FLAG_UNK30                = 0x20000000,
-    CHARACTER_FLAG_UNK31                = 0x40000000,
-    CHARACTER_FLAG_UNK32                = 0x80000000
-};
-
 // corpse reclaim times
 #define DEATH_EXPIRE_STEP (5*MINUTE)
 #define MAX_DEATH_COUNT 3
@@ -205,7 +167,7 @@ Player::Player(WorldSession* session) : Unit(),
 
     m_guildIdInvited = 0;
 
-    m_atLoginFlags = AT_LOGIN_NONE;
+    m_characterFlags = CHARACTER_FLAG_NONE;
 
     m_semaphoreTeleportNear = false;
     m_semaphoreTeleportFar = false;
@@ -1675,9 +1637,9 @@ bool Player::BuildEnumData(const std::unique_ptr<QueryResult>& result, WorldPack
     //                0                1                2                3                 4                  5                6                7                      8                      9                       10
     //    "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.skin, characters.face, characters.hair_style, characters.hair_color, characters.facial_hair, characters.level, "
     //         11               12              13                     14                     15                     16                     17
-    //    "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guild_id, characters.player_flags, "
+    //    "characters.zone, characters.map, characters.position_x, characters.position_y, characters.position_z, guild_member.guild_id, characters.character_flags, "
     //         18                         19                   20                        21                   22
-    //    "characters.at_login_flags, character_pet.entry, character_pet.display_id, character_pet.level, characters.equipment_cache "
+    //    "characters.played_time_total, character_pet.entry, character_pet.display_id, character_pet.level, characters.equipment_cache "
 
     Field* fields = result->Fetch();
 
@@ -1720,24 +1682,12 @@ bool Player::BuildEnumData(const std::unique_ptr<QueryResult>& result, WorldPack
 
     *pData << uint32(fields[16].GetUInt32());              // guild id
 
-    uint32 charFlags = 0;
-    uint32 playerFlags = fields[17].GetUInt32();
-    uint32 atLoginFlags = fields[18].GetUInt32();
-    if (playerFlags & PLAYER_FLAGS_RESTING)
-        charFlags |= CHARACTER_FLAG_RESTING;
-    if (playerFlags & PLAYER_FLAGS_HIDE_HELM)
-        charFlags |= CHARACTER_FLAG_HIDE_HELM;
-    if (playerFlags & PLAYER_FLAGS_HIDE_CLOAK)
-        charFlags |= CHARACTER_FLAG_HIDE_CLOAK;
-    if (playerFlags & PLAYER_FLAGS_GHOST)
-        charFlags |= CHARACTER_FLAG_GHOST;
-    if (atLoginFlags & AT_LOGIN_RENAME)
-        charFlags |= CHARACTER_FLAG_RENAME;
-
+    uint32 charFlags = fields[17].GetUInt32();
     *pData << uint32(charFlags);                           // character flags
 
     // First login
-    *pData << uint8(atLoginFlags & AT_LOGIN_FIRST ? 1 : 0);
+    uint32 totalPlayedTime = fields[18].GetUInt32();
+    *pData << uint8(totalPlayedTime != 0 ? 0 : 1);
 
     // Pets info
     {
@@ -1746,7 +1696,7 @@ bool Player::BuildEnumData(const std::unique_ptr<QueryResult>& result, WorldPack
         uint32 petFamily = 0;
 
         // show pet at selection character in character list only for non-ghost character
-        if (result && !(playerFlags & PLAYER_FLAGS_GHOST) && (pClass == CLASS_WARLOCK || pClass == CLASS_HUNTER))
+        if (result && !(charFlags & CHARACTER_FLAG_GHOST) && (pClass == CLASS_WARLOCK || pClass == CLASS_HUNTER))
         {
             uint32 entry = fields[19].GetUInt32();
             CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(entry);
@@ -3493,12 +3443,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // cleanup unit flags (will be re-applied if need at aura load).
     RemoveFlag(UNIT_FIELD_FLAGS,
-               UNIT_FLAG_SPAWNING   | UNIT_FLAG_DISABLE_MOVE  | UNIT_FLAG_NOT_ATTACKABLE_1 |
-               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_LOOTING          |
-               UNIT_FLAG_PET_IN_COMBAT    | UNIT_FLAG_SILENCED      | UNIT_FLAG_PACIFIED         |
-               UNIT_FLAG_STUNNED          | UNIT_FLAG_IN_COMBAT     | UNIT_FLAG_DISARMED         |
-               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING       | UNIT_FLAG_NOT_SELECTABLE   |
-               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE        | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
+               UNIT_FLAG_SPAWNING         | UNIT_FLAG_REMOVE_CLIENT_CONTROL  | UNIT_FLAG_NOT_ATTACKABLE_1 |
+               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC          | UNIT_FLAG_LOOTING          |
+               UNIT_FLAG_PET_IN_COMBAT    | UNIT_FLAG_SILENCED               | UNIT_FLAG_PACIFIED         |
+               UNIT_FLAG_STUNNED          | UNIT_FLAG_IN_COMBAT              | UNIT_FLAG_DISARMED         |
+               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING                | UNIT_FLAG_NOT_SELECTABLE   |
+               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE                 | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);    // must be set
 
     // cleanup player flags (will be re-applied if need at aura load), to avoid have ghost flag without ghost aura, for example.
@@ -4213,8 +4163,7 @@ bool Player::ResetTalents(bool noCost)
     if(HasItemCount(26001, 1))
         noCost = true;
     // not need after this call
-    if (HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
-        RemoveAtLoginFlag(AT_LOGIN_RESET_TALENTS, true);
+    SetCharacterFlag(CHARACTER_FLAG_RESET_TALENTS_ON_LOGIN, false);
 
     if (m_usedTalentCount == 0)
     {
@@ -6919,13 +6868,11 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     }
 
     if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying()) // in hostile area
-    {
         UpdatePvP(true);
-        if (sWorld.IsFFAPvPRealm() && !IsGameMaster() && !HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
-            SetFFAPvP(true);
-    }
-    else
-        SetFFAPvP(false);
+
+    // on a ffa realm, ffa is toggled together with pvp flag
+    if (sWorld.IsFFAPvPRealm())
+        SetFFAPvP(IsPvP() && !IsGameMaster() && !HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING));
 	
     if ((zoneEntry->Flags & AREA_FLAG_CAPITAL) && !pvpInfo.inPvPEnforcedArea) // in capital city
         SetRestType(REST_TYPE_IN_CITY);
@@ -14903,16 +14850,16 @@ void Player::_LoadIntoDataField(char const* data, uint32 startOffset, uint32 cou
 bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 {
     //       0     1        2     3     4      5       6      7   8      9     10    11          12          13           14              15
-    //SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hair_style, hair_color, facial_hair, bank_bag_slots, player_flags,
-    // 16          17          18          19   20           21               22                 23                 24          25           26                 27
-    //"position_x, position_y, position_z, map, orientation, known_taxi_mask, played_time_total, played_time_level, rest_bonus, logout_time, is_logout_resting, reset_talents_multiplier,"
-    // 28                  29              30           31           32           33           34           35            36              37    38      39                 40
-    //"reset_talents_time, transport_guid, transport_x, transport_y, transport_z, transport_o, extra_flags, stable_slots, at_login_flags, zone, online, death_expire_time, current_taxi_path,
-    // 41                 42                  43              44                  45                  46               47
+    //SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hair_style, hair_color, facial_hair, bank_bag_slots, character_flags,
+    // 16          17          18          19   20           21               22                 23                 24          25           26
+    //"position_x, position_y, position_z, map, orientation, known_taxi_mask, played_time_total, played_time_level, rest_bonus, logout_time, reset_talents_multiplier,"
+    // 27                  28              29           30           31           32           33           34            35                 36
+    //"reset_talents_time, transport_guid, transport_x, transport_y, transport_z, transport_o, extra_flags, stable_slots, death_expire_time, current_taxi_path,
+    // 37                 38                  39              40                  41                  42               43
     //"honor_rank_points, honor_highest_rank, honor_standing, honor_last_week_hk, honor_last_week_cp, honor_stored_hk, honor_stored_dk,"
-    // 48                49     50      51      52      53      54      55      56              57               58       59
-    //"watched_faction,  drunk, health, power1, power2, power3, power4, power5, explored_zones, equipment_cache, ammo_id, action_bars,"
-    // 60                61           62
+    // 44                45     46      47      48      49      50      51      52              53       54
+    //"watched_faction,  drunk, health, power1, power2, power3, power4, power5, explored_zones, ammo_id, action_bars,"
+    // 55                56           57
     //"world_phase_mask, create_time, instance FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
 
     std::unique_ptr<QueryResult> result = holder->TakeResult(PLAYER_LOGIN_QUERY_LOADFROM);
@@ -14925,6 +14872,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     Field* fields = result->Fetch();
 
+    uint32 lowGuid = fields[0].GetUInt32();
+    MANGOS_ASSERT(lowGuid == guid.GetCounter());
+
     uint32 dbAccountId = fields[1].GetUInt32();
 
     // check if the character's account in the db and the logged in account match.
@@ -14936,24 +14886,31 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
         return false;
     }
 
-    Object::_Create(guid.GetCounter(), 0, HIGHGUID_PLAYER);
-
-    m_name = fields[2].GetCppString();
-
-    // check name limitations
-    if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
-            (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr.IsReservedName(m_name)))
+    // prevent login to locked character
+    m_characterFlags = fields[15].GetUInt32();
+    if (m_characterFlags & (CHARACTER_FLAG_LOCKED_FOR_TRANSFER | CHARACTER_FLAG_DELETED_BY_TRANSFER))
     {
-        CharacterDatabase.PExecute("UPDATE `characters` SET `at_login_flags` = `at_login_flags` | '%u' WHERE `guid` ='%u'",
-                                   uint32(AT_LOGIN_RENAME), guid.GetCounter());
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s attempts to login but character is locked!", guid.GetString().c_str());
         return false;
     }
+
+    // check name limitations
+    m_name = fields[2].GetCppString();
+    if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
+       (GetSession()->GetSecurity() == SEC_PLAYER && sObjectMgr.IsReservedName(m_name)))
+    {
+        CharacterDatabase.PExecute("UPDATE `characters` SET `character_flags` = `character_flags` | '%u' WHERE `guid` ='%u'",
+                                   uint32(CHARACTER_FLAG_RENAME), guid.GetCounter());
+        return false;
+    }
+
+    Object::_Create(guid.GetCounter(), 0, HIGHGUID_PLAYER);
 
     // overwrite possible wrong/corrupted guid
     SetGuidValue(OBJECT_FIELD_GUID, guid);
 
     // Phasing
-    SetWorldMask(fields[60].GetUInt32());
+    SetWorldMask(fields[55].GetUInt32());
 
     // overwrite some data fields
     SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_RACE, fields[3].GetUInt8()); // race
@@ -14967,7 +14924,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     SetUInt32Value(UNIT_FIELD_LEVEL, fields[6].GetUInt8());
     SetUInt32Value(PLAYER_XP, fields[7].GetUInt32());
 
-    _LoadIntoDataField(fields[56].GetString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
+    _LoadIntoDataField(fields[52].GetString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
 
     InitPlayerDisplayIds();                                       // model, scale and model data
 
@@ -14985,17 +14942,22 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     SetBankBagSlotCount(fields[14].GetUInt8());
     SetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_REST_STATE, REST_STATE_NORMAL);
 
-    m_drunk = fields[49].GetUInt16();
+    m_drunk = fields[45].GetUInt16();
 
     SetUInt16Value(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER_AND_INEBRIATION, (m_drunk & 0xFFFE) | gender);
 
-    SetUInt32Value(PLAYER_FLAGS, fields[15].GetUInt32() & ~(PLAYER_FLAGS_PARTIAL_PLAY_TIME | PLAYER_FLAGS_NO_PLAY_TIME));
-
-    if (IsPvPDesired())
-    {
+    if (m_characterFlags & CHARACTER_FLAG_RESTING)
+        SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+    if (m_characterFlags & CHARACTER_FLAG_PVP_ENABLED)
         UpdatePvP(true);
-        SetPvPDesired(false);
-    }
+    if (m_characterFlags & CHARACTER_FLAG_PVP_DESIRED)
+        SetPvPDesired(true);
+    if (m_characterFlags & CHARACTER_FLAG_HIDE_HELM)
+        SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM);
+    if (m_characterFlags & CHARACTER_FLAG_HIDE_CLOAK)
+        SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK);
+    if (m_characterFlags & CHARACTER_FLAG_GHOST)
+        SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST);
 
     time_t const now = time(nullptr);
 
@@ -15012,13 +14974,13 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 #endif
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-    SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetInt32());
+    SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[44].GetInt32());
 #endif
 
-    SetUInt32Value(PLAYER_AMMO_ID, fields[58].GetUInt32());
+    SetUInt32Value(PLAYER_AMMO_ID, fields[53].GetUInt32());
 
     // Action bars state
-    SetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BARS, fields[59].GetUInt8());
+    SetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BARS, fields[54].GetUInt8());
 
     // cleanup inventory related item value fields (its will be filled correctly in _LoadInventory)
     for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
@@ -15048,7 +15010,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     InitPrimaryProfessions();                               // to max set before any spell loaded
 
     // init saved position, and fix it later if problematic
-    uint32 transGUID = fields[29].GetUInt32();
+    uint32 transGUID = fields[28].GetUInt32();
 
     if (!MaNGOS::IsValidMapCoord(fields[16].GetFloat(), fields[17].GetFloat(), fields[18].GetFloat(), fields[20].GetFloat()))
     {
@@ -15068,13 +15030,13 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     _LoadGroup(std::move(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADGROUP)));
 
-    m_honorMgr.SetRankPoints(fields[41].GetFloat());
-    m_honorMgr.SetHighestRank(fields[42].GetUInt32());
-    m_honorMgr.SetStanding(fields[43].GetUInt32());
-    m_honorMgr.SetLastWeekHK(fields[44].GetUInt32());
-    m_honorMgr.SetLastWeekCP(fields[45].GetFloat());
-    m_honorMgr.SetStoredHK(fields[46].GetUInt32());
-    m_honorMgr.SetStoredDK(fields[47].GetUInt32());
+    m_honorMgr.SetRankPoints(fields[37].GetFloat());
+    m_honorMgr.SetHighestRank(fields[38].GetUInt32());
+    m_honorMgr.SetStanding(fields[39].GetUInt32());
+    m_honorMgr.SetLastWeekHK(fields[40].GetUInt32());
+    m_honorMgr.SetLastWeekCP(fields[41].GetFloat());
+    m_honorMgr.SetStoredHK(fields[42].GetUInt32());
+    m_honorMgr.SetStoredDK(fields[43].GetUInt32());
 
     m_honorMgr.Load(std::move(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADHONORCP)));
     _LoadBoundInstances(std::move(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES)));
@@ -15113,9 +15075,10 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     {
         ObjectGuid guid = sObjectMgr.GetFullTransportGuidFromLowGuid(transGUID);
 
-        if (GenericTransport* transport = GetMap()->GetTransport(guid))
+        GenericTransport* transport = GetMap()->GetTransport(guid);
+        if (transport && !HasCharacterFlag(CHARACTER_FLAG_ON_UNSAFE_TRANSPORT))
         {
-            float x = fields[30].GetFloat(), y = fields[31].GetFloat(), z = fields[32].GetFloat(), o = fields[33].GetFloat();
+            float x = fields[29].GetFloat(), y = fields[30].GetFloat(), z = fields[31].GetFloat(), o = fields[32].GetFloat();
             m_movementInfo.SetTransportData(guid, x, y, z, o);
             transport->CalculatePassengerPosition(x, y, z, &o);
 
@@ -15170,7 +15133,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     if (mapEntry && mapEntry->IsDungeon())
     {
         // if the player is in an instance and it has been reset in the meantime teleport him to the entrance
-        uint32 instanceId = fields[62].GetUInt32();
+        uint32 instanceId = fields[57].GetUInt32();
         if (!state || state->GetInstanceId() != instanceId)
         {
             AreaTriggerTeleport const* at = sObjectMgr.GetGoBackTrigger(GetMapId());
@@ -15213,29 +15176,27 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     m_playedTime[PLAYED_TIME_TOTAL] = fields[22].GetUInt32();
     m_playedTime[PLAYED_TIME_LEVEL] = fields[23].GetUInt32();
-    m_createTime = fields[61].GetUInt64();
+    m_createTime = fields[56].GetUInt64();
 
-    m_resetTalentsMultiplier = fields[27].GetUInt32();
-    m_resetTalentsTime = time_t(fields[28].GetUInt64());
+    m_resetTalentsMultiplier = fields[26].GetUInt32();
+    m_resetTalentsTime = time_t(fields[27].GetUInt64());
 
     m_taxi.LoadTaxiMask(fields[21].GetString());
 
-    uint32 extraflags = fields[34].GetUInt32();
+    uint32 extraflags = fields[33].GetUInt32();
 
-    m_stableSlots = fields[35].GetUInt32();
+    m_stableSlots = fields[34].GetUInt32();
     if (m_stableSlots > MAX_PET_STABLES)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Player can have not more %u stable slots, but have in DB %u", MAX_PET_STABLES, uint32(m_stableSlots));
         m_stableSlots = MAX_PET_STABLES;
     }
 
-    m_atLoginFlags = fields[36].GetUInt32();
-
-    m_deathExpireTime = (time_t)fields[39].GetUInt64();
+    m_deathExpireTime = (time_t)fields[35].GetUInt64();
     if (m_deathExpireTime > now + MAX_DEATH_COUNT * DEATH_EXPIRE_STEP)
         m_deathExpireTime = now + MAX_DEATH_COUNT * DEATH_EXPIRE_STEP - 1;
 
-    std::string taxi_nodes = fields[40].GetCppString();
+    std::string taxi_nodes = fields[36].GetCppString();
 
     // clear channel spell data (if saved at channel spell casting)
     SetChannelObjectGuid(ObjectGuid());
@@ -15276,7 +15237,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     m_restBonus = fields[24].GetFloat();
 
     if (timeDiff > 0)
-        SetRestBonus(GetRestBonus() + ComputeRest(timeDiff, true, (fields[26].GetInt32() > 0)));
+        SetRestBonus(GetRestBonus() + ComputeRest(timeDiff, true, HasCharacterFlag(CHARACTER_FLAG_RESTING)));
 
     // load skills after InitStatsForLevel because it triggering aura apply also
     _LoadSkills(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADSKILLS));
@@ -15311,7 +15272,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     bool hasEpicMount = false; // Needed for riding skill replacement in patch 1.12.
     bool hasItems = _LoadInventory(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADINVENTORY), timeDiff, hasEpicMount);
 
-    if (!hasItems && HasAtLoginFlag(AT_LOGIN_FIRST))
+    if (!hasItems && m_playedTime[PLAYED_TIME_TOTAL] == 0)
         AddStartingItems();
 
     _LoadItemLoot(holder->TakeResult(PLAYER_LOGIN_QUERY_LOADITEMLOOT));
@@ -15384,11 +15345,11 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     UpdateAllStats();
 
     // restore remembered power/health values (but not more max values)
-    uint32 savedhealth = fields[50].GetUInt32();
+    uint32 savedhealth = fields[46].GetUInt32();
     SetHealth(savedhealth > GetMaxHealth() ? GetMaxHealth() : savedhealth);
     for (uint32 i = 0; i < MAX_POWERS; ++i)
     {
-        uint32 savedpower = fields[51 + i].GetUInt32();
+        uint32 savedpower = fields[47 + i].GetUInt32();
         SetPower(Powers(i), savedpower > GetMaxPower(Powers(i)) ? GetMaxPower(Powers(i)) : savedpower);
     }
 
@@ -15480,7 +15441,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
     sBattleGroundMgr.PlayerLoggedIn(this); // Add to BG queue if needed
     CreatePacketBroadcaster();
 
-    if (sWorld.GetWowPatch() >= WOW_PATCH_112)
+    if (sWorld.GetWowPatch() >= WOW_PATCH_112 && !HasCharacterFlag(CHARACTER_FLAG_MOUNT_UPGRADED))
         UpdateOldRidingSkillToNew(hasEpicMount);
 
     return true;
@@ -15560,6 +15521,8 @@ void Player::UpdateOldRidingSkillToNew(bool hasEpicMount)
         LearnSpell(33391u, false); // Journeyman Riding
     else
         LearnSpell(33388u, false); // Apprentice Riding
+
+    SetCharacterFlag(CHARACTER_FLAG_MOUNT_UPGRADED, true);
 }
 
 void Player::SendPacketsAtRelogin()
@@ -16537,13 +16500,13 @@ bool Player::SaveNewPlayer(WorldSession* session, uint32 guidlow, std::string co
     SqlStatement uberInsert = CharacterDatabase.CreateStatement(insChar,"REPLACE INTO `characters` (`guid`, `account`, `name`, `race`, `class`, `gender`, `level`, `money`, "
         "`skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, "
         "`map`, `position_x`, `position_y`, `position_z`, `orientation`, "
-        "`known_taxi_mask`, `current_taxi_path`, `online`, `extra_flags`, `at_login_flags`, "
+        "`known_taxi_mask`, `current_taxi_path`, `online`, `extra_flags`, "
         "`health`, `power1`, `power2`, `power3`, `power4`, `power5`, "
         "`explored_zones`, `equipment_cache`, `ammo_id`, `world_phase_mask`, `create_time`, `logout_time`) "
         "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, "
         "?, ?, ?, ?, ?, "
         "?, ?, ?, ?, ?, "
-        "?, ?, ?, ?, ?, "
+        "?, ?, ?, ?, "
         "?, ?, ?, ?, ?, ?, "
         "?, ?, ?, ?, ?, ?)");
 
@@ -16587,8 +16550,6 @@ bool Player::SaveNewPlayer(WorldSession* session, uint32 guidlow, std::string co
     else
         extraFlags |= PLAYER_EXTRA_ACCEPT_WHISPERS;
     uberInsert.addUInt32(extraFlags);
-
-    uberInsert.addUInt32(AT_LOGIN_FIRST); // login flags
 
     PlayerLevelInfo levelInfo;
     sObjectMgr.GetPlayerLevelInfo(raceId, classId, startingLevel, &levelInfo);
@@ -16671,6 +16632,21 @@ bool Player::SaveNewPlayer(WorldSession* session, uint32 guidlow, std::string co
     return true;
 }
 
+void Player::UpdateCharacterFlags()
+{
+    SetCharacterFlag(CHARACTER_FLAG_INVIS_GOD, GetInvincibilityHpThreshold());
+    SetCharacterFlag(CHARACTER_FLAG_RESTING, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING));
+    SetCharacterFlag(CHARACTER_FLAG_SILENCED, !CanSpeak());
+    SetCharacterFlag(CHARACTER_FLAG_PVP_ENABLED, IsPvP());
+    SetCharacterFlag(CHARACTER_FLAG_HAS_PVP_RANK, GetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_HIGHEST_HONOR_RANK));
+    SetCharacterFlag(CHARACTER_FLAG_HIDE_HELM, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM));
+    SetCharacterFlag(CHARACTER_FLAG_HIDE_CLOAK, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK));
+    SetCharacterFlag(CHARACTER_FLAG_SKINNABLE, HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE));
+    SetCharacterFlag(CHARACTER_FLAG_GHOST, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST));
+    SetCharacterFlag(CHARACTER_FLAG_PVP_DESIRED, IsPvPDesired());
+    SetCharacterFlag(CHARACTER_FLAG_GM_MODE, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GM));
+}
+
 void Player::SaveToDB(bool online, bool force)
 {
     // we should assure this: ASSERT((m_nextSave != sWorld.getConfig(CONFIG_UINT32_INTERVAL_SAVE)));
@@ -16697,12 +16673,12 @@ void Player::SaveToDB(bool online, bool force)
 
     static SqlStatementID insChar;
 
-    SqlStatement uberInsert = CharacterDatabase.CreateStatement(insChar, "REPLACE INTO `characters` (`guid`, `account`, `name`, `race`, `class`, `gender`, `level`, `xp`, `money`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `bank_bag_slots`, `player_flags`,"
+    SqlStatement uberInsert = CharacterDatabase.CreateStatement(insChar, "REPLACE INTO `characters` (`guid`, `account`, `name`, `race`, `class`, `gender`, `level`, `xp`, `money`, `skin`, `face`, `hair_style`, `hair_color`, `facial_hair`, `bank_bag_slots`, `character_flags`,"
                               "`map`, `instance`, `position_x`, `position_y`, `position_z`, `orientation`, "
                               "`transport_guid`, `transport_x`, `transport_y`, `transport_z`, `transport_o`, "
                               "`known_taxi_mask`, `current_taxi_path`, `online`, `played_time_total`, `played_time_level`, "
-                              "`rest_bonus`, `logout_time`, `is_logout_resting`, `reset_talents_multiplier`, `reset_talents_time`, "
-                              "`extra_flags`, `stable_slots`, `at_login_flags`, `zone`, `death_expire_time`,"
+                              "`rest_bonus`, `logout_time`, `reset_talents_multiplier`, `reset_talents_time`, "
+                              "`extra_flags`, `stable_slots`, `zone`, `death_expire_time`,"
                               "`honor_rank_points`, `honor_highest_rank`, `honor_standing`, `honor_last_week_hk`, `honor_last_week_cp`, `honor_stored_hk`, `honor_stored_dk`, "
                               "`watched_faction`, `drunk`, `health`, `power1`, `power2`, `power3`, `power4`, `power5`, "
                               "`explored_zones`, `equipment_cache`, `ammo_id`, `action_bars`, `world_phase_mask`, `create_time`) "
@@ -16714,7 +16690,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?, ?, ?)");
+                              "?, ?, ?, ?)");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16732,11 +16708,8 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_FACIAL_STYLE));
     uberInsert.addUInt32(GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_BANK_BAG_SLOTS));
 
-    // Nostalrius: Fix toggled PvP flag after relog.
-    uint32 playerFlags = GetUInt32Value(PLAYER_FLAGS) & ~(PLAYER_FLAGS_PVP_DESIRED);
-    if (IsPvP())
-        playerFlags |= PLAYER_FLAGS_PVP_DESIRED;
-    uberInsert.addUInt32(playerFlags);
+    UpdateCharacterFlags();
+    uberInsert.addUInt32(m_characterFlags);
 
     if (!IsBeingTeleported())
     {
@@ -16782,19 +16755,11 @@ void Player::SaveToDB(bool online, bool force)
 
     uberInsert.addFloat(finiteAlways(m_restBonus));
     uberInsert.addUInt64(uint64(time(nullptr)));
-    uberInsert.addUInt32(HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) ? 1 : 0);
-
     uberInsert.addUInt32(m_resetTalentsMultiplier);
     uberInsert.addUInt64(uint64(m_resetTalentsTime));
-
     uberInsert.addUInt32(m_ExtraFlags);
-
     uberInsert.addUInt32(uint32(m_stableSlots));                    // to prevent save uint8 as char
-
-    uberInsert.addUInt32(uint32(m_atLoginFlags));
-
     uberInsert.addUInt32(GetCachedZoneId());
-
     uberInsert.addUInt64(uint64(m_deathExpireTime));
 
     // Honor stored data
@@ -18189,7 +18154,7 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature const
         return false;
     }
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE))
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_REMOVE_CLIENT_CONTROL))
         return false;
 
     // No hack here
@@ -19565,10 +19530,6 @@ void Player::ApplyEquipCooldown(Item const* pItem)
 
 void Player::ResetSpells()
 {
-    // not need after this call
-    if (HasAtLoginFlag(AT_LOGIN_RESET_SPELLS))
-        RemoveAtLoginFlag(AT_LOGIN_RESET_SPELLS, true);
-
     // make full copy of map (spells removed and marked as deleted at another spell remove
     // and we can't use original map for safe iterative with visit each spell at loop end
     PlayerSpellMap smap = GetSpellMap();
@@ -21276,14 +21237,6 @@ void Player::_SaveBGData()
     }
 
     m_bgData.m_needSave = false;
-}
-
-void Player::RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also /*= false*/)
-{
-    m_atLoginFlags &= ~f;
-
-    if (in_db_also)
-        CharacterDatabase.PExecute("UPDATE `characters` SET `at_login_flags` = `at_login_flags` & ~ %u WHERE `guid` ='%u'", uint32(f), GetGUIDLow());
 }
 
 void Player::SendClearCooldown(uint32 spellId, Unit const* target) const

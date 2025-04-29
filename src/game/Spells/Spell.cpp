@@ -4459,7 +4459,7 @@ void Spell::update(uint32 difftime)
                 // check if there are alive targets left
                 if (!HasValidUnitPresentInTargetList())
                 {
-                    SendChannelUpdate(0);
+                    SendChannelUpdate(0, true);
                     finish();
                 }
 
@@ -5772,9 +5772,6 @@ void Spell::RemoveChanneledAuraHolder(SpellAuraHolder* holder, AuraRemoveMode mo
 
 SpellCastResult Spell::CheckCast(bool strict)
 {
-    if (m_spellInfo->IsIgnoringCasterAndTargetRestrictions())
-        return SPELL_CAST_OK;
-
     if (m_caster->IsPlayer() && m_caster->ToPlayer()->HasCheatOption(PLAYER_CHEAT_NO_CHECK_CAST))
         return SPELL_CAST_OK;
 
@@ -7229,6 +7226,9 @@ SpellCastResult Spell::CheckCasterAuras() const
     if (!m_casterUnit)
         return SPELL_CAST_OK;
 
+    if (m_spellInfo->IsIgnoringCasterAndTargetRestrictions())
+        return SPELL_CAST_OK;
+
     uint8 school_immune = 0;
     uint32 mechanic_immune = 0;
     uint32 dispel_immune = 0;
@@ -8286,7 +8286,8 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
 
     // Check targets for not_selectable unit flag and remove
     // A player can cast spells on his pet (or other controlled unit) though in any state
-    if (target != m_caster && target->GetCharmerOrOwnerGuid() != m_caster->GetObjectGuid())
+    if (target != m_caster && target->GetCharmerOrOwnerGuid() != m_caster->GetObjectGuid() &&
+        !m_spellInfo->IsIgnoringCasterAndTargetRestrictions())
     {
         // any unattackable target skipped
         if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING))

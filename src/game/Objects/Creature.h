@@ -183,6 +183,14 @@ class Creature : public Unit
         bool IsImmuneToDamage(SpellSchoolMask meleeSchoolMask, SpellEntry const* spellInfo = nullptr) const override;
         bool IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex index, bool castOnSelf) const override;
 
+        bool IsPlusMob() const
+        {
+            if (IsPet())
+                return false;
+
+            return GetCreatureInfo()->rank > CREATURE_ELITE_NORMAL;
+        }
+
         bool IsElite() const
         {
             if (IsPet())
