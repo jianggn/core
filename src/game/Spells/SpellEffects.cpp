@@ -32,6 +32,7 @@
 #include "DynamicObject.h"
 #include "SpellAuras.h"
 #include "Group.h"
+#include "Bag.h"
 #include "ObjectAccessor.h"
 #include "Creature.h"
 #include "Pet.h"
