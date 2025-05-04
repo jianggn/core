@@ -813,23 +813,24 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     if (Player* pPlayer = unitTarget->ToPlayer())
                     {
-                        // Hardcore Challenger Drop Item Except Hearthstone & Weapon
+                        // Hardcore Challenger Drop Item
+                        // Equipment
                         for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                         {
-                            if (i == EQUIPMENT_SLOT_BODY || (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED))
-                                continue;
                             if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                             {
-                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+                                // Keep Weapon & Clear Enchantment
+                                if (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED)
+                                {
+                                    pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+                                }
+                                else
+                                {
+                                    pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+                                }
                             }
                         }
-                        for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
-                        {
-                            if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-                            {
-                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
-                            }
-                        }
+                        // Bag
                         for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
                         {
                             if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
@@ -843,6 +844,29 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                                 }
                             }
                         }
+                        // Inventory & Bank
+                        for (int i = INVENTORY_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
+                        {
+                            if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                            {
+                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+                            }
+                        }
+                        // Bank Bag
+                        for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+                        {
+                            if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                            {
+                                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                                {
+                                    if (Item* pItem = pBag->GetItemByPos(j))
+                                    {
+                                        pPlayer->DestroyItem(i, j, true);
+                                    }
+                                }
+                            }
+                        }
+                        // Keep Hearthstone
                         pPlayer->AddItem(6948);
                         // Hardcore Challenger Drop Money
                         pPlayer->SetMoney(0);
