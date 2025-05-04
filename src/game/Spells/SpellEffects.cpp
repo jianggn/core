@@ -806,6 +806,20 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     m_casterUnit->CastSpell(m_casterUnit, 34366, true);
                     return;
                 }
+                case 34376:
+                {
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    // Hardcore Challenger quit group
+                    if (Player* pPlayer = unitTarget->ToPlayer())
+                    {
+                        if (Group* pGroup = pPlayer->GetGroup())
+                        {
+                            pPlayer->RemoveFromGroup();
+                        }
+                    }
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
