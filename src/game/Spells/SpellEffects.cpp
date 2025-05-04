@@ -810,9 +810,40 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
                         return;
-                    // Hardcore Challenger quit group
                     if (Player* pPlayer = unitTarget->ToPlayer())
                     {
+                        // Hardcore Challenger Drop Item Except Hearthstone
+                        for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+                        {
+                            if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                            {
+                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+                            }
+                        }
+                        for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+                        {
+                            if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                            {
+                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+                            }
+                        }
+                        for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+                        {
+                            if (Bag* pBag = (Bag*)pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                            {
+                                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                                {
+                                    if (Item* pItem = pBag->GetItemByPos(j))
+                                    {
+                                        pPlayer->DestroyItem(i, j, true);
+                                    }
+                                }
+                            }
+                        }
+                        pPlayer->AddItem(6948);
+                        // Hardcore Challenger Drop Money
+                        pPlayer->SetMoney(0);
+                        // Hardcore Challenger Quit Group
                         if (Group* pGroup = pPlayer->GetGroup())
                         {
                             pPlayer->RemoveFromGroup();
