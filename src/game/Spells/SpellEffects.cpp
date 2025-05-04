@@ -813,9 +813,11 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     if (Player* pPlayer = unitTarget->ToPlayer())
                     {
-                        // Hardcore Challenger Drop Item Except Hearthstone
+                        // Hardcore Challenger Drop Item Except Hearthstone & Weapon
                         for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                         {
+                            if (i == EQUIPMENT_SLOT_BODY || (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED))
+                                continue;
                             if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                             {
                                 pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
