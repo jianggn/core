@@ -1270,35 +1270,41 @@ void BattleBotAI::UpdateInCombatAI()
 
 void BattleBotAI::UpdateOutOfCombatAI_Paladin()
 {
-    if (me->HasAura(20142))
+    if (sWorld.getConfig(CONFIG_PALADIN_BOT_AURA) == 1)
     {
-        if (m_spells.paladin.pImprovedDevotionAura &&
-            CanTryToCastSpell(me, m_spells.paladin.pImprovedDevotionAura))
+        if (me->HasAura(20142))
         {
-            if (DoCastSpell(me, m_spells.paladin.pImprovedDevotionAura) == SPELL_CAST_OK)
+            if (m_spells.paladin.pImprovedDevotionAura &&
+                CanTryToCastSpell(me, m_spells.paladin.pImprovedDevotionAura))
+            {
+                if (DoCastSpell(me, m_spells.paladin.pImprovedDevotionAura) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    
+        if (m_spells.paladin.pAura &&
+            CanTryToCastSpell(me, m_spells.paladin.pAura))
+        {
+            if (DoCastSpell(me, m_spells.paladin.pAura) == SPELL_CAST_OK)
                 return;
         }
     }
 
-    if (m_spells.paladin.pAura &&
-        CanTryToCastSpell(me, m_spells.paladin.pAura))
+    if (sWorld.getConfig(CONFIG_PALADIN_BOT_BLESSING) == 1)
     {
-        if (DoCastSpell(me, m_spells.paladin.pAura) == SPELL_CAST_OK)
-            return;
-    }
-
-    if (m_spells.paladin.pBlessingBuff)
-    {
-        if (Player* pTarget = SelectBuffTarget(m_spells.paladin.pBlessingBuff))
+        if (m_spells.paladin.pBlessingBuff)
         {
-            if (CanTryToCastSpell(pTarget, m_spells.paladin.pBlessingBuff))
+            if (Player* pTarget = SelectBuffTarget(m_spells.paladin.pBlessingBuff))
             {
-                if (DoCastSpell(pTarget, m_spells.paladin.pBlessingBuff) == SPELL_CAST_OK)
+                if (CanTryToCastSpell(pTarget, m_spells.paladin.pBlessingBuff))
                 {
-                    m_isBuffing = true;
-                    return;
-                }
-            }  
+                    if (DoCastSpell(pTarget, m_spells.paladin.pBlessingBuff) == SPELL_CAST_OK)
+                    {
+                        m_isBuffing = true;
+                        return;
+                    }
+                }  
+            }
         }
     }
 
@@ -1547,8 +1553,11 @@ void BattleBotAI::UpdateOutOfCombatAI_Shaman()
             }
         }
 
-        if (SummonShamanTotems())
-            return;
+        if (sWorld.getConfig(CONFIG_SHAMAN_BOT_TOTEM) == 1)
+        {
+            if (SummonShamanTotems())
+                return;
+        }
 
         UpdateInCombatAI_Shaman();
     }
@@ -1667,8 +1676,11 @@ void BattleBotAI::UpdateInCombatAI_Shaman()
         }
     }
 
-    if (SummonShamanTotems())
-        return;
+    if (sWorld.getConfig(CONFIG_SHAMAN_BOT_TOTEM) == 1)
+    {
+        if (SummonShamanTotems())
+            return;
+    }
 
     if (m_spells.shaman.pCureDisease &&
         CanTryToCastSpell(me, m_spells.shaman.pCureDisease) &&
@@ -1699,11 +1711,14 @@ void BattleBotAI::UpdateInCombatAI_Shaman()
 
 void BattleBotAI::UpdateOutOfCombatAI_Hunter()
 {
-    if (m_spells.hunter.pTrueshotAura &&
-        CanTryToCastSpell(me, m_spells.hunter.pTrueshotAura))
+    if (sWorld.getConfig(CONFIG_HUNTER_BOT_TRUE_SHOT_AURA) == 1)
     {
-        if (DoCastSpell(me, m_spells.hunter.pTrueshotAura) == SPELL_CAST_OK)
-            return;
+        if (m_spells.hunter.pTrueshotAura &&
+            CanTryToCastSpell(me, m_spells.hunter.pTrueshotAura))
+        {
+            if (DoCastSpell(me, m_spells.hunter.pTrueshotAura) == SPELL_CAST_OK)
+                return;
+        }
     }
 
     if (m_spells.hunter.pAspectOfTheCheetah &&
@@ -1947,20 +1962,23 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
 
 void BattleBotAI::UpdateOutOfCombatAI_Mage()
 {
-    if (m_spells.mage.pArcaneBrilliance)
+    if (sWorld.getConfig(CONFIG_MAGE_BOT_ARCANE_INTELLECT) == 1)
     {
-        if (CanTryToCastSpell(me, m_spells.mage.pArcaneBrilliance))
+        if (m_spells.mage.pArcaneBrilliance)
         {
-            if (DoCastSpell(me, m_spells.mage.pArcaneBrilliance) == SPELL_CAST_OK)
-                return;
+            if (CanTryToCastSpell(me, m_spells.mage.pArcaneBrilliance))
+            {
+                if (DoCastSpell(me, m_spells.mage.pArcaneBrilliance) == SPELL_CAST_OK)
+                    return;
+            }
         }
-    }
-    else if (m_spells.mage.pArcaneIntellect)
-    {
-        if (CanTryToCastSpell(me, m_spells.mage.pArcaneIntellect))
+        else if (m_spells.mage.pArcaneIntellect)
         {
-            if (DoCastSpell(me, m_spells.mage.pArcaneIntellect) == SPELL_CAST_OK)
-                return;
+            if (CanTryToCastSpell(me, m_spells.mage.pArcaneIntellect))
+            {
+                if (DoCastSpell(me, m_spells.mage.pArcaneIntellect) == SPELL_CAST_OK)
+                    return;
+            }
         }
     }
 
@@ -2234,46 +2252,55 @@ void BattleBotAI::UpdateOutOfCombatAI_Priest()
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
     {
-        if (m_spells.priest.pPrayerofFortitude)
+        if (sWorld.getConfig(CONFIG_PRIEST_BOT_POWER_WORD_FORTITUDE) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.priest.pPrayerofFortitude))
+            if (m_spells.priest.pPrayerofFortitude)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.priest.pPrayerofFortitude))
+                if (Player* pTarget = SelectBuffTarget(m_spells.priest.pPrayerofFortitude))
                 {
-                    if (DoCastSpell(pTarget, m_spells.priest.pPrayerofFortitude) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.priest.pPrayerofFortitude))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.priest.pPrayerofFortitude) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
         }
 
-        if (m_spells.priest.pPrayerofSpirit)
+        if (sWorld.getConfig(CONFIG_PRIEST_BOT_DIVINE_SPIRIT) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.priest.pPrayerofSpirit))
+            if (m_spells.priest.pPrayerofSpirit)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.priest.pPrayerofSpirit))
+                if (Player* pTarget = SelectBuffTarget(m_spells.priest.pPrayerofSpirit))
                 {
-                    if (DoCastSpell(pTarget, m_spells.priest.pPrayerofSpirit) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.priest.pPrayerofSpirit))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.priest.pPrayerofSpirit) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
         }
 
-        if (m_spells.priest.pShadowProtection)
+        if (sWorld.getConfig(CONFIG_PRIEST_BOT_SHADOW_PROTECTION) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.priest.pShadowProtection))
+            if (m_spells.priest.pShadowProtection)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.priest.pShadowProtection))
+                if (Player* pTarget = SelectBuffTarget(m_spells.priest.pShadowProtection))
                 {
-                    if (DoCastSpell(pTarget, m_spells.priest.pShadowProtection) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.priest.pShadowProtection))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.priest.pShadowProtection) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
@@ -2281,25 +2308,31 @@ void BattleBotAI::UpdateOutOfCombatAI_Priest()
     }
     else if (bg && bg->GetStatus() == STATUS_IN_PROGRESS)
     {
-        if (m_spells.priest.pPowerWordFortitude &&
-            IsValidBuffTarget(me, m_spells.priest.pPowerWordFortitude) &&
-            CanTryToCastSpell(me, m_spells.priest.pPowerWordFortitude))
+        if (sWorld.getConfig(CONFIG_PRIEST_BOT_POWER_WORD_FORTITUDE) == 1)
         {
-            if (DoCastSpell(me, m_spells.priest.pPowerWordFortitude) == SPELL_CAST_OK)
+            if (m_spells.priest.pPowerWordFortitude &&
+                IsValidBuffTarget(me, m_spells.priest.pPowerWordFortitude) &&
+                CanTryToCastSpell(me, m_spells.priest.pPowerWordFortitude))
             {
-                m_isBuffing = true;
-                return;
+                if (DoCastSpell(me, m_spells.priest.pPowerWordFortitude) == SPELL_CAST_OK)
+                {
+                    m_isBuffing = true;
+                    return;
+                }
             }
         }
 
-        if (m_spells.priest.pDivineSpirit &&
-            IsValidBuffTarget(me, m_spells.priest.pDivineSpirit) &&
-            CanTryToCastSpell(me, m_spells.priest.pDivineSpirit))
+        if (sWorld.getConfig(CONFIG_PRIEST_BOT_DIVINE_SPIRIT) == 1)
         {
-            if (DoCastSpell(me, m_spells.priest.pDivineSpirit) == SPELL_CAST_OK)
+            if (m_spells.priest.pDivineSpirit &&
+                IsValidBuffTarget(me, m_spells.priest.pDivineSpirit) &&
+                CanTryToCastSpell(me, m_spells.priest.pDivineSpirit))
             {
-                m_isBuffing = true;
-                return;
+                if (DoCastSpell(me, m_spells.priest.pDivineSpirit) == SPELL_CAST_OK)
+                {
+                    m_isBuffing = true;
+                    return;
+                }
             }
         }
     }
@@ -2565,16 +2598,19 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
     {
-        if (m_spells.warlock.pDetectInvisibility)
+        if (sWorld.getConfig(CONFIG_WARLOCK_BOT_DETECT_INVISIBILITY) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.warlock.pDetectInvisibility))
+            if (m_spells.warlock.pDetectInvisibility)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.warlock.pDetectInvisibility))
+                if (Player* pTarget = SelectBuffTarget(m_spells.warlock.pDetectInvisibility))
                 {
-                    if (DoCastSpell(pTarget, m_spells.warlock.pDetectInvisibility) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.warlock.pDetectInvisibility))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.warlock.pDetectInvisibility) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
@@ -3127,17 +3163,20 @@ void BattleBotAI::UpdateOutOfCombatAI_Warrior()
             return;
     }
 
-    if (m_spells.warrior.pBattleShout &&
-       !me->HasAura(m_spells.warrior.pBattleShout->Id))
+    if (sWorld.getConfig(CONFIG_WARRIOR_BOT_BATTLE_SHOUT) == 1)
     {
-        if (CanTryToCastSpell(me, m_spells.warrior.pBattleShout))
-            DoCastSpell(me, m_spells.warrior.pBattleShout);
-        else if (m_spells.warrior.pBloodrage &&
-            (me->GetPower(POWER_RAGE) < 10) &&
-            CanTryToCastSpell(me, m_spells.warrior.pBloodrage))
-        {
-            DoCastSpell(me, m_spells.warrior.pBloodrage);
-        }
+        if (m_spells.warrior.pBattleShout &&
+            !me->HasAura(m_spells.warrior.pBattleShout->Id))
+         {
+             if (CanTryToCastSpell(me, m_spells.warrior.pBattleShout))
+                 DoCastSpell(me, m_spells.warrior.pBattleShout);
+             else if (m_spells.warrior.pBloodrage &&
+                 (me->GetPower(POWER_RAGE) < 10) &&
+                 CanTryToCastSpell(me, m_spells.warrior.pBloodrage))
+             {
+                 DoCastSpell(me, m_spells.warrior.pBloodrage);
+             }
+         }
     }
 
     if (Unit* pVictim = me->GetVictim())
@@ -3410,11 +3449,14 @@ void BattleBotAI::UpdateInCombatAI_Warrior()
     }
     else // no victim
     {
-        if (m_spells.warrior.pBattleShout &&
-            CanTryToCastSpell(me, m_spells.warrior.pBattleShout))
+        if (sWorld.getConfig(CONFIG_WARRIOR_BOT_BATTLE_SHOUT) == 1)
         {
-            if (DoCastSpell(me, m_spells.warrior.pBattleShout) == SPELL_CAST_OK)
-                return;
+            if (m_spells.warrior.pBattleShout &&
+                CanTryToCastSpell(me, m_spells.warrior.pBattleShout))
+            {
+                if (DoCastSpell(me, m_spells.warrior.pBattleShout) == SPELL_CAST_OK)
+                    return;
+            }
         }
     }
 }
@@ -3686,31 +3728,37 @@ void BattleBotAI::UpdateOutOfCombatAI_Druid()
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
     {
-        if (m_spells.druid.pGiftoftheWild)
+        if (sWorld.getConfig(CONFIG_DRUID_BOT_MARK_OF_THE_WILD) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.druid.pGiftoftheWild))
+            if (m_spells.druid.pGiftoftheWild)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.druid.pGiftoftheWild))
+                if (Player* pTarget = SelectBuffTarget(m_spells.druid.pGiftoftheWild))
                 {
-                    if (DoCastSpell(pTarget, m_spells.druid.pGiftoftheWild) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.druid.pGiftoftheWild))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.druid.pGiftoftheWild) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
         }
 
-        if (m_spells.druid.pThorns)
+        if (sWorld.getConfig(CONFIG_DRUID_BOT_THORNS) == 1)
         {
-            if (Player* pTarget = SelectBuffTarget(m_spells.druid.pThorns))
+            if (m_spells.druid.pThorns)
             {
-                if (CanTryToCastSpell(pTarget, m_spells.druid.pThorns))
+                if (Player* pTarget = SelectBuffTarget(m_spells.druid.pThorns))
                 {
-                    if (DoCastSpell(pTarget, m_spells.druid.pThorns) == SPELL_CAST_OK)
+                    if (CanTryToCastSpell(pTarget, m_spells.druid.pThorns))
                     {
-                        m_isBuffing = true;
-                        return;
+                        if (DoCastSpell(pTarget, m_spells.druid.pThorns) == SPELL_CAST_OK)
+                        {
+                            m_isBuffing = true;
+                            return;
+                        }
                     }
                 }
             }
@@ -3718,21 +3766,27 @@ void BattleBotAI::UpdateOutOfCombatAI_Druid()
     }
     else
     {
-        if (m_spells.druid.pMarkoftheWild && CanTryToCastSpell(me, m_spells.druid.pMarkoftheWild))
+        if (sWorld.getConfig(CONFIG_DRUID_BOT_MARK_OF_THE_WILD) == 1)
         {
-            if (DoCastSpell(me, m_spells.druid.pMarkoftheWild) == SPELL_CAST_OK)
+            if (m_spells.druid.pMarkoftheWild && CanTryToCastSpell(me, m_spells.druid.pMarkoftheWild))
             {
-                m_isBuffing = true;
-                return;
+                if (DoCastSpell(me, m_spells.druid.pMarkoftheWild) == SPELL_CAST_OK)
+                {
+                    m_isBuffing = true;
+                    return;
+                }
             }
         }
 
-        if (m_spells.druid.pThorns && CanTryToCastSpell(me, m_spells.druid.pThorns))
+        if (sWorld.getConfig(CONFIG_DRUID_BOT_THORNS) == 1)
         {
-            if (DoCastSpell(me, m_spells.druid.pThorns) == SPELL_CAST_OK)
+            if (m_spells.druid.pThorns && CanTryToCastSpell(me, m_spells.druid.pThorns))
             {
-                m_isBuffing = true;
-                return;
+                if (DoCastSpell(me, m_spells.druid.pThorns) == SPELL_CAST_OK)
+                {
+                    m_isBuffing = true;
+                    return;
+                }
             }
         }
     }

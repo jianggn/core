@@ -3028,6 +3028,19 @@ MageBotSummonPet    = 1
 WarlockBotSummonPet = 1
 DruidBotSummonPet   = 1
 
+WarriorBotBattleShout           = 1
+PaladinBotAura                  = 1
+PaladinBotBlessing              = 1
+HunterBotTrueshotAura           = 1
+PriestBotPowerWordFortitude     = 1
+PriestBotDivineSpirit           = 1
+PriestBotShadowProtection       = 1
+ShamanBotTotem                  = 1
+MageBotArcaneIntellect          = 1
+WarlockBotDetectInvisibility    = 1
+DruidBotMarkoftheWild           = 1
+DruidBotThorns                  = 1
+
 BotHunterPetLoseHappiness = 0
 BotEnvironmentalDamage    = 0
 BotDurabilityPointsLoss   = 0

@@ -626,6 +626,20 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_WARLOCK_BOT_SUMMON_PET,    "WarlockBotSummonPet",  1);
     setConfig(CONFIG_DRUID_BOT_SUMMON_PET,      "DruidBotSummonPet",    1);
 
+    //Bot Buff
+    setConfig(CONFIG_WARRIOR_BOT_BATTLE_SHOUT,          "WarriorBotBattleShout",        1);
+    setConfig(CONFIG_PALADIN_BOT_AURA,                  "PaladinBotAura",               1);
+    setConfig(CONFIG_PALADIN_BOT_BLESSING,              "PaladinBotBlessing",           1);
+    setConfig(CONFIG_HUNTER_BOT_TRUE_SHOT_AURA,         "HunterBotTrueshotAura",        1);
+    setConfig(CONFIG_PRIEST_BOT_POWER_WORD_FORTITUDE,   "PriestBotPowerWordFortitude",  1);
+    setConfig(CONFIG_PRIEST_BOT_DIVINE_SPIRIT,          "PriestBotDivineSpirit",        1);
+    setConfig(CONFIG_PRIEST_BOT_SHADOW_PROTECTION,      "PriestBotShadowProtection",    1);
+    setConfig(CONFIG_SHAMAN_BOT_TOTEM,                  "ShamanBotTotem",               1);
+    setConfig(CONFIG_MAGE_BOT_ARCANE_INTELLECT,         "MageBotArcaneIntellect",       1);
+    setConfig(CONFIG_WARLOCK_BOT_DETECT_INVISIBILITY,   "WarlockBotDetectInvisibility", 1);
+    setConfig(CONFIG_DRUID_BOT_MARK_OF_THE_WILD,        "DruidBotMarkoftheWild",        1);
+    setConfig(CONFIG_DRUID_BOT_THORNS,                  "DruidBotThorns",               1);
+
     setConfig(CONFIG_BOT_HUNTER_PET_LOSE_HAPPINESS,    "BotHunterPetLoseHappiness",  0);
     setConfig(CONFIG_BOT_ENVIRONMENTAL_DAMAGE,    "BotEnvironmentalDamage",  0);
     setConfig(CONFIG_BOT_DURABILITY_POINTS_LOSS,    "BotDurabilityPointsLoss",  0);
