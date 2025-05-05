@@ -48,7 +48,7 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
             if(result)
             {
                 std::string playerName = result->Fetch()[0].GetString();
-                player->GetSession()->SendNotification("玩家：%s已第一个到达60级，无法领取奖励。", playerName);
+                player->GetSession()->SendNotification("同职业玩家：%s已第一个到达60级，无法领取奖励。", playerName);
                 player->CLOSE_GOSSIP_MENU();
                 break;
             }
@@ -1092,6 +1092,42 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                     }
                     break;
             }
+            std::string className = "";
+            switch (player->GetClass())
+            {
+              case 1:
+                className = "战士";
+                break;
+              case 2:
+                className = "圣骑士";
+                break;
+              case 3:
+                className = "猎人";
+                break;
+              case 4:
+                className = "盗贼";
+                break;
+              case 5:
+                className = "牧师";
+                break;
+              case 7:
+                className = "萨满";
+                break;
+              case 8:
+                className = "法师";
+                break;
+              case 9:
+                className = "术士";
+                break;
+              case 11:
+                className = "德鲁伊";
+                break;
+            }
+            std::string str = "恭喜玩家：";
+            str.append(player->GetName());
+            str.append("硬核挑战成功，成为服务器第一个满级");
+            str.append(className+"。特殊奖励已发放。");
+            sWorld.SendServerMessage(SERVER_MSG_CUSTOM, str.c_str());
             break;
     }
 }
