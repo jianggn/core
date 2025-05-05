@@ -72,18 +72,190 @@ enum
     AURA_REGEN_MANA = 430,
 };
 
+void PlayerBotAI::GenerateBotSkin(uint32 race, uint8& gender, uint8& skin, uint8& face, uint8& hairStyle, uint8& hairColor, uint8& facialHair)
+{
+    gender = urand(0, 1);
+
+    if (race == RACE_HUMAN)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 9);
+            face = urand(0, 11);
+            facialHair = urand(0, 8);
+            hairStyle = urand(0, 11);
+            hairColor = urand(0, 9);
+        }
+        else
+        {
+            skin = urand(0, 9);
+            face = urand(0, 14);
+            facialHair = 0;
+            hairStyle = urand(0, 18);
+            hairColor = urand(0, 9);
+        }
+    }
+    if (race == RACE_ORC)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 8);
+            face = urand(0, 8);
+            facialHair = urand(0, 10);
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 7);
+        }
+        else
+        {
+            skin = urand(0, 8);
+            face = urand(0, 8);
+            facialHair = 0;
+            hairStyle = urand(0, 7);
+            hairColor = urand(0, 7);
+        }
+    }
+    if (race == RACE_DWARF)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 8);
+            face = urand(0, 9);
+            facialHair = urand(0, 10);
+            hairStyle = urand(0, 10);
+            hairColor = urand(0, 9);
+        }
+        else
+        {
+            skin = urand(0, 8);
+            face = urand(0, 9);
+            facialHair = 0;
+            hairStyle = urand(0, 13);
+            hairColor = urand(0, 9);
+        }
+    }
+    if (race == RACE_NIGHTELF)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 8);
+            face = urand(0, 8);
+            facialHair = urand(0, 5);
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 7);
+        }
+        else
+        {
+            skin = urand(0, 8);
+            face = urand(0, 8);
+            facialHair = urand(0, 9);
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 7);
+        }
+    }
+    if (race == RACE_UNDEAD)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 5);
+            face = urand(0, 9);
+            facialHair = urand(0, 16);
+            hairStyle = urand(0, 9);
+            hairColor = urand(0, 9);
+        }
+        else
+        {
+            skin = urand(0, 5);
+            face = urand(0, 9);
+            facialHair = urand(0, 7);
+            hairStyle = urand(0, 9);
+            hairColor = urand(0, 9);
+        }
+    }
+    if (race == RACE_TAUREN)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 18);
+            face = urand(0, 4);
+            facialHair = 0;
+            hairStyle = urand(0, 7);
+            hairColor = urand(0, 2);
+        }
+        else
+        {
+            skin = urand(0, 10);
+            face = urand(0, 3);
+            facialHair = urand(0, 4);
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 2);
+        }
+    }
+    if (race == RACE_GNOME)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 4);
+            face = urand(0, 6);
+            facialHair = urand(0, 7);
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 8);
+        }
+        else
+        {
+            skin = urand(0, 4);
+            face = urand(0, 6);
+            facialHair = 0;
+            hairStyle = urand(0, 6);
+            hairColor = urand(0, 8);
+        }
+    }
+    if (race == RACE_TROLL)
+    {
+        if (gender == GENDER_MALE)
+        {
+            skin = urand(0, 8);
+            face = urand(0, 4);
+            facialHair = urand(0, 10);
+            hairStyle = urand(0, 5);
+            hairColor = urand(0, 9);
+        }
+        else
+        {
+            skin = urand(0, 5);
+            face = urand(0, 5);
+            facialHair = 0;
+            hairStyle = urand(0, 4);
+            hairColor = urand(0, 9);
+        }
+    }
+
+    return;
+}
 
 bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, Player* pClone)
 {
+    uint8 gender = 0;
+    uint8 skin = 0;
+    uint8 face = 0;
+    uint8 hairStyle = 0;
+    uint8 hairColor = 0;
+    uint8 facialHair = 0;
+
     ASSERT(botEntry);
     std::string name = sObjectMgr.GenerateFreePlayerName();
     normalizePlayerName(name);
-    uint8 gender = pClone ? pClone->GetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER) : urand(0, 1);
-    uint8 skin = pClone ? pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID) : urand(0, 5);
-    uint8 face = pClone ? pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID) : urand(0, 5);
-    uint8 hairStyle = pClone ? pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_STYLE_ID) : urand(0, 5);
-    uint8 hairColor = pClone ? pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_COLOR_ID) : urand(0, 5);
-    uint8 facialHair = pClone ? pClone->GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_FACIAL_STYLE) : urand(0, 5);
+    if (pClone)
+    {
+        gender = pClone->GetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER);
+        skin = pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID);
+        face = pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID);
+        hairStyle = pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_STYLE_ID);
+        hairColor = pClone->GetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_COLOR_ID);
+        facialHair = pClone->GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_FACIAL_STYLE);
+    }
+    else
+        GenerateBotSkin(race_, gender, skin, face, hairStyle, hairColor, facialHair);
+
     Player* newChar = new Player(sess);
     uint32 guid = botEntry->playerGUID;
     if (!newChar->Create(guid, name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair))
