@@ -141,347 +141,331 @@ bool ChatHandler::HandleCheatFixedZCommand(char* args)
 
 bool ChatHandler::HandleCheatGodCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-        
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatGod(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_GOD, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_GOD_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatGod(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_GOD, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_GOD_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatCooldownCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatNoCooldown(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_NO_CD, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_CD_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatNoCooldown(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_NO_CD, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_CD_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatCastTimeCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatInstantCast(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_INSTANT_CAST, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_INSTANT_CAST_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatInstantCast(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_INSTANT_CAST, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_INSTANT_CAST_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatPowerCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatNoPowerCost(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_NO_POWER_COST, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_POWER_COST_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatNoPowerCost(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_NO_POWER_COST, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_POWER_COST_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatDebuffImmunityCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatDebuffImmunity(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_DEBUFF_IMMUNITY, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_DEBUFF_IMMUNITY_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatDebuffImmunity(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_DEBUFF_IMMUNITY, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_DEBUFF_IMMUNITY_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatAlwaysCritCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatAlwaysCrit(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_ALWAYS_CRIT, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_ALWAYS_CRIT_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatAlwaysCrit(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_ALWAYS_CRIT, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_ALWAYS_CRIT_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatNoCastCheckCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatNoCastCheck(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_NO_CAST_CHECK, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_CAST_CHECK_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatNoCastCheck(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_NO_CAST_CHECK, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_NO_CAST_CHECK_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatAlwaysProcCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatAlwaysProc(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_ALWAYS_PROC, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_ALWAYS_PROC_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatAlwaysProc(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_ALWAYS_PROC, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_ALWAYS_PROC_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatTriggerPassCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatTriggerPass(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_TRIGGER_PASS, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_TRIGGER_PASS_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatTriggerPass(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_TRIGGER_PASS, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_TRIGGER_PASS_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatIgnoreTriggersCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatIgnoreTriggers(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_IGNORE_TRIGGERS, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_IGNORE_TRIGGERS_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatIgnoreTriggers(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_IGNORE_TRIGGERS, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_IGNORE_TRIGGERS_SET, value ? "on" : "off", GetNameLink().c_str());
+
+    return true;
+}
+
+bool ChatHandler::HandleCheatBeastmasterCommand(char* args)
+{
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatBeastmaster(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_BEASTMASTER, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_BEASTMASTER_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatImmuneToPlayersCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        if (value)
-            target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
-        else
-            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
-
-        PSendSysMessage(LANG_YOU_SET_IMMUNE_PC, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_IMMUNE_PC_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    if (value)
+        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+    else
+        target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+
+    PSendSysMessage(LANG_YOU_SET_IMMUNE_PC, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_IMMUNE_PC_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatImmuneToCreaturesCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        if (value)
-            target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
-        else
-            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
-
-        PSendSysMessage(LANG_YOU_SET_IMMUNE_NPC, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_IMMUNE_NPC_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    if (value)
+        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+    else
+        target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+
+    PSendSysMessage(LANG_YOU_SET_IMMUNE_NPC, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_IMMUNE_NPC_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
 
 bool ChatHandler::HandleCheatUntargetableCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        if (value)
-            target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        else
-            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
-        PSendSysMessage(LANG_YOU_SET_UNTARGETABLE, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_UNTARGETABLE_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    if (value)
+        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+    else
+        target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+    PSendSysMessage(LANG_YOU_SET_UNTARGETABLE, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_UNTARGETABLE_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
@@ -556,26 +540,23 @@ bool ChatHandler::HandleCheatWallclimbCommand(char* args)
 
 bool ChatHandler::HandleCheatDebugTargetInfoCommand(char* args)
 {
-    if (*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
-        bool value;
-        if (!ExtractOnOff(&args, value))
-        {
-            SendSysMessage(LANG_USE_BOL);
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Player* target;
-        if (!ExtractPlayerTarget(&args, &target))
-            return false;
-
-        target->SetCheatDebugTargetInfo(value, true);
-
-        PSendSysMessage(LANG_YOU_SET_DEBUG_TARGET_INFO, value ? "on" : "off", GetNameLink(target).c_str());
-        if (needReportToTarget(target))
-            ChatHandler(target).PSendSysMessage(LANG_YOUR_DEBUG_TARGET_INFO_SET, value ? "on" : "off", GetNameLink().c_str());
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Player* target;
+    if (!ExtractPlayerTarget(&args, &target))
+        return false;
+
+    target->SetCheatDebugTargetInfo(value, true);
+
+    PSendSysMessage(LANG_YOU_SET_DEBUG_TARGET_INFO, value ? "on" : "off", GetNameLink(target).c_str());
+    if (needReportToTarget(target))
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_DEBUG_TARGET_INFO_SET, value ? "on" : "off", GetNameLink().c_str());
 
     return true;
 }
@@ -589,6 +570,8 @@ bool ChatHandler::HandleCheatStatusCommand(char* args)
     PSendSysMessage("Cheats active on %s:", target->GetName());
     if (target->HasCheatOption(PLAYER_CHEAT_FLY))
         SendSysMessage("- Fly");
+    if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1))
+        SendSysMessage("- Beastmaster");
     if (target->GetInvincibilityHpThreshold())
         SendSysMessage("- God");
     if (target->HasCheatOption(PLAYER_CHEAT_NO_COOLDOWN))

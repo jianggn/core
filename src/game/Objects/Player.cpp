@@ -2830,6 +2830,19 @@ void Player::SetCheatFixedZ(bool on, bool notify)
     }
 }
 
+void Player::SetCheatBeastmaster(bool on, bool notify)
+{
+    if (on)
+        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1);
+    else
+        RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1);
+
+    if (notify)
+    {
+        GetSession()->SendNotification(on ? LANG_CHEAT_BEASTMASTER_ON : LANG_CHEAT_BEASTMASTER_OFF);
+    }
+}
+
 void Player::SetCheatGod(bool on, bool notify)
 {
     SetInvincibilityHpThreshold(on ? 1 : 0);
@@ -3443,12 +3456,11 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // cleanup unit flags (will be re-applied if need at aura load).
     RemoveFlag(UNIT_FIELD_FLAGS,
-               UNIT_FLAG_SPAWNING         | UNIT_FLAG_REMOVE_CLIENT_CONTROL  | UNIT_FLAG_NOT_ATTACKABLE_1 |
-               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC          | UNIT_FLAG_LOOTING          |
+               UNIT_FLAG_SPAWNING         | UNIT_FLAG_REMOVE_CLIENT_CONTROL  | UNIT_FLAG_LOOTING          |
                UNIT_FLAG_PET_IN_COMBAT    | UNIT_FLAG_SILENCED               | UNIT_FLAG_PACIFIED         |
                UNIT_FLAG_STUNNED          | UNIT_FLAG_IN_COMBAT              | UNIT_FLAG_DISARMED         |
-               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING                | UNIT_FLAG_NOT_SELECTABLE   |
-               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE                 | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
+               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING                | UNIT_FLAG_TAXI_FLIGHT      |
+               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE                 | UNIT_FLAG_AURAS_VISIBLE);
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);    // must be set
 
     // cleanup player flags (will be re-applied if need at aura load), to avoid have ghost flag without ghost aura, for example.
@@ -14948,6 +14960,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     if (m_characterFlags & CHARACTER_FLAG_RESTING)
         SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+    if (m_characterFlags & CHARACTER_FLAG_BEASTMASTER)
+        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1);
     if (m_characterFlags & CHARACTER_FLAG_PVP_ENABLED)
         UpdatePvP(true);
     if (m_characterFlags & CHARACTER_FLAG_PVP_DESIRED)
@@ -16634,9 +16648,9 @@ bool Player::SaveNewPlayer(WorldSession* session, uint32 guidlow, std::string co
 
 void Player::UpdateCharacterFlags()
 {
-    SetCharacterFlag(CHARACTER_FLAG_INVIS_GOD, GetInvincibilityHpThreshold());
     SetCharacterFlag(CHARACTER_FLAG_RESTING, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING));
     SetCharacterFlag(CHARACTER_FLAG_SILENCED, !CanSpeak());
+    SetCharacterFlag(CHARACTER_FLAG_BEASTMASTER, HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1));
     SetCharacterFlag(CHARACTER_FLAG_PVP_ENABLED, IsPvP());
     SetCharacterFlag(CHARACTER_FLAG_HAS_PVP_RANK, GetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_HIGHEST_HONOR_RANK));
     SetCharacterFlag(CHARACTER_FLAG_HIDE_HELM, HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM));
