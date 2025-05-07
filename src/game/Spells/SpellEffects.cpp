@@ -2077,16 +2077,22 @@ void Spell::EffectPowerDrain(SpellEffectIndex effIdx)
     if (m_spellInfo->EffectMiscValue[effIdx] < 0 || m_spellInfo->EffectMiscValue[effIdx] >= MAX_POWERS)
         return;
 
+    if (!unitTarget || !unitTarget->IsAlive() || damage < 0)
+        return;
+
     Powers drainPower = Powers(m_spellInfo->EffectMiscValue[effIdx]);
 
-    if (!unitTarget)
-        return;
-    if (!unitTarget->IsAlive())
-        return;
-    if (unitTarget->GetPowerType() != drainPower)
-        return;
-    if (damage < 0)
-        return;
+    // happiness is never a creature's main power so it has special handling
+    if (drainPower == POWER_HAPPINESS)
+    {
+        if (!unitTarget->IsPet())
+            return;
+    }
+    else
+    {
+        if (unitTarget->GetPowerType() != drainPower)
+            return;
+    }
 
     int32 curPower = unitTarget->GetPower(drainPower);
 
