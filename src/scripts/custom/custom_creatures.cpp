@@ -72,6 +72,8 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
             bool has_26045 = player->HasItemCount(26045, 1, true);
             bool has_26046 = player->HasItemCount(26046, 1, true);
             bool has_26047 = player->HasItemCount(26047, 1, true);
+            bool has_26049 = player->HasItemCount(26049, 1, true);
+            bool has_26050 = player->HasItemCount(26050, 1, true);
             switch (player->GetClass())
             {
                 // WARRIOR
@@ -666,7 +668,55 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                 // SHAMAN
                 case 7:
                     // 有0件
-                    if (!has_26023 && !has_26029 && !has_26038)
+                    if (!has_26023 && !has_26038 && !has_26049 && !has_26050)
+                    {
+                        switch (urand(1,4))
+                        {
+                            case 1:
+                                player->AddItem(26023);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 3:
+                                player->AddItem(26049);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 4:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    // 有1件
+                    else if (has_26023 && !has_26038 && !has_26049 && !has_26050)
+                    {
+                        switch (urand(1,3))
+                        {
+                            case 1:
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26049);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 3:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (!has_26023 && has_26038 && !has_26049 && !has_26050)
                     {
                         switch (urand(1,3))
                         {
@@ -676,37 +726,20 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
                             case 2:
-                                player->AddItem(26029);
+                                player->AddItem(26049);
                                 CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
                             case 3:
-                                player->AddItem(26038);
+                                player->AddItem(26050);
                                 CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
                         }
                     }
-                    // 有1件
-                    else if (has_26023 && !has_26029 && !has_26038)
+                    else if (!has_26023 && !has_26038 && has_26049 && !has_26050)
                     {
-                        switch (urand(1,2))
-                        {
-                            case 1:
-                                player->AddItem(26029);
-                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
-                                player->CLOSE_GOSSIP_MENU();
-                                break;
-                            case 2:
-                                player->AddItem(26038);
-                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
-                                player->CLOSE_GOSSIP_MENU();
-                                break;
-                        }
-                    }
-                    else if (!has_26023 && has_26029 && !has_26038)
-                    {
-                        switch (urand(1,2))
+                        switch (urand(1,3))
                         {
                             case 1:
                                 player->AddItem(26023);
@@ -718,11 +751,16 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                                 CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
+                            case 3:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
                         }
                     }
-                    else if (!has_26023 && !has_26029 && has_26038)
+                    else if (!has_26023 && !has_26038 && !has_26049 && has_26050)
                     {
-                        switch (urand(1,2))
+                        switch (urand(1,3))
                         {
                             case 1:
                                 player->AddItem(26023);
@@ -730,36 +768,144 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
                             case 2:
-                                player->AddItem(26029);
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 3:
+                                player->AddItem(26049);
                                 CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                                 player->CLOSE_GOSSIP_MENU();
                                 break;
                         }
                     }
                     // 有2件
-                    else if (!has_26023 && has_26029 && has_26038)
+                    else if (has_26023 && has_26038 && !has_26049 && !has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26049);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (has_26023 && !has_26038 && has_26049 && !has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (has_26023 && !has_26038 && !has_26049 && has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26049);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (!has_26023 && has_26038 && has_26049 && !has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26023);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26050);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (!has_26023 && has_26038 && !has_26049 && has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26023);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26049);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    else if (!has_26023 && !has_26038 && has_26049 && has_26050)
+                    {
+                        switch (urand(1,2))
+                        {
+                            case 1:
+                                player->AddItem(26023);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                            case 2:
+                                player->AddItem(26038);
+                                CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                                player->CLOSE_GOSSIP_MENU();
+                                break;
+                        }
+                    }
+                    // 有3件
+                    else if (!has_26023 && has_26038 && has_26049 && has_26050)
                     {
                         player->AddItem(26023);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
-                    else if (has_26023 && !has_26029 && has_26038)
-                    {
-                        player->AddItem(26029);
-                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
-                        player->CLOSE_GOSSIP_MENU();
-                    }
-                    else if (has_26023 && has_26029 && !has_26038)
+                    else if (has_26023 && !has_26038 && has_26049 && has_26050)
                     {
                         player->AddItem(26038);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
-                    // 有3件
-                    else if (has_26023 && has_26029 && has_26038)
+                    else if (has_26023 && has_26038 && !has_26049 && has_26050)
                     {
-                        player->GetSession()->SendNotification("已集齐职业橙装，奖励3000金币。");
-                        player->ModifyMoney(3000 * GOLD);
+                        player->AddItem(26049);
+                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                        player->CLOSE_GOSSIP_MENU();
+                    }
+                    else if (has_26023 && has_26038 && has_26049 && !has_26050)
+                    {
+                        player->AddItem(26050);
+                        CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
+                        player->CLOSE_GOSSIP_MENU();
+                    }
+                    // 有4件
+                    else if (has_26023 && has_26038 && has_26049 && has_26050)
+                    {
+                        player->GetSession()->SendNotification("已集齐职业橙装，奖励4000金币。");
+                        player->ModifyMoney(4000 * GOLD);
                         CharacterDatabase.PExecute("REPLACE INTO `hardcore_reward` (`guid`, `name`, `class`) VALUES (%u, '%s', %u)", player->GetGUIDLow(), player->GetName(), player->GetClass());
                         player->CLOSE_GOSSIP_MENU();
                     }
