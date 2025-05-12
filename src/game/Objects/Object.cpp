@@ -3136,7 +3136,7 @@ uint32 WorldObject::RespawnNearCreaturesByEntry(uint32 entry, float range)
     return count;
 }
 
-void WorldObject::GetRelativePositions(float fForwardBackward, float fLeftRight, float fUpDown, float &x, float &y, float &z)
+void WorldObject::GetRelativePositions(float fForwardBackward, float fLeftRight, float fUpDown, float &x, float &y, float &z) const
 {
     float orientation = GetOrientation() + M_PI / 2.0f;
 
@@ -3151,7 +3151,7 @@ void WorldObject::GetRelativePositions(float fForwardBackward, float fLeftRight,
     z = GetPositionZ() + fUpDown;
 }
 
-void WorldObject::GetInCirclePositions(float dist, uint32 curr, uint32 total, float &x, float &y, float &z, float &o)
+void WorldObject::GetInCirclePositions(float dist, uint32 curr, uint32 total, float &x, float &y, float &z, float &o) const
 {
     float circleAng = (float(curr) / float(total)) * (M_PI * 2);
     x = GetPositionX() + (cos(circleAng) * dist);
@@ -3160,14 +3160,14 @@ void WorldObject::GetInCirclePositions(float dist, uint32 curr, uint32 total, fl
     o = circleAng - M_PI;
 }
 
-void WorldObject::GetNearRandomPositions(float distance, float &x, float &y, float &z)
+void WorldObject::GetNearRandomPositions(float distance, float &x, float &y, float &z) const
 {
     x = rand_norm_f() * distance;
     y = rand_norm_f() * distance;
     z = GetPositionZ();
 }
 
-void WorldObject::GetFirstCollision(float dist, float angle, float &x, float &y, float &z)
+void WorldObject::GetFirstCollision(float dist, float angle, float &x, float &y, float &z) const
 {
     x = GetPositionX();
     y = GetPositionY();
