@@ -45,7 +45,7 @@
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
-#include "MapManager.h"
+#include "Geometry.h"
 #include "MoveSpline.h"
 #include "MovementPacketSender.h"
 #include "ZoneScript.h"
@@ -1275,7 +1275,7 @@ void Aura::TriggerSpell()
                         else
                             newAngle -= M_PI_F / 40;
 
-                        newAngle = MapManager::NormalizeOrientation(newAngle);
+                        newAngle = Geometry::NormalizeOrientation(newAngle);
                         target->SetFacingTo(newAngle);
                         target->CastSpell(target, 26029, true);
                         return;

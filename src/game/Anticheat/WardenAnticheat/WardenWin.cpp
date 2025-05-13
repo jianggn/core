@@ -28,15 +28,12 @@
 #include "WardenScan.hpp"
 #include "../Anticheat.h"
 #include "World.h"
-
-#include "Unit.h"
-#include "Chat.h"
 #include "WorldSession.h"
+#include "Util.h"
 #include "Crypto/BigNumber.h"
 #include "Crypto/Hash/HMACSHA1.h"
 #include "ByteBuffer.h"
 #include "Database/DatabaseEnv.h"
-#include "Player.h"
 #include "Progression.h"
 
 #include <string>

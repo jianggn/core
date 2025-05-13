@@ -184,7 +184,7 @@ void MovementAnticheat::AddCheats(uint32 cheats, uint32 count)
         if (!cheatNames.empty())
         {
             if (sWorld.getConfig(CONFIG_BOOL_AC_MOVEMENT_NOTIFY_CHEATERS))
-                ChatHandler(m_session->GetPlayer()).PSendSysMessage("[AntiCheat] Detected cheats: %s", cheatNames.c_str());
+                m_session->GetPlayer()->PSendSysMessage("[AntiCheat] Detected cheats: %s", cheatNames.c_str());
 
             // Print detected cheats in place inside packet log.
             if (sWorld.getConfig(CONFIG_UINT32_AC_MOVEMENT_PACKET_LOG_SIZE))

@@ -2677,7 +2677,7 @@ void Player::SetGMChat(bool on, bool notify)
         m_ExtraFlags |= PLAYER_EXTRA_GM_CHAT;
         if (notify)
         {
-            ChatHandler(this).SendSysMessage(LANG_GM_CHAT_ON);
+            SendSysMessage(LANG_GM_CHAT_ON);
             GetSession()->SendNotification(LANG_GM_CHAT_ON);
         }
     }
@@ -2686,7 +2686,7 @@ void Player::SetGMChat(bool on, bool notify)
         m_ExtraFlags &= ~PLAYER_EXTRA_GM_CHAT;
         if (notify)
         {
-            ChatHandler(this).SendSysMessage(LANG_GM_CHAT_OFF);
+            SendSysMessage(LANG_GM_CHAT_OFF);
             GetSession()->SendNotification(LANG_GM_CHAT_OFF);
         }
     }
@@ -2712,7 +2712,7 @@ void Player::SetGameMaster(bool on, bool notify)
 
         if (notify)
         {
-            ChatHandler(this).SendSysMessage(LANG_GM_ON);
+            SendSysMessage(LANG_GM_ON);
             GetSession()->SendNotification(LANG_GM_ON);
         }
     }
@@ -2737,7 +2737,7 @@ void Player::SetGameMaster(bool on, bool notify)
 
         if (notify)
         {
-            ChatHandler(this).SendSysMessage(LANG_GM_OFF);
+            SendSysMessage(LANG_GM_OFF);
             GetSession()->SendNotification(LANG_GM_OFF);
         }
     }
@@ -2775,7 +2775,7 @@ void Player::SetGMVisible(bool on, bool notify)
 
         if (notify)
         {
-            ChatHandler(this).SendSysMessage(LANG_INVISIBLE_VISIBLE);
+            SendSysMessage(LANG_INVISIBLE_VISIBLE);
             GetSession()->SendNotification(LANG_INVIS_OFF);
         }
     }
@@ -2793,7 +2793,7 @@ void Player::SetGMVisible(bool on, bool notify)
 
         if (notify)
         {
-            ChatHandler(this).PSendSysMessage(LANG_INVISIBLE_INVISIBLE, GetGMInvisibilityLevel());
+            PSendSysMessage(LANG_INVISIBLE_INVISIBLE, GetGMInvisibilityLevel());
             GetSession()->SendNotification(LANG_INVIS_ON);
         }
     }
@@ -12941,7 +12941,12 @@ bool Player::CanRewardQuest(Quest const* pQuest, bool msg) const
     if (pQuest->IsAutoComplete())
     {
         if (!CanTakeQuest(pQuest, false, true))
-            return false;
+        {
+            if (IsGameMaster())
+                PSendSysMessage("Bypassing turn in check for auto completed quest %u due to GM mode.", pQuest->GetQuestId());
+            else
+                return false;
+        }
     }
     else
     {
@@ -13383,7 +13388,7 @@ void Player::RewardQuest(Quest const* pQuest, uint32 reward, WorldObject* questE
     q_status.m_reward_choice = pQuest->RewChoiceItemId[reward];
 
     // Used for client inform but rewarded only in case not max level
-    uint32 xp = uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
+    uint32 xp = uint32(pQuest->XPValue(GetLevel()) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
 
     if (GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         GiveXP(xp , nullptr);
@@ -16732,7 +16737,7 @@ void Player::SaveToDB(bool online, bool force)
         uberInsert.addFloat(finiteAlways(GetPositionX()));
         uberInsert.addFloat(finiteAlways(GetPositionY()));
         uberInsert.addFloat(finiteAlways(GetPositionZ()));
-        uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(GetOrientation())));
+        uberInsert.addFloat(Geometry::NormalizeOrientation(finiteAlways(GetOrientation())));
     }
     else
     {
@@ -16741,7 +16746,7 @@ void Player::SaveToDB(bool online, bool force)
         uberInsert.addFloat(finiteAlways(GetTeleportDest().x));
         uberInsert.addFloat(finiteAlways(GetTeleportDest().y));
         uberInsert.addFloat(finiteAlways(GetTeleportDest().z));
-        uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(GetTeleportDest().o)));
+        uberInsert.addFloat(Geometry::NormalizeOrientation(finiteAlways(GetTeleportDest().o)));
     }
 
     if (m_transport)
@@ -16751,7 +16756,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().x));
     uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().y));
     uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().z));
-    uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos().o)));
+    uberInsert.addFloat(Geometry::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos().o)));
 
     std::ostringstream ss;
     ss << m_taxi;                                   // string with TaxiMaskSize numbers
@@ -17433,7 +17438,7 @@ void Player::SendFactionAtWar(uint32 reputationId, bool apply) const
 
 void Player::SendResetFailedNotify()
 {
-    ChatHandler(this).SendSysMessage(LANG_LEAVE_TO_RESET_INSTANCE);
+    SendSysMessage(LANG_LEAVE_TO_RESET_INSTANCE);
 }
 
 // Reset all solo instances and optionally send a message on success for each
@@ -17673,6 +17678,39 @@ void Player::TextEmote(char const* text) const
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, text, LANG_UNIVERSAL, GetChatTag(), GetObjectGuid(), GetName());
     SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true, !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT));
+}
+
+void Player::SendSysMessage(int32 entry) const
+{
+    SendSysMessage(m_session->GetMangosString(entry));
+}
+
+void Player::SendSysMessage(char const* str) const
+{
+    WorldPacket data;
+    ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, str);
+    m_session->SendPacket(&data);
+}
+
+void Player::PSendSysMessage(int32 entry, ...) const
+{
+    char const* format = m_session->GetMangosString(entry);
+    va_list ap;
+    char str[2048];
+    va_start(ap, entry);
+    vsnprintf(str, 2048, format, ap);
+    va_end(ap);
+    SendSysMessage(str);
+}
+
+void Player::PSendSysMessage(char const* format, ...) const
+{
+    va_list ap;
+    char str[2048];
+    va_start(ap, format);
+    vsnprintf(str, 2048, format, ap);
+    va_end(ap);
+    SendSysMessage(str);
 }
 
 void Player::PetSpellInitialize()
@@ -21967,7 +22005,7 @@ Item* Player::AddItem(uint32 itemId, uint32 count)
     if (count == 0 || dest.empty())
     {
         // -- TODO: Send to mailbox if no space
-        ChatHandler(this).PSendSysMessage("You don't have any space in your bags.");
+        PSendSysMessage("You don't have any space in your bags.");
         return nullptr;
     }
 

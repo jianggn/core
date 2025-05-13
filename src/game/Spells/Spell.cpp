@@ -38,7 +38,6 @@
 #include "ScriptMgr.h"
 #include "ObjectAccessor.h"
 #include "SharedDefines.h"
-#include "LootMgr.h"
 #include "VMapFactory.h"
 #include "BattleGround.h"
 #include "Util.h"

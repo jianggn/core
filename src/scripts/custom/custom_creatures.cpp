@@ -3387,7 +3387,6 @@ void LearnSkillRecipesHelper(Player *player, uint32 skill_id)
 
 bool LearnAllRecipesInProfession(Player *pPlayer, SkillType skill)
 {
-    ChatHandler handler(pPlayer->GetSession());
     char* skill_name;
 
     SkillLineEntry const *SkillInfo = sSkillLineStore.LookupEntry(skill);

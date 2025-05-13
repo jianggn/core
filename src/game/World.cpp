@@ -2369,7 +2369,7 @@ void World::SendGMTicketText(char const* text)
             {
                 Player* player = session->GetPlayer();
                 if (player && player->IsInWorld() && player->IsAcceptTickets())
-                    ChatHandler(player).SendSysMessage(text);
+                    player->SendSysMessage(text);
             }
         }
     }
