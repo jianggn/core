@@ -5572,7 +5572,7 @@ float Unit::SpellDamageBonusTaken(SpellCaster const* pCaster, SpellEntry const* 
     // Resilience
     if (IsPlayer())
     {
-        Unit* pUnit = pCaster->ToUnit();
+        Unit const* pUnit = pCaster->ToUnit();
         if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
         {
             takenTotalMod *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
@@ -6114,7 +6114,7 @@ float Unit::MeleeDamageBonusTaken(SpellCaster const* pCaster, float pdamage, Wea
     // Resilience
     if (IsPlayer())
     {
-        Unit* pUnit = pCaster->ToUnit();
+        Unit const* pUnit = pCaster->ToUnit();
         if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
         {
             TakenPercent *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
