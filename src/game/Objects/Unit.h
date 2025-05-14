@@ -825,6 +825,7 @@ class Unit : public SpellCaster
         int32 HasAura_34142_34143_total() const;
         int32 HasAura_34155_34156_total() const;
         int32 HasAura_34165_34166_total() const;
+        float HasAura_34382_34383_total() const;
         bool HasAuraType(AuraType auraType) const;
         bool HasAuraTypeByCaster(AuraType auraType, ObjectGuid casterGuid) const;
         bool HasAura(uint32 spellId, SpellEffectIndex effIndex) const;

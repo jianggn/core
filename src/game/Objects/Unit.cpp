@@ -4419,6 +4419,20 @@ bool Unit::HasAura(uint32 spellId, SpellEffectIndex effIndex) const
     return false;
 }
 
+float Unit::HasAura_34382_34383_total() const
+{
+    int32 total = 0;
+    AuraList const& mTotalAuraList = GetAurasByType(SPELL_AURA_MOD_ATTACKER_SPELL_CRIT_CHANCE);
+    for (const auto& i : mTotalAuraList)
+    {
+        if (i->GetId() == 34382)
+            total += 2;
+        else if (i->GetId() == 34383)
+            total += 4;
+    }
+    return float(total);
+}
+
 GameObject* Unit::GetGameObject(uint32 spellId) const
 {
     for (const auto& i : m_spellGameObjects)
@@ -5555,6 +5569,16 @@ float Unit::SpellDamageBonusTaken(SpellCaster const* pCaster, SpellEntry const* 
     if (!(spellProto->Id == 1949 || spellProto->Id == 11683 ||spellProto->Id == 11684))
         takenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
 
+    // Resilience
+    if (IsPlayer())
+    {
+        Unit* pUnit = pCaster->ToUnit();
+        if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
+        {
+            takenTotalMod *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
+        }
+    }
+
     // Taken fixed damage bonus auras
     float takenFlatMod = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
 
@@ -6086,6 +6110,16 @@ float Unit::MeleeDamageBonusTaken(SpellCaster const* pCaster, float pdamage, Wea
 
     // ..taken pct (by school mask)
     TakenPercent *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
+
+    // Resilience
+    if (IsPlayer())
+    {
+        Unit* pUnit = pCaster->ToUnit();
+        if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
+        {
+            TakenPercent *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
+        }
+    }
 
     // ..taken pct (melee/ranged)
     if (attType == RANGED_ATTACK)
