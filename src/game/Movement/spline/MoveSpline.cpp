@@ -40,9 +40,11 @@ Location MoveSpline::ComputePositionAfterTime(int32 duration) const
     MANGOS_ASSERT(Initialized());
 
     int32 lastIndex = point_Idx;
+    int32 const timePassed = std::max(time_passed, spline.length(lastIndex));
+
     for (int32 i = point_Idx + 1; i <= spline.last(); ++i)
     {
-        int32 pointReachTime = spline.length(i) - time_passed;
+        int32 pointReachTime = spline.length(i) - timePassed;
         if (pointReachTime > duration)
             break;
 
@@ -52,7 +54,7 @@ Location MoveSpline::ComputePositionAfterTime(int32 duration) const
     if (lastIndex == spline.last())
         return FinalDestination();
 
-    int32 desiredTime = duration + timePassed();
+    int32 desiredTime = duration + timePassed;
     return ComputePosition(lastIndex, desiredTime);
 }
 
