@@ -5571,13 +5571,9 @@ float Unit::SpellDamageBonusTaken(SpellCaster const* pCaster, SpellEntry const* 
 
     // Resilience
     if (IsPlayer())
-    {
-        Unit const* pUnit = pCaster->ToUnit();
-        if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
-        {
-            takenTotalMod *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
-        }
-    }
+        if (Unit const* pUnit = pCaster->ToUnit())
+            if (pUnit->IsPlayer() || (pUnit->IsPet() && pUnit->GetOwnerGuid().IsPlayer()))
+                takenTotalMod *= (100.0f - this->HasAura_34382_34383_total()) / 100.0f;
 
     // Taken fixed damage bonus auras
     float takenFlatMod = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
