@@ -1616,10 +1616,8 @@ enum Maps
     MAP_STORMWIND_STOCKADE  = 34,
     MAP_STORMWIND_PRISON    = 35,
     MAP_DEADMINES           = 36,
-    MAP_AZSHARA_CRATER      = 37,
     MAP_COLLIN_TEST         = 42,
     MAP_WAILING_CAVERNS     = 43,
-    MAP_MONASTERY           = 44,
     MAP_RAZORFEN_KRAUL      = 47,
     MAP_BLACKFATHOM_DEEPS   = 48,
     MAP_ULDAMAN             = 70,
@@ -1649,7 +1647,9 @@ enum Maps
     MAP_AHN_QIRAJ_RUINS     = 509,
     MAP_ARATHI_BASIN        = 529,
     MAP_AHN_QIRAJ_TEMPLE    = 531,
-    MAP_NAXXRAMAS           = 533
+    MAP_NAXXRAMAS           = 533,
+    MAP_AZSHARA_CRATER      = 547,
+    MAP_MONASTERY           = 548
 };
 
 // Indexes of BattlemasterList.dbc

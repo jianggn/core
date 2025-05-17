@@ -1957,7 +1957,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 break;
             }
             player->ModifyMoney(-travelboots);
-            player->TeleportTo(MAP_EASTERN_KINGDOMS, -8691.629f, 572.148f, 93.662f, 0.00f);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -9362.088867f, 539.202637f, 47.111515f, 0.00f);
             break;
         case 1268:// Teleport player to CavernsOfTime
             player->CLOSE_GOSSIP_MENU();
@@ -2477,7 +2477,7 @@ bool GossipSelect_Chromie(Player *player, Creature *_Creature, uint32 sender, ui
 
 bool GossipHello_Black_Knight(Player *player, Creature *_Creature)   
 {
-    if (player->GetMapId() == 540 || player->GetMapId() == 541)
+    if (player->GetMapId() == 549 || player->GetMapId() == 541)
     {
         player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
     }
@@ -2509,7 +2509,7 @@ void SendDefaultMenu_Black_Knight(Player *player, Creature *_Creature, uint32 ac
                 player->GetSession()->SendNotification("You must be at least level 60 to enter.");
                 break;
             }
-            player->TeleportTo(540, -11039.6f, -1997.65f, 94.0802f, 0.0f);
+            player->TeleportTo(549, -11039.6f, -1997.65f, 94.0802f, 0.0f);
             break;
         case 4:
             player->CLOSE_GOSSIP_MENU();
@@ -2518,7 +2518,7 @@ void SendDefaultMenu_Black_Knight(Player *player, Creature *_Creature, uint32 ac
                 player->GetSession()->SendNotification("You must be at least level 60 to enter.");
                 break;
             }
-            player->TeleportTo(540, -11101.692f, -1997.510f, 49.893f, 0.0f);
+            player->TeleportTo(549, -11101.692f, -1997.510f, 49.893f, 0.0f);
             break;
         case 5:
             player->CLOSE_GOSSIP_MENU();
@@ -2722,9 +2722,9 @@ bool GossipSelect_Yarntown(Player *player, Creature *_Creature, uint32 sender, u
 
 bool GossipHello_Elder_Timbermaw(Player *player, Creature *_Creature)   
 {
-    if (player->GetMapId() == 37)
+    if (player->GetMapId() == 547)
     {
-        player->ADD_GOSSIP_ITEM(5, "离开凄凉山（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(5, "离开凄凉山",               GOSSIP_SENDER_MAIN, 1);
     }
     else
     {
@@ -2752,7 +2752,7 @@ void SendDefaultMenu_Elder_Timbermaw(Player *player, Creature *_Creature, uint32
                 player->GetSession()->SendNotification("You must be at least level 60 to enter.");
                 break;
             }
-            player->TeleportTo(37, 322.27f, 170.297f, 234.934f, 0.0f);
+            player->TeleportTo(547, 322.27f, 170.297f, 234.934f, 0.0f);
             break;
     }
 }
@@ -2767,9 +2767,9 @@ bool GossipSelect_Elder_Timbermaw(Player *player, Creature *_Creature, uint32 se
 
 bool GossipHello_Scarlet_Traitor(Player *player, Creature *_Creature)   
 {
-    if (player->GetMapId() == 44)
+    if (player->GetMapId() == 548)
     {
-        player->ADD_GOSSIP_ITEM(5, "离开修道院（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(5, "离开修道院",               GOSSIP_SENDER_MAIN, 1);
     }
     else
     {
@@ -2797,7 +2797,7 @@ void SendDefaultMenu_Scarlet_Traitor(Player *player, Creature *_Creature, uint32
                 player->GetSession()->SendNotification("You must be at least level 60 to enter.");
                 break;
             }
-            player->TeleportTo(44, 78.3392f, -0.845785f, 18.6771f, 0.0f);
+            player->TeleportTo(548, 78.3392f, -0.845785f, 18.6771f, 0.0f);
             break;
     }
 }
@@ -2814,7 +2814,7 @@ bool GossipHello_Tirion_Fordring_Outland(Player *player, Creature *_Creature)
 {
     if (player->GetMapId() == 546)
     {
-        player->ADD_GOSSIP_ITEM(5, "离开德拉诺（需自行/logout）",               GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(5, "离开德拉诺",               GOSSIP_SENDER_MAIN, 1);
     }
     else
     {
