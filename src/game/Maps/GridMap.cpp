@@ -643,7 +643,8 @@ bool GridMap::ExistMap(uint32 mapid, int gx, int gy)
 
     if (!pf)
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Check existing of map file '%s': not exist!", tmp);
+        // ignore .map file not exists error
+        //sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Check existing of map file '%s': not exist!", tmp);
         delete[] tmp;
         return false;
     }
