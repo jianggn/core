@@ -486,6 +486,22 @@ SpellScript* GetScript_BagOfGold(SpellEntry const*)
     return new BagOfGoldScript();
 }
 
+// 4067 - Big Bronze Bomb
+// 13237 - Goblin Mortar
+struct InstantCastScript : SpellScript
+{
+    void OnSuccessfulStart(Spell* spell) const final
+    {
+        spell->SetCastTime(0);
+        spell->ReSetTimer();
+    }
+};
+
+SpellScript* GetScript_InstantCast(SpellEntry const*)
+{
+    return new InstantCastScript();
+}
+
 void AddSC_item_spell_scripts()
 {
     Script* newscript;
@@ -583,5 +599,10 @@ void AddSC_item_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_bag_of_gold";
     newscript->GetSpellScript = &GetScript_BagOfGold;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_instant_cast";
+    newscript->GetSpellScript = &GetScript_InstantCast;
     newscript->RegisterSelf();
 }
