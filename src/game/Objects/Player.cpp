@@ -6391,7 +6391,10 @@ void Player::CheckAreaExploreAndOutdoor()
         }
     }
     else if (sWorld.getConfig(CONFIG_BOOL_VMAP_INDOOR_CHECK) && !IsGameMaster())
-        RemoveAurasWithAttribute(SPELL_ATTR_ONLY_OUTDOORS);
+    {
+        if (GetMapId() != 550 || !IsMounted())
+            RemoveAurasWithAttribute(SPELL_ATTR_ONLY_OUTDOORS);
+    }
 
     if (areaFlag == 0xffff)
         return;

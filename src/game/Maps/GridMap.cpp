@@ -883,7 +883,7 @@ bool TerrainInfo::IsOutdoors(float x, float y, float z) const
     int32 adtId, rootId, groupId;
 
     // no wmo found? -> outside by default
-    if (!GetAreaInfo(x, y, z, mogpFlags, adtId, rootId, groupId))
+    if (!GetAreaInfo(x, y, z, mogpFlags, adtId, rootId, groupId) || GetMapId() == 550)
         return true;
 
     return IsOutdoorWMO(mogpFlags);
