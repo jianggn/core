@@ -2078,7 +2078,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 break;
             }
             player->ModifyMoney(-travelboots);
-            player->TeleportTo(MAP_KALIMDOR, -6228.310059f, -3982.498291f, -58.749954f, 0.00f);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -5618.981934, -830.361633, 483.534393, 0.00f);
             break;
         case 1279:// Teleport player to StardewValley
             player->CLOSE_GOSSIP_MENU();
@@ -2970,7 +2970,7 @@ void SendDefaultMenu_Foggy_Zoltan(Player *player, Creature *_Creature, uint32 ac
     {
         case 1:
             player->CLOSE_GOSSIP_MENU();
-            player->TeleportTo(MAP_KALIMDOR, -6228.310059f, -3982.498291f, -58.749954f, 0.0f);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -5618.981934, -830.361633, 483.534393, 0.0f);
             break;
         case 2:
             player->ADD_GOSSIP_ITEM(5, "传送：旧铁炉堡",               GOSSIP_SENDER_MAIN, 3);
