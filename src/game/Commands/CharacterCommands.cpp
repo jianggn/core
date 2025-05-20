@@ -2655,6 +2655,18 @@ static uint32 gmSpellList[] =
     27261,  // dmg11
     25059,  // Dmg Shield
     26666,  // Dmg Shield2
+    24341,  // Revive
+    26687,  // Revall
+    29313,  // CooldownAll
+    1302,   // Damage Immunity Test
+    9454,   // Freeze
+    31366,  // Root Anybody Forever
+    1908,   // Uber Heal Over Time
+    30839,  // Debuff Uber Heal Over Time
+    8358,   // Mana Spike
+    23965,  // Instant Heal
+
+    // these spell ids are reused
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
     456,    // SHOWLABEL Only OFF
     2765,   // SHOWLABEL Only ON
@@ -2665,14 +2677,6 @@ static uint32 gmSpellList[] =
     20114,  // BM Only OFF
     20115,  // BM Only ON
 #endif
-    24341,  // Revive
-    29313,  // CooldownAll
-    1302,   // Damage Immunity Test
-    9454,   // Freeze
-    31366,  // Root Anybody Forever
-    1908,   // Uber Heal Over Time
-    8358,   // Mana Spike
-    23965,  // Instant Heal
 };
 
 bool ChatHandler::HandleLearnAllGMCommand(char* /*args*/)
@@ -2681,10 +2685,7 @@ bool ChatHandler::HandleLearnAllGMCommand(char* /*args*/)
     {
         SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spell);
         if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, m_session->GetPlayer()))
-        {
-            PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spell);
             continue;
-        }
 
         m_session->GetPlayer()->LearnSpell(spell, false);
     }
