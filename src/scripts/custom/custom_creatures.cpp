@@ -1271,8 +1271,8 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
             }
             std::string str = "恭喜玩家：";
             str.append(player->GetName());
-            str.append("硬核挑战成功，成为服务器第一个满级");
-            str.append(className+"。特殊奖励已发放。");
+            str.append("完成硬核挑战，成为服务器第一个满级");
+            str.append(className+"。专属奖励已发放。");
             sWorld.SendServerMessage(SERVER_MSG_CUSTOM, str.c_str());
             break;
     }
@@ -1415,8 +1415,19 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->ADD_GOSSIP_ITEM(5, "亚楠镇 60级",           GOSSIP_SENDER_MAIN, 1273);
             player->ADD_GOSSIP_ITEM(5, "凄凉山 60级",           GOSSIP_SENDER_MAIN, 1274);
             player->ADD_GOSSIP_ITEM(5, "修道院 60级",           GOSSIP_SENDER_MAIN, 1275);
-            player->ADD_GOSSIP_ITEM(5, "德拉诺 60级",           GOSSIP_SENDER_MAIN, 1276);
+            player->ADD_GOSSIP_ITEM(7, "[更多] ->",             GOSSIP_SENDER_MAIN, 5553);
             player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5551);
+            player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
+
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 5553: // Instances [PAGE 4]
+            player->ADD_GOSSIP_ITEM(5, "德拉诺 60级",           GOSSIP_SENDER_MAIN, 1276);
+            player->ADD_GOSSIP_ITEM(5, "血环竞技场 60级",             GOSSIP_SENDER_MAIN, 1277);
+            player->ADD_GOSSIP_ITEM(5, "旧铁炉堡 60级",          GOSSIP_SENDER_MAIN, 1278);
+            player->ADD_GOSSIP_ITEM(5, "星露谷 60级",            GOSSIP_SENDER_MAIN, 1279);
+            player->ADD_GOSSIP_ITEM(5, "新月林地 60级",   GOSSIP_SENDER_MAIN, 1280);
+            player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5552);
             player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
 
             player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
@@ -2048,6 +2059,46 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             }
             player->ModifyMoney(-travelboots);
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11865.1f, -3203.32f, -22.8171f, 0.00f);
+            break;
+        case 1277:// Teleport player to BloodRing
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -492.673553f, -1570.729370f, 52.666183f, 0.00f);
+            break;
+        case 1278:// Teleport player to OldIronforge
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, -6228.310059f, -3982.498291f, -58.749954f, 0.00f);
+            break;
+        case 1279:// Teleport player to StardewValley
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, -6560.617188f, -545.094299f, -254.334824f, 0.00f);
+            break;
+        case 1280:// Teleport player to CrescentGrove
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -213.140915f, -2522.304688f, 118.503098f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
             player->CLOSE_GOSSIP_MENU();
@@ -2851,6 +2902,186 @@ bool GossipSelect_Tirion_Fordring_Outland(Player *player, Creature *_Creature, u
     // Main menu
     if (sender == GOSSIP_SENDER_MAIN)
         SendDefaultMenu_Tirion_Fordring_Outland(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Syndicate_Onlookers(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 550)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "欢迎加入勇敢者的游戏。Make Arena Great Again!",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Syndicate_Onlookers(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -492.673553f, -1570.729370f, 52.666183f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：血环竞技场",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(550, 15672.334961f, 16796.822266f, 2.957636f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Syndicate_Onlookers(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Syndicate_Onlookers(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Foggy_Zoltan(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 552)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "嗝~再给我一杯酒……还有丝绸！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Foggy_Zoltan(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, -6228.310059f, -3982.498291f, -58.749954f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：旧铁炉堡",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(552, -4981.924805f, -881.592896f, 501.659760f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Foggy_Zoltan(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Foggy_Zoltan(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Brave_Cow(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 553)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "略略略！我什么都不知道，因为我只是一头奶牛。",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Brave_Cow(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, -6560.617188f, -545.094299f, -254.334824f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：星露谷",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(553, 16637.523438f, 16783.306641f, 70.350830f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Brave_Cow(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Brave_Cow(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Luke_Skywalker(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 554)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "我以前和你一样也是个冒险家，直到我的膝盖中了一箭。",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Luke_Skywalker(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -213.140915f, -2522.304688f, 118.503098f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：新月林地",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(554, 560.769409f, 86.339394f, 273.202637f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Luke_Skywalker(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Luke_Skywalker(player, _Creature, action);
 
     return true;
 }
@@ -3762,6 +3993,30 @@ void AddSC_custom_creatures()
     newscript->Name = "npc_tirion_fordring_outland";
     newscript->pGossipHello = &GossipHello_Tirion_Fordring_Outland;
     newscript->pGossipSelect = &GossipSelect_Tirion_Fordring_Outland;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_syndicate_onlookers";
+    newscript->pGossipHello = &GossipHello_Syndicate_Onlookers;
+    newscript->pGossipSelect = &GossipSelect_Syndicate_Onlookers;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_foggy_zoltan";
+    newscript->pGossipHello = &GossipHello_Foggy_Zoltan;
+    newscript->pGossipSelect = &GossipSelect_Foggy_Zoltan;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_brave_cow";
+    newscript->pGossipHello = &GossipHello_Brave_Cow;
+    newscript->pGossipSelect = &GossipSelect_Brave_Cow;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_luke_skywalker";
+    newscript->pGossipHello = &GossipHello_Luke_Skywalker;
+    newscript->pGossipSelect = &GossipSelect_Luke_Skywalker;
     newscript->RegisterSelf(false);
 
     newscript = new Script;
