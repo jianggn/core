@@ -2293,7 +2293,7 @@ struct go_warpwood_pod : public GameObjectAI
         {
             if (pInfo->type == GAMEOBJECT_TYPE_CHEST && pInfo->chest.linkedTrapId)
             {
-                if (GameObjectInfo const* pTrap = sObjectMgr.GetGameObjectInfo(pInfo->chest.linkedTrapId))
+                if (GameObjectInfo const* pTrap = sObjectMgr.GetGameObjectTemplate(pInfo->chest.linkedTrapId))
                 {
                     if (pTrap->trap.spellId)
                     {

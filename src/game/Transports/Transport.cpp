@@ -58,7 +58,7 @@ bool Transport::Create(uint32 guidlow, uint32 mapid, float x, float y, float z, 
 
     Object::_Create(guidlow, 0, HIGHGUID_MO_TRANSPORT);
 
-    GameObjectInfo const* goinfo = ObjectMgr::GetGameObjectInfo(guidlow);
+    GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectTemplate(guidlow);
 
     if (!goinfo)
     {

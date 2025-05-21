@@ -385,27 +385,6 @@ class ChatHandler
         bool HandleUnitStatCommand(char *args);
         bool HandleDebugControlCommand(char *args);
         bool HandlePvPCommand(char *args);
-        // Reload
-        bool HandleReloadCreatureTemplate(char* args);
-        bool HandleReloadItemTemplate(char* args);
-        bool HandleReloadMapTemplate(char* args);
-        bool HandleReloadGameObjectTemplate(char* args);
-        bool HandleReloadExplorationBaseXp(char* args);
-        bool HandleReloadPetNameGeneration(char* args);
-        bool HandleReloadCreatureOnKillReputation(char* args);
-        bool HandleReloadGameWeather(char* args);
-        bool HandleReloadFactionChangeReputations(char* args);
-        bool HandleReloadFactionChangeSpells(char* args);
-        bool HandleReloadFactionChangeItems(char* args);
-        bool HandleReloadFactionChangeQuests(char* args);
-        bool HandleReloadFactionChangeMounts(char* args);
-        bool HandleReloadCreatureDisplayInfoAddon(char* args);
-        bool HandleReloadIPBanList(char* args);
-        bool HandleReloadAccountBanList(char* args);
-        bool HandleReloadCreatureCommand(char* args);
-        bool HandleReloadGameObjectCommand(char* args);
-        bool HandleReloadInstanceBuffRemoval(char* args);
-        bool HandleReloadPetitions(char* args);
         // Channel
         bool HandleChannelJoinCommand(char*);
         bool HandleChannelLeaveCommand(char*);
@@ -867,6 +846,25 @@ class ChatHandler
         bool HandleReloadSpellTargetPositionCommand(char* args);
         bool HandleReloadSpellThreatsCommand(char* args);
         bool HandleReloadSpellPetAurasCommand(char* args);
+        bool HandleReloadItemTemplate(char* args);
+        bool HandleReloadMapTemplate(char* args);
+        bool HandleReloadGameObjectTemplatesCommand(char* args);
+        bool HandleReloadExplorationBaseXp(char* args);
+        bool HandleReloadPetNameGeneration(char* args);
+        bool HandleReloadCreatureOnKillReputation(char* args);
+        bool HandleReloadGameWeather(char* args);
+        bool HandleReloadFactionChangeReputations(char* args);
+        bool HandleReloadFactionChangeSpells(char* args);
+        bool HandleReloadFactionChangeItems(char* args);
+        bool HandleReloadFactionChangeQuests(char* args);
+        bool HandleReloadFactionChangeMounts(char* args);
+        bool HandleReloadCreatureDisplayInfoAddon(char* args);
+        bool HandleReloadIPBanList(char* args);
+        bool HandleReloadAccountBanList(char* args);
+        bool HandleReloadCreatureCommand(char* args);
+        bool HandleReloadGameObjectCommand(char* args);
+        bool HandleReloadInstanceBuffRemoval(char* args);
+        bool HandleReloadPetitions(char* args);
 
         bool HandleResetAchievementsCommand(char* args);
         bool HandleResetAllCommand(char* args);

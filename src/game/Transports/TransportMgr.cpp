@@ -46,14 +46,15 @@ TransportTemplate* TransportMgr::GetTransportTemplate(uint32 entry)
 
 void TransportMgr::LoadTransportTemplates()
 {
-    for (uint32 entry = 1; entry <= sGOStorage.GetMaxEntry(); ++entry)
+    for (auto const& itr : sObjectMgr.GetGameObjectInfoMap())
     {
-        auto data = sGOStorage.LookupEntry<GameObjectInfo>(entry);
+        uint32 entry = itr.first;
+        auto const& data = itr.second;
         if (data && data->type == GAMEOBJECT_TYPE_MO_TRANSPORT)
         {
             TransportTemplate& transportTemplate = m_transportTemplates[entry];
             transportTemplate.entry = entry;
-            if (!GenerateWaypoints(data, transportTemplate))
+            if (!GenerateWaypoints(data.get(), transportTemplate))
                 m_transportTemplates.erase(entry);
         }
     }

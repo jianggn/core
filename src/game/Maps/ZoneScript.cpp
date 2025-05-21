@@ -86,7 +86,7 @@ void OPvPCapturePoint::SendChangePhase()
 
 bool OPvPCapturePoint::AddObject(uint32 type, uint32 entry, uint32 mapId, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3)
 {
-    GameObjectInfo const* goInfo = sObjectMgr.GetGameObjectInfo(entry);
+    GameObjectInfo const* goInfo = sObjectMgr.GetGameObjectTemplate(entry);
     if (!goInfo)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Invalid GameObject entry %u in OPvPCapturePoint::AddObject!", entry);
@@ -147,14 +147,14 @@ bool OPvPCapturePoint::SetCapturePointData(uint32 entry, uint32 mapId, float x, 
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Creating capture point %u", entry);
 
     // check info existence
-    GameObjectInfo const* goinfo = ObjectMgr::GetGameObjectInfo(entry);
+    GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectTemplate(entry);
     if (!goinfo || goinfo->type != GAMEOBJECT_TYPE_CAPTURE_POINT)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "OutdoorPvP: GO %u is not capture point!", entry);
         return false;
     }
 
-    GameObjectInfo const* goInfo = sObjectMgr.GetGameObjectInfo(entry);
+    GameObjectInfo const* goInfo = sObjectMgr.GetGameObjectTemplate(entry);
     if (!goInfo)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Invalid GameObject entry %u in OPvPCapturePoint::SetCapturePointData!", entry);

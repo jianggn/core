@@ -110,7 +110,7 @@ GameObject::~GameObject()
 
 GameObject* GameObject::CreateGameObject(uint32 entry)
 {
-    GameObjectInfo const* goinfo = ObjectMgr::GetGameObjectInfo(entry);
+    GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectTemplate(entry);
     if (goinfo && goinfo->type == GAMEOBJECT_TYPE_TRANSPORT)
         return new ElevatorTransport;
     return new GameObject;
@@ -203,7 +203,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, float x, float
 
     SetZoneScript();
 
-    GameObjectInfo const* goinfo = ObjectMgr::GetGameObjectInfo(name_id);
+    GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectTemplate(name_id);
     if (!goinfo)
     {
         sLog.Out(LOG_DBERROR, LOG_LVL_ERROR, "Gameobject (GUID: %u) not created: Entry %u does not exist in `gameobject_template`. Map: %u  (X: %f Y: %f Z: %f) ang: %f rotation0: %f rotation1: %f rotation2: %f rotation3: %f", guidlow, name_id, map->GetId(), x, y, z, ang, rotation0, rotation1, rotation2, rotation3);
@@ -1298,7 +1298,7 @@ void GameObject::TriggerLinkedGameObject(Unit* target)
     if (!trapEntry)
         return;
 
-    GameObjectInfo const* trapInfo = sGOStorage.LookupEntry<GameObjectInfo>(trapEntry);
+    GameObjectInfo const* trapInfo = sObjectMgr.GetGameObjectTemplate(trapEntry);
     if (!trapInfo || trapInfo->type != GAMEOBJECT_TYPE_TRAP)
         return;
 
@@ -1335,7 +1335,7 @@ void GameObject::RespawnLinkedGameObject()
     if (!trapEntry)
         return;
 
-    GameObjectInfo const* trapInfo = sGOStorage.LookupEntry<GameObjectInfo>(trapEntry);
+    GameObjectInfo const* trapInfo = sObjectMgr.GetGameObjectTemplate(trapEntry);
     if (!trapInfo || trapInfo->type != GAMEOBJECT_TYPE_TRAP)
         return;
 
