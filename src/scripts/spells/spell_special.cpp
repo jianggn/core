@@ -246,6 +246,33 @@ SpellScript* GetScript_ClearAllCooldowns(SpellEntry const*)
     return new ClearAllCooldownsScript();
 }
 
+// 21651 - Opening
+struct OpeningBattlegroundBannerScript : public SpellScript
+{
+    void OnSuccessfulStart(Spell* spell) const final
+    {
+        if (!spell->m_casterUnit)
+            return;
+
+        if (GameObject* go = spell->m_targets.getGOTarget())
+        {
+            // Make sure the player is sending a valid GO target and lock ID.
+            // SPELL_EFFECT_OPEN_LOCK can succeed with a lockId of 0.
+            LockEntry const* lockInfo = sLockStore.LookupEntry(go->GetGOInfo()->GetLockId());
+            if (lockInfo && lockInfo->Index[1] == LOCKTYPE_SLOW_OPEN)
+            {
+                Spell* visual = new Spell(spell->m_casterUnit, sSpellMgr.GetSpellEntry(24390), true);
+                visual->prepare();
+            }
+        }
+    }
+};
+
+SpellScript* GetScript_OpeningBattlegroundBanner(SpellEntry const*)
+{
+    return new OpeningBattlegroundBannerScript();
+}
+
 void AddSC_special_spell_scripts()
 {
     Script* newscript;
@@ -308,5 +335,10 @@ void AddSC_special_spell_scripts()
     newscript = new Script;
     newscript->Name = "spell_clear_all_cooldowns";
     newscript->GetSpellScript = &GetScript_ClearAllCooldowns;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "spell_opening_battleground_banner";
+    newscript->GetSpellScript = &GetScript_OpeningBattlegroundBanner;
     newscript->RegisterSelf();
 }

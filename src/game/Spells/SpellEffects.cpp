@@ -2563,6 +2563,13 @@ void Spell::EffectOpenLock(SpellEffectIndex effIdx)
 
     if (gameObjTarget && m_casterUnit)
     {
+        // World of Warcraft Client Patch 1.6.0 (2005-07-12)
+        // - Disarming an enemy faction hunter's trap will now flag the rogue for PvP.
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
+        if (Unit* pOwner = gameObjTarget->GetOwner())
+            m_casterUnit->TogglePlayerPvPFlagOnAttackVictim(pOwner, true);
+#endif
+
         if (player)
             sScriptMgr.OnGameObjectOpen(player, gameObjTarget);
         if (gameObjTarget->AI())

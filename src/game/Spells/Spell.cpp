@@ -8777,23 +8777,8 @@ void Spell::SetClientStarted(bool bisClientStarted)
 
 void Spell::OnSpellLaunch()
 {
-    if (!m_casterUnit || !m_caster->IsInWorld())
+    if (!m_casterUnit || !m_casterUnit->IsInWorld())
         return;
-
-    // Make sure the player is sending a valid GO target and lock ID. SPELL_EFFECT_OPEN_LOCK
-    // can succeed with a lockId of 0
-    if (m_spellInfo->Id == 21651)
-    {
-        if (GameObject* go = m_targets.getGOTarget())
-        {
-            LockEntry const* lockInfo = sLockStore.LookupEntry(go->GetGOInfo()->GetLockId());
-            if (lockInfo && lockInfo->Index[1] == LOCKTYPE_SLOW_OPEN)
-            {
-                Spell* visual = new Spell(m_casterUnit, sSpellMgr.GetSpellEntry(24390), true);
-                visual->prepare();
-            }
-        }
-    }
 
     unitTarget = m_targets.getUnitTarget();
 
