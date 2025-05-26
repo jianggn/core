@@ -53,7 +53,7 @@ public:
         else
             return false;
     }
-    void AppendTaximaskTo(ByteBuffer& data, bool all);
+    void AppendTaximaskTo(ByteBuffer& data, bool all, uint32 race);
 
     // Destinations
     bool LoadTaxiDestinationsFromString(std::string const& values, Team team);
