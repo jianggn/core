@@ -818,8 +818,8 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         {
                             if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                             {
-                                // Keep Weapon & Clear Enchantment
-                                if (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED)
+                                // Keep Weapon/Body & Clear Enchantment
+                                if (i == EQUIPMENT_SLOT_BODY || (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED))
                                 {
                                     pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
                                 }
