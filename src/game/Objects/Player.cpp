@@ -6882,7 +6882,8 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
             break;
     }
 
-    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying()) // in hostile area
+    // Hardcore Challenger Do Not Update PvP
+    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying() && !(GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)) // in hostile area
         UpdatePvP(true);
 
     // on a ffa realm, ffa is toggled together with pvp flag
