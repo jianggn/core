@@ -422,23 +422,6 @@ void WorldSession::HandleZoneUpdateOpcode(WorldPacket& recv_data)
     }
 }
 
-void WorldSession::HandleSetTargetOpcode(WorldPacket& recv_data)
-{
-    // When this packet send?
-    ObjectGuid guid ;
-    recv_data >> guid;
-
-    _player->SetTargetGuid(guid);
-
-    // update reputation list if need
-    Unit* unit = ObjectAccessor::GetUnit(*_player, guid);   // can select group members at diff maps
-    if (!unit)
-        return;
-
-    if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->GetFactionTemplateId()))
-        _player->GetReputationMgr().SetVisible(factionTemplateEntry);
-}
-
 void WorldSession::HandleSetSelectionOpcode(WorldPacket& recv_data)
 {
     ObjectGuid guid;
@@ -450,8 +433,9 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket& recv_data)
     Unit* unit = ObjectAccessor::GetUnit(*_player, guid);   // can select group members at diff maps
 
     if (unit)
-        if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->GetFactionTemplateId()))
-            _player->GetReputationMgr().SetVisible(factionTemplateEntry);
+        if (FactionTemplateEntry const* factionTemplateEntry = unit->GetFactionTemplateEntry())
+            if (!factionTemplateEntry->IsHostileToPlayerTeam(*_player->GetFactionTemplateEntry()))
+                _player->GetReputationMgr().SetVisible(factionTemplateEntry);
 
     // Drop combo points only for rogues and druids
     // Warriors use combo points internally, do no reset for everyone
