@@ -3369,11 +3369,75 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
 
             uint64 guid = *((uint64*)(*packet).contents());
             uint32 slot = *(((uint32*)(*packet).contents()) + 2);
+            uint32 itemid = *(((uint32*)(*packet).contents()) + 3);
 
             std::unique_ptr<WorldPacket> data = std::make_unique<WorldPacket>(CMSG_LOOT_ROLL);
             *data << uint64(guid);
             *data << uint32(slot);
-            *data << uint8(0); // pass
+            if (sWorld.getConfig(CONFIG_BOT_LOOT_ROLL) == 0)
+            {
+                *data << uint8(0); // pass
+            }
+            else
+            {
+                ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemid);
+                if (pProto->Class != ITEM_CLASS_WEAPON && pProto->Class != ITEM_CLASS_ARMOR)
+                {
+                    *data << uint8(0); // pass
+                }
+                else
+                {
+                    // 1. if armor crossover
+                    bool armor_crossover = false;
+                    if (pProto->Class == ITEM_CLASS_ARMOR && (pProto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE || pProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL || pProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER || pProto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH))
+                    {
+                        uint32 armor_class;
+                        switch (me->GetClass())
+                        {
+                            case CLASS_WARRIOR:
+                            case CLASS_PALADIN:
+                            {
+                                armor_class = 4;
+                                break;
+                            }
+                            case CLASS_HUNTER:
+                            case CLASS_SHAMAN:
+                            {
+                                armor_class = 3;
+                                break;
+                            }
+                            case CLASS_ROGUE:
+                            case CLASS_DRUID:
+                            {
+                                armor_class = 2;
+                                break;
+                            }
+                            case CLASS_MAGE:
+                            case CLASS_WARLOCK:
+                            case CLASS_PRIEST:
+                            {
+                                armor_class = 1;
+                                break;
+                            }
+                        }
+                        if (pProto->SubClass != armor_class)
+                            armor_crossover = true;
+                    }
+                    // 2. if can store
+                    ItemPosCountVec dest;
+                    InventoryResult msg_1 = me->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, pProto->ItemId, pProto->Stackable);
+                    // 3. if can use
+                    InventoryResult msg_2 = me->CanUseItem(pProto);
+                    if (!armor_crossover && msg_1 == EQUIP_ERR_OK && msg_2 == EQUIP_ERR_OK)
+                    {
+                        *data << uint8(1); // need
+                    }
+                    else
+                    {
+                        *data << uint8(0); // pass
+                    }
+                }
+            }
             me->GetSession()->QueuePacket(std::move(data));
             return;
         }

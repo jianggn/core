@@ -3045,7 +3045,8 @@ BotHunterPetLoseHappiness = 0
 BotEnvironmentalDamage    = 0
 BotDurabilityPointsLoss   = 0
 
-BotLootMoney = 0
+BotLootMoney = 1
+BotLootRoll = 1
 
 Buff.JieFuFuTi = 99
 
