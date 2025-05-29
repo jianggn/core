@@ -644,6 +644,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
     // Can Not Trade Partybot(.load character)
     // Just Send Email(out of dungeon) Or Master Looter(in dungeon)
+    /*
     if (pOther->IsBot())
     {
         std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", otherGuid, pOther->GetName()));
@@ -654,6 +655,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
             return;
         }
     }
+    */
 
     if (pOther == GetPlayer() || pOther->m_trade)
     {

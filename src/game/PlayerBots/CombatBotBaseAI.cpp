@@ -3322,8 +3322,12 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
             }
             else if (status == TRADE_STATUS_TRADE_COMPLETE)
             {
-                EquipOrUseNewItem();
-                UpdateVisualHonorRankBasedOnItems();
+                std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", me->GetObjectGuid(), me->GetName()));
+                if (!result)
+                {
+                    EquipOrUseNewItem();
+                    UpdateVisualHonorRankBasedOnItems();
+                }
             }
             break;
         }
