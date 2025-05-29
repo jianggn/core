@@ -817,17 +817,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                         {
                             if (Item* pItem = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-                            {
-                                // Keep Weapon/Body & Clear Enchantment
-                                if (i == EQUIPMENT_SLOT_BODY || (i >= EQUIPMENT_SLOT_MAINHAND && i <= EQUIPMENT_SLOT_RANGED))
-                                {
-                                    pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
-                                }
-                                else
-                                {
-                                    pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
-                                }
-                            }
+                                pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
                         }
                         // Bag
                         for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
@@ -865,8 +855,8 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                                 }
                             }
                         }
-                        // Keep Hearthstone
-                        pPlayer->AddItem(6948);
+                        // Add Starting Items
+                        pPlayer->AddStartingItems();
                         // Hardcore Challenger Drop Money
                         pPlayer->SetMoney(0);
                         // Hardcore Challenger Quit Group
