@@ -1888,6 +1888,13 @@ void PartyBotAI::UpdateOutOfCombatAI_Mage()
         }
     }
 
+    if (m_isBuffing &&
+       (!m_spells.mage.pArcaneIntellect ||
+        !me->HasGCD(m_spells.mage.pArcaneIntellect)))
+    {
+        m_isBuffing = false;
+    }
+
     if (m_spells.mage.pRemoveLesserCurse)
     {
         if (Unit* pFriend = SelectDispelTarget(m_spells.mage.pRemoveLesserCurse))
@@ -1898,13 +1905,6 @@ void PartyBotAI::UpdateOutOfCombatAI_Mage()
                     return;
             }
         }
-    }
-
-    if (m_isBuffing &&
-       (!m_spells.mage.pArcaneIntellect ||
-        !me->HasGCD(m_spells.mage.pArcaneIntellect)))
-    {
-        m_isBuffing = false;
     }
 
     if (Unit* pVictim = me->GetVictim())
