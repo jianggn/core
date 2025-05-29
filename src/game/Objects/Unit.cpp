@@ -4607,10 +4607,11 @@ typedef std::list<RemovedSpellData> RemoveSpellList;
 
 void Unit::HandleTriggers(Unit* pVictim, uint32 procExtra, uint32 amount, uint32 originalAmount, SpellEntry const* procSpell, ProcTriggeredList const& procTriggered)
 {
-    RemoveSpellList removedSpells;
     // Nothing found
     if (procTriggered.empty())
         return;
+
+    RemoveSpellList removedSpells;
 
     // Handle effects proceed this time
     for (const auto& itr : procTriggered)

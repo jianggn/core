@@ -333,7 +333,7 @@ struct ProcTriggeredData
     uint32 procFlag;
 };
 
-typedef std::list< ProcTriggeredData > ProcTriggeredList;
+typedef std::vector<ProcTriggeredData> ProcTriggeredList;
 
 class Unit : public SpellCaster
 {
