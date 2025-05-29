@@ -1058,6 +1058,18 @@ void PartyBotAI::UpdateOutOfCombatAI_Paladin()
         m_isBuffing = false;
     }
 
+    if (m_spells.paladin.pCleanse)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.paladin.pCleanse))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.paladin.pCleanse))
+            {
+                if (DoCastSpell(pFriend, m_spells.paladin.pCleanse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (Pet* pPet = me->GetPet())
@@ -1344,6 +1356,30 @@ void PartyBotAI::UpdateOutOfCombatAI_Shaman()
     if (m_role == ROLE_HEALER &&
         FindAndHealInjuredAlly())
         return;
+
+    if (m_spells.shaman.pCureDisease)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.shaman.pCureDisease))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.shaman.pCureDisease))
+            {
+                if (DoCastSpell(pFriend, m_spells.shaman.pCureDisease) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.shaman.pCurePoison)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.shaman.pCurePoison))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.shaman.pCurePoison))
+            {
+                if (DoCastSpell(pFriend, m_spells.shaman.pCurePoison) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
 
     if (Unit* pVictim = me->GetVictim())
     {
@@ -1859,6 +1895,18 @@ void PartyBotAI::UpdateOutOfCombatAI_Mage()
         m_isBuffing = false;
     }
 
+    if (m_spells.mage.pRemoveLesserCurse)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.mage.pRemoveLesserCurse))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.mage.pRemoveLesserCurse))
+            {
+                if (DoCastSpell(pFriend, m_spells.mage.pRemoveLesserCurse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (Pet* pPet = me->GetPet())
@@ -2252,6 +2300,30 @@ void PartyBotAI::UpdateOutOfCombatAI_Priest()
     if (m_role == ROLE_HEALER &&
         FindAndHealInjuredAlly())
         return;
+
+    if (m_spells.priest.pDispelMagic)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.priest.pDispelMagic))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.priest.pDispelMagic))
+            {
+                if (DoCastSpell(pFriend, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.priest.pAbolishDisease)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.priest.pAbolishDisease))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.priest.pAbolishDisease))
+            {
+                if (DoCastSpell(pFriend, m_spells.priest.pAbolishDisease) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
 
     if (Unit* pVictim = me->GetVictim())
     {
@@ -3848,6 +3920,33 @@ void PartyBotAI::UpdateOutOfCombatAI_Druid()
         !me->HasGCD(m_spells.druid.pMarkoftheWild)))
     {
         m_isBuffing = false;
+    }
+
+    SpellEntry const* pDispelSpell = m_spells.druid.pAbolishPoison ?
+                                     m_spells.druid.pAbolishPoison :
+                                     m_spells.druid.pCurePoison;
+    if (pDispelSpell)
+    {
+        if (Unit* pFriend = SelectDispelTarget(pDispelSpell))
+        {
+            if (CanTryToCastSpell(pFriend, pDispelSpell))
+            {
+                if (DoCastSpell(pFriend, pDispelSpell) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.druid.pRemoveCurse)
+    {
+        if (Unit* pFriend = SelectDispelTarget(m_spells.druid.pRemoveCurse))
+        {
+            if (CanTryToCastSpell(pFriend, m_spells.druid.pRemoveCurse))
+            {
+                if (DoCastSpell(pFriend, m_spells.druid.pRemoveCurse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
     }
 
     if (me->GetShapeshiftForm() == FORM_NONE)
