@@ -3434,7 +3434,7 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
                     }
                     else
                     {
-                        *data << uint8(0); // pass
+                        *data << uint8(2); // greed
                     }
                 }
             }
