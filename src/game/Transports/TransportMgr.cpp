@@ -393,7 +393,7 @@ void TransportMgr::SpawnContinentTransports()
 
     uint32 oldMSTime = WorldTimer::getMSTime();
 
-    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT `entry`, `period` FROM `transports`");
+    std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT `entry`, `period` FROM `transports` t1 WHERE `build`=(SELECT max(`build`) FROM `transports` t2 WHERE t1.`entry`=t2.`entry` && `build` <= %u)", SUPPORTED_CLIENT_BUILD);
 
     uint32 count = 0;
     if (result)

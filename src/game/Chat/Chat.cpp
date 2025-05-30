@@ -526,6 +526,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "movegens",       SEC_TICKETMASTER,  false, &ChatHandler::HandleListMoveGensCommand,       "", nullptr },
         { "hostilerefs",    SEC_TICKETMASTER,  false, &ChatHandler::HandleListHostileRefsCommand,    "", nullptr },
         { "threat",         SEC_TICKETMASTER,  false, &ChatHandler::HandleListThreatCommand,         "", nullptr },
+        { "visibleguids",   SEC_TICKETMASTER,  false, &ChatHandler::HandleListVisibleGuidsCommand,   "", nullptr },
         { nullptr,          0,                 false, nullptr,                                       "", nullptr }
     };
 
