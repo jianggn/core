@@ -3420,15 +3420,23 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
                                 break;
                             }
                         }
-                        if (pProto->SubClass != armor_class)
+                        if (pProto->SubClass != armor_class && pProto->InventoryType != INVTYPE_CLOAK)
                             armor_crossover = true;
                     }
-                    // 2. if can store
+                    // 2. 25% chance : INVTYPE_NECK / INVTYPE_FINGER / INVTYPE_TRINKET / INVTYPE_CLOAK / INVTYPE_RELIC
+                    bool random_root_roll = false;
+                    if (pProto->Class == ITEM_CLASS_ARMOR && (pProto->InventoryType == INVTYPE_NECK || pProto->InventoryType == INVTYPE_FINGER || pProto->InventoryType == INVTYPE_TRINKET || pProto->InventoryType == INVTYPE_CLOAK || pProto->InventoryType == INVTYPE_RELIC))
+                    {
+                        uint32 rnd = urand(1, 100);
+                        if (rnd > 25)
+                            random_root_roll = true;
+                    }
+                    // 3. if can store
                     ItemPosCountVec dest;
                     InventoryResult msg_1 = me->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, pProto->ItemId, pProto->Stackable);
-                    // 3. if can use
+                    // 4. if can use
                     InventoryResult msg_2 = me->CanUseItem(pProto);
-                    if (!armor_crossover && msg_1 == EQUIP_ERR_OK && msg_2 == EQUIP_ERR_OK)
+                    if (!armor_crossover && !random_root_roll && msg_1 == EQUIP_ERR_OK && msg_2 == EQUIP_ERR_OK)
                     {
                         *data << uint8(1); // need
                     }
