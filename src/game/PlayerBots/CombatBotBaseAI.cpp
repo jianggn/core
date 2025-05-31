@@ -3423,9 +3423,9 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
                         if (pProto->SubClass != armor_class && pProto->InventoryType != INVTYPE_CLOAK)
                             armor_crossover = true;
                     }
-                    // 2. 20% chance : INVTYPE_NECK / INVTYPE_FINGER / INVTYPE_TRINKET / INVTYPE_CLOAK / INVTYPE_RELIC
+                    // 2. 20% chance : INVTYPE_NECK / INVTYPE_FINGER / INVTYPE_TRINKET / INVTYPE_CLOAK / INVTYPE_HOLDABLE / INVTYPE_RELIC
                     bool random_root_roll = false;
-                    if (pProto->Class == ITEM_CLASS_ARMOR && (pProto->InventoryType == INVTYPE_NECK || pProto->InventoryType == INVTYPE_FINGER || pProto->InventoryType == INVTYPE_TRINKET || pProto->InventoryType == INVTYPE_CLOAK || pProto->InventoryType == INVTYPE_RELIC))
+                    if (pProto->Class == ITEM_CLASS_ARMOR && (pProto->InventoryType == INVTYPE_NECK || pProto->InventoryType == INVTYPE_FINGER || pProto->InventoryType == INVTYPE_TRINKET || pProto->InventoryType == INVTYPE_CLOAK || pProto->InventoryType == INVTYPE_HOLDABLE || pProto->InventoryType == INVTYPE_RELIC))
                     {
                         uint32 rnd = urand(1, 100);
                         if (rnd > 20)
