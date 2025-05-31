@@ -894,7 +894,7 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
             if (instance_blackrock_spire* pInstance = (instance_blackrock_spire*) pPlayer->GetInstanceData())
             {
                 pInstance->DoSortRoomEventMobs();
-                if (pPlayer->HasItemCount(12344, 1)) // le joueur a le sceau de l'ascension
+                if (pPlayer->HasItemCount(12344, 1) || pPlayer->HasItemCount(26051, 1)) // le joueur a le sceau de l'ascension
                     if (pInstance->GetData(TYPE_EVENT_DOOR_UBRS) != DONE)
                         pInstance->SetData(TYPE_EVENT_DOOR_UBRS, DONE);
             }
