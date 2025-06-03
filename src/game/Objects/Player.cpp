@@ -6883,17 +6883,8 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     }
 
     // Hardcore Challenger Do Not Update PvP
-    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying()) // in hostile area
-    {
-        if (GetAreaId() != 2177 && GetAreaId() != 3217 && !InBattleGround() && GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
-        {
-            UpdatePvP(false);
-        }
-        else
-        {
-            UpdatePvP(true);
-        }
-    }
+    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying() && !(GetAreaId() != 2177 && GetAreaId() != 3217 && !InBattleGround() && GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)) // in hostile area
+        UpdatePvP(true);
 
     // on a ffa realm, ffa is toggled together with pvp flag
     if (sWorld.IsFFAPvPRealm())
@@ -17573,7 +17564,7 @@ void Player::AddInstanceEnterTime(uint32 instanceId, time_t enterTime) const
 void Player::UpdatePvPFlagTimer(uint32 diff)
 {
     // Freeze flag timer while participating in PvP combat, in pvp enforced zone, in capture points, when carrying flag or on player preference
-    if (!pvpInfo.inPvPCombat && !pvpInfo.inPvPEnforcedArea && !pvpInfo.inPvPCapturePoint && !pvpInfo.isPvPFlagCarrier && !IsPvPDesired())
+    if (!pvpInfo.inPvPCombat && !pvpInfo.inPvPCapturePoint && !pvpInfo.isPvPFlagCarrier && !IsPvPDesired() && (!pvpInfo.inPvPEnforcedArea || (GetAreaId() != 2177 && GetAreaId() != 3217 && !InBattleGround() && GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)))
         pvpInfo.timerPvPRemaining -= std::min(pvpInfo.timerPvPRemaining, diff);
 
     // Timer tries to drop flag if all conditions are met and time has passed
