@@ -10369,7 +10369,14 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
                 {
                     if (Player* pMember = itr->getSource())
                     {
-                        if (pMember->IsBot() || !pMember->GetMap()->IsRaid() || pMember->GetMap()->GetInstanceId() != GetMap()->GetInstanceId())
+                        bool isPartybotLoad = false;
+                        if (pMember->IsBot())
+                        {
+                            std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", pMember->GetObjectGuid(), pMember->GetName()));
+                            if (result)
+                                isPartybotLoad = true;
+                        }
+                        if ((pMember->IsBot() && !isPartybotLoad) || !pMember->GetMap()->IsRaid() || pMember->GetMap()->GetInstanceId() != GetMap()->GetInstanceId())
                             continue;
                         ss << pMember->GetGUIDLow() << ":";
                     }
