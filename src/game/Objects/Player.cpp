@@ -6883,8 +6883,17 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     }
 
     // Hardcore Challenger Do Not Update PvP
-    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying() && !(!InBattleGround() && GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)) // in hostile area
-        UpdatePvP(true);
+    if (pvpInfo.inPvPEnforcedArea && !IsTaxiFlying()) // in hostile area
+    {
+        if (GetAreaId() != 2177 && GetAreaId() != 3217 && !InBattleGround() && GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
+        {
+            UpdatePvP(false);
+        }
+        else
+        {
+            UpdatePvP(true);
+        }
+    }
 
     // on a ffa realm, ffa is toggled together with pvp flag
     if (sWorld.IsFFAPvPRealm())
