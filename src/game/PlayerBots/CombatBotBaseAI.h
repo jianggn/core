@@ -105,6 +105,7 @@ public:
     Unit* SelectPeriodicHealTarget(float selfHealPercent = 100.0f, float groupHealPercent = 100.0f) const;
     Player* SelectBuffTarget(SpellEntry const* pSpellEntry) const;
     Player* SelectDispelTarget(SpellEntry const* pSpellEntry) const;
+    Unit* SelectDispelTargetPet(SpellEntry const* pSpellEntry) const;
     bool IsValidBuffTarget(Unit const* pTarget, SpellEntry const* pSpellEntry) const;
     bool IsValidHealTarget(Unit const* pTarget, float healthPercent = 100.0f) const;
     bool IsValidHostileTarget(Unit const* pTarget) const;

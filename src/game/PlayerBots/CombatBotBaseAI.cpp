@@ -2362,6 +2362,31 @@ Player* CombatBotBaseAI::SelectDispelTarget(SpellEntry const* pSpellEntry) const
     return nullptr;
 }
 
+Unit* CombatBotBaseAI::SelectDispelTargetPet(SpellEntry const* pSpellEntry) const
+{
+    Group* pGroup = me->GetGroup();
+    if (pGroup)
+    {
+        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+        {
+            if (Player* pMember = itr->getSource())
+            {
+                if (Pet* pPet = pMember->GetPet())
+                {
+                    if (me->IsValidHelpfulTarget(pPet) &&
+                       !pMember->IsGameMaster() &&
+                        IsValidDispelTarget(pPet, pSpellEntry) &&
+                        me->IsWithinLOSInMap(pPet) &&
+                        me->IsWithinDist(pPet, 30.0f))
+                        return pPet;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 void CombatBotBaseAI::SummonPetIfNeeded()
 {
     if (me->GetClass() == CLASS_HUNTER && sWorld.getConfig(CONFIG_HUNTER_BOT_SUMMON_PET) == 1)

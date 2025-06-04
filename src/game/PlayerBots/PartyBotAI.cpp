@@ -1070,6 +1070,18 @@ void PartyBotAI::UpdateOutOfCombatAI_Paladin()
         }
     }
 
+    if (m_spells.paladin.pCleanse)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.paladin.pCleanse))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.paladin.pCleanse))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.paladin.pCleanse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (Pet* pPet = me->GetPet())
@@ -1376,6 +1388,30 @@ void PartyBotAI::UpdateOutOfCombatAI_Shaman()
             if (CanTryToCastSpell(pFriend, m_spells.shaman.pCurePoison))
             {
                 if (DoCastSpell(pFriend, m_spells.shaman.pCurePoison) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.shaman.pCureDisease)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.shaman.pCureDisease))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.shaman.pCureDisease))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.shaman.pCureDisease) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.shaman.pCurePoison)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.shaman.pCurePoison))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.shaman.pCurePoison))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.shaman.pCurePoison) == SPELL_CAST_OK)
                     return;
             }
         }
@@ -1907,6 +1943,18 @@ void PartyBotAI::UpdateOutOfCombatAI_Mage()
         }
     }
 
+    if (m_spells.mage.pRemoveLesserCurse)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.mage.pRemoveLesserCurse))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.mage.pRemoveLesserCurse))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.mage.pRemoveLesserCurse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (Pet* pPet = me->GetPet())
@@ -2320,6 +2368,30 @@ void PartyBotAI::UpdateOutOfCombatAI_Priest()
             if (CanTryToCastSpell(pFriend, m_spells.priest.pAbolishDisease))
             {
                 if (DoCastSpell(pFriend, m_spells.priest.pAbolishDisease) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.priest.pDispelMagic)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.priest.pDispelMagic))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.priest.pDispelMagic))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.priest.pAbolishDisease)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.priest.pAbolishDisease))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.priest.pAbolishDisease))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.priest.pAbolishDisease) == SPELL_CAST_OK)
                     return;
             }
         }
@@ -3944,6 +4016,30 @@ void PartyBotAI::UpdateOutOfCombatAI_Druid()
             if (CanTryToCastSpell(pFriend, m_spells.druid.pRemoveCurse))
             {
                 if (DoCastSpell(pFriend, m_spells.druid.pRemoveCurse) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (pDispelSpell)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(pDispelSpell))
+        {
+            if (CanTryToCastSpell(pFriendPet, pDispelSpell))
+            {
+                if (DoCastSpell(pFriendPet, pDispelSpell) == SPELL_CAST_OK)
+                    return;
+            }
+        }
+    }
+
+    if (m_spells.druid.pRemoveCurse)
+    {
+        if (Unit* pFriendPet = SelectDispelTargetPet(m_spells.druid.pRemoveCurse))
+        {
+            if (CanTryToCastSpell(pFriendPet, m_spells.druid.pRemoveCurse))
+            {
+                if (DoCastSpell(pFriendPet, m_spells.druid.pRemoveCurse) == SPELL_CAST_OK)
                     return;
             }
         }
