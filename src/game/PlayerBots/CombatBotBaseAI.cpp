@@ -696,6 +696,11 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(m_spells.hunter.pScatterShot))
                         m_spells.hunter.pScatterShot = pSpellEntry;
                 }
+                else if (pSpellEntry->SpellName[0].find("Tranquilizing Shot") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.hunter.pTranquilizingShot))
+                        m_spells.hunter.pTranquilizingShot = pSpellEntry;
+                }
                 break;
             }
             case CLASS_MAGE:
