@@ -105,12 +105,18 @@ void AuctionHouseBotMgr::Update(bool force /* = false */)
     uint32 auctions     = auctionHouse->GetCount();
     uint32 items        = m_config->itemcount;
     uint32 entriesCount = m_items.size();
+    uint32 updateCount = 0;
 
     while (auctions < items)
     {
         AuctionHouseBotEntry item = m_items[urand(0, entriesCount - 1)];
         AddItem(item, auctionHouse);
         auctions++;
+        updateCount++;
+        if (m_config->enable && !force && updateCount >= 100)
+        {
+            break; // Limit to 100 items per update to avoid performance issues
+        }
     }
 }
 
