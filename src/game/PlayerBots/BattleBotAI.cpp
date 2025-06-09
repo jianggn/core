@@ -1860,14 +1860,6 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
                 return;
         }
 
-        if (m_spells.hunter.pTranquilizingShot &&
-            IsValidDispelTarget(pVictim, m_spells.hunter.pTranquilizingShot) &&
-            CanTryToCastSpell(pVictim, m_spells.hunter.pTranquilizingShot))
-        {
-            if (DoCastSpell(pVictim, m_spells.hunter.pTranquilizingShot) == SPELL_CAST_OK)
-                return;
-        }
-
         if (m_spells.hunter.pAimedShot &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pAimedShot))
         {
@@ -2516,14 +2508,6 @@ void BattleBotAI::UpdateInCombatAI_Priest()
                 return;
         }
 
-        if (m_spells.priest.pDispelMagic &&
-            IsValidDispelTarget(pVictim, m_spells.priest.pDispelMagic) &&
-            CanTryToCastSpell(pVictim, m_spells.priest.pDispelMagic))
-        {
-            if (DoCastSpell(pVictim, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
-                return;
-        }
-
         if (m_spells.priest.pVampiricEmbrace &&
             CanTryToCastSpell(pVictim, m_spells.priest.pVampiricEmbrace))
         {
@@ -2549,6 +2533,14 @@ void BattleBotAI::UpdateInCombatAI_Priest()
             CanTryToCastSpell(pVictim, m_spells.priest.pDevouringPlague))
         {
             if (DoCastSpell(pVictim, m_spells.priest.pDevouringPlague) == SPELL_CAST_OK)
+                return;
+        }
+
+        if (m_spells.priest.pDispelMagic &&
+            IsValidDispelTarget(pVictim, m_spells.priest.pDispelMagic) &&
+            CanTryToCastSpell(pVictim, m_spells.priest.pDispelMagic))
+        {
+            if (DoCastSpell(pVictim, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
                 return;
         }
 

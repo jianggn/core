@@ -1736,6 +1736,14 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
                 return;
         }
 
+        if (m_spells.hunter.pTranquilizingShot &&
+            IsValidDispelTarget(pVictim, m_spells.hunter.pTranquilizingShot) &&
+            CanTryToCastSpell(pVictim, m_spells.hunter.pTranquilizingShot))
+        {
+            if (DoCastSpell(pVictim, m_spells.hunter.pTranquilizingShot) == SPELL_CAST_OK)
+                return;
+        }
+
         if (me->HasSpell(PB_SPELL_AUTO_SHOT) &&
             !me->IsMoving() &&
             (me->GetCombatDistance(pVictim) > 8.0f) &&
@@ -1765,14 +1773,6 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
             CanTryToCastSpell(pVictim, m_spells.hunter.pScatterShot))
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pScatterShot) == SPELL_CAST_OK)
-                return;
-        }
-
-        if (m_spells.hunter.pTranquilizingShot &&
-            IsValidDispelTarget(pVictim, m_spells.hunter.pTranquilizingShot) &&
-            CanTryToCastSpell(pVictim, m_spells.hunter.pTranquilizingShot))
-        {
-            if (DoCastSpell(pVictim, m_spells.hunter.pTranquilizingShot) == SPELL_CAST_OK)
                 return;
         }
 
@@ -2590,14 +2590,6 @@ void PartyBotAI::UpdateInCombatAI_Priest()
                 return;
         }
 
-        if (m_spells.priest.pDispelMagic &&
-            IsValidDispelTarget(pVictim, m_spells.priest.pDispelMagic) &&
-            CanTryToCastSpell(pVictim, m_spells.priest.pDispelMagic))
-        {
-            if (DoCastSpell(pVictim, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
-                return;
-        }
-
         if (m_spells.priest.pVampiricEmbrace &&
             CanTryToCastSpell(pVictim, m_spells.priest.pVampiricEmbrace))
         {
@@ -2623,6 +2615,14 @@ void PartyBotAI::UpdateInCombatAI_Priest()
             CanTryToCastSpell(pVictim, m_spells.priest.pDevouringPlague))
         {
             if (DoCastSpell(pVictim, m_spells.priest.pDevouringPlague) == SPELL_CAST_OK)
+                return;
+        }
+
+        if (m_spells.priest.pDispelMagic &&
+            IsValidDispelTarget(pVictim, m_spells.priest.pDispelMagic) &&
+            CanTryToCastSpell(pVictim, m_spells.priest.pDispelMagic))
+        {
+            if (DoCastSpell(pVictim, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
                 return;
         }
 
