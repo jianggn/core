@@ -917,22 +917,38 @@ bool ChatHandler::HandlePartyBotAddCommand(char* args)
             botClass = CLASS_DRUID;
         else if (option == "dps")
         {
-            botClass = PickRandomValue(CLASS_WARRIOR, CLASS_HUNTER, CLASS_ROGUE, CLASS_MAGE, CLASS_WARLOCK);
-            botRole = CombatBotBaseAI::IsMeleeDamageClass(botClass) ? ROLE_MELEE_DPS : ROLE_RANGE_DPS;
-        }
-        else if (option == "healer")
-        {
-            std::vector<uint32> dpsClasses = { CLASS_PRIEST, CLASS_DRUID };
+            std::vector<uint32> dpsClasses = { CLASS_WARRIOR, CLASS_HUNTER, CLASS_ROGUE, CLASS_PRIEST, CLASS_MAGE, CLASS_WARLOCK, CLASS_DRUID };
             if (pPlayer->GetTeam() == HORDE)
                 dpsClasses.push_back(CLASS_SHAMAN);
             else
                 dpsClasses.push_back(CLASS_PALADIN);
             botClass = SelectRandomContainerElement(dpsClasses);
+            if (botClass == CLASS_WARRIOR || botClass == CLASS_PALADIN || botClass == CLASS_ROGUE)
+            {
+                botRole = ROLE_MELEE_DPS;
+            }
+            else if (botClass == CLASS_HUNTER || botClass == CLASS_PRIEST || botClass == CLASS_MAGE || botClass == CLASS_WARLOCK)
+            {
+                botRole = ROLE_RANGE_DPS;
+            }
+            else if (botClass == CLASS_SHAMAN || botClass == CLASS_DRUID)
+            {
+                botRole = urand(0, 1) ? ROLE_MELEE_DPS : ROLE_RANGE_DPS;
+            }
+        }
+        else if (option == "healer")
+        {
+            std::vector<uint32> healerClasses = { CLASS_PRIEST, CLASS_DRUID };
+            if (pPlayer->GetTeam() == HORDE)
+                healerClasses.push_back(CLASS_SHAMAN);
+            else
+                healerClasses.push_back(CLASS_PALADIN);
+            botClass = SelectRandomContainerElement(healerClasses);
             botRole = ROLE_HEALER;
         }
         else if (option == "tank")
         {
-            botClass = CLASS_WARRIOR;
+            botClass = PickRandomValue(CLASS_WARRIOR, CLASS_PALADIN, CLASS_DRUID);
             botRole = ROLE_TANK;
         }
 
