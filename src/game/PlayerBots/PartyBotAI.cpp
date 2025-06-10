@@ -839,7 +839,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
                     me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-                if (urand(0, 99) < 70)
+                if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 99) < 30)
                 {
                     auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
                     if (!auraList.empty())
@@ -848,7 +848,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                         bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                        me->CastSpell(me, (*auraList.begin())->GetId(), true);
+                        me->CastSpell(me, urand(34385, 34462), true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                     }
@@ -859,7 +859,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                    me->CastSpell(me, urand(34385, 34462), true);
+                    me->CastSpell(me, (*auraList.begin())->GetId(), true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                 }
