@@ -6535,7 +6535,8 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             if (pCaster->GetMaxPower(power) > 0)
             {
                 gain_multiplier = spellProto->EffectMultipleValue[GetEffIndex()];
-
+                if (spellProto->Id == 3034 || spellProto->Id == 14279 || spellProto->Id == 14280)
+                    gain_multiplier = 1.0f; // Viper Sting gain 100% mana of drained amount
                 if (Player* modOwner = pCaster->GetSpellModOwner())
                     modOwner->ApplySpellMod(GetId(), SPELLMOD_MULTIPLE_VALUE, gain_multiplier);
             }
