@@ -839,7 +839,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
                     me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-                if (urand(0, 99) < 90)
+                if (urand(0, 99) < 70)
                 {
                     auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
                     if (!auraList.empty())

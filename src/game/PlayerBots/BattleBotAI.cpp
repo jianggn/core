@@ -78,7 +78,7 @@ uint32 BattleBotAI::GetMountSpellId() const
 {
     if (me->GetLevel() >= 60)
     {
-        if (urand(0, 99) < 90)
+        if (urand(0, 99) < 70)
         {
             if (me->GetClass() == CLASS_PALADIN)
                 return BB_SPELL_MOUNT_60_PALADIN;
