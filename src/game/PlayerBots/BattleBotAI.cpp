@@ -78,30 +78,35 @@ uint32 BattleBotAI::GetMountSpellId() const
 {
     if (me->GetLevel() >= 60)
     {
-        if (me->GetClass() == CLASS_PALADIN)
-            return (urand(0, 1) ? BB_SPELL_MOUNT_60_PALADIN : urand(34385, 34462));
-        if (me->GetClass() == CLASS_WARLOCK)
-            return (urand(0, 1) ? BB_SPELL_MOUNT_60_WARLOCK : urand(34385, 34462));
-
-        switch (me->GetRace())
+        if (urand(0, 99) < 90)
         {
-            case RACE_HUMAN:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_HUMAN : urand(34385, 34462));
-            case RACE_NIGHTELF:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_NELF : urand(34385, 34462));
-            case RACE_DWARF:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_DWARF : urand(34385, 34462));
-            case RACE_GNOME:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_GNOME : urand(34385, 34462));
-            case RACE_TROLL:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_TROLL : urand(34385, 34462));
-            case RACE_ORC:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_ORC : urand(34385, 34462));
-            case RACE_TAUREN:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_TAUREN : urand(34385, 34462));
-            case RACE_UNDEAD:
-                return (urand(0, 1) ? BB_SPELL_MOUNT_60_UNDEAD : urand(34385, 34462));
+            if (me->GetClass() == CLASS_PALADIN)
+                return BB_SPELL_MOUNT_60_PALADIN;
+            if (me->GetClass() == CLASS_WARLOCK)
+                return BB_SPELL_MOUNT_60_WARLOCK;
+
+            switch (me->GetRace())
+            {
+                case RACE_HUMAN:
+                    return BB_SPELL_MOUNT_60_HUMAN;
+                case RACE_NIGHTELF:
+                    return BB_SPELL_MOUNT_60_NELF;
+                case RACE_DWARF:
+                    return BB_SPELL_MOUNT_60_DWARF;
+                case RACE_GNOME:
+                    return BB_SPELL_MOUNT_60_GNOME;
+                case RACE_TROLL:
+                    return BB_SPELL_MOUNT_60_TROLL;
+                case RACE_ORC:
+                    return BB_SPELL_MOUNT_60_ORC;
+                case RACE_TAUREN:
+                    return BB_SPELL_MOUNT_60_TAUREN;
+                case RACE_UNDEAD:
+                    return BB_SPELL_MOUNT_60_UNDEAD;
+            }
         }
+        else
+            return urand(34385, 34462);
     }
     else if (me->GetLevel() >= 40)
     {

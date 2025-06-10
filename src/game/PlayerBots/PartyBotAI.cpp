@@ -839,17 +839,30 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
                     me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-                auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
-                if (!auraList.empty())
+                if (urand(0, 99) < 90)
+                {
+                    auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
+                    if (!auraList.empty())
+                    {
+                        bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
+                        bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+                        me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
+                        me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
+                        me->CastSpell(me, (*auraList.begin())->GetId(), true);
+                        me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
+                        me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                    }
+                }
+                else
                 {
                     bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
                     bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                    me->CastSpell(me, (urand(0, 1) ? (*auraList.begin())->GetId() : urand(34385, 34462)), true);
+                    me->CastSpell(me, urand(34385, 34462), true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
-                } 
+                }
             }
         }
         else if (me->IsMounted())
