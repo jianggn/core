@@ -780,12 +780,14 @@ void PartyBotAI::UpdateAI(uint32 const diff)
         // Teleport to leader if too far away.
         // C'Thun room do not teleport
         // Blackrock Mountain balcony
-        if ((!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150))) || (me->GetZoneId() == 25 && pLeader->GetZoneId() == 25 && pLeader->GetPositionZ() >= 283.0f && !me->IsWithinDistInMap(pLeader, 8.0f)))
+        if ((!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150))) || (me->GetZoneId() == 25 && pLeader->GetZoneId() == 25 && pLeader->GetPositionZ() >= 285.0f && pLeader->GetPositionZ() <= 286.0f && !me->IsWithinDistInMap(pLeader, 10.0f)))
         {
             if (!me->IsStopped())
                 me->StopMoving();
             me->GetMotionMaster()->Clear(false, true);
             me->GetMotionMaster()->MoveIdle();
+            if (me->GetPet())
+                me->RemovePet(PET_SAVE_REAGENTS);
             char name[128] = {};
             strcpy(name, pLeader->GetName());
             ChatHandler(me).HandleGonameCommand(name);
