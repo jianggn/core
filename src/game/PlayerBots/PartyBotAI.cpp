@@ -841,6 +841,16 @@ void PartyBotAI::UpdateAI(uint32 const diff)
 
                 if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 99) < 30)
                 {
+                    bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
+                    bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
+                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
+                    me->CastSpell(me, urand(34385, 34462), true);
+                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
+                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                }
+                else
+                {
                     auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
                     if (!auraList.empty())
                     {
@@ -848,20 +858,10 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                         bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                        me->CastSpell(me, urand(34385, 34462), true);
+                        me->CastSpell(me, (*auraList.begin())->GetId(), true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                     }
-                }
-                else
-                {
-                    bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
-                    bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                    me->CastSpell(me, (*auraList.begin())->GetId(), true);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
-                    me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                 }
             }
         }
