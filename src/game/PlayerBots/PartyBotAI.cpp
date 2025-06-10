@@ -839,7 +839,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
                     me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-                if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 99) < 30)
+                if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 1))
                 {
                     bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
                     bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);

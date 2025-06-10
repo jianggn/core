@@ -2727,8 +2727,11 @@ void CombatBotBaseAI::EquipRandomGearInEmptySlots()
         if (pProto->InventoryType == INVTYPE_TABARD || pProto->InventoryType == INVTYPE_BODY)
             continue;
 
-        // No Seal of Ascension & Drakefire Amulet & Hook of the Master Angler & Cannonball Runner
-        if (pProto->ItemId == 12344 || pProto->ItemId == 16309 || pProto->ItemId == 19979 || pProto->ItemId == 13382)
+        // No Seal of Ascension & Drakefire Amulet & Hook of the Master Angler & Cannonball Runner & Stormpike Insignia & Frostwolf Insignia
+        if (pProto->ItemId == 12344 || pProto->ItemId == 16309 || pProto->ItemId == 19979 || pProto->ItemId == 13382 ||
+            pProto->ItemId == 17691 || pProto->ItemId == 17900 || pProto->ItemId == 17901 || pProto->ItemId == 17902 ||
+            pProto->ItemId == 17903 || pProto->ItemId == 17904 || pProto->ItemId == 17690 || pProto->ItemId == 17905 ||
+            pProto->ItemId == 17906 || pProto->ItemId == 17907 || pProto->ItemId == 17908 || pProto->ItemId == 17909)
             continue;
 
         if (pProto->SourceQuestRaces && !(pProto->SourceQuestRaces & me->GetRaceMask()))
