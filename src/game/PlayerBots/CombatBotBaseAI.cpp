@@ -2727,6 +2727,10 @@ void CombatBotBaseAI::EquipRandomGearInEmptySlots()
         if (pProto->InventoryType == INVTYPE_TABARD || pProto->InventoryType == INVTYPE_BODY)
             continue;
 
+        // No Seal of Ascension & Drakefire Amulet & Hook of the Master Angler
+        if (pProto->ItemId == 12344 || pProto->ItemId == 16309 || pProto->ItemId == 19979)
+            continue;
+
         if (pProto->SourceQuestRaces && !(pProto->SourceQuestRaces & me->GetRaceMask()))
             continue;
 
