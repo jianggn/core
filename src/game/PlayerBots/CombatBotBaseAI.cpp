@@ -701,6 +701,11 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(m_spells.hunter.pTranquilizingShot))
                         m_spells.hunter.pTranquilizingShot = pSpellEntry;
                 }
+                else if (pSpellEntry->SpellName[0].find("Viper Sting") != std::string::npos)
+                {
+                    if (IsHigherRankSpell(m_spells.hunter.pViperSting))
+                        m_spells.hunter.pViperSting = pSpellEntry;
+                }
                 break;
             }
             case CLASS_MAGE:

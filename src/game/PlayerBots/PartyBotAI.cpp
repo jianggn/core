@@ -1790,8 +1790,17 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
                 return;
         }
 
+        if (m_spells.hunter.pViperSting &&
+            CanTryToCastSpell(pVictim, m_spells.hunter.pViperSting) &&
+            pVictim->GetPowerType() == POWER_MANA)
+        {
+            if (DoCastSpell(pVictim, m_spells.hunter.pViperSting) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.hunter.pSerpentSting &&
-            CanTryToCastSpell(pVictim, m_spells.hunter.pSerpentSting))
+            CanTryToCastSpell(pVictim, m_spells.hunter.pSerpentSting) &&
+            pVictim->GetPowerType() != POWER_MANA)
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pSerpentSting) == SPELL_CAST_OK)
                 return;
