@@ -779,6 +779,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
 
         // Teleport to leader if too far away.
         // C'Thun room do not teleport
+        // Blackrock Mountain balcony
         if ((!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150))) || (me->GetZoneId() == 25 && pLeader->GetZoneId() == 25 && pLeader->GetPositionZ() >= 283.0f && !me->IsWithinDistInMap(pLeader, 8.0f)))
         {
             if (!me->IsStopped())
