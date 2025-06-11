@@ -4173,7 +4173,7 @@ void PartyBotAI::UpdateInCombatAI_Druid()
         }
 
         // Druid - Rebirth in combat
-        if (m_resurrectionSpell)
+        if (urand(0, 1) && m_resurrectionSpell)
             if (Player* pTarget = SelectResurrectionTarget())
                 if (CanTryToCastSpell(pTarget, m_resurrectionSpell))
                     if (DoCastSpell(pTarget, m_resurrectionSpell) == SPELL_CAST_OK)
