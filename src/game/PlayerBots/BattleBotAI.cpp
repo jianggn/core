@@ -1770,7 +1770,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Hunter()
             {
                 pPet->ToggleAutocast(14920, true);
             }
-            else if(pPet->GetLevel() == 60)
+            else if(pPet->GetLevel() >= 60)
             {
                 pPet->ToggleAutocast(14921, true);
             }
@@ -1816,7 +1816,7 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
             {
                 pPet->ToggleAutocast(14920, true);
             }
-            else if(pPet->GetLevel() == 60)
+            else if(pPet->GetLevel() >= 60)
             {
                 pPet->ToggleAutocast(14921, true);
             }
@@ -2744,7 +2744,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(11774, true);
                 }
-                else if(pPet->GetLevel() == 60)
+                else if(pPet->GetLevel() >= 60)
                 {
                     pPet->ToggleAutocast(11775, true);
                 }
@@ -2761,7 +2761,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(17751, true);
                 }
-                else if(pPet->GetLevel() == 60)
+                else if(pPet->GetLevel() >= 60)
                 {
                     pPet->ToggleAutocast(17752, true);
                 }
@@ -2789,7 +2789,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(11779, true);
                 }
-                else if(pPet->GetLevel() == 60)
+                else if(pPet->GetLevel() >= 60)
                 {
                     pPet->ToggleAutocast(11780, true);
                 }
@@ -2937,7 +2937,7 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     {
                         pPet->ToggleAutocast(11774, true);
                     }
-                    else if(pPet->GetLevel() == 60)
+                    else if(pPet->GetLevel() >= 60)
                     {
                         pPet->ToggleAutocast(11775, true);
                     }
@@ -2954,7 +2954,7 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     {
                         pPet->ToggleAutocast(17751, true);
                     }
-                    else if(pPet->GetLevel() == 60)
+                    else if(pPet->GetLevel() >= 60)
                     {
                         pPet->ToggleAutocast(17752, true);
                     }
@@ -2982,7 +2982,7 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     {
                         pPet->ToggleAutocast(11779, true);
                     }
-                    else if(pPet->GetLevel() == 60)
+                    else if(pPet->GetLevel() >= 60)
                     {
                         pPet->ToggleAutocast(11780, true);
                     }

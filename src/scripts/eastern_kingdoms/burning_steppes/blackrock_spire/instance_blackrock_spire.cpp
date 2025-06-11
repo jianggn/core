@@ -895,7 +895,7 @@ bool AreaTrigger_at_blackrock_spire(Player* pPlayer, AreaTriggerEntry const* pAt
             {
                 pInstance->DoSortRoomEventMobs();
                 // Level 60 Hardcore Challenger With Item 26051 Can Enter UBRS
-                if (pPlayer->HasItemCount(12344, 1) || (pPlayer->HasItemCount(26051, 1) && pPlayer->GetLevel() == 60 && pPlayer->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)) // le joueur a le sceau de l'ascension
+                if (pPlayer->HasItemCount(12344, 1) || (pPlayer->HasItemCount(26051, 1) && pPlayer->GetLevel() >= 60 && pPlayer->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)) // le joueur a le sceau de l'ascension
                     if (pInstance->GetData(TYPE_EVENT_DOOR_UBRS) != DONE)
                         pInstance->SetData(TYPE_EVENT_DOOR_UBRS, DONE);
             }
