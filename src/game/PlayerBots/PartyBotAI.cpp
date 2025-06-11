@@ -3935,14 +3935,14 @@ bool PartyBotAI::EnterCombatDruidForm(bool inCombat)
         }
         else
         {
+            bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
             bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-            if (DoCastSpell(me, m_spells.druid.pCatForm) == SPELL_CAST_OK)
-            {
-                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
-                return true;
-            }
+            me->CastSpell(me, m_spells.druid.pCatForm->Id, true);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+            return true;
         }
     }
 
@@ -3957,14 +3957,14 @@ bool PartyBotAI::EnterCombatDruidForm(bool inCombat)
         }
         else
         {
+            bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
             bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-            if (DoCastSpell(me, m_spells.druid.pBearForm) == SPELL_CAST_OK)
-            {
-                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
-                return true;
-            }
+            me->CastSpell(me, m_spells.druid.pBearForm->Id, true);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+            return true;
         }
     }
 
@@ -3979,14 +3979,14 @@ bool PartyBotAI::EnterCombatDruidForm(bool inCombat)
         }
         else
         {
+            bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
             bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-            if (DoCastSpell(me, m_spells.druid.pMoonkinForm) == SPELL_CAST_OK)
-            {
-                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
-                return true;
-            }
+            me->CastSpell(me, m_spells.druid.pMoonkinForm->Id, true);
+            me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
             me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+            return true;
         }
     }
 
