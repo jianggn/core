@@ -64,7 +64,7 @@ public:
     Unit* GetDistancingTarget(Unit* pEnemy);
     bool RunAwayFromTarget(Unit* pEnemy);
     bool CrowdControlMarkedTargets();
-    bool EnterCombatDruidForm();
+    bool EnterCombatDruidForm(bool inCombat);
     bool ShouldEnterStealth() const;
     bool EnterStealthIfNeeded(SpellEntry const* pStealthSpell);
 

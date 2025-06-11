@@ -3922,30 +3922,72 @@ void PartyBotAI::UpdateInCombatAI_Rogue()
     }
 }
 
-bool PartyBotAI::EnterCombatDruidForm()
+bool PartyBotAI::EnterCombatDruidForm(bool inCombat)
 {
     if (m_spells.druid.pCatForm &&
         GetRole() == ROLE_MELEE_DPS &&
         CanTryToCastSpell(me, m_spells.druid.pCatForm))
     {
-        if (DoCastSpell(me, m_spells.druid.pCatForm) == SPELL_CAST_OK)
-            return true;
+        if (inCombat)
+        {
+            if (DoCastSpell(me, m_spells.druid.pCatForm) == SPELL_CAST_OK)
+                return true;
+        }
+        else
+        {
+            bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
+            if (DoCastSpell(me, m_spells.druid.pCatForm) == SPELL_CAST_OK)
+            {
+                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                return true;
+            }
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+        }
     }
 
     if (m_spells.druid.pBearForm &&
        (m_role == ROLE_TANK || GetRole() == ROLE_MELEE_DPS) &&
         CanTryToCastSpell(me, m_spells.druid.pBearForm))
     {
-        if (DoCastSpell(me, m_spells.druid.pBearForm) == SPELL_CAST_OK)
-            return true;
+        if (inCombat)
+        {
+            if (DoCastSpell(me, m_spells.druid.pBearForm) == SPELL_CAST_OK)
+                return true;
+        }
+        else
+        {
+            bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
+            if (DoCastSpell(me, m_spells.druid.pBearForm) == SPELL_CAST_OK)
+            {
+                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                return true;
+            }
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+        }
     }
 
     if (m_spells.druid.pMoonkinForm &&
         GetRole() == ROLE_RANGE_DPS &&
         CanTryToCastSpell(me, m_spells.druid.pMoonkinForm))
     {
-        if (DoCastSpell(me, m_spells.druid.pMoonkinForm) == SPELL_CAST_OK)
-            return true;
+        if (inCombat)
+        {
+            if (DoCastSpell(me, m_spells.druid.pMoonkinForm) == SPELL_CAST_OK)
+                return true;
+        }
+        else
+        {
+            bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
+            if (DoCastSpell(me, m_spells.druid.pMoonkinForm) == SPELL_CAST_OK)
+            {
+                me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+                return true;
+            }
+            me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
+        }
     }
 
     return false;
@@ -4088,7 +4130,7 @@ void PartyBotAI::UpdateOutOfCombatAI_Druid()
 
     if (me->GetShapeshiftForm() == FORM_NONE)
     {
-        if (EnterCombatDruidForm())
+        if (EnterCombatDruidForm(false))
             return;
 
         if ((me->GetPowerPercent(POWER_MANA) > 80.0f) &&
@@ -4236,7 +4278,7 @@ void PartyBotAI::UpdateInCombatAI_Druid()
         if (GetRole() == ROLE_HEALER && FindAndPreHealTarget())
             return;
 
-        if (EnterCombatDruidForm())
+        if (EnterCombatDruidForm(true))
             return;
     }
 
