@@ -2540,7 +2540,8 @@ void CombatBotBaseAI::LearnPremadeSpecForClass()
         {
             for (const auto itr : vSpecs)
             {
-                if (itr->role == m_role &&
+                // treat ROLE_MELEE_DPS as ROLE_TANK if CLASS_DRUID
+                if ((itr->role == m_role || (itr->role == ROLE_TANK && m_role == ROLE_MELEE_DPS && me->GetClass() == CLASS_DRUID)) &&
                    (!pSpec || pSpec->level < itr->level))
                 {
                     pSpec = itr;
@@ -2652,7 +2653,8 @@ void CombatBotBaseAI::EquipPremadeGearTemplate()
         {
             for (const auto itr : vGear)
             {
-                if (itr->role == m_role)
+                // treat ROLE_MELEE_DPS as ROLE_TANK if CLASS_DRUID
+                if (itr->role == m_role || (itr->role == ROLE_TANK && m_role == ROLE_MELEE_DPS && me->GetClass() == CLASS_DRUID))
                     vGear2.push_back(itr);
             }
         }
