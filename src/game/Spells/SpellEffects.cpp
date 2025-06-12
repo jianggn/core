@@ -326,6 +326,13 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             m_casterUnit->ModifyPower(POWER_MANA, (dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f) + 75));
                         break;
                     }
+                    case 21992: // Thunderfury, Blessed Blade of the Windseeker
+                    {
+                        // Thunderfury : 300 nature damage bonus 20% attack power
+                        if (m_casterUnit)
+                            damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
+                        break;
+                    }
                 }
                 break;
             }
