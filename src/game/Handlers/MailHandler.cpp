@@ -74,6 +74,11 @@ bool WorldSession::CheckMailBox(ObjectGuid guid)
         return false;
     }
 
+    // Hardcore Challenger Can Not Use Mailbox
+    if (Player* pHardcoreChallenger = GetPlayer())
+        if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_MAIL) == 1 && pHardcoreChallenger->GetLevel()<60 && pHardcoreChallenger->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
+            return false;
+
     return true;
 }
 
@@ -218,6 +223,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     }
 
     // Hardcore Challenger Can Not Mail
+    /*
     if (Player* pHardcoreChallengerSender = sObjectMgr.GetPlayer(pl->GetObjectGuid()))
     {
         if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_MAIL) == 1 && pHardcoreChallengerSender->GetLevel()<60 && pHardcoreChallengerSender->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
@@ -226,6 +232,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
             return;
         }
     }
+    */
 
     // Hardcore Challenger Can Not Be Mailed To
     std::unique_ptr<QueryResult> hardcoreChallengerReceiverResult = CharacterDatabase.PQuery("SELECT `characters`.`guid` FROM `characters` LEFT JOIN `character_queststatus` ON `characters`.`guid` = `character_queststatus`.`guid` WHERE `characters`.`guid` = '%u' AND `characters`.`LEVEL` < 60 AND `character_queststatus`.`quest` = 10000 AND `character_queststatus`.`status` = 1 AND `character_queststatus`.`rewarded` = 1", req->receiver);
