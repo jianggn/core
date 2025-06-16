@@ -203,8 +203,12 @@ bool ShipTransport::TeleportTransport(uint32 newMapid, float x, float y, float z
 
 void GenericTransport::AddPassenger(Unit* passenger, bool adjustCoords)
 {
-    std::lock_guard<std::mutex> lock(m_passengerMutex);
-    if (m_passengers.insert(passenger).second)
+    // we need to unlock right away because SetTransport can dismount and resummon pet, which will call AddPassanger again
+    std::unique_lock<std::mutex> lock(m_passengerMutex);
+    bool const boarded = m_passengers.insert(passenger).second;
+    lock.unlock();
+
+    if (boarded)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Unit %s boarded transport %s.", passenger->GetName(), GetName());
         passenger->SetTransport(this);
@@ -226,7 +230,7 @@ void GenericTransport::RemovePassenger(Unit* passenger)
 {
     bool erased = false;
 
-    std::lock_guard<std::mutex> lock(m_passengerMutex);
+    std::unique_lock<std::mutex> lock(m_passengerMutex);
     if (m_passengerTeleportItr != m_passengers.end())
     {
         PassengerSet::iterator itr = m_passengers.find(passenger);
@@ -241,6 +245,7 @@ void GenericTransport::RemovePassenger(Unit* passenger)
     }
     else
         erased = m_passengers.erase(passenger) > 0;
+    lock.unlock();
 
     if (erased)
     {
