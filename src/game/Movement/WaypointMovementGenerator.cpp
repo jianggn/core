@@ -369,7 +369,7 @@ void FlightPathMovementGenerator::Finalize(Player & player)
         if (player.pvpInfo.inPvPEnforcedArea)
         {
             player.CastSpell(&player, 2479, true);
-            if (!player.IsPvP())
+            if (!player.IsPvP() && !(player->GetLevel()<60 && player->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE))
                 player.UpdatePvP(true, true);
         }
 
