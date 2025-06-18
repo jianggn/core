@@ -2389,6 +2389,11 @@ void Player::Regenerate(Powers power)
             addValue = 20 * EnergyRate;
             // 34140 34141 effect
             addValue *= (HasAura_34140_34141_total() * 0.01f + 1.0f);
+            // 14983 Vigor
+            if (HasAura(14983))
+            {
+                addValue *= 1.1f; // 10% bonus
+            }
             break;
         }
         case POWER_FOCUS:
