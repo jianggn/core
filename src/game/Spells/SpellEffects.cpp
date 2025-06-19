@@ -6259,6 +6259,39 @@ void Spell::EffectSummonDemon(SpellEffectIndex effIdx)
     // might not always work correctly, maybe the creature that dies from CoD casts the effect on itself and is therefore the caster?
     pSummon->SetLevel(m_caster->GetLevel());
 
+    // Warlock - Infernal & Doomguard
+    if (Player* pPlayer = m_caster->ToPlayer())
+    {
+        // Infernal
+        if (pSummon->GetCreatureInfo()->entry == 89)
+        {
+            pSummon->SetMaxHealth(pSummon->GetMaxHealth() + pPlayer->GetMaxHealth() * 2);
+            pSummon->SetHealth(pSummon->GetMaxHealth() + pPlayer->GetMaxHealth() * 2);
+            pSummon->SetArmor(pSummon->GetArmor() + pPlayer->GetArmor());
+            float dmgMin;
+            float dmgMax;
+            pSummon->GetDefaultDamageRange(dmgMin, dmgMax);
+            pSummon->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, (dmgMin + pPlayer->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) / 10 + pPlayer->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) / 20));
+            pSummon->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, (dmgMax + pPlayer->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) / 10 + pPlayer->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) / 20));
+            pSummon->UpdateDamagePhysical(BASE_ATTACK);
+        }
+        // Doomguard
+        else if (pSummon->GetCreatureInfo()->entry == 11859)
+        {
+            pSummon->SetMaxHealth(pSummon->GetMaxHealth() + pPlayer->GetMaxHealth() + pPlayer->GetMaxPower(POWER_MANA));
+            pSummon->SetHealth(pSummon->GetMaxHealth() + pPlayer->GetMaxHealth() + pPlayer->GetMaxPower(POWER_MANA));
+            pSummon->SetMaxPower(POWER_MANA, pSummon->GetMaxPower(POWER_MANA) + pPlayer->GetMaxPower(POWER_MANA));
+            pSummon->SetPower(POWER_MANA, pSummon->GetMaxPower(POWER_MANA) + pPlayer->GetMaxPower(POWER_MANA));
+            pSummon->SetArmor(pSummon->GetArmor() + pPlayer->GetArmor() * 0.5f);
+            float dmgMin;
+            float dmgMax;
+            pSummon->GetDefaultDamageRange(dmgMin, dmgMax);
+            pSummon->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, (dmgMin + pPlayer->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) / 7 + pPlayer->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) / 14));
+            pSummon->SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, (dmgMax + pPlayer->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) / 7 + pPlayer->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) / 14));
+            pSummon->UpdateDamagePhysical(BASE_ATTACK);
+        }
+    }
+
     AddExecuteLogInfo(effIdx, ExecuteLogInfo(pSummon->GetObjectGuid()));
 
     if (m_spellScript)
