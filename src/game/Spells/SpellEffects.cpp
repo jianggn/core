@@ -369,6 +369,11 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                                 pPlayer->GetSession()->SendNotification("Multi Cast X2!");
                         }
                     }
+                    else if (m_spellInfo->Id == 21162) // Sulfuras, Hand of Ragnaros
+                    {
+                        // Fireball : 273-334 fire damage bonus 40% attack power
+                        damage += pPlayer->GetTotalAttackPowerValue(BASE_ATTACK) * 0.40f;
+                    }
                 }
                 break;
             }

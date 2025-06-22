@@ -1737,6 +1737,14 @@ void Unit::TriggerDamageShields(Unit* pVictim)
 
             uint32 damage = ditheru(fdamage);
 
+            //Sulfuras, Hand of Ragnaros - Immolation : bonus fire resistance difference
+            if (pSpellProto->Id == 21142)
+            {
+                int32 fireResistanceDiff = pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE);
+                if (fireResistanceDiff > 0)
+                    damage += fireResistanceDiff; // increase damage by fire resistance difference
+            }
+
             //JieFuFuTi(34001) taken damage
             if (this->HasAura(34001))
             {

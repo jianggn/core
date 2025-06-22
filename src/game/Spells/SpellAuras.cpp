@@ -4631,6 +4631,15 @@ float Aura::CalculateDotDamage() const
 
     switch (spellProto->SpellFamilyName)
     {
+        case SPELLFAMILY_MAGE:
+        {
+            // Sulfuras, Hand of Ragnaros - Fireball : dot damage bonus 4% attack power per trigger
+            if (spellProto->Id == 21162)
+            {
+                damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.04f;
+            }
+            break;
+        }
         case SPELLFAMILY_DRUID:
         {
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
