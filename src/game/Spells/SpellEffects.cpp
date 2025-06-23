@@ -6108,6 +6108,14 @@ void Spell::EffectTransmitted(SpellEffectIndex effIdx)
         return;
     }
 
+    // E Mo Xie Dian - Ritual of Doom can be cast without partner
+    if (m_spellInfo->Id == 18540 && m_casterUnit->HasAura(34358))
+    {
+        m_casterUnit->CastSpell(m_casterUnit, 18541, true);
+        m_casterUnit->AddCooldown(*m_spellInfo);
+        return;
+    }
+
     float fx, fy, fz;
     if (m_targets.m_targetMask & TARGET_FLAG_DEST_LOCATION)
     {

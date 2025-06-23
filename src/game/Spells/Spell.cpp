@@ -1914,7 +1914,8 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     m_diminishGroup = m_spellInfo->GetDiminishingReturnsGroup(m_triggeredByAuraSpell);
     // Fingerslayer Blade - item 26044
     // Improved Sap - talent 14095
-    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && pRealUnitCaster->HasAura(34319)) || (m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && pRealUnitCaster->HasAura(14095)))
+    // Improved Enslave Demon - talent 18825
+    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && pRealUnitCaster->HasAura(34319)) || (m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && pRealUnitCaster->HasAura(14095)) || (m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)))
         m_diminishGroup = DIMINISHING_NONE;
     m_diminishLevel = unit->GetDiminishing(m_diminishGroup);
 
@@ -5823,6 +5824,11 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 14305:
                 if (m_casterUnit->IsInCombat() && !m_casterUnit->HasAura(34325))
                     return SPELL_FAILED_AFFECTING_COMBAT;
+                break;
+            // E Mo Xie Dian - Inferno can be cast indoors
+            case 1122:
+                if (!m_caster->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) && !m_casterUnit->HasAura(34358))
+                    return SPELL_FAILED_ONLY_OUTDOORS;
                 break;
         }
 
