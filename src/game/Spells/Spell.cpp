@@ -5830,6 +5830,26 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_caster->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) && !m_casterUnit->HasAura(34358))
                     return SPELL_FAILED_ONLY_OUTDOORS;
                 break;
+            // Warlock Demonic Circle : Teleport
+            case 34295:
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                    return SPELL_FAILED_NOT_READY;
+                if (Player* pCaster = m_caster->ToPlayer())
+                {
+                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT position_x, position_y, position_z FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`='%u'", pCaster->GetObjectGuid(), pCaster->GetMapId(), getTimestamp()-300, getTimestamp(), pCaster->GetInstanceId());
+                    if (result)
+                    {
+                        Field* fields = result->Fetch();
+                        float x = fields[0].GetFloat();
+                        float y = fields[1].GetFloat();
+                        float z = fields[2].GetFloat();
+                        if (pCaster->GetDistance(x,y,z) > 50.0f)
+                            return SPELL_FAILED_OUT_OF_RANGE;
+                    }
+                    else
+                        return SPELL_FAILED_NOT_HERE;
+                }
+                break;
         }
 
         // Loatheb Corrupted Mind spell failed
