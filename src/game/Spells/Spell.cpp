@@ -68,6 +68,13 @@ SpellCastTargets::~SpellCastTargets()
 {
 }
 
+uint32 getTimestamp()
+{
+    time_t rawtime = time(NULL);
+    struct tm *timeinfo = localtime(&rawtime);
+    return mktime(timeinfo);
+}
+
 void SpellCastTargets::setUnitTarget(Unit* target)
 {
     if (!target)
