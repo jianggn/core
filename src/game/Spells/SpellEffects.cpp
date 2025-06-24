@@ -703,7 +703,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                             if (pCaster->GetDistance(x,y,z) <= 50.0f)
                             {
                                 pCaster->TeleportTo(pCaster->GetMapId(), x, y, z, o);
-                                pCaster->CastSpell(pCaster, 34369, true);
+                                pCaster->CastSpell(pCaster, 5579, true);
                             }
                             else
                             {
