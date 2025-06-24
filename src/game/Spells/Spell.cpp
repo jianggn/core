@@ -68,7 +68,7 @@ SpellCastTargets::~SpellCastTargets()
 {
 }
 
-uint32 getTimestamp()
+uint32 getTimestamp_spell()
 {
     time_t rawtime = time(NULL);
     struct tm *timeinfo = localtime(&rawtime);
@@ -5843,7 +5843,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_NOT_READY;
                 if (Player* pCaster = m_caster->ToPlayer())
                 {
-                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT position_x, position_y, position_z FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`='%u'", pCaster->GetObjectGuid(), pCaster->GetMapId(), getTimestamp()-300, getTimestamp(), pCaster->GetInstanceId());
+                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT position_x, position_y, position_z FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`='%u'", pCaster->GetObjectGuid(), pCaster->GetMapId(), getTimestamp_spell()-300, getTimestamp_spell(), pCaster->GetInstanceId());
                     if (result)
                     {
                         Field* fields = result->Fetch();
