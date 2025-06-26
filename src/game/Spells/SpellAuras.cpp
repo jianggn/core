@@ -7737,6 +7737,20 @@ void SpellAuraHolder::Update(uint32 diff)
                             Spell::SendCastResult(plCaster, m_spellProto, SPELL_FAILED_FIZZLE);
                     }
                 }
+                else if (manaPerSecond && powertype == POWER_HEALTH && m_spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_HEALTH_FUNNEL>())
+                {
+                    if (int32(caster->GetHealth()) > int32(manaPerSecond / 2))
+                        caster->ModifyHealth(-int32(manaPerSecond / 2));
+                    else
+                    {
+                        if (target)
+                            target->RemoveAurasDueToSpell(m_spellProto->Id, this);
+                        if (m_isChanneled)
+                            caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
+                        if (Player* plCaster = caster->ToPlayer())
+                            Spell::SendCastResult(plCaster, m_spellProto, SPELL_FAILED_FIZZLE);
+                    }
+                }
             }
         }
     }
