@@ -1524,11 +1524,11 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
                 }
                 else if(owner->IsPlayer() && creatureId == 1863)
                 {
-                    SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + warlock_armor * 0.4));
+                    SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + warlock_armor * 0.35));
                 }
                 else if(owner->IsPlayer() && creatureId == 417)
                 {
-                    SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + warlock_armor * 0.6));
+                    SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + warlock_armor * 0.5));
                 }
                 else if(owner->IsPlayer() && creatureId == 200009)
                 {
@@ -1646,6 +1646,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
         }
         case HUNTER_PET:
         {
+            uint64 hunter_melee_ap = owner->GetTotalAttackPowerValue(BASE_ATTACK);
             uint64 hunter_ranged_ap = owner->GetTotalAttackPowerValue(RANGED_ATTACK);
             uint64 hunter_max_hp = owner->GetMaxHealth();
             uint64 hunter_armor = owner->GetArmor();
@@ -1653,15 +1654,15 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
 
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(petlevel));
             // Formulas reviewed by Clank <Nostalrius>, from vanilla pet tab screenshots.
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod * (petlevel * 1.15 * 1.05 + hunter_ranged_ap / 10 * petlevel / hunter_level) * (float)GetAttackTime(BASE_ATTACK) / 2000));
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod * (petlevel * 1.45 * 1.05 + hunter_ranged_ap / 10 * petlevel / hunter_level) * (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod * (petlevel * 1.15 * 1.05 + (hunter_melee_ap + hunter_ranged_ap) / 20 * petlevel / hunter_level) * (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod * (petlevel * 1.45 * 1.05 + (hunter_melee_ap + hunter_ranged_ap) / 20 * petlevel / hunter_level) * (float)GetAttackTime(BASE_ATTACK) / 2000));
 
             //stored standard pet stats are entry 1 in pet_levelinfo
             PetLevelInfo const* pInfo = sObjectMgr.GetPetLevelInfo(creatureId, petlevel);
             if (pInfo)                                      // exist in DB
             {
-                SetCreateHealth((pInfo->health + hunter_max_hp * 0.8 * petlevel / hunter_level) * healthMod);
-                SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + hunter_armor * 0.6 * petlevel / hunter_level));
+                SetCreateHealth((pInfo->health + hunter_max_hp * 0.75 * petlevel / hunter_level) * healthMod);
+                SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor + hunter_armor * 0.5 * petlevel / hunter_level));
 
                 for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
                     SetCreateStat(Stats(i),  float(pInfo->stats[i]));
