@@ -1411,12 +1411,42 @@ float SpellCaster::SpellDamageBonusDone(Unit const* pVictim, SpellEntry const* s
         // IMP_FIREBOLT
         if (spellProto->Id == 3110 || spellProto->Id == 7799 || spellProto->Id == 7800 || spellProto->Id == 7801 || spellProto->Id == 7802 || spellProto->Id == 11762 || spellProto->Id == 11763)
         {
-            DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.35;
+            if (pUnit->GetOwner()->HasAura(18694))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.35 * 1.10;
+            }
+            else if (pUnit->GetOwner()->HasAura(18695))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.35 * 1.20;
+            }
+            else if (pUnit->GetOwner()->HasAura(18696))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.35 * 1.30;
+            }
+            else
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.35;
+            }
         }
         // SUCCUBUS_LASH_OF_PAIN
         if (spellProto->Id == 7814 || spellProto->Id == 7815 || spellProto->Id == 7816 || spellProto->Id == 11778 || spellProto->Id == 11779 || spellProto->Id == 11780)
         {
-            DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 1.00;
+            if (pUnit->GetOwner()->HasAura(18754))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 1.00 * 1.10;
+            }
+            else if (pUnit->GetOwner()->HasAura(18755))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 1.00 * 1.20;
+            }
+            else if (pUnit->GetOwner()->HasAura(18756))
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 1.00 * 1.30;
+            }
+            else
+            {
+                DoneTotal += pUnit->GetOwner()->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 1.00;
+            }
         }
     }
 
