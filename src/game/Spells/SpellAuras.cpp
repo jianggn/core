@@ -7739,8 +7739,9 @@ void SpellAuraHolder::Update(uint32 diff)
                 }
                 else if (manaPerSecond && powertype == POWER_HEALTH && m_spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_HEALTH_FUNNEL>())
                 {
-                    if (int32(caster->GetHealth()) > int32(manaPerSecond / 2))
-                        caster->ModifyHealth(-int32(manaPerSecond / 2));
+                    int32 realPerSecond = manaPerSecond % 2 ? int32(manaPerSecond / 2) + 1 : int32(manaPerSecond / 2);
+                    if (int32(caster->GetHealth()) > realPerSecond)
+                        caster->ModifyHealth(-realPerSecond);
                     else
                     {
                         if (target)
