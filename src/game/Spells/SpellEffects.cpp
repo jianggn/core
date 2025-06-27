@@ -333,6 +333,13 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.3f);
                         break;
                     }
+                    case 27860: // Blade of Eternal Darkness
+                    {
+                        // Engulfing Shadows : 100 shadow damage bonus intellect
+                        if (m_casterUnit && m_casterUnit->GetTypeId() == TYPEID_PLAYER)
+                            damage = damage + m_casterUnit->GetStat(STAT_INTELLECT);
+                        break;
+                    }
                 }
                 break;
             }
@@ -2420,6 +2427,16 @@ void Spell::EffectEnergize(SpellEffectIndex effIdx)
     info.energize.powerType = power;
     AddExecuteLogInfo(effIdx, info);
 #endif
+
+    // Blade of Eternal Darkness
+    if (m_spellInfo->Id == 27860 && unitTarget->GetTypeId() == TYPEID_PLAYER)
+    {
+        // Engulfing Shadows : 100 mana bonus spirit, Spirit Tap bonus half
+        if (unitTarget->HasAura(15271))
+            damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.5f;
+        else
+            damage += m_casterUnit->GetStat(STAT_SPIRIT);
+    }
 
     m_caster->EnergizeBySpell(unitTarget, m_spellInfo->Id, damage, power);
 }
@@ -5452,6 +5469,10 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex effIdx)
         return;
 
     Item* item = itemOwner->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+
+    // Warlock - Firestone
+    if (m_spellInfo->Id == 1054 || m_spellInfo->Id == 17936 || m_spellInfo->Id == 17940 || m_spellInfo->Id == 17942)
+        item = itemOwner->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED);
 
     if (!item)
         return;
