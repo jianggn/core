@@ -8137,6 +8137,10 @@ bool Unit::HandleAttackPowerModifier(AttackPowerModIndex index, AttackPowerModTy
     if (!CanModifyStats())
         return false;
 
+    // Warlock - Infernal & Doomguard
+    if (IsCreature() && (GetEntry() == 89 || GetEntry() == 11859))
+        return false;
+
     UpdateAttackPowerAndDamage(index == RANGED_AP_MODS);
     return true;
 }
@@ -8186,6 +8190,10 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
     }
 
     if (!CanModifyStats())
+        return false;
+
+    // Warlock - Infernal & Doomguard
+    if (IsCreature() && (GetEntry() == 89 || GetEntry() == 11859))
         return false;
 
     switch (unitMod)

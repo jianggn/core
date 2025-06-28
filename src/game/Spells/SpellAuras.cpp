@@ -339,6 +339,11 @@ void Aura::Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHold
                 lockStats = true;
                 break;
         }
+
+        // Warlock - Infernal & Doomguard
+        if (target->IsCreature() && (target->GetEntry() == 89 || target->GetEntry() == 11859))
+            lockStats = false;
+
         if (lockStats)
             target->SetCanModifyStats(false);
 #endif
