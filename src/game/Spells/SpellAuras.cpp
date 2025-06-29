@@ -6147,11 +6147,41 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                         DoneActualBenefit = caster->SpellBaseDamageBonusDone(spellProto->GetSpellSchoolMask()) * 0.5f;
                         break;
                     }
+                    // Spellstone
+                    if (spellProto->SpellIconID == 344)
+                    {
+                        //+50% from +spd bonus mod by jianggn
+                        DoneActualBenefit = caster->SpellBaseDamageBonusDone(spellProto->GetSpellSchoolMask()) * 0.5f;
+                        if (caster->HasAura(18774))
+                        {
+                            DoneActualBenefit *= 1.50;
+                        }
+                        else if (caster->HasAura(18775))
+                        {
+                            DoneActualBenefit *= 2.00;
+                        }
+                        break;
+                    }
                     // Voidwalker - Sacrifice
                     if (spellProto->SpellIconID == 693)
                     {
                         //+100% from max health bonus
                         DoneActualBenefit = caster->GetMaxHealth() * 1.0f;
+                        if (Player* pOwner = ::ToPlayer(caster->GetOwner()))
+                        {
+                            if (pOwner->HasAura(18705))
+                            {
+                                DoneActualBenefit *= 1.10;
+                            }
+                            else if (pOwner->HasAura(18706))
+                            {
+                                DoneActualBenefit *= 1.20;
+                            }
+                            else if (pOwner->HasAura(18707))
+                            {
+                                DoneActualBenefit *= 1.30;
+                            }
+                        }
                         break;
                     }
                     break;

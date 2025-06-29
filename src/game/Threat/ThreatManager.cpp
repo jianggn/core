@@ -509,6 +509,32 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
             }
         }
     }
+    // Voidwalker - Suffering : add 50% max health threat
+    else if (pThreatSpell && (pThreatSpell->Id == 17735 ||
+                         pThreatSpell->Id == 17750 ||
+                         pThreatSpell->Id == 17751 ||
+                         pThreatSpell->Id == 17752))
+    {
+        if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
+        {
+            if (pOwner->HasAura(18705))
+            {
+                threat += pVictim->GetMaxHealth()*0.50*1.10;
+            }
+            else if (pOwner->HasAura(18706))
+            {
+                threat += pVictim->GetMaxHealth()*0.50*1.20;
+            }
+            else if (pOwner->HasAura(18707))
+            {
+                threat += pVictim->GetMaxHealth()*0.50*1.30;
+            }
+            else
+            {
+                threat += pVictim->GetMaxHealth()*0.50;
+            }
+        }
+    }
     // Hunter's Pet - Growl : add 10% max health threat
     else if (pThreatSpell && (pThreatSpell->Id == 2649 ||
                               pThreatSpell->Id == 14916 ||
