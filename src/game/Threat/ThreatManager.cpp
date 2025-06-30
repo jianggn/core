@@ -509,29 +509,55 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
             }
         }
     }
-    // Voidwalker - Suffering : add 50% max health threat
+    // Voidwalker - Suffering : add 25% max health threat
     else if (pThreatSpell && (pThreatSpell->Id == 17735 ||
-                         pThreatSpell->Id == 17750 ||
-                         pThreatSpell->Id == 17751 ||
-                         pThreatSpell->Id == 17752))
+                              pThreatSpell->Id == 17750 ||
+                              pThreatSpell->Id == 17751 ||
+                              pThreatSpell->Id == 17752))
     {
         if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
         {
             if (pOwner->HasAura(18705))
             {
-                threat += pVictim->GetMaxHealth()*0.50*1.10;
+                threat += pVictim->GetMaxHealth()*0.25*1.10;
             }
             else if (pOwner->HasAura(18706))
             {
-                threat += pVictim->GetMaxHealth()*0.50*1.20;
+                threat += pVictim->GetMaxHealth()*0.25*1.20;
             }
             else if (pOwner->HasAura(18707))
             {
-                threat += pVictim->GetMaxHealth()*0.50*1.30;
+                threat += pVictim->GetMaxHealth()*0.25*1.30;
             }
             else
             {
-                threat += pVictim->GetMaxHealth()*0.50;
+                threat += pVictim->GetMaxHealth()*0.25;
+            }
+        }
+    }
+    // Succubus - Soothing Kiss : subtract 15% max mana threat
+    else if (pThreatSpell && (pThreatSpell->Id == 6360 ||
+                              pThreatSpell->Id == 7813 ||
+                              pThreatSpell->Id == 11784 ||
+                              pThreatSpell->Id == 11785))
+    {
+        if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
+        {
+            if (pOwner->HasAura(18754))
+            {
+                threat -= pVictim->GetMaxPower(POWER_MANA)*0.15*1.10;
+            }
+            else if (pOwner->HasAura(18755))
+            {
+                threat -= pVictim->GetMaxPower(POWER_MANA)*0.15*1.20;
+            }
+            else if (pOwner->HasAura(18756))
+            {
+                threat -= pVictim->GetMaxPower(POWER_MANA)*0.15*1.30;
+            }
+            else
+            {
+                threat -= pVictim->GetMaxPower(POWER_MANA)*0.15;
             }
         }
     }
