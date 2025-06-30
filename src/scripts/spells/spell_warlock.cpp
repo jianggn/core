@@ -72,7 +72,9 @@ struct WarlockConflagrateScript : SpellScript
                     i->GetCasterGuid() == spell->m_caster->GetObjectGuid())
                 {
                     spell->GetUnitTarget()->RemoveAurasByCasterSpell(i->GetId(), spell->m_caster->GetObjectGuid());
-                    coefficientImmolate = 1.0f;
+                    coefficientImmolate = (float(i->GetSpellProto()->spellLevel) / float(spell->m_spellInfo->spellLevel)) * 1.0f;
+                    if (coefficientImmolate > 1.0f)
+                        coefficientImmolate = 1.0f;
                     break;
                 }
             }
@@ -83,7 +85,9 @@ struct WarlockConflagrateScript : SpellScript
                     i->GetCasterGuid() == spell->m_caster->GetObjectGuid())
                 {
                     spell->GetUnitTarget()->RemoveAurasByCasterSpell(i->GetId(), spell->m_caster->GetObjectGuid());
-                    coefficientCurseOfAgony = 2.0f;
+                    coefficientCurseOfAgony = (float(i->GetSpellProto()->spellLevel) / float(spell->m_spellInfo->spellLevel)) * 2.0f;
+                    if (coefficientCurseOfAgony > 2.0f)
+                        coefficientCurseOfAgony = 2.0f;
                     break;
                 }
             }
@@ -94,11 +98,13 @@ struct WarlockConflagrateScript : SpellScript
                     i->GetCasterGuid() == spell->m_caster->GetObjectGuid())
                 {
                     spell->GetUnitTarget()->RemoveAurasByCasterSpell(i->GetId(), spell->m_caster->GetObjectGuid());
-                    coefficientCorruption = 1.5f;
+                    coefficientCorruption = (float(i->GetSpellProto()->spellLevel) / float(spell->m_spellInfo->spellLevel)) * 1.5f;
+                    if (coefficientCorruption > 1.5f)
+                        coefficientCorruption = 1.5f;
                     break;
                 }
             }
-            spell->damage = spell->damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption);
+            spell->damage = spell->damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption + 1.0f);
             // Wildfire - Conflagrate
             if (spell->m_casterUnit->HasAura(34359) && spell->GetUnitTarget()->GetHealthPercent() < 50.0f)
                 spell->damage = spell->damage * 1.3f;
