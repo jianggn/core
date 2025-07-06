@@ -340,6 +340,22 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             damage = damage + m_casterUnit->GetStat(STAT_INTELLECT);
                         break;
                     }
+                    case 20153: // Infernal
+                    {
+                        // Immolation : 30 fire damage bonus 1% max health
+                        Unit* pOwner = m_casterUnit ? m_casterUnit->GetCharmerOrOwner() : nullptr;
+                        if (pOwner && pOwner->GetTypeId() == TYPEID_PLAYER)
+                            damage = damage + m_casterUnit->GetMaxHealth() * 0.01f;
+                        break;
+                    }
+                    case 19482: // Doomguard
+                    {
+                        // War Stomp : 160 physical damage bonus 4% max health
+                        Unit* pOwner = m_casterUnit ? m_casterUnit->GetCharmerOrOwner() : nullptr;
+                        if (pOwner && pOwner->GetTypeId() == TYPEID_PLAYER)
+                            damage = damage + m_casterUnit->GetMaxHealth() * 0.04f;
+                        break;
+                    }
                 }
                 break;
             }

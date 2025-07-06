@@ -4636,6 +4636,28 @@ float Aura::CalculateDotDamage() const
 
     switch (spellProto->SpellFamilyName)
     {
+        case SPELLFAMILY_GENERIC:
+        {
+            // Doomguard - Rend : dot damage bonus 1% max health per trigger
+            if (spellProto->Id == 21949)
+            {
+                Unit* pOwner = caster ? caster->GetCharmerOrOwner() : nullptr;
+                if (pOwner && pOwner->GetTypeId() == TYPEID_PLAYER)
+                    damage += caster->GetMaxHealth() * 0.01f;
+            }
+            break;
+        }
+        case SPELLFAMILY_WARLOCK:
+        {
+            // Doomguard - Rain of Fire : dot damage bonus 3% max mana per trigger
+            if (spellProto->Id == 19474)
+            {
+                Unit* pOwner = caster ? caster->GetCharmerOrOwner() : nullptr;
+                if (pOwner && pOwner->GetTypeId() == TYPEID_PLAYER && caster->GetPowerType() == POWER_MANA)
+                    damage += caster->GetMaxPower(POWER_MANA) * 0.03f;
+            }
+            break;
+        }
         case SPELLFAMILY_MAGE:
         {
             // Sulfuras, Hand of Ragnaros - Fireball : dot damage bonus 4% attack power per trigger
