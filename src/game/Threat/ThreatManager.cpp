@@ -561,6 +561,14 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
             }
         }
     }
+    // Felhunter - Tainted Blood : add 7.5% max mana threat
+    else if (pThreatSpell && (pThreatSpell->Id == 19479 ||
+                              pThreatSpell->Id == 19652 ||
+                              pThreatSpell->Id == 19653 ||
+                              pThreatSpell->Id == 19654))
+    {
+        threat += pVictim->GetMaxPower(POWER_MANA)*0.075;
+    }
     // Hunter's Pet - Growl : add 10% max health threat
     else if (pThreatSpell && (pThreatSpell->Id == 2649 ||
                               pThreatSpell->Id == 14916 ||
