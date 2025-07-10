@@ -1931,7 +1931,7 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     // Seduction - spell 6358
     else if (m_spellInfo->Id == 6358)
     {
-        if (Player* pOwner = ::ToPlayer(pRealUnitCaster->GetOwner()))
+        if (Unit* pOwner = pRealUnitCaster->GetOwner())
         {
             if (pOwner->HasAura(18756))
                 m_diminishGroup = DIMINISHING_NONE;
