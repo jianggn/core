@@ -425,15 +425,15 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 {
                     if (m_casterUnit->HasAura(18767))
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.375f;
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.225f;
                     }
                     else if (m_casterUnit->HasAura(18768))
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.5f;
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.3f;
                     }
                     else
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.25f;
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.15f;
                     }
                 }
                 break;
