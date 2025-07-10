@@ -1922,8 +1922,21 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     // Fingerslayer Blade - item 26044
     // Improved Sap - talent 14095
     // Improved Enslave Demon - talent 18825
+    // Scream of Pain - talent 34469
     if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && pRealUnitCaster->HasAura(34319)) || (m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && pRealUnitCaster->HasAura(14095)) || (m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)))
+    {
         m_diminishGroup = DIMINISHING_NONE;
+    }
+    // Improved Succubus - talent 18756
+    // Seduction - spell 6358
+    else if (m_spellInfo->Id == 6358)
+    {
+        if (Player* pOwner = pRealUnitCaster->GetOwner())
+        {
+            if (pOwner->HasAura(18756))
+                m_diminishGroup = DIMINISHING_NONE;
+        }
+    }
     m_diminishLevel = unit->GetDiminishing(m_diminishGroup);
 
     // Apply additional spell effects to target

@@ -425,15 +425,15 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 {
                     if (m_casterUnit->HasAura(18767))
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.225f;
+                        damage = damage + (m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT)) * 0.15f;
                     }
                     else if (m_casterUnit->HasAura(18768))
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.3f;
+                        damage = damage + (m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT)) * 0.2f;
                     }
                     else
                     {
-                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.15f;
+                        damage = damage + (m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT)) * 0.1f;
                     }
                 }
                 break;
@@ -2247,6 +2247,18 @@ void Spell::EffectHeal(SpellEffectIndex effIdx)
 #endif
 
         m_healing += addhealth;
+        // Improved Healthstone
+        if (unitTarget->HasAura(34020) && m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_HEALTHSTONE>())
+        {
+            if (unitTarget->HasAura(18692))
+            {
+                m_healing *= 1.5f;
+            }
+            else if (unitTarget->HasAura(18693))
+            {
+                m_healing *= 2.0f;
+            }
+        }
     }
 }
 
