@@ -412,13 +412,29 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             }
             case SPELLFAMILY_WARLOCK:
             {
+                if (!m_casterUnit)
+                    break;
                 // Wildfire - Immolate + Searing Pain + Soul Fire
                 if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_IMMOLATE, CF_WARLOCK_SEARING_PAIN>() || m_spellInfo->SpellIconID == 184)
                 {
-                    if (!m_casterUnit)
-                        break;
                     if (m_casterUnit->HasAura(34359) && unitTarget->GetHealthPercent() < 50.0f)
                         damage = damage * 1.3f;
+                }
+                // Firestone Attack
+                else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_FIRESTONE_ATTACK>())
+                {
+                    if (m_casterUnit->HasAura(18767))
+                    {
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.375f;
+                    }
+                    else if (m_casterUnit->HasAura(18768))
+                    {
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.5f;
+                    }
+                    else
+                    {
+                        damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.25f;
+                    }
                 }
                 break;
             }
