@@ -8611,7 +8611,7 @@ void SpellAuraHolder::CalculateHeartBeat(Unit* caster, Unit* target)
         // Seduction - spell 6358
         else if (m_spellProto->Id == 6358)
         {
-            if (Player* pOwner = caster->GetOwner())
+            if (Player* pOwner = ::ToPlayer(caster->GetOwner()))
             {
                 if (pOwner->HasAura(18756))
                     return;
