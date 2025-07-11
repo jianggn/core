@@ -104,7 +104,7 @@ struct WarlockConflagrateScript : SpellScript
                     break;
                 }
             }
-            spell->damage = spell->damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption + 1.0f);
+            spell->damage = spell->damage * (coefficientImmolate + coefficientCurseOfAgony + coefficientCorruption + 1.0f) * 0.75f;
             // Wildfire - Conflagrate
             if (spell->m_casterUnit->HasAura(34359) && spell->GetUnitTarget()->GetHealthPercent() < 50.0f)
                 spell->damage = spell->damage * 1.3f;
