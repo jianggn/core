@@ -28,6 +28,7 @@
 #include <list>
 #include <map>
 #include <unordered_map>
+#include <shared_mutex>
 #include "Database/DatabaseEnv.h"
 #include "DBCEnums.h"
 #include "DBCStores.h"
@@ -111,6 +112,8 @@ class MapPersistentState
         void RemoveCreatureFromGrid(uint32 guid, CreatureData const* data);
         void AddGameobjectToGrid(uint32 guid, GameObjectData const* data);
         void RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data);
+        std::shared_timed_mutex& GetCellObjectGuidsMutex() { return m_cellObjectGuidsMutex; }
+
     protected:
         virtual bool CanBeUnload() const =0;                // body provided for subclasses
 
@@ -133,6 +136,7 @@ class MapPersistentState
         RespawnTimes m_creatureRespawnTimes;                // lock MapPersistentState from unload, for example for temporary bound dungeon unload delay
         RespawnTimes m_goRespawnTimes;                      // lock MapPersistentState from unload, for example for temporary bound dungeon unload delay
         MapCellObjectGuidsMap m_gridObjectGuids;            // Single map copy specific grid spawn data, like pool spawns
+        std::shared_timed_mutex m_cellObjectGuidsMutex;
 
         SpawnedPoolData m_spawnedPoolData;                  // Pools spawns state for map copy
 };

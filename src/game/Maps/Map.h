@@ -100,7 +100,7 @@ struct MapEntry
     bool IsContinent() const { return id == 0 || id == 1; }
 };
 
-typedef std::map<uint32, uint32> AreaFlagByMapId;
+typedef std::unordered_map<uint32, uint32> AreaFlagByMapId;
 static AreaFlagByMapId sAreaFlagByMapId;
 
 struct AreaEntry
@@ -231,7 +231,7 @@ struct ScriptedEvent
     uint32 m_uiSuccessCondition;
     uint32 m_uiSuccessScript;
 
-    std::map<uint32, uint32> m_mData;
+    std::unordered_map<uint32, uint32> m_mData;
     std::vector<ScriptedEventTarget> m_vTargets;
 
     // Returns true when event has expired.
