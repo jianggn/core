@@ -2931,27 +2931,6 @@ void PartyBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(19480, true);
                 }
-                //Tainted Blood
-                if(pPet->GetLevel() >= 32 && pPet->GetLevel() < 40)
-                {
-                    if (!pPet->HasAura(19478))
-                        pPet->CastSpell(pPet, 19478, true);
-                }
-                else if(pPet->GetLevel() >= 40 && pPet->GetLevel() < 48)
-                {
-                    if (!pPet->HasAura(19655))
-                        pPet->CastSpell(pPet, 19655, true);
-                }
-                else if(pPet->GetLevel() >= 48 && pPet->GetLevel() < 56)
-                {
-                    if (!pPet->HasAura(19656))
-                        pPet->CastSpell(pPet, 19656, true);
-                }
-                else if(pPet->GetLevel() >= 56 && pPet->GetLevel() <= 60)
-                {
-                    if (!pPet->HasAura(19660))
-                        pPet->CastSpell(pPet, 19660, true);
-                }
             }
             if (!pPet->GetVictim())
             {
@@ -3154,27 +3133,6 @@ void PartyBotAI::UpdateInCombatAI_Warlock()
                     if(pPet->GetLevel() >= 42 && pPet->GetLevel() <= 60)
                     {
                         pPet->ToggleAutocast(19480, true);
-                    }
-                    //Tainted Blood
-                    if(pPet->GetLevel() >= 32 && pPet->GetLevel() < 40)
-                    {
-                        if (!pPet->HasAura(19478))
-                            pPet->CastSpell(pPet, 19478, true);
-                    }
-                    else if(pPet->GetLevel() >= 40 && pPet->GetLevel() < 48)
-                    {
-                        if (!pPet->HasAura(19655))
-                            pPet->CastSpell(pPet, 19655, true);
-                    }
-                    else if(pPet->GetLevel() >= 48 && pPet->GetLevel() < 56)
-                    {
-                        if (!pPet->HasAura(19656))
-                            pPet->CastSpell(pPet, 19656, true);
-                    }
-                    else if(pPet->GetLevel() >= 56 && pPet->GetLevel() <= 60)
-                    {
-                        if (!pPet->HasAura(19660))
-                            pPet->CastSpell(pPet, 19660, true);
                     }
                 }
                 if (!pPet->GetVictim())
