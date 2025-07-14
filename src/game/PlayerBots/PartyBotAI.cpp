@@ -2892,6 +2892,11 @@ void PartyBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(11785, true);
                 }
+                //Lesser Invisibility
+                if(pPet->GetLevel() >= 32 && pPet->GetLevel() <= 60)
+                {
+                    pPet->ToggleAutocast(7870, true);
+                }
             }
             else if(pPet->GetEntry() == 417)
             {
@@ -3110,6 +3115,11 @@ void PartyBotAI::UpdateInCombatAI_Warlock()
                     else if(pPet->GetLevel() >= 58 && pPet->GetLevel() <= 60)
                     {
                         pPet->ToggleAutocast(11785, true);
+                    }
+                    //Lesser Invisibility
+                    if(pPet->GetLevel() >= 32 && pPet->GetLevel() <= 60)
+                    {
+                        pPet->ToggleAutocast(7870, true);
                     }
                 }
                 else if(pPet->GetEntry() == 417)
