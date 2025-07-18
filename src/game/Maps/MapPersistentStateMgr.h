@@ -107,7 +107,14 @@ class MapPersistentState
         bool IsSpawnedPoolObject(uint32 db_guid_or_pool_id) { return GetSpawnedPoolData().IsSpawnedObject<T>(db_guid_or_pool_id); }
 
         // grid objects (Dynamic map/instance specific added/removed grid spawns from pool system/etc)
-        MapCellObjectGuids const& GetCellObjectGuids(uint32 cell_id) { return m_gridObjectGuids[cell_id]; }
+        MapCellObjectGuids const* GetCellObjectGuids(uint32 cell_id) const
+        {
+            auto itr = m_gridObjectGuids.find(cell_id);
+            if (itr != m_gridObjectGuids.end())
+                return &itr->second;
+
+            return nullptr;
+        }
         void AddCreatureToGrid(uint32 guid, CreatureData const* data);
         void RemoveCreatureFromGrid(uint32 guid, CreatureData const* data);
         void AddGameobjectToGrid(uint32 guid, GameObjectData const* data);
