@@ -730,11 +730,11 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     ++triggeredByAura->GetModifier()->m_amount;
                     triggerAmount = triggeredByAura->GetModifier()->m_amount;
 
-                    if (triggerAmount == 10)
+                    if (triggerAmount == 20)
                         MonsterTextEmote(11346, this, true); // begins to crack!
-                    else if (triggerAmount == 20)
+                    else if (triggerAmount == 40)
                         MonsterTextEmote(11347, nullptr, true); // looks ready to shatter!
-                    else if (triggerAmount == 30)
+                    else if (triggerAmount == 60)
                     {
                         RemoveAurasDueToSpell(25937);
                         triggered_spell_id = 25938; // Explode
