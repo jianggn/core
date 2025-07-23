@@ -475,9 +475,9 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 // Explosive Trap
                 else if (m_spellInfo->Id == 13812 || m_spellInfo->Id == 14314 || m_spellInfo->Id == 14315)
                 {
-                    // HUNTER - Explosive Trap : direct damage bonus 15% hp and mana
+                    // HUNTER - Explosive Trap : direct damage bonus 15% hp
                     if (m_casterUnit)
-                        damage = damage + ((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f);
+                        damage = damage + (m_casterUnit->GetMaxHealth() * 0.15f);
                 }
                 break;
             }

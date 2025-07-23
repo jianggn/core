@@ -4693,15 +4693,15 @@ float Aura::CalculateDotDamage() const
         }
         case SPELLFAMILY_HUNTER:
         {
-            // HUNTER - Explosive Trap : dot damage bonus 1% hp and mana
+            // HUNTER - Explosive Trap : dot damage bonus 1% hp
             if (spellProto->Id == 13812 || spellProto->Id == 14314 || spellProto->Id == 14315)
             {
-                damage += (caster->GetMaxHealth() + caster->GetMaxPower(POWER_MANA)) * 0.01f;
+                damage += caster->GetMaxHealth() * 0.01f;
             }
-            // HUNTER - Immolation Trap : dot damage bonus 5% hp and mana
+            // HUNTER - Immolation Trap : dot damage bonus 5% hp
             else if (spellProto->Id == 13797 || spellProto->Id == 14298 || spellProto->Id == 14299 || spellProto->Id == 14300 || spellProto->Id == 14301)
             {
-                damage += (caster->GetMaxHealth() + caster->GetMaxPower(POWER_MANA)) * 0.05f;
+                damage += caster->GetMaxHealth() * 0.05f;
             }
             break;
         }
