@@ -5865,6 +5865,17 @@ SpellCastResult Spell::CheckCast(bool strict)
                         return SPELL_FAILED_NOT_HERE;
                 }
                 break;
+            // Mage - Kelens Dagger of Escape
+            // Rogue - Hound Steps
+            // can not be used in Blackrock Spire specific areas
+            case 34002:
+            case 34372:
+                if (m_casterUnit->GetMapId() == MAP_BLACKROCK_SPIRE)
+                    if (m_casterUnit->GetPositionX() >= -20.0f && m_casterUnit->GetPositionX() <= 50.0f)
+                        if (m_casterUnit->GetPositionY() >= -370.0f && m_casterUnit->GetPositionY() <= -290.0f)
+                            if (m_casterUnit->GetPositionZ() >= 30.0f && m_casterUnit->GetPositionZ() <= 100.0f)
+                                return SPELL_FAILED_NOT_HERE;
+                break;
         }
 
         // Loatheb Corrupted Mind spell failed
