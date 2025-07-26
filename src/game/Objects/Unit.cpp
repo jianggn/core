@@ -1739,12 +1739,12 @@ void Unit::TriggerDamageShields(Unit* pVictim)
 
             //Cloak of Flames
             //Sulfuras, Hand of Ragnaros
-            //Immolation : bonus 0.2x fire resistance difference
+            //Immolation : bonus 0.5x fire resistance difference
             if (pSpellProto->Id == 21142)
             {
-                int32 fireResistanceDiff = ditheru((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.2);
+                int32 fireResistanceDiff = ditheru((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.5f);
                 if (fireResistanceDiff > 0)
-                    damage += fireResistanceDiff; // increase damage by 0.2x fire resistance difference
+                    damage += fireResistanceDiff; // increase damage by 0.5x fire resistance difference
             }
 
             //JieFuFuTi(34001) taken damage

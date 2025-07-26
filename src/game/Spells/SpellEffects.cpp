@@ -335,9 +335,9 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     }
                     case 27860: // Blade of Eternal Darkness
                     {
-                        // Engulfing Shadows : 100 shadow damage bonus intellect
+                        // Engulfing Shadows : 100 shadow damage bonus 0.5x intellect
                         if (m_casterUnit && m_casterUnit->GetTypeId() == TYPEID_PLAYER)
-                            damage = damage + m_casterUnit->GetStat(STAT_INTELLECT);
+                            damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.5f;
                         break;
                     }
                     case 20153: // Infernal
@@ -2475,11 +2475,11 @@ void Spell::EffectEnergize(SpellEffectIndex effIdx)
     // Blade of Eternal Darkness
     if (m_spellInfo->Id == 27860 && unitTarget->GetTypeId() == TYPEID_PLAYER)
     {
-        // Engulfing Shadows : 100 mana bonus spirit, Spirit Tap bonus half
+        // Engulfing Shadows : 100 mana bonus 0.5x spirit, Priest - Spirit Tap bonus half
         if (unitTarget->HasAura(15271))
-            damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.5f;
+            damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f;
         else
-            damage += m_casterUnit->GetStat(STAT_SPIRIT);
+            damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.5f;
     }
 
     m_caster->EnergizeBySpell(unitTarget, m_spellInfo->Id, damage, power);
