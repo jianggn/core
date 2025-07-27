@@ -1338,19 +1338,28 @@ bool Map::ScriptCommand_RemoveItem(ScriptInfo const& script, WorldObject* source
 }
 
 // SCRIPT_COMMAND_REMOVE_OBJECT (41)
-bool Map::ScriptCommand_RemoveGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+bool Map::ScriptCommand_RemoveObject(ScriptInfo const& script, WorldObject* source, WorldObject* target)
 {
-    GameObject* pGo = nullptr;
-
-    if (!((pGo = ToGameObject(target)) || (pGo = ToGameObject(source))))
+    if (!source)
     {
-        sLog.Out(LOG_SCRIPTS, LOG_LVL_ERROR, "SCRIPT_COMMAND_REMOVE_OBJECT (script id %u) call for a nullptr gameobject, skipping.", script.id);
+        sLog.Out(LOG_SCRIPTS, LOG_LVL_ERROR, "SCRIPT_COMMAND_REMOVE_OBJECT (script id %u) call for a nullptr source, skipping.", script.id);
         return ShouldAbortScript(script);
     }
 
-    pGo->SetLootState(GO_JUST_DEACTIVATED);
-    pGo->Delete();
-    return false;
+    if (GameObject* pGo = source->ToGameObject())
+    {
+        pGo->SetLootState(GO_JUST_DEACTIVATED);
+        pGo->Delete();
+        return false;
+    }
+    else if (Creature* pCreature = source->ToCreature())
+    {
+        pCreature->AddObjectToRemoveList();
+        return false;
+    }
+
+    sLog.Out(LOG_SCRIPTS, LOG_LVL_ERROR, "SCRIPT_COMMAND_REMOVE_OBJECT (script id %u) call for a non-creature and non-gameobject source (TypeId: %u), skipping.", script.id, source->GetTypeId());
+    return ShouldAbortScript(script);
 }
 
 // SCRIPT_COMMAND_SET_MELEE_ATTACK (42)
