@@ -340,6 +340,13 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             damage = damage + m_casterUnit->GetStat(STAT_INTELLECT) * 0.5f;
                         break;
                     }
+                    case 34475: // Atiesh, Greatstaff of the Guardian
+                    {
+                        // Arcane Blast : 150 arcane damage bonus 1.0x intellect
+                        if (m_casterUnit && m_casterUnit->GetTypeId() == TYPEID_PLAYER)
+                            damage = damage + m_casterUnit->GetStat(STAT_INTELLECT);
+                        break;
+                    }
                     case 20153: // Infernal
                     {
                         // Immolation : 30 fire damage bonus 1% max health
@@ -2480,6 +2487,15 @@ void Spell::EffectEnergize(SpellEffectIndex effIdx)
             damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f;
         else
             damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.5f;
+    }
+    // Atiesh, Greatstaff of the Guardian
+    else if (m_spellInfo->Id == 34475 && unitTarget->GetTypeId() == TYPEID_PLAYER)
+    {
+        // Arcane Blast : 150 mana bonus 1.0x spirit, Priest - Spirit Tap bonus half
+        if (unitTarget->HasAura(15271))
+            damage += m_casterUnit->GetStat(STAT_SPIRIT) * 0.5f;
+        else
+            damage += m_casterUnit->GetStat(STAT_SPIRIT);
     }
 
     m_caster->EnergizeBySpell(unitTarget, m_spellInfo->Id, damage, power);
