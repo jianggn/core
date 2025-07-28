@@ -4286,7 +4286,6 @@ void BattleBotAI::UpdateInCombatAI_Druid()
                 }
 
                 if (m_spells.druid.pFaerieFire &&
-                   (pVictim->GetClass() == CLASS_ROGUE) &&
                     CanTryToCastSpell(pVictim, m_spells.druid.pFaerieFire))
                 {
                     if (DoCastSpell(pVictim, m_spells.druid.pFaerieFire) == SPELL_CAST_OK)

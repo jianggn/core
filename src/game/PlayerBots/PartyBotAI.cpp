@@ -905,11 +905,12 @@ void PartyBotAI::UpdateOutOfCombatAI()
 {
     if (!IsInDuel())
     {
-        if (m_resurrectionSpell)
-            if (Player* pTarget = SelectResurrectionTarget())
-                if (CanTryToCastSpell(pTarget, m_resurrectionSpell))
-                    if (DoCastSpell(pTarget, m_resurrectionSpell) == SPELL_CAST_OK)
-                        return;
+        if (me->GetClass() != CLASS_DRUID)
+            if (m_resurrectionSpell)
+                if (Player* pTarget = SelectResurrectionTarget())
+                    if (CanTryToCastSpell(pTarget, m_resurrectionSpell))
+                        if (DoCastSpell(pTarget, m_resurrectionSpell) == SPELL_CAST_OK)
+                            return;
 
         if (m_role != ROLE_TANK && me->GetVictim() && CrowdControlMarkedTargets())
             return;
@@ -4519,7 +4520,6 @@ void PartyBotAI::UpdateInCombatAI_Druid()
             }
 
             if (m_spells.druid.pFaerieFire &&
-               (pVictim->GetClass() == CLASS_ROGUE) &&
                 CanTryToCastSpell(pVictim, m_spells.druid.pFaerieFire))
             {
                 if (DoCastSpell(pVictim, m_spells.druid.pFaerieFire) == SPELL_CAST_OK)
