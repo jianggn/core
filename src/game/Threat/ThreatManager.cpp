@@ -473,7 +473,13 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
                          pThreatSpell->Id == 27860 ||
                          pThreatSpell->Id == 34475))
         return;
-    
+
+    // Improved Imp rank 3 - Firebolt no threat
+    if (pThreatSpell && (pThreatSpell->Id == 3110 || pThreatSpell->Id == 7799 || pThreatSpell->Id == 7800 || pThreatSpell->Id == 7801 || pThreatSpell->Id == 7802 || pThreatSpell->Id == 11762 || pThreatSpell->Id == 11763))
+        if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
+            if (pOwner->HasAura(18696))
+                return;
+
     MANGOS_ASSERT(getOwner()->GetTypeId() == TYPEID_UNIT);
 
     // don't add assist threat to targets under hard CC
