@@ -4749,15 +4749,12 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                     // Select maintank + 4 random targets
                     std::vector<Unit*> viableTargets;
                     ThreatList const& tl = m_casterUnit->GetThreatManager().getThreatList();
-                    for (const auto it : tl)
+                    for (auto const& itr : tl)
                     {
-                        if (it->getUnitGuid().IsPlayer())
+                        if (Player* pPlayer = itr->getTarget()->ToPlayer())
                         {
-                            if (Unit* pUnit = m_casterUnit->GetMap()->GetUnit(it->getUnitGuid()))
-                            {
-                                if (pUnit->IsAlive())
-                                    viableTargets.push_back(pUnit);
-                            }
+                            if (pPlayer->IsAlive())
+                                viableTargets.push_back(pPlayer);
                         }
                     }
 

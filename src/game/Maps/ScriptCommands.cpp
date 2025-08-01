@@ -1028,8 +1028,8 @@ bool Map::ScriptCommand_ModifyThreat(ScriptInfo const& script, WorldObject* sour
     if (script.modThreat.target == SO_MODIFYTHREAT_ALL_ATTACKERS)
     {
         ThreatList const& threatList = pSource->GetThreatManager().getThreatList();
-        for (const auto i : threatList)
-            if (Unit* Temp = pSource->GetMap()->GetUnit(i->getUnitGuid()))
+        for (auto const& itr : threatList)
+            if (Unit* Temp = itr->getTarget())
                 pSource->GetThreatManager().modifyThreatPercent(Temp, script.x);
     }
     else
