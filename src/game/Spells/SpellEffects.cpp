@@ -1556,6 +1556,18 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         m_casterUnit->CastCustomSpell(m_casterUnit, 23782, LifegivingGemHealthMod, {}, {}, true, nullptr);
                     }
                     return;
+                case 24150:                                 // Stinger Charge Primer
+                {
+                    if (!unitTarget)
+                        return;
+
+                    if (unitTarget->HasAura(25187))
+                        m_caster->CastSpell(unitTarget, 25191, true);
+                    else
+                        m_caster->CastSpell(unitTarget, 25190, true);
+
+                    return;
+                }
                 case 24781:                                 // Dream Fog
                 {
                     if (m_caster->GetTypeId() != TYPEID_UNIT || !unitTarget)
