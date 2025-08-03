@@ -4447,6 +4447,20 @@ float Unit::HasAura_34382_34383_total() const
     return float(total);
 }
 
+int32 Unit::HasAura_34477_34478_total() const
+{
+    int32 total = 0;
+    AuraList const& mTotalAuraList = GetAurasByType(SPELL_AURA_DUMMY);
+    for (const auto& i : mTotalAuraList)
+    {
+        if (i->GetId() == 34477)
+            total += 1;
+        else if (i->GetId() == 34478)
+            total += 2;
+    }
+    return total;
+}
+
 GameObject* Unit::GetGameObject(uint32 spellId) const
 {
     for (const auto& i : m_spellGameObjects)

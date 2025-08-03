@@ -792,6 +792,18 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     target = this;
                     break;
                 }
+                // Leech Life
+                case 34479:
+                {
+                    int32 leech_life_total = this->HasAura_34477_34478_total();
+                    if (!leech_life_total)
+                        return SPELL_AURA_PROC_FAILED;
+                    // heal amount
+                    basepoints[0] = dither(leech_life_total * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34480;
+                    break;                               // no hidden cooldown
+                }
                 // Hunter: Headshot
                 case 34010:
                 {
