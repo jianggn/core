@@ -463,6 +463,24 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 }
                 break;
             }
+            case SPELLFAMILY_ROGUE:
+            {
+                if (!m_casterUnit)
+                    break;
+                // Master Poisoner - instant poison
+                if (m_spellInfo->IsFitToFamilyMask<CF_ROGUE_INSTANT_POISON>())
+                {
+                    if (m_casterUnit->HasAura(34481))
+                    {
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.075f);
+                    }
+                    else if (m_casterUnit->HasAura(34482))
+                    {
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(BASE_ATTACK) * 0.15f);
+                    }
+                }
+                break;
+            }
             case SPELLFAMILY_HUNTER:
             {
                 // Counterattack

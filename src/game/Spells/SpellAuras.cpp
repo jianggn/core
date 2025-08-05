@@ -1949,6 +1949,22 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 }
                 break;
             }
+            case SPELLFAMILY_ROGUE:
+            {
+                switch (GetId())
+                {
+                    case 34373: // Smoke Bomb
+                    {
+                        if (target)
+                        {
+                            m_isPeriodic            = true;
+                            m_modifier.periodictime = 1000;
+                        }
+                        return;
+                    }
+                }
+                break;
+            }
             case SPELLFAMILY_PALADIN:
             {
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
@@ -4722,6 +4738,18 @@ float Aura::CalculateDotDamage() const
                     damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * cp / 100;
                 }
             }
+            // Master Poisoner - deadly poison
+            else if (spellProto->IsFitToFamilyMask<CF_ROGUE_DEADLY_POISON>())
+            {
+                if (caster->HasAura(34481))
+                {
+                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.02f;
+                }
+                else if (caster->HasAura(34482))
+                {
+                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.04f;
+                }
+            }
             // World of Warcraft Client Patch 1.12.0 (2006-08-22)
             // - Garrote: The damage from this ability has been increased. In
             //   addition, Garrote now increases in potency with greater attack power.
@@ -6983,6 +7011,25 @@ void Aura::PeriodicDummyTick()
                     if (ribbonCount > 1)
                         target->CastSpell(GetCaster(), 29175, true); // Midsummer Pole Buff
 
+                    return;
+                }
+            }
+            break;
+        }
+
+        case SPELLFAMILY_ROGUE:
+        {
+            switch (spell->Id)
+            {
+                // Smoke Bomb
+                case 34373:
+                {
+                    if (target->IsInCombat())
+                    {
+                        uint32 rand = urand(0, 99);
+                        if (rand < 15)          // 15% chance to fall down
+                            target->CastSpell(target, 6869, true, nullptr, this);
+                    }
                     return;
                 }
             }
