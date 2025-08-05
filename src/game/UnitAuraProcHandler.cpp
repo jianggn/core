@@ -795,8 +795,12 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 // Leech Life
                 case 34479:
                 {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
                     int32 leech_life_total = this->HasAura_34477_34478_total();
-                    if (!leech_life_total)
+                    if (leech_life_total <= 0)
                         return SPELL_AURA_PROC_FAILED;
                     // heal amount
                     basepoints[0] = dither(leech_life_total * amount / 100);
