@@ -4743,11 +4743,11 @@ float Aura::CalculateDotDamage() const
             {
                 if (caster->HasAura(34481))
                 {
-                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.02f;
+                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.02f * GetStackAmount();
                 }
                 else if (caster->HasAura(34482))
                 {
-                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.04f;
+                    damage += caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.04f * GetStackAmount();
                 }
             }
             // World of Warcraft Client Patch 1.12.0 (2006-08-22)
@@ -7027,7 +7027,7 @@ void Aura::PeriodicDummyTick()
                     if (target->IsInCombat())
                     {
                         uint32 rand = urand(0, 99);
-                        if (rand < 15)          // 15% chance to fall down
+                        if (rand < 10)          // 10% chance to fall down
                             target->CastSpell(target, 6869, true, nullptr, this);
                     }
                     return;
