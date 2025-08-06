@@ -794,6 +794,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 }
                 // Leech Life
                 case 34479:
+                case 34484:
+                case 34485:
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
