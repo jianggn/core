@@ -3845,7 +3845,7 @@ void PartyBotAI::UpdateInCombatAI_Rogue()
         }
 
         if (m_spells.rogue.pAdrenalineRush &&
-           !me->GetPower(POWER_ENERGY) &&
+            (me->GetPower(POWER_ENERGY) < 5) &&
             CanTryToCastSpell(me, m_spells.rogue.pAdrenalineRush))
         {
             if (DoCastSpell(me, m_spells.rogue.pAdrenalineRush) == SPELL_CAST_OK)
