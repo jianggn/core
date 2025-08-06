@@ -3910,6 +3910,13 @@ void PartyBotAI::UpdateInCombatAI_Rogue()
                 return;
         }
 
+        if (m_spells.rogue.pRiposte &&
+            CanTryToCastSpell(pVictim, m_spells.rogue.pRiposte))
+        {
+            if (DoCastSpell(pVictim, m_spells.rogue.pRiposte) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.rogue.pGhostlyStrike &&
             CanTryToCastSpell(pVictim, m_spells.rogue.pGhostlyStrike))
         {
