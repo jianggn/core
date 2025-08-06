@@ -2279,7 +2279,8 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: rolled %d, miss %d, dodge %d, parry %d, block %d, crit %d", roll, missChance, dodgeChance, parryChance, blockChance, critChance);
 
     //Shaman - Monkey King Bar
-    if(!(IsPlayer() && HasAura(34131)))
+    //Rogue - Blinkstrike
+    if(!(IsPlayer() && (HasAura(34131) || (HasAura(34483) && HasAura(13750)))))
     {
         tmp = missChance;
 
