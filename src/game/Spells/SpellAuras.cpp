@@ -1744,7 +1744,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     case 34187:
                     {
                         bool castspells = true;
-                        uint32 spells[8] = {24425,22888,34073,34072,34075,34074,34076,34276};
+                        //uint32 spells[8] = {24425,22888,34073,34072,34075,34074,34076,34276};
+                        uint32 spells[8] = {34486,34487,34073,34072,34075,34074,34076,34276};
                         uint32 times[8] = {};
                         if (Player* player = ToPlayer(GetCaster()))
                         {
@@ -8108,7 +8109,7 @@ void SpellAuraHolder::CalculateForBuffLimit()
 {
     m_visibleSlotLimitAffected = true;
 
-    if (IsPermanent() || m_spellProto->Id == 34000 || m_spellProto->Id == 34001)
+    if (IsPermanent() || m_spellProto->Id == 34000 || m_spellProto->Id == 34001 || m_spellProto->Id == 34072 || m_spellProto->Id == 34073 || m_spellProto->Id == 34074 || m_spellProto->Id == 34075 || m_spellProto->Id == 34076 || m_spellProto->Id == 34276 || m_spellProto->Id == 34486 || m_spellProto->Id == 34487)
         m_visibleSlotLimitScore = 3;
     else if (GetCasterGuid() != GetTarget()->GetObjectGuid())
         m_visibleSlotLimitScore = 2;
