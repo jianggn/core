@@ -8652,8 +8652,7 @@ void SpellAuraHolder::CalculateHeartBeat(Unit* caster, Unit* target)
         // Fingerslayer Blade - item 26044
         // Improved Sap - talent 14095
         // Improved Enslave Demon - talent 18825
-        // Scream of Pain - talent 34469
-        if ((m_spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && caster->HasAura(34319)) || (m_spellProto->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && caster->HasAura(14095)) || (m_spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && caster->HasAura(18825)) || ((m_spellProto->Id == 5782 || m_spellProto->Id == 6213 || m_spellProto->Id == 6215 || m_spellProto->Id == 5484 || m_spellProto->Id == 17928) && caster->HasAura(34469)))
+        if ((m_spellProto->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>() && caster->HasAura(34319)) || (m_spellProto->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && caster->HasAura(14095)) || (m_spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && caster->HasAura(18825)))
         {
             return;
         }
