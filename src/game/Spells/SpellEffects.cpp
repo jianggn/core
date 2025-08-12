@@ -371,32 +371,41 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
             {
                 if (!m_casterUnit)
                     break;
-                // Multi Cast
                 if (Player* pPlayer = ToPlayer(m_casterUnit))
                 {
-                    if (pPlayer->HasAura(34318) && m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES, CF_MAGE_FIREBALL, CF_MAGE_FROSTBOLT>())
+                    if (m_spellInfo->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES, CF_MAGE_FIREBALL, CF_MAGE_PYROBLAST, CF_MAGE_FROSTBOLT>())
                     {
-                        uint32 randomchance = urand(1, 100);
-                        // 3% chances deal 4 times damage
-                        if (randomchance >= 98)
+                        // Torment the Weak
+                        if (pPlayer->HasAura(34488))
                         {
-                            damage *= 4;
-                            if (!pPlayer->IsBot())
-                                pPlayer->GetSession()->SendNotification("Multi Cast X4!");
+                            if (unitTarget->HasUnitState(UNIT_STATE_ROOT) || unitTarget->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED))
+                                damage *= 1.15f;
                         }
-                        // 6% chances deal 3 times damage
-                        else if (randomchance >= 92 && randomchance < 98)
+                        // Multi Cast
+                        if (pPlayer->HasAura(34318))
                         {
-                            damage *= 3;
-                            if (!pPlayer->IsBot())
-                                pPlayer->GetSession()->SendNotification("Multi Cast X3!");
-                        }
-                        // 12% chances deal 2 times damage
-                        else if (randomchance >= 80 && randomchance < 92)
-                        {
-                            damage *= 2;
-                            if (!pPlayer->IsBot())
-                                pPlayer->GetSession()->SendNotification("Multi Cast X2!");
+                            uint32 randomchance = urand(1, 100);
+                            // 3% chances deal 4 times damage
+                            if (randomchance >= 98)
+                            {
+                                damage *= 4;
+                                if (!pPlayer->IsBot())
+                                    pPlayer->GetSession()->SendNotification("Multi Cast X4!");
+                            }
+                            // 6% chances deal 3 times damage
+                            else if (randomchance >= 92 && randomchance < 98)
+                            {
+                                damage *= 3;
+                                if (!pPlayer->IsBot())
+                                    pPlayer->GetSession()->SendNotification("Multi Cast X3!");
+                            }
+                            // 12% chances deal 2 times damage
+                            else if (randomchance >= 80 && randomchance < 92)
+                            {
+                                damage *= 2;
+                                if (!pPlayer->IsBot())
+                                    pPlayer->GetSession()->SendNotification("Multi Cast X2!");
+                            }
                         }
                     }
                     else if (m_spellInfo->Id == 21162) // Sulfuras, Hand of Ragnaros
