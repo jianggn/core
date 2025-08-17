@@ -45,7 +45,6 @@ namespace MaNGOS
         Camera& i_camera;
         UpdateData i_data;
         ObjectGuidSet i_clientGUIDs;
-        std::set<WorldObject*> i_visibleNow;
 
         explicit VisibleNotifier(Camera &c) : i_camera(c), i_clientGUIDs(c.GetOwner()->m_visibleGUIDs) {}
         template<class T> void Visit(GridRefManager<T>& m);

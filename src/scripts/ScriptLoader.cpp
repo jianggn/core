@@ -5,7 +5,6 @@
 #include "scriptPCH.h"
 
 // AI system
-void AddSC_generic_spell_ai();
 void AddSC_npc_escort();
 
 //battlegrounds
@@ -264,7 +263,6 @@ void AddSC_warrior_spell_scripts();
 void AddScripts()
 {
     //Nostalrius
-    AddSC_generic_spell_ai();
     AddSC_npc_escort();
 
     //battlegrounds
