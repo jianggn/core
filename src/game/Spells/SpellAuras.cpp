@@ -7028,8 +7028,8 @@ void Aura::PeriodicDummyTick()
                     if (target->IsInCombat())
                     {
                         uint32 rand = urand(0, 99);
-                        if (rand < 10)          // 10% chance to fall down
-                            target->CastSpell(target, 6869, true, nullptr, this);
+                        if (rand < 15)          // 15% chance to fall down
+                            target->CastSpell(target, 34489, true, nullptr, this);
                     }
                     return;
                 }
