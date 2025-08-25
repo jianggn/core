@@ -52,28 +52,28 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
                 player->CLOSE_GOSSIP_MENU();
                 break;
             }
-            bool has_26010 = player->HasItemCount(26010, 1, true);
-            bool has_26020 = player->HasItemCount(26020, 1, true);
-            bool has_26021 = player->HasItemCount(26021, 1, true);
-            bool has_26022 = player->HasItemCount(26022, 1, true);
-            bool has_26023 = player->HasItemCount(26023, 1, true);
-            bool has_26024 = player->HasItemCount(26024, 1, true);
-            bool has_26027 = player->HasItemCount(26027, 1, true);
-            bool has_26028 = player->HasItemCount(26028, 1, true);
-            bool has_26029 = player->HasItemCount(26029, 1, true);
-            bool has_26032 = player->HasItemCount(26032, 1, true);
-            bool has_26034 = player->HasItemCount(26034, 1, true);
-            bool has_26035 = player->HasItemCount(26035, 1, true);
-            bool has_26036 = player->HasItemCount(26036, 1, true);
-            bool has_26037 = player->HasItemCount(26037, 1, true);
-            bool has_26038 = player->HasItemCount(26038, 1, true);
-            bool has_26044_1 = player->HasItemCount(26044, 1, true);
-            bool has_26044_2 = player->HasItemCount(26044, 2, true);
-            bool has_26045 = player->HasItemCount(26045, 1, true);
-            bool has_26046 = player->HasItemCount(26046, 1, true);
-            bool has_26047 = player->HasItemCount(26047, 1, true);
-            bool has_26049 = player->HasItemCount(26049, 1, true);
-            bool has_26050 = player->HasItemCount(26050, 1, true);
+            bool has_26010 = player->HasItemCount(26010, 1, true) || player->HasItemCount(26137, 1, true);
+            bool has_26020 = player->HasItemCount(26020, 1, true) || player->HasItemCount(26138, 1, true);
+            bool has_26021 = player->HasItemCount(26021, 1, true) || player->HasItemCount(26139, 1, true);
+            bool has_26022 = player->HasItemCount(26022, 1, true) || player->HasItemCount(26140, 1, true);
+            bool has_26023 = player->HasItemCount(26023, 1, true) || player->HasItemCount(26141, 1, true);
+            bool has_26024 = player->HasItemCount(26024, 1, true) || player->HasItemCount(26142, 1, true);
+            bool has_26027 = player->HasItemCount(26027, 1, true) || player->HasItemCount(26143, 1, true);
+            bool has_26028 = player->HasItemCount(26028, 1, true) || player->HasItemCount(26144, 1, true);
+            bool has_26029 = player->HasItemCount(26029, 1, true) || player->HasItemCount(26145, 1, true);
+            bool has_26032 = player->HasItemCount(26032, 1, true) || player->HasItemCount(26146, 1, true);
+            bool has_26034 = player->HasItemCount(26034, 1, true) || player->HasItemCount(26147, 1, true);
+            bool has_26035 = player->HasItemCount(26035, 1, true) || player->HasItemCount(26148, 1, true);
+            bool has_26036 = player->HasItemCount(26036, 1, true) || player->HasItemCount(26149, 1, true);
+            bool has_26037 = player->HasItemCount(26037, 1, true) || player->HasItemCount(26150, 1, true);
+            bool has_26038 = player->HasItemCount(26038, 1, true) || player->HasItemCount(26151, 1, true);
+            bool has_26044_1 = player->HasItemCount(26044, 1, true) || player->HasItemCount(26152, 1, true);
+            bool has_26044_2 = player->HasItemCount(26044, 2, true) || player->HasItemCount(26152, 2, true) || (player->HasItemCount(26044, 1, true) && player->HasItemCount(26152, 1, true));
+            bool has_26045 = player->HasItemCount(26045, 1, true) || player->HasItemCount(26153, 1, true);
+            bool has_26046 = player->HasItemCount(26046, 1, true) || player->HasItemCount(26154, 1, true);
+            bool has_26047 = player->HasItemCount(26047, 1, true) || player->HasItemCount(26155, 1, true);
+            bool has_26049 = player->HasItemCount(26049, 1, true) || player->HasItemCount(26156, 1, true);
+            bool has_26050 = player->HasItemCount(26050, 1, true) || player->HasItemCount(26157, 1, true);
             switch (player->GetClass())
             {
                 // WARRIOR
