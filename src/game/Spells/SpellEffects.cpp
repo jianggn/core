@@ -940,6 +940,27 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 34492:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    float hp_percent = m_casterUnit->GetHealthPercent();
+                    uint32 haste_point = 0;
+                    if (hp_percent > 80.0f)
+                        haste_point = 5;
+                    else if (hp_percent > 60.0f)
+                        haste_point = 10;
+                    else if (hp_percent > 40.0f)
+                        haste_point = 15;
+                    else if (hp_percent > 20.0f)
+                        haste_point = 20;
+                    else
+                        haste_point = 25;
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34493, haste_point, haste_point, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
