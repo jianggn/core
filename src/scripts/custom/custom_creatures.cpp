@@ -3086,6 +3086,373 @@ bool GossipSelect_Luke_Skywalker(Player *player, Creature *_Creature, uint32 sen
     return true;
 }
 
+bool GossipHello_Gwyn(Player *player, Creature *_Creature)   
+{
+    player->ADD_GOSSIP_ITEM(7, "火已渐熄，位不见王影，而无火的余灰们将纷沓而至。那是无名，成不了薪，且被诅咒的不死人。但正因为如此，灰烬才会如此渴求余火吧。",  GOSSIP_SENDER_MAIN, 1);
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Gwyn(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->ADD_GOSSIP_ITEM(7, "薪王不肯回到王位，那么，将柴薪拿回来就行。",    GOSSIP_SENDER_MAIN, 2);
+            if (player->HasItemCount(26158, 1) && player->HasItemCount(26159, 1) && player->HasItemCount(26160, 1) && player->HasItemCount(26161, 1) && player->HasItemCount(26162, 1) && player->HasItemCount(26163, 1) && player->HasItemCount(26164, 1))
+            {
+                if (player->HasItemWithIdEquipped(26010, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：武林之豪",    GOSSIP_SENDER_MAIN, 3);
+                if (player->HasItemWithIdEquipped(26020, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：埃辛诺斯战刃",    GOSSIP_SENDER_MAIN, 4);
+                if (player->HasItemWithIdEquipped(26021, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：埃辛诺斯战刃",    GOSSIP_SENDER_MAIN, 5);
+                if (player->HasItemWithIdEquipped(26022, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：灰烬使者",    GOSSIP_SENDER_MAIN, 6);
+                if (player->HasItemWithIdEquipped(26023, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：金箍棒",    GOSSIP_SENDER_MAIN, 7);
+                if (player->HasItemWithIdEquipped(26024, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：凤凰",    GOSSIP_SENDER_MAIN, 8);
+                if (player->HasItemWithIdEquipped(26027, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：不朽之守护",    GOSSIP_SENDER_MAIN, 9);
+                if (player->HasItemWithIdEquipped(26028, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：审判之轮",    GOSSIP_SENDER_MAIN, 10);
+                if (player->HasItemWithIdEquipped(26029, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：阿哈利姆神杖",    GOSSIP_SENDER_MAIN, 11);
+                if (player->HasItemWithIdEquipped(26032, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：死亡拨弦",    GOSSIP_SENDER_MAIN, 12);
+                if (player->HasItemWithIdEquipped(26034, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：巴特克的猛击",    GOSSIP_SENDER_MAIN, 13);
+                if (player->HasItemWithIdEquipped(26035, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：赫拉森的庇护",    GOSSIP_SENDER_MAIN, 14);
+                if (player->HasItemWithIdEquipped(26036, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：洗礼圣契",    GOSSIP_SENDER_MAIN, 15);
+                if (player->HasItemWithIdEquipped(26037, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：月夜枭兽神像",    GOSSIP_SENDER_MAIN, 16);
+                if (player->HasItemWithIdEquipped(26038, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：雷云图腾",    GOSSIP_SENDER_MAIN, 17);
+                if (player->HasItemWithIdEquipped(26044, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：命定之死",    GOSSIP_SENDER_MAIN, 18);
+                if (player->HasItemWithIdEquipped(26045, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：猎杀指头刀",    GOSSIP_SENDER_MAIN, 19);
+                if (player->HasItemWithIdEquipped(26046, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：群星",    GOSSIP_SENDER_MAIN, 20);
+                if (player->HasItemWithIdEquipped(26047, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：猩红腐败",    GOSSIP_SENDER_MAIN, 21);
+                if (player->HasItemWithIdEquipped(26049, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：先锋盾",    GOSSIP_SENDER_MAIN, 22);
+                if (player->HasItemWithIdEquipped(26050, 1))
+                    player->ADD_GOSSIP_ITEM(5, "燃烧薪王柴薪，用初始之火锻造：雷神之锤",    GOSSIP_SENDER_MAIN, 23);
+            }
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 2:
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 3:
+            if (player->AddItem(26137))
+            {
+                player->DestroyItemCount(26010, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 4:
+            if (player->AddItem(26138))
+            {
+                player->DestroyItemCount(26020, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 5:
+            if (player->AddItem(26139))
+            {
+                player->DestroyItemCount(26021, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 6:
+            if (player->AddItem(26140))
+            {
+                player->DestroyItemCount(26022, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 7:
+            if (player->AddItem(26141))
+            {
+                player->DestroyItemCount(26023, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 8:
+            if (player->AddItem(26142))
+            {
+                player->DestroyItemCount(26024, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 9:
+            if (player->AddItem(26143))
+            {
+                player->DestroyItemCount(26027, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 10:
+            if (player->AddItem(26144))
+            {
+                player->DestroyItemCount(26028, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 11:
+            if (player->AddItem(26145))
+            {
+                player->DestroyItemCount(26029, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 12:
+            if (player->AddItem(26146))
+            {
+                player->DestroyItemCount(26032, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 13:
+            if (player->AddItem(26147))
+            {
+                player->DestroyItemCount(26034, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 14:
+            if (player->AddItem(26148))
+            {
+                player->DestroyItemCount(26035, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 15:
+            if (player->AddItem(26149))
+            {
+                player->DestroyItemCount(26036, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 16:
+            if (player->AddItem(26150))
+            {
+                player->DestroyItemCount(26037, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 17:
+            if (player->AddItem(26151))
+            {
+                player->DestroyItemCount(26038, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 18:
+            if (player->AddItem(26152))
+            {
+                player->DestroyItemCount(26044, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 19:
+            if (player->AddItem(26153))
+            {
+                player->DestroyItemCount(26045, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 20:
+            if (player->AddItem(26154))
+            {
+                player->DestroyItemCount(26046, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 21:
+            if (player->AddItem(26155))
+            {
+                player->DestroyItemCount(26047, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 22:
+            if (player->AddItem(26156))
+            {
+                player->DestroyItemCount(26049, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+        case 23:
+            if (player->AddItem(26157))
+            {
+                player->DestroyItemCount(26050, 1, true);
+                player->DestroyItemCount(26158, 1, true);
+                player->DestroyItemCount(26159, 1, true);
+                player->DestroyItemCount(26160, 1, true);
+                player->DestroyItemCount(26161, 1, true);
+                player->DestroyItemCount(26162, 1, true);
+                player->DestroyItemCount(26163, 1, true);
+                player->DestroyItemCount(26164, 1, true);
+            }
+            player->CLOSE_GOSSIP_MENU();
+            break;
+    }
+}
+bool GossipSelect_Gwyn(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Gwyn(player, _Creature, action);
+
+    return true;
+}
+
 bool GossipHello_TransmogNPC(Player* player, Creature* creature)
 {
     player->ADD_GOSSIP_ITEM(5, "头部",      GOSSIP_SENDER_MAIN, EQUIPMENT_SLOT_HEAD);
@@ -4035,6 +4402,12 @@ void AddSC_custom_creatures()
     newscript->Name = "custom_reforge_npc";
     newscript->pGossipHello = &GossipHello_ReforgeNPC;
     newscript->pGossipSelect = &GossipSelect_ReforgeNPC;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "the_lord_of_sunlight_gwyn";
+    newscript->pGossipHello = &GossipHello_Gwyn;
+    newscript->pGossipSelect = &GossipSelect_Gwyn;
     newscript->RegisterSelf(false);
 
     newscript = new Script;
