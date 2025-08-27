@@ -17041,16 +17041,26 @@ void Player::_SaveInventory()
         itr.item->SetEnchantmentDuration(itr.slot, itr.leftduration);
 
     // if no changes
-    if (m_itemUpdateQueue.empty()) return;
+    if (m_itemUpdateQueue.empty())
+        return;
 
     for (auto& item : m_itemUpdateQueue)
     {
         if (!item)
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "_SaveInventory - Null item pointer found in item update queue of %s.", GetGuidStr().c_str());
             continue;
+        }
+
+        if (item->IsDeleted())
+        {
+            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "_SaveInventory - Already deleted item pointer found in item update queue of %s.", GetGuidStr().c_str());
+            continue;
+        }
 
         if (item->GetState() != ITEM_REMOVED)
         {
-            // Plusieurs tests anti dupli ...
+            // Several anti-duplicate tests ...
             Item* test = GetItemByPos(item->GetBagSlot(), item->GetSlot());
 
             if (test == nullptr)
@@ -17078,12 +17088,13 @@ void Player::_SaveInventory()
                 continue;
             }
         }
+
         if (item->GetOwnerGuid() != GetObjectGuid())
             GetSession()->ProcessAnticheatAction("PassiveAnticheat", "_SaveInventory: attempting to save not owned item", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
 
-        static SqlStatementID insertInventory ;
-        static SqlStatementID updateInventory ;
-        static SqlStatementID deleteInventory ;
+        static SqlStatementID insertInventory;
+        static SqlStatementID updateInventory;
+        static SqlStatementID deleteInventory;
 
         Bag* container = item->GetContainer();
         uint32 bagGuid = container ? container->GetGUIDLow() : 0;
@@ -17108,8 +17119,8 @@ void Player::_SaveInventory()
                 stmt.addUInt64(item->GetLootingTime()); // Modification - trading in loot for two hours.
                 stmt.addString(item->GetRaidGroup()); // Modification - trading in loot for two hours.
                 stmt.Execute();
+                break;
             }
-            break;
             case ITEM_CHANGED:
             {
                 SqlStatement stmt = CharacterDatabase.CreateStatement(updateInventory, "UPDATE `character_inventory` SET `guid` = ?, `bag` = ?, `slot` = ?, `item_id` = ?, `looting_date` = ?, `raid_group` = ? WHERE `item_guid` = ?");
@@ -17121,14 +17132,14 @@ void Player::_SaveInventory()
                 stmt.addString(item->GetRaidGroup()); // Modification - trading in loot for two hours.
                 stmt.addUInt32(item->GetGUIDLow());
                 stmt.Execute();
+                break;
             }
-            break;
             case ITEM_REMOVED:
             {
                 SqlStatement stmt = CharacterDatabase.CreateStatement(deleteInventory, "DELETE FROM `character_inventory` WHERE `item_guid` = ?");
                 stmt.PExecute(item->GetGUIDLow());
+                break;
             }
-            break;
             case ITEM_UNCHANGED:
                 break;
         }
