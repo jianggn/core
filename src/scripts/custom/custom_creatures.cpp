@@ -23,7 +23,8 @@
 
 bool GossipHello_Hardcore_Reward_NPC(Player *player, Creature *_Creature)   
 {
-    player->ADD_GOSSIP_ITEM(7, "各职业第一个到达60级的硬核模式玩家，可随机获取一件职业橙装。",               GOSSIP_SENDER_MAIN, 1);
+    player->ADD_GOSSIP_ITEM(7, "各职业第一个到达60级的硬核模式玩家，可随机获取一件未锻造的职业橙装。",  GOSSIP_SENDER_MAIN, 1);
+    player->ADD_GOSSIP_ITEM(7, "如何锻造职业橙装？",    GOSSIP_SENDER_MAIN, 2);
     player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
     return true;
 }
@@ -1274,6 +1275,13 @@ void SendDefaultMenu_Hardcore_Reward_NPC(Player *player, Creature *_Creature, ui
             str.append("完成硬核挑战，成为服务器第一个满级");
             str.append(className+"。专属奖励已发放。");
             sWorld.SendServerMessage(SERVER_MSG_CUSTOM, str.c_str());
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(7, "火之时代的开创者——太阳王葛温，知道如何引导初始之火完成锻造。此刻他正在燃烧平原，寻找传火的薪王。",  GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
             break;
     }
 }

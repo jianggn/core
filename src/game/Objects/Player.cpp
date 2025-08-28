@@ -17048,7 +17048,7 @@ void Player::_SaveInventory()
     {
         if (!item)
         {
-            sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "_SaveInventory - Null item pointer found in item update queue of %s.", GetGuidStr().c_str());
+            //sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "_SaveInventory - Null item pointer found in item update queue of %s.", GetGuidStr().c_str());
             continue;
         }
 
