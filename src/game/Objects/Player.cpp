@@ -9883,10 +9883,14 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16& dest, ItemPrototype con
         // check this only in game
         if (not_loading)
         {
+            // World of Warcraft Client Patch 1.6.0 (2005-07-12)
+            // - It will no longer be possible to swap any equipment while stunned. 
             // May be here should be more stronger checks; STUNNED checked
             // ROOT, CONFUSED, DISTRACTED, FLEEING this needs to be checked.
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
             if (HasUnitState(UNIT_STATE_STUNNED | UNIT_STATE_PENDING_STUNNED))
                 return EQUIP_ERR_YOU_ARE_STUNNED;
+#endif
 
             // do not allow equipping gear except weapons, offhands, projectiles, relics in
             // - combat
@@ -9898,7 +9902,11 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16& dest, ItemPrototype con
 
             // prevent equip item in process logout
             if (GetSession()->IsLogingOut())
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
                 return EQUIP_ERR_YOU_ARE_STUNNED;
+#else
+                return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+#endif
 
             if (IsInCombat() && pProto->Class == ITEM_CLASS_WEAPON && m_weaponChangeTimer != 0)
                 return EQUIP_ERR_CANT_DO_RIGHT_NOW;         // maybe exist better err
@@ -10017,7 +10025,11 @@ InventoryResult Player::CanUnequipItem(uint16 pos, bool swap) const
 
     // prevent unequip item in process logout
     if (GetSession()->IsLogingOut())
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
         return EQUIP_ERR_YOU_ARE_STUNNED;
+#else
+        return EQUIP_ERR_CANT_DO_RIGHT_NOW;
+#endif
 
     if (!swap && pItem->IsBag() && !((Bag*)pItem)->IsEmpty())
         return EQUIP_ERR_CAN_ONLY_DO_WITH_EMPTY_BAGS;
@@ -10220,9 +10232,6 @@ InventoryResult Player::CanUseItem(Item const* pItem, bool not_loading) const
         if (!IsAlive() && not_loading)
             return EQUIP_ERR_YOU_ARE_DEAD;
 
-        //if (isStunned())
-        //    return EQUIP_ERR_YOU_ARE_STUNNED;
-
         ItemPrototype const* pProto = pItem->GetProto();
         if (pProto)
         {
@@ -10293,8 +10302,7 @@ InventoryResult Player::CanUseAmmo(uint32 item) const
     sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "STORAGE: CanUseAmmo item = %u", item);
     if (!IsAlive())
         return EQUIP_ERR_YOU_ARE_DEAD;
-    //if (isStunned())
-    //    return EQUIP_ERR_YOU_ARE_STUNNED;
+
     ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(item);
     if (pProto)
     {

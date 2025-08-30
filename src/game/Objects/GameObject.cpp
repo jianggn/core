@@ -1854,6 +1854,7 @@ void GameObject::Use(Unit* user)
             // See WorldSession::HandleMeetingStoneJoinOpcode
             return;
         }
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
         case GAMEOBJECT_TYPE_FLAGSTAND:                     // 24
         {
             if (user->GetTypeId() != TYPEID_PLAYER)
@@ -1881,6 +1882,8 @@ void GameObject::Use(Unit* user)
             }
             break;
         }
+#endif
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
         case GAMEOBJECT_TYPE_FISHINGHOLE:                   // 25
         {
             if (user->GetTypeId() != TYPEID_PLAYER)
@@ -1891,6 +1894,7 @@ void GameObject::Use(Unit* user)
             player->SendLoot(GetObjectGuid(), LOOT_FISHINGHOLE);
             return;
         }
+#endif
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
         case GAMEOBJECT_TYPE_FLAGDROP:                      // 26
         {
