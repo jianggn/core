@@ -1427,6 +1427,9 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->ADD_GOSSIP_ITEM(5, "旧铁炉堡 60级",          GOSSIP_SENDER_MAIN, 1278);
             player->ADD_GOSSIP_ITEM(5, "星露谷 60级",            GOSSIP_SENDER_MAIN, 1279);
             player->ADD_GOSSIP_ITEM(5, "新月林地 60级",   GOSSIP_SENDER_MAIN, 1280);
+            player->ADD_GOSSIP_ITEM(5, "格瑞姆巴托 60级",   GOSSIP_SENDER_MAIN, 1281);
+            player->ADD_GOSSIP_ITEM(5, "逐日者庭院 60级",   GOSSIP_SENDER_MAIN, 1282);
+            player->ADD_GOSSIP_ITEM(5, "阿拉索废墟 60级",   GOSSIP_SENDER_MAIN, 1283);
             player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5552);
             player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
 
@@ -2099,6 +2102,36 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             }
             player->ModifyMoney(-travelboots);
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -213.140915f, -2522.304688f, 118.503098f, 0.00f);
+            break;
+        case 1281:// Teleport player to Dragonmaw
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -4062.725830f, -3451.427734f, 281.387482f, 0.00f);
+            break;
+        case 1282:// Teleport player to HighElfPVP
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 3373.121582f, -4490.019531f, 144.267410f, 0.00f);
+            break;
+        case 1283:// Teleport player to Balor
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -1528.809082f, -1805.616821f, 71.632103f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
             player->CLOSE_GOSSIP_MENU();
@@ -3082,6 +3115,141 @@ bool GossipSelect_Luke_Skywalker(Player *player, Creature *_Creature, uint32 sen
     // Main menu
     if (sender == GOSSIP_SENDER_MAIN)
         SendDefaultMenu_Luke_Skywalker(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Falstad_Wildhammer(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 555)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "龙喉兽人占据了格瑞姆巴托。勇士，蛮锤矮人需要帮助！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Falstad_Wildhammer(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -4062.725830f, -3451.427734f, 281.387482f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：格瑞姆巴托",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(555, -5807.743164f, -3568.145996f, 303.187378f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Falstad_Wildhammer(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Falstad_Wildhammer(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Blood_Elf_Rogue(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 556)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "逐日者庭院只向勇士开放。唯有刀剑与魔法，才能赢得辛多雷的荣耀。",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Blood_Elf_Rogue(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 3373.121582f, -4490.019531f, 144.267410f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：逐日者庭院",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(556, 300.223511f, 763.826782f, 26.535112f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Blood_Elf_Rogue(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Blood_Elf_Rogue(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Danath_Trollbane(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 557)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "激流堡从未沦陷，阿拉索必将复兴！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Danath_Trollbane(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -1528.809082f, -1805.616821f, 71.632103f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：阿拉索废墟",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(557, -5635.961914f, -4369.339355f, 245.164673f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Danath_Trollbane(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Danath_Trollbane(player, _Creature, action);
 
     return true;
 }
@@ -4384,6 +4552,24 @@ void AddSC_custom_creatures()
     newscript->Name = "npc_luke_skywalker";
     newscript->pGossipHello = &GossipHello_Luke_Skywalker;
     newscript->pGossipSelect = &GossipSelect_Luke_Skywalker;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_falstad_wildhammer";
+    newscript->pGossipHello = &GossipHello_Falstad_Wildhammer;
+    newscript->pGossipSelect = &GossipSelect_Falstad_Wildhammer;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_blood_elf_rogue";
+    newscript->pGossipHello = &GossipHello_Blood_Elf_Rogue;
+    newscript->pGossipSelect = &GossipSelect_Blood_Elf_Rogue;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_danath_trollbane";
+    newscript->pGossipHello = &GossipHello_Danath_Trollbane;
+    newscript->pGossipSelect = &GossipSelect_Danath_Trollbane;
     newscript->RegisterSelf(false);
 
     newscript = new Script;
