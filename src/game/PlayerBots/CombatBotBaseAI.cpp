@@ -2734,7 +2734,7 @@ void CombatBotBaseAI::EquipRandomGearInEmptySlots()
             pProto->ItemId == 17691 || pProto->ItemId == 17900 || pProto->ItemId == 17901 || pProto->ItemId == 17902 ||
             pProto->ItemId == 17903 || pProto->ItemId == 17904 || pProto->ItemId == 17690 || pProto->ItemId == 17905 ||
             pProto->ItemId == 17906 || pProto->ItemId == 17907 || pProto->ItemId == 17908 || pProto->ItemId == 17909 ||
-            pProto->ItemId == 13544)
+            pProto->ItemId == 13544 || pProto->ItemId == 26036 || pProto->ItemId == 26037 || pProto->ItemId == 26038)
             continue;
 
         if (pProto->SourceQuestRaces && !(pProto->SourceQuestRaces & me->GetRaceMask()))
