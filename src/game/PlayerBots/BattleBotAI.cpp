@@ -2070,7 +2070,6 @@ void BattleBotAI::UpdateInCombatAI_Mage()
 
         if (m_spells.mage.pATuoSiZhiGun &&
             CanTryToCastSpell(pVictim, m_spells.mage.pATuoSiZhiGun) &&
-            (me->GetDistance(pVictim) < 40.0f) &&
             !pVictim->HasAura(34003))
         {
             if (DoCastSpell(pVictim, m_spells.mage.pATuoSiZhiGun) == SPELL_CAST_OK)
