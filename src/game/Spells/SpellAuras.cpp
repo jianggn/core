@@ -7025,16 +7025,11 @@ void Aura::PeriodicDummyTick()
                 // Smoke Bomb
                 case 34373:
                 {
-                    if (target->IsInCombat())
+                    if (target->IsInCombat() && !target->IsImmuneToMechanic(MECHANIC_STUN))
                     {
                         uint32 rand = urand(0, 99);
-                        if (rand < 15)          // 15% chance to fall down
-                        {
-                            if (target->GetTypeId() == TYPEID_PLAYER)
-                                target->CastSpell(target, 6869, true, nullptr, this); // Player: Fall Down 6869
-                            else
-                                target->CastSpell(target, 34489, true, nullptr, this); // Creature: Fall Down 34489
-                        }
+                        if (rand < 15)  // 15% chance to fall down
+                            target->CastSpell(target, 6869, true, nullptr, this);   // Fall Down 6869
                     }
                     return;
                 }
