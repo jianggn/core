@@ -7025,10 +7025,23 @@ void Aura::PeriodicDummyTick()
                 // Smoke Bomb
                 case 34373:
                 {
-                    if (target->IsInCombat() && !target->IsImmuneToMechanic(MECHANIC_STUN))
+                    if (target->IsInCombat())
                     {
                         uint32 rand = urand(0, 99);
-                        if (rand < 15)  // 15% chance to fall down
+                        uint32 limit = 15;
+                        switch (target->GetLevel())
+                        {
+                            case 61:
+                                limit = 10;
+                                break;
+                            case 62:
+                                limit = 5;
+                                break;
+                            case 63:
+                                limit = 1;
+                                break;
+                        }
+                        if (rand < limit)   // chance to fall down
                             target->CastSpell(target, 6869, true, nullptr, this);   // Fall Down 6869
                     }
                     return;
