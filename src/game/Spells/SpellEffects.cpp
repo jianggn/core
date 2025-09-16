@@ -963,6 +963,26 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     m_casterUnit->CastCustomSpell(m_casterUnit, 34493, haste_point, haste_point, {}, true);
                     return;
                 }
+                case 34494:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    if (Pet* pet = m_casterUnit->GetPet())
+                    {
+                        float pet_hp_percent = pet->GetHealthPercent();
+                        int32 pet_damage_percent = 0;
+                        if (pet_hp_percent < 30.0f)
+                            pet_damage_percent = -60;
+                        else if (pet_hp_percent >= 30.0f && pet_hp_percent <= 90.0f)
+                            pet_damage_percent = dither(pet_hp_percent - 90.0f);
+                        else if (pet_hp_percent > 90.0f)
+                            pet_damage_percent = dither(pet_hp_percent * 2 - 180.0f);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34344, pet_damage_percent, {}, {}, true);
+                    }
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
