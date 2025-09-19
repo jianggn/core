@@ -983,6 +983,17 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 34495:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Ice Cold Milk : Remove Drunk Status
+                    if (Player* pPlayer = m_caster->ToPlayer())
+                        pPlayer->SetDrunkValue(0, m_CastItem ? m_CastItem->GetEntry() : 0);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
