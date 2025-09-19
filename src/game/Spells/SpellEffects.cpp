@@ -4080,6 +4080,9 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, effIdx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
+    // Obsidian Destroyer‌ - Sanity's Eclipse - 34091
+    if (m_spellInfo->Id == 34091)
+        bonus *= m_casterUnit->GetPowerPercent(POWER_MANA) / 100.0f;
     // Hunter - Split Shot - 34322
     if (m_spellInfo->Id == 75 && m_casterUnit->HasAura(34322))
         bonus *= 0.7f;
