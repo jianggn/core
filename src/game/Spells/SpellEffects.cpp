@@ -989,7 +989,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     if (!m_casterUnit)
                         return;
-                    // Ice Cold Milk : Remove Drunk Status
+                    // Ice Cold Milk - Remove Drunk Status
                     if (Player* pPlayer = m_caster->ToPlayer())
                         pPlayer->SetDrunkValue(0, m_CastItem ? m_CastItem->GetEntry() : 0);
                     return;
@@ -4080,7 +4080,7 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, effIdx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
-    // Obsidian Destroyer‌ - Sanity's Eclipse - 34091
+    // Obsidian Destroyer‌ - Sanity Eclipse - 34091
     if (m_spellInfo->Id == 34091)
         bonus *= m_casterUnit->GetPowerPercent(POWER_MANA) / 100.0f;
     // Hunter - Split Shot - 34322
