@@ -2401,30 +2401,41 @@ void GameObject::GetLosCheckPosition(float& x, float& y, float& z) const
 {
     if (GameObjectDisplayInfoAddon const* displayInfo = sGameObjectDisplayInfoAddonStorage.LookupEntry<GameObjectDisplayInfoAddon>(GetDisplayId()))
     {
-        float scale = GetObjectScale();
+        if (displayInfo->min_x || displayInfo->min_y || displayInfo->min_z || displayInfo->max_x || displayInfo->max_y || displayInfo->max_z)
+        {
+            float scale = GetObjectScale();
 
-        float minX = displayInfo->min_x * scale;
-        float minY = displayInfo->min_y * scale;
-        float minZ = displayInfo->min_z * scale;
-        float maxX = displayInfo->max_x * scale;
-        float maxY = displayInfo->max_y * scale;
-        float maxZ = displayInfo->max_z * scale;
+            float minX = displayInfo->min_x * scale;
+            float minY = displayInfo->min_y * scale;
+            float minZ = displayInfo->min_z * scale;
+            float maxX = displayInfo->max_x * scale;
+            float maxY = displayInfo->max_y * scale;
+            float maxZ = displayInfo->max_z * scale;
 
-        QuaternionData worldRotation = GetLocalRotation();
-        G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
+            QuaternionData worldRotation = GetLocalRotation();
+            G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
 
-        auto pos = G3D::CoordinateFrame{ { worldRotationQuat },{ GetPositionX(), GetPositionY(), GetPositionZ() } }
-        .toWorldSpace(G3D::Box{ { minX, minY, minZ },{ maxX, maxY, maxZ } }).center();
+            auto pos = G3D::CoordinateFrame{ { worldRotationQuat },{ GetPositionX(), GetPositionY(), GetPositionZ() } }
+            .toWorldSpace(G3D::Box{ { minX, minY, minZ },{ maxX, maxY, maxZ } }).center();
 
+            x = pos.x;
+            y = pos.y;
+            z = pos.z;
+            return;
+        }
+    }
+
+    if (m_model)
+    {
+        auto pos = m_model->getBounds().center();
         x = pos.x;
         y = pos.y;
         z = pos.z;
+        return;
     }
-    else
-    {
-        GetPosition(x, y, z);
-        z += 1.0f;
-    }
+    
+    GetPosition(x, y, z);
+    z += 1.0f;
 }
 
 GameObjectData const* GameObject::GetGOData() const

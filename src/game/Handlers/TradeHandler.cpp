@@ -332,9 +332,16 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
         his_trade->SetAccepted(false, true);
         return;
     }
-    if (!sWorld.getConfig(CONFIG_BOOL_GM_ALLOW_TRADES) &&
-            (trader->GetSession()->GetSecurity() > SEC_PLAYER ||
-            GetSecurity() > SEC_PLAYER))
+
+    // prevent losing money due to reaching gold cap
+    if (((int64(_player->GetMoney()) + int64(his_trade->GetMoney()) - int64(my_trade->GetMoney())) > int64(_player->GetMaxMoney())) ||
+        ((int64(trader->GetMoney()) + int64(my_trade->GetMoney()) - int64(his_trade->GetMoney())) > int64(trader->GetMaxMoney())))
+    {
+        SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
+        return;
+    }
+
+    if (!sWorld.getConfig(CONFIG_BOOL_GM_ALLOW_TRADES) && (trader->GetSession()->GetSecurity() > SEC_PLAYER || GetSecurity() > SEC_PLAYER))
     {
         SendTradeStatus(TRADE_STATUS_TRADE_CANCELED);
         return;
