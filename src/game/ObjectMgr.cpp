@@ -7650,22 +7650,22 @@ void ObjectMgr::PackGroupIds()
 
 void ObjectMgr::SetHighestGuids()
 {
-    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT MAX(`guid`) FROM `characters`"));
-    if (result)
-        m_CharGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Character");
-
-    result = CharacterDatabase.Query("SELECT MAX(`guid`) FROM `item_instance`");
-    if (result)
-        m_ItemGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Item");
+    m_CharGuids.LoadFromDB("guid", "characters");
+    m_ItemGuids.LoadFromDB("guid", "item_instance");
+    m_CorpseGuids.LoadFromDB("guid", "corpse");
+    m_ItemTextIds.LoadFromDB("id", "item_text");
 
     // Cleanup other tables from nonexistent guids (>=m_hiItemGuid)
     CharacterDatabase.BeginTransaction();
-    CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
-    CharacterDatabase.PExecute("DELETE FROM `mail_items` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
     CharacterDatabase.PExecute("DELETE FROM `auction` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
+    CharacterDatabase.PExecute("DELETE FROM `character_gifts` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
+    CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
+    CharacterDatabase.PExecute("DELETE FROM `item_loot` WHERE `guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
+    CharacterDatabase.PExecute("DELETE FROM `mail_items` WHERE `item_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
+    CharacterDatabase.PExecute("DELETE FROM `petition` WHERE `charter_guid` >= '%u'", m_ItemGuids.GetNextAfterMaxUsed());
     CharacterDatabase.CommitTransaction();
 
-    result = WorldDatabase.Query("SELECT MAX(`guid`) FROM `creature`");
+    std::unique_ptr<QueryResult> result = WorldDatabase.Query("SELECT MAX(`guid`) FROM `creature`");
     if (result)
         m_FirstTemporaryCreatureGuid = (*result)[0].GetUInt32();
 
@@ -7687,14 +7687,6 @@ void ObjectMgr::SetHighestGuids()
     result = CharacterDatabase.Query("SELECT MAX(`id`) FROM `mail`");
     if (result)
         m_MailIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Mail");
-
-    result = CharacterDatabase.Query("SELECT MAX(`id`) FROM `item_text`");
-    if (result)
-        m_ItemTextIds.SetMaxUsedGuid((*result)[0].GetUInt32(), "Item Text");
-
-    result = CharacterDatabase.Query("SELECT MAX(`guid`) FROM `corpse`");
-    if (result)
-        m_CorpseGuids.SetMaxUsedGuid((*result)[0].GetUInt32(), "Corpse");
 
     result = CharacterDatabase.Query("SELECT MAX(`guild_id`) FROM `guild`");
     if (result)

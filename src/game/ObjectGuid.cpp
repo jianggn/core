@@ -108,6 +108,44 @@ void ObjectGuidGenerator<high>::GenerateRange(uint32& first, uint32& last)
     last = m_nextGuid;
 }
 
+// Loads the max guid and any gaps to reuse.
+template<HighGuid high>
+void ObjectGuidGenerator<high>::LoadFromDB(char const* fieldName, char const* tableName)
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT MAX(`%s`) FROM `%s`", fieldName, tableName));
+    if (!result)
+        return;
+
+    SetMaxUsedGuid((*result)[0].GetUInt32(), tableName);
+
+    if (!sWorld.getConfig(CONFIG_BOOL_REUSE_FREE_GUIDS))
+        return;
+
+    result = CharacterDatabase.PQuery("SELECT `%s` FROM `%s` ORDER BY `%s` ASC LIMIT 100000", fieldName, tableName, fieldName);
+    if (!result)
+        return;
+
+    uint32 lastGuid = 0;
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 currentGuid = fields[0].GetUInt32();
+
+        for (uint32 i = lastGuid + 1; i < currentGuid; ++i)
+        {
+            m_freedGuids.push(i);
+            if (m_freedGuids.size() >= 100000)
+                goto end;
+        }
+        lastGuid = currentGuid;
+
+    } while (result->NextRow());
+
+end:
+    if (!m_freedGuids.empty())
+        sLog.Out(LOG_BASIC, LOG_LVL_BASIC, "Loaded %u free %s guids for reuse.", (uint32)m_freedGuids.size(), tableName);
+}
+
 template<HighGuid high>
 void ObjectGuidGenerator<high>::SetMaxUsedGuid(uint32 val, char const* guidType)
 {
