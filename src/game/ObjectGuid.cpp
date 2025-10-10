@@ -118,28 +118,39 @@ void ObjectGuidGenerator<high>::LoadFromDB(char const* fieldName, char const* ta
 
     SetMaxUsedGuid((*result)[0].GetUInt32(), tableName);
 
-    if (!sWorld.getConfig(CONFIG_BOOL_REUSE_FREE_GUIDS))
+    uint32 const maxPoolSize = sWorld.getConfig(CONFIG_UINT32_REUSABLE_GUID_POOL_SIZE);
+    if (!maxPoolSize)
         return;
 
-    result = CharacterDatabase.PQuery("SELECT `%s` FROM `%s` ORDER BY `%s` ASC LIMIT 100000", fieldName, tableName, fieldName);
-    if (!result)
-        return;
+    uint32 const maxQuerySize = std::max(maxPoolSize * 2u, 1000u);
+    uint32 lowerBound = 1;
+    uint32 upperBound;
 
-    uint32 lastGuid = 0;
     do
     {
-        Field* fields = result->Fetch();
-        uint32 currentGuid = fields[0].GetUInt32();
+        upperBound = lowerBound - 1 + maxQuerySize;
+        result = CharacterDatabase.PQuery("SELECT `%s` FROM `%s` WHERE `%s` BETWEEN %u AND %u ORDER BY `%s` ASC", fieldName, tableName, fieldName, lowerBound, upperBound, fieldName);
+        if (!result)
+            goto end;
 
-        for (uint32 i = lastGuid + 1; i < currentGuid; ++i)
+        uint32 lastGuid = lowerBound - 1;
+        do
         {
-            m_freedGuids.push(i);
-            if (m_freedGuids.size() >= 100000)
-                goto end;
-        }
-        lastGuid = currentGuid;
+            Field* fields = result->Fetch();
+            uint32 currentGuid = fields[0].GetUInt32();
 
-    } while (result->NextRow());
+            for (uint32 i = lastGuid + 1; i < currentGuid; ++i)
+            {
+                m_freedGuids.push(i);
+                if (m_freedGuids.size() >= maxPoolSize)
+                    goto end;
+            }
+            lastGuid = currentGuid;
+
+        } while (result->NextRow());
+
+        lowerBound += maxQuerySize;
+    } while (upperBound < m_nextGuid);
 
 end:
     if (!m_freedGuids.empty())
