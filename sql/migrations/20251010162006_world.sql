@@ -9,6 +9,9 @@ INSERT INTO `migrations` VALUES ('20251010162006');
 -- Add your query below.
 
 
+-- Set unsigned value to zero to avoid error in mariadb.
+UPDATE `gameobject_template` SET `data5`=0 WHERE `entry`=176084;
+
 -- All gameobject data fields should be signed.
 ALTER TABLE `gameobject_template`
 	CHANGE COLUMN `data0` `data0` INT(10) NOT NULL DEFAULT '0' AFTER `size`,
