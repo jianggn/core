@@ -1000,8 +1000,11 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     if (!m_casterUnit)
                         return;
-                    // Tong Ku Ya Zhi
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f), {}, {}, true);
+                    // Tong Ku Ya Zhi : Spirit Tap bonus half
+                    if (m_casterUnit->HasAura(15271))
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.125f), {}, {}, true);
+                    else
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f), {}, {}, true);
                     return;
                 }
                 case 8344: // Universal Remote
