@@ -994,6 +994,16 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         pPlayer->SetDrunkValue(0, m_CastItem ? m_CastItem->GetEntry() : 0);
                     return;
                 }
+                case 34497:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Tong Ku Ya Zhi
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
