@@ -1075,6 +1075,15 @@ bool ChatHandler::HandlePartyBotLoadCommand(char* args)
         return false;
     }
 
+    // Check if authorized
+    result = CharacterDatabase.PQuery("SELECT 1 FROM `character_partybot_authorize` WHERE `guid` = '%u' AND `summoner_id` = '%u'", guid, pPlayer->GetGUIDLow());
+    if (!result)
+    {
+        SendSysMessage("You are not authorized!");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     float x, y, z;
     pPlayer->GetNearPoint(pPlayer, x, y, z, 0, 5.0f, frand(0.0f, 6.0f));
 
@@ -1089,6 +1098,83 @@ bool ChatHandler::HandlePartyBotLoadCommand(char* args)
     }
 
     PSendSysMessage("Loading %s as party bot.", name.c_str());
+    return true;
+}
+
+bool ChatHandler::HandlePartyBotAuthorizeAddCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
+        return false;
+    uint32 guid = pPlayer->GetGUIDLow();
+
+    std::string name = ExtractPlayerNameFromLink(&args);
+    if (name.empty())
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    ObjectGuid summoner_id = sObjectMgr.GetPlayerGuidByName(name).GetCounter();
+    if (!summoner_id)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (summoner_id.GetCounter() == guid)
+    {
+        SendSysMessage("You can not authorize yourself.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CharacterDatabase.PExecute("replace into `character_partybot_authorize` (`guid`, `summoner_id`) VALUES (%u, %u)", guid, summoner_id);
+
+    PSendSysMessage("Partybot authorize add %s.", name.c_str());
+    return true;
+}
+
+bool ChatHandler::HandlePartyBotAuthorizeShowCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
+        return false;
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT summoner_id FROM `character_partybot_authorize` WHERE `guid` = '%u'", pPlayer->GetGUIDLow()));
+    if (!result)
+    {
+        SendSysMessage("No player authorized!");
+        SetSentErrorMessage(true);
+        return false;
+    }
+    else
+    {
+        PSendSysMessage("Partybot authorize show %u records.", result->GetRowCount());
+        do
+        {
+            Field* fields = result->Fetch();
+            ObjectGuid summoner_id = ObjectGuid(HIGHGUID_PLAYER, fields[0].GetUInt32());
+            std::string summoner_name;
+            if (sObjectMgr.GetPlayerNameByGUID(summoner_id, summoner_name))
+                PSendSysMessage("%s", summoner_name.c_str());
+        } while (result->NextRow());
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandlePartyBotAuthorizeClearCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
+        return false;
+
+    CharacterDatabase.PExecute("delete from `character_partybot_authorize` where `guid` = '%u'", pPlayer->GetGUIDLow());
+
+    PSendSysMessage("Partybot authorize clear.");
     return true;
 }
 
