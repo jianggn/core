@@ -1131,6 +1131,18 @@ bool ChatHandler::HandlePartyBotAuthorizeAddCommand(char* args)
         return false;
     }
 
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT COUNT(*) FROM `character_partybot_authorize` WHERE `guid` = '%u'", guid));
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        if (fields[0].GetUInt32() >= 10)
+        {
+            SendSysMessage("You have reached the maximum number of authorized players (10).");
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+
     CharacterDatabase.PExecute("replace into `character_partybot_authorize` (`guid`, `summoner_id`) VALUES (%u, %u)", guid, summoner_id);
 
     PSendSysMessage("Partybot authorize add %s.", name.c_str());
