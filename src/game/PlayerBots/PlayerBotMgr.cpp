@@ -948,7 +948,10 @@ bool ChatHandler::HandlePartyBotAddCommand(char* args)
         }
         else if (option == "tank")
         {
-            botClass = PickRandomValue(CLASS_WARRIOR, CLASS_PALADIN, CLASS_DRUID);
+            if (pPlayer->GetTeam() == HORDE)
+                botClass = PickRandomValue(CLASS_WARRIOR, CLASS_DRUID);
+            else
+                botClass = PickRandomValue(CLASS_WARRIOR, CLASS_PALADIN, CLASS_DRUID);
             botRole = ROLE_TANK;
         }
 
