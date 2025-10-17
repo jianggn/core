@@ -390,21 +390,21 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             {
                                 damage *= 4;
                                 if (!pPlayer->IsBot())
-                                    pPlayer->GetSession()->SendNotification("Multi Cast X4!");
+                                    pPlayer->GetSession()->SendNotification("Multi Cast %s X4!", m_spellInfo->SpellName[0].c_str());
                             }
                             // 6% chances deal 3 times damage
                             else if (randomchance >= 92 && randomchance < 98)
                             {
                                 damage *= 3;
                                 if (!pPlayer->IsBot())
-                                    pPlayer->GetSession()->SendNotification("Multi Cast X3!");
+                                    pPlayer->GetSession()->SendNotification("Multi Cast %s X3!", m_spellInfo->SpellName[0].c_str());
                             }
                             // 12% chances deal 2 times damage
                             else if (randomchance >= 80 && randomchance < 92)
                             {
                                 damage *= 2;
                                 if (!pPlayer->IsBot())
-                                    pPlayer->GetSession()->SendNotification("Multi Cast X2!");
+                                    pPlayer->GetSession()->SendNotification("Multi Cast %s X2!", m_spellInfo->SpellName[0].c_str());
                             }
                         }
                     }
