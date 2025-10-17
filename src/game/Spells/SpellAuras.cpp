@@ -7751,6 +7751,17 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
                 GetTarget()->CastSpell(GetTarget(), 24004, true);
             break;
         }
+        case 34499:
+        {
+            if (Player* player = GetTarget()->ToPlayer())
+            {
+                player->SetCheatFly(false, false);
+                player->m_movementInfo.moveFlags = (MOVEFLAG_JUMPING);
+                player->GetSession()->RejectMovementPacketsFor(100);
+                player->SendHeartBeat(true);
+            }
+            break;
+        }
         default:
             return;
     }

@@ -15475,6 +15475,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
         SetCheatGod(sWorld.getConfig(CONFIG_BOOL_GM_CHEAT_GOD));
     }
 
+    if (HasAura(34499) && GetClass() == CLASS_MAGE)
+        SetCheatFly(true, false);
+
     if (extraflags & PLAYER_EXTRA_WHISP_RESTRICTION)
         SetWhisperRestriction(true);
 

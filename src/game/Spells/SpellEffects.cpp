@@ -1007,6 +1007,29 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.25f), {}, {}, true);
                     return;
                 }
+                case 34499:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Mage - Fingerslayer Blade
+                    if (Player* player = m_casterUnit->ToPlayer())
+                    {
+                        if (player->GetClass() == CLASS_MAGE)
+                        {
+                            if (Pet* pet = player->GetPet())
+                                pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                            player->SetCheatFly(true, false);
+                            player->SendSysMessage("Jump to switch flying to running.");
+                        }
+                        else
+                        {
+                            player->SendSysMessage("Only mage can do.");
+                        }
+                    }
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
