@@ -2740,7 +2740,25 @@ void CombatBotBaseAI::EquipRandomGearInEmptySlots()
             pProto->ItemId == 26032 || pProto->ItemId == 26034 || pProto->ItemId == 26035 ||
             pProto->ItemId == 26036 || pProto->ItemId == 26037 || pProto->ItemId == 26038 ||
             pProto->ItemId == 26044 || pProto->ItemId == 26045 || pProto->ItemId == 26046 ||
-            pProto->ItemId == 26047 || pProto->ItemId == 26049 || pProto->ItemId == 26050)
+            pProto->ItemId == 26047 || pProto->ItemId == 26049 || pProto->ItemId == 26050 ||
+            pProto->ItemId == 26170 || pProto->ItemId == 26188 || pProto->ItemId == 26206 ||
+            pProto->ItemId == 26171 || pProto->ItemId == 26189 || pProto->ItemId == 26207 ||
+            pProto->ItemId == 26172 || pProto->ItemId == 26190 || pProto->ItemId == 26208 ||
+            pProto->ItemId == 26173 || pProto->ItemId == 26191 || pProto->ItemId == 26209 ||
+            pProto->ItemId == 26174 || pProto->ItemId == 26192 || pProto->ItemId == 26210 ||
+            pProto->ItemId == 26175 || pProto->ItemId == 26193 || pProto->ItemId == 26211 ||
+            pProto->ItemId == 26176 || pProto->ItemId == 26194 || pProto->ItemId == 26212 ||
+            pProto->ItemId == 26177 || pProto->ItemId == 26195 || pProto->ItemId == 26213 ||
+            pProto->ItemId == 26178 || pProto->ItemId == 26196 || pProto->ItemId == 26214 ||
+            pProto->ItemId == 26179 || pProto->ItemId == 26197 || pProto->ItemId == 26215 ||
+            pProto->ItemId == 26180 || pProto->ItemId == 26198 || pProto->ItemId == 26216 ||
+            pProto->ItemId == 26181 || pProto->ItemId == 26199 || pProto->ItemId == 26217 ||
+            pProto->ItemId == 26182 || pProto->ItemId == 26200 || pProto->ItemId == 26218 ||
+            pProto->ItemId == 26183 || pProto->ItemId == 26201 || pProto->ItemId == 26219 ||
+            pProto->ItemId == 26184 || pProto->ItemId == 26202 || pProto->ItemId == 26220 ||
+            pProto->ItemId == 26185 || pProto->ItemId == 26203 || pProto->ItemId == 26221 ||
+            pProto->ItemId == 26186 || pProto->ItemId == 26204 || pProto->ItemId == 26222 ||
+            pProto->ItemId == 26187 || pProto->ItemId == 26205 || pProto->ItemId == 26223)
             continue;
 
         if (pProto->SourceQuestRaces && !(pProto->SourceQuestRaces & me->GetRaceMask()))
