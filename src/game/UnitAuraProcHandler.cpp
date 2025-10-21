@@ -1149,18 +1149,11 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 // Flame, Grant me Strength
                 case 34500:
                 {
-                    if (!procSpell)
-                        return SPELL_AURA_PROC_FAILED;
-
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
 
                     if (procEx & PROC_EX_CRITICAL_HIT)
                     {
-                        if (procSpell->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_FLAMESTRIKE, CF_MAGE_BLAST_WAVE2>())
-                            if (urand(0, 99) < 67)
-                                return SPELL_AURA_PROC_FAILED;
-
                         if (HasAura(34501))
                         {
                             RemoveAurasDueToSpell(34501);
