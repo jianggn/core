@@ -1146,6 +1146,35 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     CastSpell(this, 28682, true, castItem, triggeredByAura);
                     return (procEx & PROC_EX_CRITICAL_HIT) ? SPELL_AURA_PROC_OK : SPELL_AURA_PROC_FAILED; // charge update only at crit hits, no hidden cooldowns
                 }
+                // Flame, Grant me Strength
+                case 34500:
+                {
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (procEx & PROC_EX_CRITICAL_HIT)
+                    {
+                        if (HasAura(34501))
+                        {
+                            RemoveAurasDueToSpell(34501);
+                            CastSpell(this, 34502, true, castItem, triggeredByAura);
+                            return SPELL_AURA_PROC_OK;
+                        }
+                        else
+                        {
+                            CastSpell(this, 34501, true, castItem, triggeredByAura);
+                            return SPELL_AURA_PROC_OK;
+                        }
+                    }
+                    else
+                    {
+                        if (HasAura(34501))
+                            RemoveAurasDueToSpell(34501);
+                        return SPELL_AURA_PROC_FAILED;
+                    }
+
+                    return SPELL_AURA_PROC_OK;
+                }
             }
             break;
         }
