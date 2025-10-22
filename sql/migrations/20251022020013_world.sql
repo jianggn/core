@@ -3,10 +3,11 @@ DELIMITER ??
 CREATE PROCEDURE `add_migration`()
 BEGIN
 DECLARE v INT DEFAULT 1;
-SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20241208211202');
+SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20251022020013');
 IF v = 0 THEN
-INSERT INTO `migrations` VALUES ('20241208211202');
+INSERT INTO `migrations` VALUES ('20251022020013');
 -- Add your query below.
+
 
 -- ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Add Missing Script
@@ -446,10 +447,10 @@ INSERT INTO `quest_end_scripts` (`id`, `delay`, `priority`, `command`, `datalong
 DELETE FROM `event_scripts` WHERE `id`=664;
 INSERT INTO `event_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (664, 0, 0, 10, 3946, 13000, 1, 10, 0, 0, 0, 0, 8, 0, -1, 1, -11141.1, -1152.68, 43.5816, 4.7822, 0, 'The Scythe of Elune: Mound of Dirt - Summon Creature Velinde Starsong'),
-(664, 1, 0, 35, 0, 0, 0, 0, 0, 0, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Set Orientation'),
-(664, 5, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 1359, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Say Text'),
-(664, 9, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 1360, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Say Text'),
-(664, 9, 1, 1, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune - Velinde Starsong - Emote OneShotCry');
+(664, 1, 0, 35, 0, 0, 0, 0, 3946, 30, 10, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Set Orientation'),
+(664, 5, 0, 0, 0, 0, 0, 0, 3946, 30, 10, 2, 1359, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Say Text'),
+(664, 9, 0, 0, 0, 0, 0, 0, 3946, 30, 10, 2, 1360, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Say Text'),
+(664, 9, 1, 1, 18, 0, 0, 0, 3946, 30, 10, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'The Scythe of Elune: Velinde Starsong - Emote OneShotCry');
 -- ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Add Pearl Diving Script (credit cmangos)
 UPDATE `quest_template` SET `CompleteScript`=705 WHERE  `entry`=705 AND `patch`=0;
@@ -610,9 +611,6 @@ DELETE FROM `skinning_loot_template` WHERE `entry`=100008;
 -- ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Stop Creature Clipping Through Walls
 UPDATE `creature` SET `wander_distance` = 2 WHERE `guid` = 16985;
-
-
--- For Future Ref: More Blizzlike Goodness From Cmangos https://github.com/cmangos/tbc-db/pull/1251
 
 
 -- End of migration.
