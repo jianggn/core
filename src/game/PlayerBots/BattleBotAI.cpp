@@ -410,6 +410,9 @@ Unit* BattleBotAI::SelectFollowTarget() const
         if (pTarget->IsGameMaster())
             continue;
 
+        if (pTarget->HasAura(34499))
+            continue;
+
         if (me->GetTeam() == ALLIANCE)
         {
             if (pTarget->HasAura(AURA_WARSONG_FLAG))

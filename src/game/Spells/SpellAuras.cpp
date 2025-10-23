@@ -7733,6 +7733,13 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
 
 void SpellAuraHolder::HandleCastOnAuraRemoval() const
 {
+    if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>())
+    {
+        if (GetTarget()->HasAura(34499))
+            GetTarget()->RemoveAurasDueToSpell(34499);
+        return;
+    }
+
     uint32 uiTriggeredSpell = 0;
     AuraRemoveMode mode = GetRemoveMode();
 
