@@ -3734,8 +3734,9 @@ bool GossipSelect_ReforgeNPC(Player* player, Creature* creature, uint32 sender, 
         player->GetSession()->SendNotification("重铸需要150金币。");
     }else if(item->GetProto()->RandomProperty == 9000 || item->GetProto()->RandomProperty == 9001 || item->GetProto()->RandomProperty == 9002){
         player->GetSession()->SendNotification("行囊首格装备重铸成功。");
+        uint32 item_entry = item->GetProto()->ItemId;
         player->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
-        player->AddItem(item->GetProto()->ItemId);
+        player->AddItem(item_entry);
         player->ModifyMoney(-150 * GOLD);
     }
     else{
