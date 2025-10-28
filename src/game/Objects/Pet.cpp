@@ -1329,7 +1329,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
         SetByteValue(UNIT_FIELD_BYTES_2, UNIT_BYTES_2_OFFSET_MISC_FLAGS, UNIT_BYTE2_FLAG_UNK3 | UNIT_BYTE2_FLAG_AURAS | UNIT_BYTE2_FLAG_UNK5);
         SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_RENAME | UNIT_FLAG_PET_ABANDON);
 
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
         SetFloatValue(UNIT_MOD_CAST_SPEED, creature->GetFloatValue(UNIT_MOD_CAST_SPEED));
 #else
         SetInt32Value(UNIT_MOD_CAST_SPEED, creature->GetInt32Value(UNIT_MOD_CAST_SPEED));
@@ -1390,7 +1390,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
     SetAttackTime(OFF_ATTACK, cinfo->base_attack_time); //BASE_ATTACK_TIME);
     SetAttackTime(RANGED_ATTACK, cinfo->ranged_attack_time); //BASE_ATTACK_TIME);
 
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);

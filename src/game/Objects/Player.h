@@ -1491,6 +1491,7 @@ class Player final: public Unit
         bool CanDualWield() const { return m_canDualWield; }
         void SetCanDualWield(bool value) { m_canDualWield = value; }
 
+        void UpdateDamageDonePercent(uint32 school);
         void ApplyStatBuffMod(Stats stat, float val, bool apply) { ApplyModSignedFloatValue((val > 0 ? PLAYER_FIELD_POSSTAT0 + stat : PLAYER_FIELD_NEGSTAT0 + stat), val, apply); }
         void ApplyStatPercentBuffMod(Stats stat, float val, bool apply)
         {

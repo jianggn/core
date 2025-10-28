@@ -418,7 +418,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
 
     // fix cast time showed in spell tooltip on client
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
@@ -3357,7 +3357,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
     UpdateSkillsForLevel();
 
     // set default cast time multiplier
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 #else
     SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
@@ -7365,6 +7365,28 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item const* item, WeaponAttackTy
 
     if (item->IsFitToSpellRequirements(aura->GetSpellProto()))
         HandleStatModifier(unitMod, unitModType, modifier->m_amount, apply);
+}
+
+void Player::UpdateDamageDonePercent(uint32 school)
+{
+    float multiplier = 1.0f;
+
+    AuraList const& mTotalAuraList = GetAurasByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+    for (const auto& aura : mTotalAuraList)
+    {
+        if (!aura->IsApplied())
+            continue;
+
+        // skip item specific requirements
+        if (aura->GetSpellProto()->EquippedItemClass != -1 || aura->GetSpellProto()->EquippedItemInventoryTypeMask != 0)
+            continue;
+
+        Modifier* mod = aura->GetModifier();
+        if (mod->m_miscvalue & (1 << school))
+            multiplier *= (100.0f + mod->m_amount) / 100.0f;
+    }
+
+    SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, multiplier);
 }
 
 void Player::ApplyItemEquipSpell(Item* item, bool apply, bool formChange)
@@ -22456,7 +22478,7 @@ void Player::AddGCD(SpellEntry const& spellEntry, uint32 /*forcedDuration = 0*/,
         spellEntry.DmgClass != SPELL_DAMAGE_CLASS_MELEE && spellEntry.DmgClass != SPELL_DAMAGE_CLASS_RANGED &&
         !spellEntry.HasAttribute(SPELL_ATTR_USES_RANGED_SLOT) && !spellEntry.HasAttribute(SPELL_ATTR_IS_ABILITY))
     {
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
         gcdDuration = int32(float(gcdDuration) * GetFloatValue(UNIT_MOD_CAST_SPEED));
 #else
         gcdDuration = int32(float(gcdDuration) * (1.0f + GetInt32Value(UNIT_MOD_CAST_SPEED) / 100.0f));

@@ -10106,16 +10106,36 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
     }
 }
 
-void Unit::ApplyCastTimePercentMod(float val, bool apply)
+void Unit::UpdateCastSpeed()
 {
-#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
-    if (val > 0)
-        SetFloatValue(UNIT_MOD_CAST_SPEED, GetFloatValue(UNIT_MOD_CAST_SPEED) * (apply ? 100.0f / (100.0f + val) : (100.0f + val) / 100.0f));
-    else
-        SetFloatValue(UNIT_MOD_CAST_SPEED, GetFloatValue(UNIT_MOD_CAST_SPEED) * (apply ? (100.0f - val) / 100.0f : 100.0f / (100.0f - val)));
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
+    float total = 1.0f;
 #else
-    int32 intval = round(val);
-    SetInt32Value(UNIT_MOD_CAST_SPEED, (GetInt32Value(UNIT_MOD_CAST_SPEED) + (apply ? -intval : intval)));
+    int32 total = 0;
+#endif
+
+    AuraList const& auras = GetAurasByType(SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK);
+    for (auto const& aura : auras)
+    {
+        if (!aura->IsApplied())
+            continue;
+
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
+        float val = aura->GetModifier()->m_amount;
+        if (val > 0)
+            total *= 100.0f / (100.0f + val);
+        else
+            total *= (100.0f - val) / 100.0f;
+#else
+        int32 intval = round(aura->GetModifier()->m_amount);
+        total -= intval;
+#endif
+    }
+
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_11_2
+    SetFloatValue(UNIT_MOD_CAST_SPEED, total);
+#else
+    SetInt32Value(UNIT_MOD_CAST_SPEED, total);
 #endif
 }
 
