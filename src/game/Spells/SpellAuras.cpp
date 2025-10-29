@@ -7455,6 +7455,11 @@ bool SpellAuraHolder::ModStackAmount(int32 num)
 {
     uint32 protoStackAmount = m_spellProto->StackAmount;
 
+    // Ming Zun Liu Li Ti
+    if (Unit* caster = GetCaster())
+        if ((m_spellProto->Id == 34031 || m_spellProto->Id == 34032) && caster->HasAura(34503))
+            protoStackAmount = 150;
+
     // Can`t mod
     if (!protoStackAmount)
         return true;

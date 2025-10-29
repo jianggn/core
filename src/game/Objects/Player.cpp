@@ -15740,9 +15740,10 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
     if (spellproto->procCharges == 0)
         s.charges = 0;
 
+    // Ming Zun Liu Li Ti
     if (!spellproto->StackAmount)
         s.stacks = 1;
-    else if (spellproto->StackAmount < s.stacks)
+    else if (spellproto->StackAmount < s.stacks && !(spellproto->Id == 34031 || spellproto->Id == 34032))
         s.stacks = spellproto->StackAmount;
     else if (!s.stacks)
         s.stacks = 1;
