@@ -1030,6 +1030,16 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 34504:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Ming Zun Liu Li Ti
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.33f), {}, {}, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
