@@ -823,7 +823,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Kang Mo Qi Shu
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.25f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.45f), {}, {}, true);
                     return;
                 }
                 case 34339:
