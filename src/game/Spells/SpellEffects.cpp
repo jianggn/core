@@ -1037,7 +1037,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Ming Zun Liu Li Ti
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.33f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.35f), {}, {}, true);
                     return;
                 }
                 case 8344: // Universal Remote
