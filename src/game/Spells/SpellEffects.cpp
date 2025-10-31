@@ -1021,6 +1021,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                             if (Pet* pet = player->GetPet())
                                 pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
                             player->SetCheatFly(true, false);
+                            player->CastSpell(player, 34506, true);
                             player->SendSysMessage("Jump to switch from flying to running.");
                         }
                         else
