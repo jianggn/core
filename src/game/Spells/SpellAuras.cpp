@@ -6682,6 +6682,9 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             if (GetAuraScript())
                 GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
 
+            if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_BLESSING_OF_WISDOM>() && target->HasAura(20245) && target == pCaster)
+                fdamage += target->GetStat(STAT_INTELLECT);
+
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %s energize %s for %g dmg inflicted by %u",
                               GetCasterGuid().GetString().c_str(), target->GetGuidStr().c_str(), fdamage, GetId());
 
