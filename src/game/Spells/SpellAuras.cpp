@@ -5525,13 +5525,15 @@ void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
     if (apply)
     {
         if (Unit* caster = GetCaster())
+        {
             if (Player* modOwner = caster->GetSpellModOwner())
+            {
+                if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_BLESSING_OF_MIGHT>() && modOwner->HasAura(20048) && modOwner == GetTarget())
+                    m_modifier.m_amount += modOwner->GetStat(STAT_STRENGTH);
                 modOwner->ApplySpellMod(GetSpellProto()->Id, SPELLMOD_ATTACK_POWER, m_modifier.m_amount);
+            }
+        }
     }
-
-    if (Unit* pCaster = GetCaster())
-        if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_BLESSING_OF_MIGHT>() && GetTarget()->HasAura(20048) && GetTarget() == pCaster)
-            m_modifier.m_amount += GetTarget()->GetStat(STAT_STRENGTH);
 
     GetTarget()->HandleAttackPowerModifier(MELEE_AP_MODS, IsPositive() ? AP_MOD_POSITIVE_FLAT : AP_MOD_NEGATIVE_FLAT, m_modifier.m_amount, apply);
 
