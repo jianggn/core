@@ -5531,6 +5531,10 @@ void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
 
     GetTarget()->HandleAttackPowerModifier(MELEE_AP_MODS, IsPositive() ? AP_MOD_POSITIVE_FLAT : AP_MOD_NEGATIVE_FLAT, m_modifier.m_amount, apply);
 
+    if (Unit* pCaster = GetCaster())
+        if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_BLESSING_OF_MIGHT>() && GetTarget()->HasAura(20048) && GetTarget() == pCaster)
+            m_modifier.m_amount += GetTarget()->GetStat(STAT_STRENGTH);
+
 #if (SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_3_1) && (SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4)
     // Blood Fury- Add aura to decrease attack power on remove
     if (!apply && GetId() == 23234 && (m_removeMode == AURA_REMOVE_BY_CANCEL || m_removeMode == AURA_REMOVE_BY_EXPIRE))
