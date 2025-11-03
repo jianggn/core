@@ -18685,14 +18685,6 @@ void Player::SendDismountResult(UnitDismountResult result) const
     GetSession()->SendPacket(&data);
 }
 
-void Player::ScheduleStandUp()
-{
-    if (sWorld.getConfig(CONFIG_UINT32_SPELL_PROC_DELAY))
-        m_isStandUpScheduled = true;
-    else
-        SetStandState(UNIT_STAND_STATE_STAND);
-}
-
 void Player::InitDataForForm(bool reapplyMods)
 {
     ShapeshiftForm form = GetShapeshiftForm();

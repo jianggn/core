@@ -2020,7 +2020,7 @@ class Player final: public Unit
         void SendDismountResult(UnitDismountResult result) const;
         void UpdateCorpseReclaimDelay();
     public:
-        void ScheduleStandUp();
+        void ScheduleStandUp() { m_isStandUpScheduled = true; }
         bool IsStandUpScheduled() const { return m_isStandUpScheduled; }
         void ClearScheduledStandUp() { m_isStandUpScheduled = false; }
         UnitMountResult Mount(uint32 mount, uint32 spellId = 0) override;
