@@ -7318,12 +7318,23 @@ void SpellAuraHolder::_AddSpellAuraHolder()
             }
             else                                                // empty negative slot
             {
-                for (uint8 i = 12; i < MAX_AURAS; i++)
+                for (uint8 i = MAX_POSITIVE_AURAS; i < MAX_AURAS; i++)
                 {
                     if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
                     {
                         slot = i;
                         break;
+                    }
+                }
+                if (slot == NULL_AURA_SLOT)
+                {
+                    for (uint8 i = 12; i < MAX_POSITIVE_AURAS; i++)
+                    {
+                        if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                        {
+                            slot = i;
+                            break;
+                        }
                     }
                 }
             }
