@@ -1046,7 +1046,7 @@ void World::LoadConfigSettings(bool reload)
     if (getConfig(CONFIG_UINT32_DEBUFF_LIMIT) == 0)
     {
         if (GetWowPatch() >= WOW_PATCH_107)
-            setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 40);
+            setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 16);
         else
             setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 8);
     }

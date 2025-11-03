@@ -7278,25 +7278,53 @@ void SpellAuraHolder::_AddSpellAuraHolder()
     // will be < MAX_AURAS slot (if find free) with !secondaura
     if (IsNeedVisibleSlot(caster))
     {
-        if (IsPositive())                                   // empty positive slot
+        if (m_target->IsPlayer() || (m_target->IsPet() && m_target->GetOwnerGuid().IsPlayer()))
         {
-            for (uint8 i = 0; i < MAX_POSITIVE_AURAS; i++)
+            if (IsPositive())                                   // empty positive slot
             {
-                if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                for (uint8 i = 0; i < MAX_POSITIVE_AURAS; i++)
                 {
-                    slot = i;
-                    break;
+                    if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                    {
+                        slot = i;
+                        break;
+                    }
+                }
+            }
+            else                                                // empty negative slot
+            {
+                for (uint8 i = MAX_POSITIVE_AURAS; i < MAX_AURAS; i++)
+                {
+                    if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                    {
+                        slot = i;
+                        break;
+                    }
                 }
             }
         }
-        else                                                // empty negative slot
+        else
         {
-            for (uint8 i = MAX_POSITIVE_AURAS; i < MAX_AURAS; i++)
+            if (IsPositive())                                   // empty positive slot
             {
-                if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                for (uint8 i = 0; i < 8; i++)
                 {
-                    slot = i;
-                    break;
+                    if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                    {
+                        slot = i;
+                        break;
+                    }
+                }
+            }
+            else                                                // empty negative slot
+            {
+                for (uint8 i = 8; i < MAX_AURAS; i++)
+                {
+                    if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
+                    {
+                        slot = i;
+                        break;
+                    }
                 }
             }
         }

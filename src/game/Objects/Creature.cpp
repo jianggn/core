@@ -588,6 +588,10 @@ bool Creature::UpdateEntry(uint32 entry, GameEventCreatureData const* eventData 
     else
         RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLUS_MOB);
 
+    // Detect Magic mod
+    if (!(IsPet() && GetOwnerGuid().IsPlayer()))
+        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_AURAS_VISIBLE);
+
     m_reputationId = -1;
     if (FactionTemplateEntry const* pFactionTemplate = sObjectMgr.GetFactionTemplateEntry(GetCreatureInfo()->faction))
         if (FactionEntry const* pFaction = sObjectMgr.GetFactionEntry(pFactionTemplate->faction))

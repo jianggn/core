@@ -5915,6 +5915,11 @@ SpellCastResult Spell::CheckCast(bool strict)
 
     if (Unit* target = m_targets.getUnitTarget())
     {
+        // Detect Magic mod
+        if (m_spellInfo->Id == 2855)
+            if (!(target->IsPlayer() || (target->IsPet() && target->GetOwnerGuid().IsPlayer())))
+                return SPELL_FAILED_BAD_TARGETS;
+
         if (m_spellInfo->IsSpellAppliesAura() && !m_spellInfo->IsAreaOfEffectSpell())
         {
             // A more powerful spell is already active

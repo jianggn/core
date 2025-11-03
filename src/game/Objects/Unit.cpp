@@ -3611,24 +3611,50 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder* holder)
     //sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "AddSpellAuraHolder: Adding spell %d, debuff limit affected: %d", holder->GetId(), holder->IsAffectedByVisibleSlotLimit());
     if (holder->IsAffectedByVisibleSlotLimit())
     {
-        if (holder->IsPositive())
+        if (IsPlayer() || (IsPet() && GetOwnerGuid().IsPlayer()))
         {
-            uint32 positveAuras = GetVisibleAurasCount(true);
-            if (positveAuras > MAX_POSITIVE_AURAS)
+            if (holder->IsPositive())
             {
-                // We may have removed the aura we just applied ...
-                if (RemoveAuraDueToVisibleSlotLimit(holder))
-                    return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                uint32 positveAuras = GetVisibleAurasCount(true);
+                if (positveAuras > MAX_POSITIVE_AURAS)
+                {
+                    // We may have removed the aura we just applied ...
+                    if (RemoveAuraDueToVisibleSlotLimit(holder))
+                        return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                }
+            }
+            else
+            {
+                uint32 negativeAuras = GetVisibleAurasCount(false);
+                if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
+                {
+                    // We may have removed the aura we just applied ...
+                    if (RemoveAuraDueToVisibleSlotLimit(holder))
+                        return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                }
             }
         }
         else
         {
-            uint32 negativeAuras = GetVisibleAurasCount(false);
-            if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
+            if (holder->IsPositive())
             {
-                // We may have removed the aura we just applied ...
-                if (RemoveAuraDueToVisibleSlotLimit(holder))
-                    return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                uint32 positveAuras = GetVisibleAurasCount(true);
+                if (positveAuras > 8)
+                {
+                    // We may have removed the aura we just applied ...
+                    if (RemoveAuraDueToVisibleSlotLimit(holder))
+                        return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                }
+            }
+            else
+            {
+                uint32 negativeAuras = GetVisibleAurasCount(false);
+                if (negativeAuras > 40)
+                {
+                    // We may have removed the aura we just applied ...
+                    if (RemoveAuraDueToVisibleSlotLimit(holder))
+                        return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+                }
             }
         }
     }
