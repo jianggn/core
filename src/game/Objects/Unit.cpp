@@ -3639,7 +3639,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder* holder)
             if (holder->IsPositive())
             {
                 uint32 positveAuras = GetVisibleAurasCount(true);
-                if (positveAuras > 8)
+                if (positveAuras > 12)
                 {
                     // We may have removed the aura we just applied ...
                     if (RemoveAuraDueToVisibleSlotLimit(holder))
@@ -3649,7 +3649,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder* holder)
             else
             {
                 uint32 negativeAuras = GetVisibleAurasCount(false);
-                if (negativeAuras > 40)
+                if (negativeAuras > 36)
                 {
                     // We may have removed the aura we just applied ...
                     if (RemoveAuraDueToVisibleSlotLimit(holder))
