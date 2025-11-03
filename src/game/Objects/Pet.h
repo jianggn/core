@@ -216,6 +216,8 @@ class Pet : public Creature
         bool   HasTPForSpell(uint32 spellid);
         int32  GetTPForSpell(uint32 spellid);
 
+        // World of Warcraft Client Patch 1.6.0 (2005-07-12)
+        // - Pets will now enter passive/follow mode when their masters mount.
         void SetEnabled(bool on);
         bool IsEnabled() const { return m_enabled; }
 

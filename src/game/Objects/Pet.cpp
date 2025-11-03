@@ -396,8 +396,10 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petNumber, bool c
 
     if (owner->GetTypeId() == TYPEID_PLAYER)
     {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
         if (owner->IsMounted())
             m_enabled = false;
+#endif
 
         ((Player*)owner)->PetSpellInitialize();
         if (((Player*)owner)->GetGroup())
@@ -2622,6 +2624,7 @@ void Pet::SynchronizeLevelWithOwner()
 
 void Pet::SetEnabled(bool on)
 {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
     m_enabled = on;
     Unit* owner = GetOwner();
     if (!owner || owner->GetTypeId() != TYPEID_PLAYER || !GetCharmInfo())
@@ -2634,4 +2637,5 @@ void Pet::SetEnabled(bool on)
     data << uint8(0);
     data << uint8(m_enabled ? 0x0 : 0x8);
     ((Player*)owner)->GetSession()->SendPacket(&data);
+#endif
 }
