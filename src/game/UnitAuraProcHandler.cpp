@@ -1175,6 +1175,27 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
 
                     return SPELL_AURA_PROC_OK;
                 }
+                // Deep Freeze
+                case 34507:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (pVictim->IsImmuneToMechanic(MECHANIC_STUN))
+                    {
+                        basepoints[0] = dither(this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FROST) * 2.0f);
+                        target = pVictim;
+                        triggered_spell_id = 34509;
+                    }
+                    else
+                    {
+                        target = pVictim;
+                        triggered_spell_id = 34508;
+                    }
+                    break;
+                }
             }
             break;
         }
