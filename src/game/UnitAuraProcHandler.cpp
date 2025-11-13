@@ -1183,7 +1183,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
 
-                    if (pVictim->IsImmuneToMechanic(MECHANIC_STUN))
+                    if (pVictim->IsImmuneToSpell(sSpellMgr.GetSpellEntry(34508), false))
                     {
                         basepoints[0] = dither(this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FROST) * 2.0f);
                         target = pVictim;
