@@ -3789,7 +3789,7 @@ void Spell::EffectSummonPet(SpellEffectIndex effIdx)
                     {
                         uint32 spellId = itr->first;
                         ++itr;
-                        pet->unlearnSpell(spellId, false);
+                        pet->UnlearnSpell(spellId, false);
                     }
 
                     pet->SetTP(pet->GetLevel() * (pet->GetLoyaltyLevel() - 1));
@@ -3810,7 +3810,7 @@ void Spell::EffectSummonPet(SpellEffectIndex effIdx)
                     {
                         uint32 spellId = itr->first;
                         ++itr;
-                        pet->unlearnSpell(spellId, false);
+                        pet->UnlearnSpell(spellId, false);
                     }
 
                     pet->SetTP(pet->GetLevel() * pet->GetLoyaltyLevel());
