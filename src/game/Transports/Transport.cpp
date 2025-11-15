@@ -141,7 +141,7 @@ bool ShipTransport::TeleportTransport(uint32 newMapid, float x, float y, float z
                 Creature* creature = static_cast<Creature*>(passenger);
                 RemovePassenger(creature);
 
-                Player* pOwner = ::ToPlayer(creature->GetOwner());
+                Player* pOwner = creature->GetOwnerPlayer();
                 if (!pOwner || pOwner->GetTransport() != this)
                 {
                     if (creature->IsInCombat())

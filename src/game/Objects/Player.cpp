@@ -12339,7 +12339,7 @@ void Player::PrepareGossipMenu(WorldObject* pSource, uint32 menuId)
                         hasMenuItem = false;
                     break;
                 case GOSSIP_OPTION_UNLEARNPETSKILLS:
-                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->m_petSpells.size() <= 1 || pCreature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || pCreature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
+                    if (!GetPet() || GetPet()->GetPetType() != HUNTER_PET || GetPet()->m_petSpells.size() <= 1 || pCreature->GetCreatureInfo()->trainer_type != TRAINER_TYPE_PETS || pCreature->GetCreatureInfo()->trainer_class != CLASS_HUNTER)
                         hasMenuItem = false;
                     break;
                 case GOSSIP_OPTION_TAXIVENDOR:
@@ -21276,7 +21276,7 @@ void Player::UnsummonPetTemporaryIfAny()
     if (!pet)
         return;
 
-    if (!m_temporaryUnsummonedPetNumber && pet->isControlled() && !pet->isTemporarySummoned())
+    if (!m_temporaryUnsummonedPetNumber && pet->IsControlled() && !pet->IsTemporarySummoned())
         m_temporaryUnsummonedPetNumber = pet->GetCharmInfo()->GetPetNumber();
 
     pet->Unsummon(PET_SAVE_AS_CURRENT, this);

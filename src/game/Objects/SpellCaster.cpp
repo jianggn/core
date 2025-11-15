@@ -1122,7 +1122,7 @@ float SpellCaster::MeleeDamageBonusDone(Unit const* pVictim, float pdamage, Weap
     }
 
     // Pet happiness increases damage of Hunter pet melee spells
-    if (IsPet() && ((Pet*)this)->getPetType() == HUNTER_PET)
+    if (IsPet() && ((Pet*)this)->GetPetType() == HUNTER_PET)
     {
         if (Pet* pet = ((Pet*)this))
         {
@@ -1407,7 +1407,7 @@ float SpellCaster::SpellDamageBonusDone(Unit const* pVictim, SpellEntry const* s
     }
 
     // Pet happiness increases damage of Hunter pet spells (e.g. Lightning Breath)
-    if (IsPet() && ((Pet*)this)->getPetType() == HUNTER_PET)
+    if (IsPet() && ((Pet*)this)->GetPetType() == HUNTER_PET)
     {
         if (Pet* pet = ((Pet*)this))
         {

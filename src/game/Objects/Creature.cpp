@@ -1691,7 +1691,7 @@ void Creature::SetInitCreaturePowerType()
 {
     Pet* pPet = ToPet();
 
-    if (pPet && pPet->getPetType() == HUNTER_PET)
+    if (pPet && pPet->GetPetType() == HUNTER_PET)
         return;
 
     if (GetClassLevelStats()->mana > 0)
@@ -3528,6 +3528,7 @@ void Creature::GetHomePosition(float &x, float &y, float &z, float &o)
     }
     GetRespawnCoord(x, y, z, &o);
 }
+
 void Creature::SetHomePosition(float x, float y, float z, float o)
 {
     m_homePosition.x = x;

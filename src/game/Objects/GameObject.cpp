@@ -424,7 +424,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                                 caster->FinishSpell(CURRENT_CHANNELED_SPELL);
 
                                 WorldPacket data(SMSG_FISH_NOT_HOOKED, 0);
-                                ((Player*)caster)->GetSession()->SendPacket(&data);
+                                caster->GetSession()->SendPacket(&data);
                             }
                             // can be deleted
                             m_lootState = GO_JUST_DEACTIVATED;

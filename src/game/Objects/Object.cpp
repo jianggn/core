@@ -3218,7 +3218,7 @@ bool WorldObject::IsLikePlayer() const
         return true;
 
     if (Pet const* pPet = ToPet())
-        return pPet->isControlled() && pPet->GetOwnerGuid().IsPlayer();
+        return pPet->IsControlled() && pPet->GetOwnerGuid().IsPlayer();
 
     return false;
 }
