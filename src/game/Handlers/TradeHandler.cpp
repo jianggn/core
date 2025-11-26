@@ -192,22 +192,9 @@ void WorldSession::MoveItems(Item* myItems[], Item* hisItems[])
                 // If saving is disabled for player who receives the item, it must be deleted from db, or it enables duping.
                 if (_player->IsSavingDisabled())
                 {
-                    if (_player->IsBot())
-                    {
-                        std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", _player->GetObjectGuid(), _player->GetName()));
-                        if (result)
-                        {
-                            sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Item guid %u traded to character %u with disabled saving. Deleting from DB.", hisItems[i]->GetGUIDLow(), _player->GetGUIDLow());
-                            hisItems[i]->DeleteFromInventoryDB();
-                            hisItems[i]->DeleteAllFromDB();
-                        }
-                    }
-                    else
-                    {
-                        sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Item guid %u traded to character %u with disabled saving. Deleting from DB.", hisItems[i]->GetGUIDLow(), _player->GetGUIDLow());
-                        hisItems[i]->DeleteFromInventoryDB();
-                        hisItems[i]->DeleteAllFromDB();
-                    }
+                    sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Item guid %u traded to character %u with disabled saving. Deleting from DB.", hisItems[i]->GetGUIDLow(), _player->GetGUIDLow());
+                    hisItems[i]->DeleteFromInventoryDB();
+                    hisItems[i]->DeleteAllFromDB();
                 }
             }
         }
