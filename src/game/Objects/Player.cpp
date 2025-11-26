@@ -11824,10 +11824,10 @@ void Player::SendEquipError(InventoryResult msg, Item const* pItem, Item const* 
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendOpenContainer() const
+void Player::SendOpenContainer(ObjectGuid itemGuid) const
 {
     WorldPacket data(SMSG_OPEN_CONTAINER, 8);   // opens the main bag in the UI
-    data << GetObjectGuid();
+    data << itemGuid;
     GetSession()->SendPacket(&data);
 }
 

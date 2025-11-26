@@ -5357,6 +5357,8 @@ void Unit::SetPet(Pet* pet)
     SetPetGuid(pet ? pet->GetObjectGuid() : ObjectGuid());
     if (pet)
         pet->SetWorldMask(GetWorldMask());
+    if (IsPlayer())
+        ApplyModByteFlag(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_FLAGS, PLAYER_FIELD_BYTE_CONTROLLING_PET, pet != nullptr);
 }
 
 void Unit::SetCharm(Unit* pet)
