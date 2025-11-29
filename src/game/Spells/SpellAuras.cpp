@@ -1956,6 +1956,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 {
                     case 34373: // Smoke Bomb
                     {
+                        if (Unit* caster = GetCaster())
+                            caster->CastSpell(caster, 34510, true);
                         if (target)
                         {
                             m_isPeriodic            = true;
@@ -7789,6 +7791,12 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
         {
             if (mode == AURA_REMOVE_BY_EXPIRE)
                 GetTarget()->CastSpell(GetTarget(), 24004, true);
+            break;
+        }
+        case 34373:
+        {
+            if (Player* player = GetTarget()->ToPlayer())
+                player->SetDrunkValue(0, 0);
             break;
         }
         case 34499:

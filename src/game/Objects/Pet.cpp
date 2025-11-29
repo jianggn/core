@@ -2285,6 +2285,9 @@ void Pet::InitPetCreateSpells()
 
             AddSpell(petspellid);
 
+            if (petspellid == 34115)
+                AddSpell(34511);
+
             SkillLineAbilityMapBounds bounds = sSpellMgr.GetSkillLineAbilityMapBoundsBySpellId(learn_spellproto->EffectTriggerSpell[0]);
 
             for (SkillLineAbilityMap::const_iterator _spell_idx = bounds.first; _spell_idx != bounds.second; ++_spell_idx)

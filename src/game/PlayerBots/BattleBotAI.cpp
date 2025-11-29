@@ -3250,6 +3250,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Warrior()
             pPet->ToggleAutocast(34118, true);
             pPet->ToggleAutocast(34119, true);
             pPet->ToggleAutocast(34120, true);
+            pPet->ToggleAutocast(34511, true);
             if (!pPet->GetVictim())
             {
                 pPet->GetCharmInfo()->SetIsCommandAttack(true);
@@ -3282,6 +3283,7 @@ void BattleBotAI::UpdateInCombatAI_Warrior()
                 pPet->ToggleAutocast(34118, true);
                 pPet->ToggleAutocast(34119, true);
                 pPet->ToggleAutocast(34120, true);
+                pPet->ToggleAutocast(34511, true);
                 if (!pPet->GetVictim())
                 {
                     pPet->GetCharmInfo()->SetIsCommandAttack(true);
