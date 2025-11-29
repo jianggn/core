@@ -1617,7 +1617,7 @@ enum Maps
     MAP_BLACKFATHOM_DEEPS   = 48,
     MAP_ULDAMAN             = 70,
     MAP_GNOMEREGAN          = 90,
-    MAP_SUNKEN_TEMLE        = 109,
+    MAP_SUNKEN_TEMPLE       = 109,
     MAP_RAZORFEN_DOWNS      = 129,
     MAP_EMERALD_DREAM       = 169,
     MAP_SCARLET_MONASTERY   = 189,
