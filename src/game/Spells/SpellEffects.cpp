@@ -1041,6 +1041,15 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.35f), {}, {}, true);
                     return;
                 }
+                case 34512:
+                {
+                    if (!m_casterUnit)
+                        return;
+                    // Ji Feng Bu
+                    m_casterUnit->CastSpell(m_casterUnit, 34107, true);
+                    m_casterUnit->CastSpell(m_casterUnit, 34111, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
