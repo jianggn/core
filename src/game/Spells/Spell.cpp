@@ -8792,6 +8792,18 @@ void Spell::OnSpellLaunch()
     if (!m_casterUnit || !m_casterUnit->IsInWorld())
         return;
 
+    if (GameObject* go = m_targets.getGOTarget())
+    {
+        for (auto const& effect : m_spellInfo->Effect)
+        {
+            if (effect == SPELL_EFFECT_OPEN_LOCK || effect == SPELL_EFFECT_OPEN_LOCK_ITEM)
+            {
+                go->DoAggroWhenOpening(m_casterUnit);
+                break;
+            }
+        }
+    }
+
     unitTarget = m_targets.getUnitTarget();
 
     // Charge handled here instead of in effect handler
