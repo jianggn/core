@@ -1052,6 +1052,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                         return SPELL_AURA_PROC_FAILED;
                     break;
                 }
+                // priest: impenetrable thorns
+                case 34513:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!this->HasAura(6788))
+                        return SPELL_AURA_PROC_FAILED;
+                    // reflect damage amount
+                    basepoints[0] = dither(amount * 0.25f);
+                    target = pVictim;
+                    triggered_spell_id = 34514;
+                    break;                               // no hidden cooldown
+                }
                 // Obsidian Armor (Justice Bearer`s Pauldrons shoulder)
                 case 27539:
                 {
