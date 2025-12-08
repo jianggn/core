@@ -7715,6 +7715,24 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
         {
             return;
         }
+        case SPELLFAMILY_WARRIOR:
+        {
+            switch (GetId())
+            {
+                // Bladestorm - immunity
+                case 34476:
+                {
+                    spellId1 = 34516;
+                    spellId2 = 34517;
+                    spellId3 = 34518;
+                    spellId4 = 34519;
+                    break;
+                }
+                default:
+                    return;
+            }
+            break;
+        }
         case SPELLFAMILY_HUNTER:
         {
             switch (GetId())

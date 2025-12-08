@@ -5819,7 +5819,7 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 100:
             case 6178:
             case 11578:
-                if (m_casterUnit->IsInCombat() && !m_casterUnit->HasAura(34476))
+                if (m_casterUnit->IsInCombat() && !m_casterUnit->HasAura(34327))
                     return SPELL_FAILED_AFFECTING_COMBAT;
                 break;
             // Frost Trap
