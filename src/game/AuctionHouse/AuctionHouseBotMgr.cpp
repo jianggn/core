@@ -113,9 +113,9 @@ void AuctionHouseBotMgr::Update(bool force /* = false */)
         AddItem(item, auctionHouse);
         auctions++;
         updateCount++;
-        if (m_config->enable && !force && updateCount >= 100)
+        if (m_config->enable && !force && updateCount >= 50)
         {
-            break; // Limit to 100 items per update to avoid performance issues
+            break; // Limit to 50 items per update to avoid performance issues
         }
     }
 }
