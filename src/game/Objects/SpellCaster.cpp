@@ -555,9 +555,9 @@ int32 SpellCaster::MagicSpellHitChance(Unit const* pVictim, SpellEntry const* sp
 
     // Miss chance due to level difference is capped according to tests on classic.
     // Test: lvl 1 player casts Fireball on a lvl 60 player in a duel
-    // Result: 60 hits 186 resists, hit ratio of 24%
-    if (modHitChance < 24)
-        modHitChance = 24;
+    // Result: 83 hits 284 resists, hit ratio of 22%
+    if (modHitChance < 22)
+        modHitChance = 22;
 
     // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
     if (Unit* pUnit = ToUnit())
