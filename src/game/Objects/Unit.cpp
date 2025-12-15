@@ -887,22 +887,25 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         else
             pVictim->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_DAMAGE_CANCELS, spellProto ? spellProto->Id : 0, true, SKIP_STEALTH);
 
-        if (damagetype != NODAMAGE && damagetype != DOT && damage && pVictim->IsPlayer())
+        if (damagetype != NODAMAGE && damagetype != DOT && damage)
         {
-            for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
+            if (pVictim->IsPlayer())
             {
-                // skip channeled spell (processed differently below)
-                if (i == CURRENT_CHANNELED_SPELL)
-                    continue;
-
-                if (Spell* spell = pVictim->GetCurrentSpell(CurrentSpellTypes(i)))
+                for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
                 {
-                    if (spell->getState() == SPELL_STATE_PREPARING)
+                    // skip channeled spell (processed differently below)
+                    if (i == CURRENT_CHANNELED_SPELL)
+                        continue;
+    
+                    if (Spell* spell = pVictim->GetCurrentSpell(CurrentSpellTypes(i)))
                     {
-                        if (spell->m_spellInfo->HasSpellInterruptFlag(SPELL_INTERRUPT_FLAG_DAMAGE_CANCELS))
-                            pVictim->InterruptSpell(CurrentSpellTypes(i));
-                        else
-                            spell->Delayed();
+                        if (spell->getState() == SPELL_STATE_PREPARING)
+                        {
+                            if (spell->m_spellInfo->HasSpellInterruptFlag(SPELL_INTERRUPT_FLAG_DAMAGE_CANCELS))
+                                pVictim->InterruptSpell(CurrentSpellTypes(i));
+                            else
+                                spell->Delayed();
+                        }
                     }
                 }
             }
@@ -913,7 +916,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                 {
                     if (spell->m_spellInfo->HasChannelInterruptFlag(AURA_INTERRUPT_DAMAGE_CHANNEL_DURATION))
                     {
-                        if (pVictim != this)                //don't shorten the duration of channeling if you damage yourself
+                        if (pVictim != this && pVictim->IsPlayer())                //don't shorten the duration of channeling if you damage yourself
                             spell->DelayedChannel();
                     }
                     else if (spell->m_spellInfo->HasChannelInterruptFlag(AURA_INTERRUPT_DAMAGE_CANCELS))
@@ -922,7 +925,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                         pVictim->InterruptSpell(CURRENT_CHANNELED_SPELL);
                     }
                 }
-                else if (spell->getState() == SPELL_STATE_DELAYED)
+                else if (spell->getState() == SPELL_STATE_DELAYED && pVictim->IsPlayer())
                     // break channeled spell in delayed state on damage
                 {
                     sLog.Out(LOG_BASIC, LOG_LVL_DETAIL, "Spell %u canceled at damage!", spell->m_spellInfo->Id);
