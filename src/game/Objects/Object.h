@@ -585,20 +585,14 @@ class WorldObject : public Object
         template <class T >
         bool IsWithinDist2d(T const& position, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return IsWithinDist2d(position.x, position.y, dist2compare, distcalc); }
         bool IsWithinDist2d(float x, float y, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
-        bool _IsWithinDist(WorldObject const* obj, float const dist2compare, bool const is3D, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
-
-        // use only if you will sure about placing both object at same map
-        bool IsWithinDist(WorldObject const* obj, float const& dist2compare, bool const is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const
-        {
-            return obj && _IsWithinDist(obj, dist2compare, is3D, distcalc);
-        }
+        bool IsWithinDist(WorldObject const* obj, float const dist2compare, bool const is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
         bool IsWithinDistInMap(WorldObject const* obj, float const& dist2compare, bool const is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const
         {
-            return obj && IsInMap(obj) && _IsWithinDist(obj, dist2compare, is3D, distcalc);
+            return IsInMap(obj) && IsWithinDist(obj, dist2compare, is3D, distcalc);
         }
         bool IsWithinCombatDistInMap(WorldObject const* obj, float const& dist2compare) const
         {
-            return obj && IsInMap(obj) && (GetCombatDistance(obj) <= dist2compare);
+            return IsInMap(obj) && (GetCombatDistance(obj) <= dist2compare);
         }
         bool IsWithinLOS(float targetX, float targetY, float targetZ, bool checkDynLos = true, float targetHeight = 2.f) const
         {
@@ -622,8 +616,9 @@ class WorldObject : public Object
         static float GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability);
         float GetLeewayBonusRadius() const;
 
-        // Gestion des positions
+        // Position Management
         void GetRelativePositions(float fForwardBackward, float fLeftRight, float fUpDown, float &x, float &y, float &z) const;
+        void GetRelativePositions(float fForwardBackward, float fLeftRight, float &x, float &y) const;
         void GetInCirclePositions(float dist, uint32 curr, uint32 total, float &x, float &y, float &z, float &o) const;
         void GetNearRandomPositions(float distance, float &x, float &y, float &z) const;
         void GetFirstCollision(float dist, float angle, float &x, float &y, float &z) const;
@@ -757,6 +752,7 @@ class WorldObject : public Object
         Creature* FindRandomCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
         GameObject* FindNearestGameObject(uint32 entry, float range) const;
         GameObject* FindRandomGameObject(uint32 entry, float range) const;
+        GameObject* FindNearbyClosedDoor(float range) const;
         Player* FindNearestPlayer(float range) const;
         Player* FindNearestHostilePlayer(float range) const;
         Player* FindNearestFriendlyPlayer(float range) const;
