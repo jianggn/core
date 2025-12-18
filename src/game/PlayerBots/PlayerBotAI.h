@@ -43,7 +43,6 @@ class PlayerBotAI: public PlayerAI
         virtual void OnPlayerLogin() {}
         virtual void BeforeAddToMap(Player* player) {} // me=nullptr at call
         // Helpers
-        void GenerateBotSkin(uint32 race, uint8& gender, uint8& face, uint8& skin, uint8& hairStyle, uint8& hairColor, uint8& facialHair);
         bool SpawnNewPlayer(WorldSession* sess, uint8 classId, uint32 raceId, uint32 mapId, uint32 instanceId, float dx, float dy, float dz, float o, Player* pClone = nullptr);
         PlayerBotEntry* botEntry;
 };
