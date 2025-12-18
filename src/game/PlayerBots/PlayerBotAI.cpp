@@ -75,13 +75,6 @@ enum
 
 bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, Player* pClone)
 {
-    uint8 gender = 0;
-    uint8 skin = 0;
-    uint8 face = 0;
-    uint8 hairStyle = 0;
-    uint8 hairColor = 0;
-    uint8 facialHair = 0;
-
     ASSERT(botEntry);
     std::string name = sObjectMgr.GenerateFreePlayerName();
     normalizePlayerName(name);
