@@ -97,7 +97,7 @@ bool PlayerBotAI::SpawnNewPlayer(WorldSession* sess, uint8 class_, uint32 race_,
     }
     else
     {
-        uint8 gender = urand(0, 1);
+        gender = urand(0, 1);
         Player::SelectRandomAppearance(race_, gender, hairStyle, hairColor, face, facialHair, skin);
     }
     
