@@ -6447,7 +6447,8 @@ void Unit::SetInCombatWithAggressor(Unit* pAggressor, bool touchOnly/* = false*/
 
     if (!touchOnly)
     {
-        SetInCombatWith(pAggressor);
+        // in classic out of combat player hit by aoe from creature gets put in combat for 5 seconds
+        SetInCombatState(UsesPvPCombatTimer() ? UNIT_PVP_COMBAT_TIMER : 0, pAggressor);
         if (Creature* pCreature = ToCreature())
             pCreature->UpdateLeashExtensionTime();
 
