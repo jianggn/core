@@ -1062,7 +1062,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (!this->HasAura(6788))
                         return SPELL_AURA_PROC_FAILED;
                     // reflect damage amount
-                    basepoints[0] = dither(amount * 0.25f + this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW) * 1.0f);
+                    basepoints[0] = dither(amount * 0.25f + this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW) * 0.25f);
                     target = pVictim;
                     triggered_spell_id = 34514;
                     break;                               // no hidden cooldown
