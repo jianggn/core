@@ -737,7 +737,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     uint32 health = pVictim->GetHealth();
     // duel ends when player has 1 or less hp
     bool duel_hasEnded = false;
-    if (pVictim->IsPlayer() && ((Player*)pVictim)->m_duel && damage >= (health - 1))
+    if (pVictim->IsPlayer() && ((Player*)pVictim)->m_duel && (damage + 1) >= health)
     {
         // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
         if (((Player*)pVictim)->m_duel->opponent == this ||
@@ -748,7 +748,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             || pVictim == this && reflected
 #endif
             )
-            damage = health - 1;
+            damage = health ? health - 1 : 0;
 
         duel_hasEnded = true;
     }
@@ -1625,6 +1625,8 @@ void Unit::DealMeleeDamage(CalcDamageInfo const* damageInfo, bool durabilityLoss
             else if (offtime > percent60)
             {
                 offtime -= 2.0f * percent20;
+                if (offtime < 0.0f)
+                    offtime = 0.0f;
                 pVictim->SetAttackTimer(OFF_ATTACK, uint32(offtime));
             }
         }
@@ -1637,6 +1639,8 @@ void Unit::DealMeleeDamage(CalcDamageInfo const* damageInfo, bool durabilityLoss
             else if (basetime > percent60)
             {
                 basetime -= 2.0f * percent20;
+                if (basetime < 0.0f)
+                    basetime = 0.0f;
                 pVictim->SetAttackTimer(BASE_ATTACK, uint32(basetime));
             }
         }
@@ -5964,19 +5968,22 @@ bool Unit::IsImmuneToSpell(SpellEntry const* spellInfo, bool /*castOnSelf*/) con
             }
         }
 
-        uint32 mask = 1 << (mechanic - 1);
-        AuraList const& immuneAuraApply = GetAurasByType(SPELL_AURA_MECHANIC_IMMUNITY_MASK);
-        for (const auto& iter : immuneAuraApply)
+        if (mechanic != MECHANIC_NONE)
         {
-            if (iter->GetModifier()->m_miscvalue & mask)
+            uint32 mask = 1 << (mechanic - 1);
+            AuraList const& immuneAuraApply = GetAurasByType(SPELL_AURA_MECHANIC_IMMUNITY_MASK);
+            for (const auto& iter : immuneAuraApply)
             {
-                SpellEntry const* pImmunitySpell = iter->GetSpellProto();
+                if (iter->GetModifier()->m_miscvalue & mask)
+                {
+                    SpellEntry const* pImmunitySpell = iter->GetSpellProto();
 
-                if ((pImmunitySpell && pImmunitySpell->IsPositiveSpell()) != spellInfo->IsPositiveSpell())
-                    return true;
+                    if ((pImmunitySpell && pImmunitySpell->IsPositiveSpell()) != spellInfo->IsPositiveSpell())
+                        return true;
 
-                if (pImmunitySpell && pImmunitySpell->HasAttribute(SPELL_ATTR_EX_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS))
-                    return true;
+                    if (pImmunitySpell && pImmunitySpell->HasAttribute(SPELL_ATTR_EX_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS))
+                        return true;
+                }
             }
         }
     }
@@ -6039,18 +6046,21 @@ bool Unit::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex i
             }
         }
 
-        AuraList const& immuneAuraApply = GetAurasByType(SPELL_AURA_MECHANIC_IMMUNITY_MASK);
-        for (const auto& iter : immuneAuraApply)
+        if (mechanic != MECHANIC_NONE)
         {
-            if (iter->GetModifier()->m_miscvalue & (1 << (mechanic - 1)))
+            AuraList const& immuneAuraApply = GetAurasByType(SPELL_AURA_MECHANIC_IMMUNITY_MASK);
+            for (const auto& iter : immuneAuraApply)
             {
-                SpellEntry const* pImmunitySpell = iter->GetSpellProto();
+                if (iter->GetModifier()->m_miscvalue & (1 << (mechanic - 1)))
+                {
+                    SpellEntry const* pImmunitySpell = iter->GetSpellProto();
 
-                if ((pImmunitySpell && pImmunitySpell->IsPositiveSpell()) != spellInfo->IsPositiveEffect(index))
-                    return true;
+                    if ((pImmunitySpell && pImmunitySpell->IsPositiveSpell()) != spellInfo->IsPositiveEffect(index))
+                        return true;
 
-                if (pImmunitySpell && pImmunitySpell->HasAttribute(SPELL_ATTR_EX_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS))
-                    return true;
+                    if (pImmunitySpell && pImmunitySpell->HasAttribute(SPELL_ATTR_EX_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS))
+                        return true;
+                }
             }
         }
     }
@@ -11429,7 +11439,7 @@ void Unit::RestoreMovement()
 
 void Unit::SetTransformScale(float scale)
 {
-    if (!scale)
+    if (!scale || !m_nativeScaleOverride)
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to set transform scale to 0!");
         return;
