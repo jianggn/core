@@ -6791,16 +6791,13 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_AURA_MOD_DISARM:
             {
-                if (Creature* pTarget = ToCreature(m_targets.getUnitTarget()))
+                // World of Warcraft Client Patch 1.5.0 (2005-06-07)
+                // - Riposte - Fixed a bug where the ability was not usable against a disarmed or unarmed target.
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
+                if (m_spellInfo->GetEffectsCount() == 1)
+#endif
                 {
-                    if (!pTarget->CanUseEquippedWeapon(BASE_ATTACK) ||
-                        !pTarget->GetVirtualItemDisplayId(BASE_ATTACK) ||
-                        pTarget->GetVirtualItemClass(BASE_ATTACK) != ITEM_CLASS_WEAPON)
-                        return SPELL_FAILED_TARGET_NO_WEAPONS;
-                }
-                else if (Player* pTarget = ToPlayer(m_targets.getUnitTarget()))
-                {
-                    if (!pTarget->GetWeaponForAttack(BASE_ATTACK, true, true))
+                    if (m_targets.getUnitTarget() && !m_targets.getUnitTarget()->CanBeDisarmed())
                         return SPELL_FAILED_TARGET_NO_WEAPONS;
                 }
                 break;
@@ -7393,8 +7390,6 @@ SpellCastResult Spell::CheckItems()
             }
         }
     }
-
-    
 
     Player* pCaster = m_caster->ToPlayer();
     if (!pCaster)

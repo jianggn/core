@@ -4192,8 +4192,13 @@ void Creature::LeaveCreatureGroup()
 
 bool Creature::HasWeapon() const
 {
-    uint8 itemClass = GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (0 * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_CLASS);
-    return itemClass == ITEM_CLASS_WEAPON;
+    return GetVirtualItemClass(BASE_ATTACK) == ITEM_CLASS_WEAPON;
+}
+
+bool Creature::CanBeDisarmed() const
+{
+    return CanUseEquippedWeapon(BASE_ATTACK) &&
+           GetVirtualItemClass(BASE_ATTACK) == ITEM_CLASS_WEAPON;
 }
 
 void Creature::StartCooldownForSummoner()
