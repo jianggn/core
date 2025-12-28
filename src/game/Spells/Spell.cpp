@@ -6636,8 +6636,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_caster->IsPlayer())
                     return SPELL_FAILED_BAD_TARGETS;
 
-                // creature 200017 can not be possessed
-                if (m_targets.getUnitTarget()->GetEntry() == 200017)
+                // creature 200017/200149 can not be possessed
+                if (m_targets.getUnitTarget()->GetEntry() == 200017 || m_targets.getUnitTarget()->GetEntry() == 200149)
                     return SPELL_FAILED_BAD_TARGETS;
                 // no break
             }
@@ -6646,8 +6646,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_casterUnit)
                     return SPELL_FAILED_BAD_TARGETS;
 
-                // creature 200017 can not be charmed
-                if (m_targets.getUnitTarget()->GetEntry() == 200017)
+                // creature 200017/200149 can not be charmed
+                if (m_targets.getUnitTarget()->GetEntry() == 200017 || m_targets.getUnitTarget()->GetEntry() == 200149)
                     return SPELL_FAILED_BAD_TARGETS;
 
                 if (!IsScriptTarget(m_spellInfo->EffectImplicitTargetA[i]))

@@ -474,7 +474,8 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
                          pThreatSpell->Id == 34475 ||
                          pThreatSpell->Id == 34480 ||
                          pThreatSpell->Id == 34509 ||
-                         pThreatSpell->Id == 34514))
+                         pThreatSpell->Id == 34514 ||
+                         pThreatSpell->Id == 34522))
         return;
 
     // Improved Imp rank 3 - Firebolt no threat
