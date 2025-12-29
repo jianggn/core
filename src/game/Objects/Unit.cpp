@@ -11202,7 +11202,7 @@ void Unit::SendSpellGo(Unit* target, uint32 spellId) const
     SendMessageToSet(&data, true);
 }
 
-void Unit::SendPlaySpellVisual(uint32 id) const
+void Unit::SendPlaySpellVisualKit(uint32 id) const
 {
     WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 8 + 4);
     data << uint64(GetGUID());
