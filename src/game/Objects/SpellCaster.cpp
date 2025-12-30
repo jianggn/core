@@ -1019,7 +1019,7 @@ void SpellCaster::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, float da
         if (Unit* pUnit = ToUnit())
         {
             // physical damage => armor
-            if (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL && !(spellInfo->Custom & SPELL_CUSTOM_IGNORE_ARMOR || (pUnit->HasAura(14195) && spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_EVISCERATE>())))
+            if (damageSchoolMask & SPELL_SCHOOL_MASK_NORMAL && !(spellInfo->Custom & SPELL_CUSTOM_IGNORE_ARMOR || (pUnit->HasAura(14195) && (spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_EVISCERATE>() || spellInfo->id == 34028))))
                 damage = CalcArmorReducedDamage(pVictim, damage);
         }
         else
