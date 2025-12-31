@@ -13596,7 +13596,7 @@ void Player::RewardQuest(Quest const* pQuest, uint32 reward, WorldObject* questE
     }
 
     // daily quest recall Player::SaveToDB() at quest reward
-    if (quest_id == 10004 || quest_id == 10005 || quest_id == 10006)
+    if (questId == 10004 || questId == 10005 || questId == 10006)
         SaveToDB();
 }
 
@@ -13646,13 +13646,13 @@ uint32 getTodayStartTimestamp()
 
 bool Player::SatisfyQuestDaily(Quest const* qInfo, bool msg) const
 {
-    uint32 quest_id = qInfo->GetQuestId();
-    if (!(quest_id == 10004 || quest_id == 10005 || quest_id == 10006))
+    uint32 questId = qInfo->GetQuestId();
+    if (!(questId == 10004 || questId == 10005 || questId == 10006))
         return true;
 
     uint32 todayStart = getTodayStartTimestamp();
     uint32 todayEnd = todayStart + 86399;
-    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT `quest` FROM `character_queststatus` WHERE `guid`='%u' and `quest`='%u' and `timer`>='%u' and `timer`<='%u' and `status`=0 and `rewarded`=1 and `mob_count1`=1 and `mob_count2`=1 and `mob_count3`=1", GetGUIDLow(), quest_id, todayStart, todayEnd);
+    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT `quest` FROM `character_queststatus` WHERE `guid`='%u' and `quest`='%u' and `timer`>='%u' and `timer`<='%u' and `status`=0 and `rewarded`=1 and `mob_count1`=1 and `mob_count2`=1 and `mob_count3`=1", GetGUIDLow(), questId, todayStart, todayEnd);
     if (result)
     {
         uint32 id = result->Fetch()[0].GetUInt32();
