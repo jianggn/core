@@ -1648,10 +1648,10 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
             CreatureClassLevelStats const* pCLS = GetClassLevelStats();
             if (owner->IsPlayer() && creatureId == 200149)
             {
-                SetCreateHealth((pCLS->health * cinfo->health_multiplier + owner->GetMaxHealth() * 0.3f) * healthMod);
+                SetCreateHealth((pCLS->health * cinfo->health_multiplier + owner->GetMaxHealth() * 0.2f) * healthMod);
                 SetCreateMana(pCLS->mana * cinfo->mana_multiplier);
-                SetCreateResistance(SPELL_SCHOOL_NORMAL, (pCLS->armor * cinfo->armor_multiplier + owner->GetArmor() * 0.2f));
-                float const meleeDamageAverage = (pCLS->melee_damage * cinfo->damage_multiplier + owner->GetTotalAttackPowerValue(BASE_ATTACK) / 28) * damageMod;
+                SetCreateResistance(SPELL_SCHOOL_NORMAL, (pCLS->armor * cinfo->armor_multiplier + owner->GetArmor() * 0.1f));
+                float const meleeDamageAverage = (pCLS->melee_damage * cinfo->damage_multiplier + owner->GetTotalAttackPowerValue(BASE_ATTACK) / 42) * damageMod;
                 float const meleeDamageVariance = meleeDamageAverage * cinfo->damage_variance;
                 SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, meleeDamageAverage - meleeDamageVariance);
                 SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, meleeDamageAverage + meleeDamageVariance);
