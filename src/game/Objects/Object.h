@@ -143,7 +143,7 @@ class Object
 
         uint8 GetTypeId() const { return m_objectTypeId; }
         uint8 GetTypeMask() const { return m_objectType; }
-        bool isType(TypeMask mask) const { return (mask & m_objectType); }
+        bool IsType(TypeMask mask) const { return (mask & m_objectType); }
 
         virtual void BuildCreateUpdateBlockForPlayer(UpdateData& data, Player* target) const;
         void SendCreateUpdateToPlayer(Player* player);
@@ -367,7 +367,7 @@ class Object
         bool IsDeleted() const { return m_deleted; }
 
         // Convertions
-        inline bool IsWorldObject() const { return isType(TYPEMASK_WORLDOBJECT); }
+        inline bool IsWorldObject() const { return IsType(TYPEMASK_WORLDOBJECT); }
         WorldObject* ToWorldObject();
         WorldObject const* ToWorldObject() const;
 
@@ -379,7 +379,7 @@ class Object
         Creature* ToCreature();
         Creature const* ToCreature() const;
 
-        inline bool IsUnit() const { return isType(TYPEMASK_UNIT); }
+        inline bool IsUnit() const { return IsType(TYPEMASK_UNIT); }
         Unit* ToUnit();
         Unit const* ToUnit() const;
 
@@ -720,8 +720,7 @@ class WorldObject : public Object
         virtual void UpdateVisibilityAndView();             // update visibility for object and object for all around
 
         // main visibility check function in normal case (ignore grey zone distance check)
-        bool isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewpoint, bool inVisibleList = false) const;
-        bool isVisibleFor(Player const* u, WorldObject const* viewPoint) const;
+        bool IsWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewpoint, bool inVisibleList = false) const;
 
         // low level function for visibility change code, must be define in all main world object subclasses
         virtual bool IsVisibleForInState(WorldObject const* pDetector, WorldObject const* viewPoint, bool inVisibleList) const = 0;
@@ -764,7 +763,7 @@ class WorldObject : public Object
         uint32 DespawnNearCreaturesByEntry(uint32 entry, float range);
         uint32 RespawnNearCreaturesByEntry(uint32 entry, float range);
 
-        bool isActiveObject() const { return m_isActiveObject || m_viewPoint.hasViewers(); }
+        bool IsActiveObject() const { return m_isActiveObject || m_viewPoint.hasViewers(); }
         void SetActiveObjectState(bool on);
 
         ViewPoint& GetViewPoint() { return m_viewPoint; }

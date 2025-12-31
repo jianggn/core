@@ -601,20 +601,20 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
     if (updatetype == UPDATETYPE_CREATE_OBJECT)
 #endif
     {
-        if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
+        if (IsType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
         {
             if (((GameObject*)this)->ActivateToQuest(target) || target->IsGameMaster())
                 IsActivateToQuest = true;
 
             updateMask->SetBit(GAMEOBJECT_DYN_FLAGS);
         }
-        else if (isType(TYPEMASK_UNIT) && target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
+        else if (IsType(TYPEMASK_UNIT) && target->HasCheatOption(PLAYER_CHEAT_DEBUG_TARGET_INFO))
         {
             // Force include dynamic flags to make special info visible.
             updateMask->SetBit(UNIT_DYNAMIC_FLAGS);
         }
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-        else if (isType(TYPEMASK_ITEM))
+        else if (IsType(TYPEMASK_ITEM))
         {
             // Force include flags field in create object packet,
             // because the static flags need to be sent in that field.
@@ -624,7 +624,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
     }
     else                                                    // case UPDATETYPE_VALUES
     {
-        if (isType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
+        if (IsType(TYPEMASK_GAMEOBJECT) && !((GameObject*)this)->IsTransport())
         {
             if (((GameObject*)this)->ActivateToQuest(target) || target->IsGameMaster())
                 IsActivateToQuest = true;
@@ -635,7 +635,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
 #endif
         }
     }
-    if (isType(TYPEMASK_GAMEOBJECT))
+    if (IsType(TYPEMASK_GAMEOBJECT))
     {
         std::unique_lock<std::mutex> lock(target->m_visibleGobjsQuestAct_lock);
         target->m_visibleGobjQuestActivated[GetObjectGuid()] = IsActivateToQuest;
@@ -647,7 +647,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
     data->append(updateMask->GetMask(), updateMask->GetLength());
 
     // 2 specialized loops for speed optimization in non-unit case
-    if (isType(TYPEMASK_UNIT))                              // unit (creature/player) case
+    if (IsType(TYPEMASK_UNIT))                              // unit (creature/player) case
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -859,7 +859,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
             }
         }
     }
-    else if (isType(TYPEMASK_GAMEOBJECT))                   // gameobject case
+    else if (IsType(TYPEMASK_GAMEOBJECT))                   // gameobject case
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -893,7 +893,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
             }
         }
     }
-    else if (isType(TYPEMASK_CORPSE))
+    else if (IsType(TYPEMASK_CORPSE))
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -920,7 +920,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, UpdateMask* u
         }
     }
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_6_1
-    else if (isType(TYPEMASK_ITEM))
+    else if (IsType(TYPEMASK_ITEM))
     {
         for (uint16 index = 0; index < m_valuesCount; ++index)
         {
@@ -2244,7 +2244,7 @@ void WorldObject::SendObjectDeSpawnAnim() const
     SendObjectMessageToSet(&data, true);
 }
 
-bool WorldObject::isWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewPoint, bool inVisibleList) const
+bool WorldObject::IsWithinVisibilityDistanceOf(Unit const* viewer, WorldObject const* viewPoint, bool inVisibleList) const
 {
     if (viewer->IsTaxiFlying())
     {
@@ -2820,7 +2820,7 @@ struct WorldObjectChangeAccumulator
     {
         // send self fields changes in another way, otherwise
         // with new camera system when player's camera too far from player, camera wouldn't receive packets and changes from player
-        if (i_object.isType(TYPEMASK_PLAYER))
+        if (i_object.IsType(TYPEMASK_PLAYER))
             i_object.BuildUpdateDataForPlayer((Player*)&i_object, i_updateDatas);
     }
 
@@ -2920,7 +2920,7 @@ void WorldObject::DestroyForNearbyPlayers()
         if (!plr->IsInVisibleList_Unsafe(this))
             continue;
 
-        if (isType(TYPEMASK_UNIT) && ((Unit*)this)->GetCharmerGuid() == plr->GetObjectGuid()) // TODO: this is for puppet
+        if (IsType(TYPEMASK_UNIT) && ((Unit*)this)->GetCharmerGuid() == plr->GetObjectGuid()) // TODO: this is for puppet
             continue;
 
         DestroyForPlayer(plr);
@@ -3464,11 +3464,6 @@ void WorldObject::LoadMapCellsAround(float dist) const
     ASSERT(IsInWorld());
     NULLNotifier notifier = NULLNotifier();
     Cell::VisitAllObjects(this, notifier, dist, false);
-}
-
-bool WorldObject::isVisibleFor(Player const* u, WorldObject const* viewPoint) const
-{
-    return IsVisibleForInState(u, viewPoint, false);
 }
 
 FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const

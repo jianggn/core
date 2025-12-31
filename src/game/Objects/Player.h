@@ -1074,11 +1074,11 @@ class Player final: public Unit
         bool CanGiveQuestSourceItemIfNeed(Quest const* pQuest, ItemPosCountVec* dest = nullptr) const;
         void GiveQuestSourceItemIfNeed(Quest const* pQuest);
 
-        uint16 FindQuestSlot(uint32 quest_id) const;
+        uint16 FindQuestSlot(uint32 questId) const;
         uint32 GetQuestSlotQuestId(uint16 slot) const { return GetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot * MAX_QUEST_OFFSET + QUEST_ID_OFFSET); }
-        void SetQuestSlot(uint16 slot, uint32 quest_id, uint32 timer = 0)
+        void SetQuestSlot(uint16 slot, uint32 questId, uint32 timer = 0)
         {
-            SetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_ID_OFFSET, quest_id);
+            SetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_ID_OFFSET, questId);
             SetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_COUNT_STATE_OFFSET, 0);
             SetUInt32Value(PLAYER_QUEST_LOG_1_1 + slot*MAX_QUEST_OFFSET + QUEST_TIME_OFFSET, timer);
         }
@@ -1096,24 +1096,24 @@ class Player final: public Unit
         uint32 GetQuestLevelForPlayer(Quest const* pQuest) const { return pQuest && (pQuest->GetQuestLevel() > 0) ? pQuest->GetQuestLevel() : GetLevel(); }
         void PrepareQuestMenu(ObjectGuid guid, uint32 exceptQuestId = 0);
         void SendPreparedQuest(ObjectGuid guid);
-        bool IsActiveQuest(uint32 quest_id) const;        // can be taken or taken
-        bool IsCurrentQuest(uint32 quest_id, uint8 completedOrNot = 0) const;
+        bool IsActiveQuest(uint32 questId) const;        // can be taken or taken
+        bool IsCurrentQuest(uint32 questId, uint8 completedOrNot = 0) const;
         Quest const* GetNextQuest(ObjectGuid guid, Quest const* pQuest);
         bool CanSeeStartQuest(Quest const* pQuest) const;
         bool CanTakeQuest(Quest const* pQuest, bool msg, bool skipStatusCheck = false) const;
         bool CanAddQuest(Quest const* pQuest, bool msg) const;
-        bool CanCompleteQuest(uint32 quest_id) const;
+        bool CanCompleteQuest(uint32 questId) const;
         bool CanCompleteRepeatableQuest(Quest const* pQuest) const;
         bool CanRewardQuest(Quest const* pQuest, bool msg) const;
         bool CanRewardQuest(Quest const* pQuest, uint32 reward, bool msg) const;
         void AddQuest(Quest const* pQuest, Object* questGiver);
         void FullQuestComplete(uint32 questId); // Equivalent to .quest complete
-        void CompleteQuest(uint32 quest_id);
-        void RemoveQuest(uint32 quest_id);
+        void CompleteQuest(uint32 questId);
+        void RemoveQuest(uint32 questId);
         void RemoveQuestAtSlot(uint32 slot);
-        void IncompleteQuest(uint32 quest_id);
+        void IncompleteQuest(uint32 questId);
         void RewardQuest(Quest const* pQuest, uint32 reward, WorldObject* questGiver, bool announce = true);
-        void FailQuest(uint32 quest_id);
+        void FailQuest(uint32 questId);
         bool SatisfyQuestDaily(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestSkill(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestCondition(Quest const* qInfo, bool msg) const;
@@ -1130,11 +1130,11 @@ class Player final: public Unit
         bool SatisfyQuestExclusiveGroup(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestNextChain(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestPrevChain(Quest const* qInfo, bool msg) const;
-        bool TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQuestStartItem);
-        bool GetQuestRewardStatus(uint32 quest_id) const;
-        QuestStatusData const* GetQuestStatusData(uint32 quest_id) const;
-        QuestStatus GetQuestStatus(uint32 quest_id) const;
-        void SetQuestStatus(uint32 quest_id, QuestStatus status);
+        bool TakeOrReplaceQuestStartItems(uint32 questId, bool msg, bool giveQuestStartItem);
+        bool GetQuestRewardStatus(uint32 questId) const;
+        QuestStatusData const* GetQuestStatusData(uint32 questId) const;
+        QuestStatus GetQuestStatus(uint32 questId) const;
+        void SetQuestStatus(uint32 questId, QuestStatus status);
 
         void SwapQuestSlot(uint16 slot1,uint16 slot2)
         {
@@ -1166,14 +1166,14 @@ class Player final: public Unit
         bool HasQuestForItem(uint32 itemid) const;
         bool HasQuestForGO(int32 GOId) const;
         void UpdateForQuestWorldObjects();
-        bool CanShareQuest(uint32 quest_id) const;
-        QuestStatusMap& getQuestStatusMap() { return mQuestStatus; };
+        bool CanShareQuest(uint32 questId) const;
+        QuestStatusMap& GetQuestStatusMap() { return mQuestStatus; };
 
-        void SendQuestCompleteEvent(uint32 quest_id) const;
+        void SendQuestCompleteEvent(uint32 questId) const;
         void SendQuestReward(Quest const* pQuest, uint32 XP) const;
-        void SendQuestFailed(uint32 quest_id) const;
-        void SendQuestFailedAtTaker(uint32 quest_id, uint32 reason = INVALIDREASON_DONT_HAVE_REQ) const;
-        void SendQuestTimerFailed(uint32 quest_id) const;
+        void SendQuestFailed(uint32 questId) const;
+        void SendQuestFailedAtTaker(uint32 questId, uint32 reason = INVALIDREASON_DONT_HAVE_REQ) const;
+        void SendQuestTimerFailed(uint32 questId) const;
         void SendCanTakeQuestResponse(uint32 msg) const;
         void SendQuestConfirmAccept(Quest const* pQuest, Player const* pReceiver) const;
         void SendPushToPartyResponse(Player const* pPlayer, uint8 msg) const;
@@ -1187,8 +1187,8 @@ class Player final: public Unit
         uint32 GetInGameTime() const { return m_ingametime; }
         void SetInGameTime(uint32 time) { m_ingametime = time; }
 
-        void AddTimedQuest(uint32 quest_id) { m_timedquests.insert(quest_id); }
-        void RemoveTimedQuest(uint32 quest_id) { m_timedquests.erase(quest_id); }
+        void AddTimedQuest(uint32 questId) { m_timedquests.insert(questId); }
+        void RemoveTimedQuest(uint32 questId) { m_timedquests.erase(questId); }
 
         /*********************************************************/
         /***                   LOAD SYSTEM                     ***/
@@ -1525,7 +1525,6 @@ class Player final: public Unit
         void ApplyItemEquipSpell(Item* item, bool apply, bool formChange = false);
         void ApplyEquipSpell(SpellEntry const* spellInfo, Item* item, bool apply, bool formChange = false);
         void UpdateEquipSpellsAtFormChange();
-        void outDebugStatsValues() const;
 
         /*********************************************************/
         /***                   SKILLS SYSTEM                   ***/
