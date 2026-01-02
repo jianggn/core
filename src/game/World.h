@@ -274,6 +274,8 @@ enum eConfigUInt32Values
     //EtherealBlade&AstralImprisonment IN RAID
     CONFIG_PARTYBOT_ETHEREALBLADE_RAID,
     CONFIG_PARTYBOT_ASTRALIMPRISONMENT_RAID,
+    //BanToggleCastingCommand
+    CONFIG_PARTYBOT_BANTOGGLECASTINGCOMMAND,
     //Dual Talent Specialization
     CONFIG_SWAP_SPEC_INTERVAL,
     //Bot Summon Pet

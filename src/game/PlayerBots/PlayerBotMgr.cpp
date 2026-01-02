@@ -1399,6 +1399,13 @@ bool ChatHandler::HandlePartyBotStopCastingCommand(char * args)
 
 bool ChatHandler::HandlePartyBotToggleCastingCommand(bool allowCasting)
 {
+    if (sWorld.getConfig(CONFIG_PARTYBOT_BANTOGGLECASTINGCOMMAND) == 1)
+    {
+        SendSysMessage("Partybot start&stop casting command is banned.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     Player* pPlayer = GetSession()->GetPlayer();
     Player* pTarget = GetSelectedPlayer();
 

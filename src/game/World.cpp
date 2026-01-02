@@ -614,6 +614,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_PARTYBOT_ETHEREALBLADE_RAID,       "PartyBot.EtherealBlade.Raid",  1);
     setConfig(CONFIG_PARTYBOT_ASTRALIMPRISONMENT_RAID,  "PartyBot.AstralImprisonment.Raid",  1);
 
+    //BanToggleCastingCommand
+    setConfig(CONFIG_PARTYBOT_BANTOGGLECASTINGCOMMAND,  "PartyBot.BanToggleCastingCommand",  1);
+
     //Dual Talent Specialization
     setConfig(CONFIG_SWAP_SPEC_INTERVAL,    "SwapSpecInterval", 900);
 
