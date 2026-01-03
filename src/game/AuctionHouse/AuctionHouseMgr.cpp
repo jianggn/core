@@ -629,7 +629,9 @@ void AuctionHouseObject::Update()
     // Also required to properly erase the itr and delete the entry if
     // necessary
     AuctionEntry* entry = nullptr;
-    for (AuctionEntryMap::iterator itr = AuctionsMap.begin(); itr != AuctionsMap.end(); itr = next)
+    uint32 updateCount = 0;
+    // Limit to 100 items per update to avoid performance issues
+    for (AuctionEntryMap::iterator itr = AuctionsMap.begin(); itr != AuctionsMap.end() && updateCount < 100; itr = next)
     {
         entry = itr->second;
         if (entry->depositTime + 5*60 < curTime) // Locked for 5 minutes on IP to prevent AH snipping
@@ -672,6 +674,7 @@ void AuctionHouseObject::Update()
 
             delete entry;
             entry = nullptr;
+            updateCount++;
         }
     }
 }
