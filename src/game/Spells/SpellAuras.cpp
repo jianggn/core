@@ -7788,6 +7788,8 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
 {
     if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_POLYMORPH>())
     {
+        if (GetTarget()->HasAura(34524))
+            GetTarget()->RemoveAurasDueToSpell(34524);
         if (GetTarget()->HasAura(34499))
             GetTarget()->RemoveAurasDueToSpell(34499);
         return;
@@ -7817,6 +7819,7 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
                 player->SetDrunkValue(0, 0);
             break;
         }
+        case 34524:
         case 34499:
         {
             if (Player* player = GetTarget()->ToPlayer())

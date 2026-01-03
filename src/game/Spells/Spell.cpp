@@ -5765,6 +5765,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                             if (m_casterUnit->GetPositionZ() >= 30.0f && m_casterUnit->GetPositionZ() <= 100.0f)
                                 return SPELL_FAILED_NOT_HERE;
                 break;
+            case 34524:
             case 34499:
                 if (m_casterUnit->HasAura(23333) || m_casterUnit->HasAura(23335))
                     return SPELL_FAILED_NOT_HERE;

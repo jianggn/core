@@ -410,7 +410,7 @@ Unit* BattleBotAI::SelectFollowTarget() const
         if (pTarget->IsGameMaster())
             continue;
 
-        if (pTarget->HasAura(34499))
+        if (pTarget->HasAura(34524) || pTarget->HasAura(34499))
             continue;
 
         if (me->GetTeam() == ALLIANCE)

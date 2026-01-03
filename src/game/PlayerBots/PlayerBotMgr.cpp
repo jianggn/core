@@ -788,7 +788,7 @@ bool ChatHandler::PartyBotAddRequirementCheck(Player const* pPlayer, Player cons
         return false;
     }
 
-    if (pPlayer->IsTaxiFlying() || pPlayer->HasAura(34499))
+    if (pPlayer->IsTaxiFlying() || pPlayer->HasAura(34524) || pPlayer->HasAura(34499))
     {
         SendSysMessage("Cannot add bots while flying.");
         return false;

@@ -683,7 +683,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
         return;
     }
 
-    if (pLeader->IsTaxiFlying() || pLeader->HasAura(34499))
+    if (pLeader->IsTaxiFlying() || pLeader->HasAura(34524) || pLeader->HasAura(34499))
     {
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         {

@@ -1007,6 +1007,23 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.2f), {}, {}, true);
                     return;
                 }
+                case 34524:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Horn of Dragonborn
+                    if (Player* player = m_casterUnit->ToPlayer())
+                    {
+                        if (Pet* pet = player->GetPet())
+                            pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                        player->SetCheatFly(true, false);
+                        player->CastSpell(player, 34506, true);
+                        player->SendSysMessage("Jump to switch from flying to running.");
+                    }
+                    return;
+                }
                 case 34499:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
