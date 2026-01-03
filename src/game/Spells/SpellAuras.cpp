@@ -7820,6 +7820,19 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
             break;
         }
         case 34524:
+        {
+            if (Player* player = GetTarget()->ToPlayer())
+            {
+                player->SetCheatFly(false, false);
+                player->RemoveAurasDueToSpell(34506);
+                player->SetObjectScale(1.0f);
+                player->UpdateModelData();
+                player->m_movementInfo.moveFlags = (MOVEFLAG_JUMPING);
+                player->GetSession()->RejectMovementPacketsFor(100);
+                player->SendHeartBeat(true);
+            }
+            break;
+        }
         case 34499:
         {
             if (Player* player = GetTarget()->ToPlayer())
