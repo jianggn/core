@@ -15538,8 +15538,15 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
         SetCheatGod(sWorld.getConfig(CONFIG_BOOL_GM_CHEAT_GOD));
     }
 
-    if (HasAura(34524) || (HasAura(34499) && GetClass() == CLASS_MAGE))
+    if (HasAura(34499) && GetClass() == CLASS_MAGE)
         SetCheatFly(true, false);
+
+    if (HasAura(34524))
+    {
+        SetObjectScale(0.5f);
+        UpdateModelData();
+        SetCheatFly(true, false);
+    }
 
     if (extraflags & PLAYER_EXTRA_WHISP_RESTRICTION)
         SetWhisperRestriction(true);
