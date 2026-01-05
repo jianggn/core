@@ -1016,13 +1016,36 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     // Horn of Dragonborn
                     if (Player* player = m_casterUnit->ToPlayer())
                     {
-                        if (Pet* pet = player->GetPet())
-                            pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
-                        player->SetCheatFly(true, false);
-                        player->CastSpell(player, 34506, true);
-                        player->SetObjectScale(0.5f);
-                        player->UpdateModelData();
-                        player->SendSysMessage("Jump to switch from flying to running.");
+                        uint32 questId = 0;
+                        switch (player->GetRace())
+                        {
+                            case RACE_HUMAN:
+                            case RACE_DWARF:
+                            case RACE_NIGHTELF:
+                            case RACE_GNOME:
+                                questId = 10011;
+                                break;
+                            case RACE_ORC:
+                            case RACE_UNDEAD:
+                            case RACE_TAUREN:
+                            case RACE_TROLL:
+                                questId = 10012;
+                                break;
+                        }
+                        if (questId && player->GetQuestStatus(questId) == QUEST_STATUS_COMPLETE)
+                        {
+                            if (Pet* pet = player->GetPet())
+                                pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                            player->SetCheatFly(true, false);
+                            player->CastSpell(player, 34506, true);
+                            player->SetObjectScale(0.5f);
+                            player->UpdateModelData();
+                            player->SendSysMessage("Jump to switch from flying to running.");
+                        }
+                        else
+                        {
+                            player->SendSysMessage("Quest Incomplete : Dragon Awakens.");
+                        }
                     }
                     return;
                 }
