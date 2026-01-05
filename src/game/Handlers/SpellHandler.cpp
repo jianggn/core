@@ -144,6 +144,13 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
         itemCastCheckResult = SPELL_FAILED_NO_ITEMS_WHILE_SHAPESHIFTED;
     }
 
+    // Goblin Rocket Helmet & Horned Viking Helmet - Reckless Charge
+    // Hook of the Master Angler - Master Angler
+    if ((pUser->HasAura(34524) || pUser->HasAura(34499)) && (proto->ItemId == 9394 || proto->ItemId == 10588 || proto->ItemId == 19979))
+    {
+        itemCastCheckResult = SPELL_FAILED_NOT_HERE;
+    }
+
     if (itemCastCheckResult != SPELL_CAST_OK)
     {
         // free gray item after use fail
