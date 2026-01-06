@@ -5697,7 +5697,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (m_casterUnit->IsInCombat() && !m_casterUnit->HasAura(34327))
                     return SPELL_FAILED_AFFECTING_COMBAT;
                 if (m_casterUnit->HasAura(34524) || m_casterUnit->HasAura(34499))
-                    return SPELL_FAILED_NOT_HERE;
+                    return SPELL_FAILED_NOPATH;
                 break;
             // Warrior - Intercept
             case 20252:
@@ -5707,12 +5707,15 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 16979:
             // Goblin Rocket Helmet & Horned Viking Helmet - Reckless Charge
             case 22641:
+                if (m_casterUnit->HasAura(34524) || m_casterUnit->HasAura(34499))
+                    return SPELL_FAILED_NOPATH;
+                break;
             // Druid - Aquatic Form
             case 1066:
             // Hook of the Master Angler - Master Angler
             case 24347:
                 if (m_casterUnit->HasAura(34524) || m_casterUnit->HasAura(34499))
-                    return SPELL_FAILED_NOT_HERE;
+                    return SPELL_FAILED_ONLY_UNDERWATER;
                 break;
             // Frost Trap
             case 13809:
