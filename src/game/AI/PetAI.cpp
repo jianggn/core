@@ -625,6 +625,24 @@ void PetAI::DoAttack(Unit* target, bool chase)
         // Imp pets have a small chance to say one of these texts on aggro.
         if ((m_creature->GetEntry() == 416 || m_creature->GetEntry() == 12922) && !m_creature->IsInCombat() && roll_chance_u(5))
             DoScriptText(PickRandomValue(746, 747, 749, 750, 751, 752, 753, 754), m_creature, target);
+        // Bane pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200015) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000004, 1000005, 1000006, 1000007, 1000008, 1000009), m_creature, target);
+        // Goblin Shredder pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200013) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000010, 1000011, 1000012, 1000013, 1000014, 1000015), m_creature, target);
+        // Obsidian Destroyer pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200012) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000016, 1000017, 1000018, 1000019, 1000020, 1000021), m_creature, target);
+        // Bone Clinkz pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200014) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000022, 1000023, 1000024, 1000025, 1000026, 1000027), m_creature, target);
+        // Sven pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200010) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000028, 1000029, 1000030, 1000031, 1000032, 1000033), m_creature, target);
+        // Morphling pets have a small chance to say one of these texts on aggro.
+        else if ((m_creature->GetEntry() == 200009) && !m_creature->IsInCombat() && roll_chance_u(10))
+            DoScriptText(PickRandomValue(1000034, 1000035, 1000036, 1000037, 1000038, 1000039), m_creature, target);
 
         if (chase)
         {
