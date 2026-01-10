@@ -20,7 +20,11 @@ cmake_minimum_required(VERSION 3.1...3.20)
 
 project(MaNGOS)
 
-# Allow -DACE_ROOT, -DTBB_ROOT, etc.
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Allow `find_package()` to use `<PackageName>_ROOT` variable
 if(${CMAKE_VERSION} VERSION_GREATER "3.11")
   cmake_policy(SET CMP0074 NEW)
 endif()
@@ -81,70 +85,7 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
 set(CMAKE_INSTALL_RPATH ${LIBS_DIR})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
-# Find needed packages and if necessery abort if something important is missing
-unset(ACE_INCLUDE_DIR CACHE)
-unset(ACE_LIBRARIES CACHE)
-unset(ACE_LIBRARIES_DIR CACHE)
-unset(ACE_INCLUDE_DIR)
-unset(ACE_LIBRARIES)
-unset(ACE_LIBRARIES_DIR)
-
-find_package(ACE)
-if(NOT ACE_FOUND)
-  message(FATAL_ERROR
-    "This project requires ACE installed. Please download the ACE Micro Release Kit from http://download.dre.vanderbilt.edu/ and install it. If this script didn't find ACE and it was correctly installed please set ACE_ROOT to the correct path."
-  )
-endif()
-
-set(ACE_VERSION_FILE "${ACE_INCLUDE_DIR}/ace/Version.h")
-file(READ "${ACE_VERSION_FILE}" ACE_VERSION_CONTENTS)
-string(REGEX MATCH "ACE_MAJOR_VERSION[ \t]+([0-9]+)" _ "${ACE_VERSION_CONTENTS}")
-set(ACE_MAJOR_VERSION "${CMAKE_MATCH_1}")
-message(STATUS "Found ACE version: ${ACE_MAJOR_VERSION}")
-
-if (ACE_MAJOR_VERSION GREATER 7)
-    set(CMAKE_CXX_STANDARD 17)
-    message(WARNING
-      "Installed ACE version requires higher C++ standard. Switching to C++17. Be aware that this project targets C++14 if you intend to contribute."
-      )
-else()
-    set(CMAKE_CXX_STANDARD 14)
-endif()
-
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-if(NOT USE_STD_MALLOC)
-  unset(TBB_INCLUDE_DIRS            CACHE)
-  unset(TBB_LIBRARIES               CACHE)
-  unset(TBB_LIBRARIES_RELEASE       CACHE)
-  unset(TBB_LIBRARIES_DEBUG         CACHE)
-
-  set(TBB_USE_DEBUG_BUILD ${TBB_DEBUG})
-  find_package(TBB COMPONENTS tbbmalloc)
-  if(NOT TBB_FOUND)
-    message(FATAL_ERROR
-      "This project requires TBB installed. Please download the TBB Stable Release from http://www.threadingbuildingblocks.org/ and install it. If this script didn't find TBB and it was correctly installed please set TBB_ROOT_DIR to the correct path."
-    )
-  endif()
-
-  if(TBB_DEBUG)
-    set(TBB_LIBRARIES
-      ${TBB_LIBRARIES_DEBUG}
-    )
-  else()
-    set(TBB_LIBRARIES
-      ${TBB_LIBRARIES}
-    )
-  endif()
-
-  if (WIN32)
-    list (GET TBB_LIBRARIES 1 TBB_SINGLE_FILEDIRECTORY)
-    get_filename_component(TBB_LIB_DIRECTORY "${TBB_SINGLE_FILEDIRECTORY}" DIRECTORY)
-    link_directories(${TBB_LIB_DIRECTORY})
-  endif()
-
-endif()
+# Find needed packages and if necessary abort if something important is missing
 
 if (ENABLE_MAILSENDER)
   set(REQUIRES_LIBCURL ON)
@@ -249,16 +190,6 @@ if(${CMAKE_VERSION} VERSION_LESS "3.16")
   endif()
 endif()
 
-if(USE_STD_MALLOC)
-  set(ALLOC_LIB_INFO_STRING "std::malloc")
-else()
-  if(TBB_DEBUG)
-    set(ALLOC_LIB_INFO_STRING "TBB/Debug")
-  else()
-    set(ALLOC_LIB_INFO_STRING "TBB/Release")
-  endif()
-endif()
-
 include(cmake/showoptions.cmake)
 
 set(DEFINITIONS_RELEASE ${DEFINITIONS_RELEASE} NDEBUG)
@@ -332,10 +263,6 @@ if(WIN32)
   set(DEFINITIONS_RELEASE ${DEFINITIONS_RELEASE} _CRT_SECURE_NO_WARNINGS)
 else()
   set(DEFINITIONS ${DEFINITIONS} SYSCONFDIR="${CONF_DIR}/")
-endif()
-
-if(USE_STD_MALLOC)
-  set(DEFINITIONS ${DEFINITIONS} USE_STANDARD_MALLOC)
 endif()
 
 if (ENABLE_MAILSENDER)

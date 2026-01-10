@@ -2077,7 +2077,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                     return;
                 }
-				
+
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
                 case 24658:                                 // Unstable Power
                 {
@@ -2159,7 +2159,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         if (apply)
                         {
-                            SpellModifier* mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), UI64LIT(0x0000000000000100));
+                            SpellModifier* mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), uint64(0x0000000000000100));
                             pPlayer->AddSpellMod(mod, true);
                         }
                         else
@@ -2178,7 +2178,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         if (apply)
                         {
-                            SpellModifier *mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), UI64LIT(0x0000000000000008));
+                            SpellModifier *mod = new SpellModifier(SPELLMOD_RESIST_MISS_CHANCE, SPELLMOD_FLAT, m_modifier.m_amount, GetId(), uint64(0x0000000000000008));
                             pPlayer->AddSpellMod(mod, true);
                         }
                         else
@@ -5841,7 +5841,7 @@ void Aura::HandleSpiritOfRedemption(bool apply, bool Real)
                 target->SetStandState(UNIT_STAND_STATE_STAND);
         }
 
-        // set health and mana to maximum        
+        // set health and mana to maximum
         target->SetPower(POWER_MANA, target->GetMaxPower(POWER_MANA));
         target->SetInvincibilityHpThreshold(target->GetMaxHealth());
 
@@ -6013,7 +6013,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     return;
                 }
             }
-            
+
             // Check for immune (not use charges)
             if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
             {
@@ -6142,7 +6142,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                     pCaster->SendSpellMiss(target, GetId(), result);
                     return;
                 }
-            }       
+            }
 
             // Check for immune
             if (target->IsImmuneToDamage(spellProto->GetSpellSchoolMask(), spellProto))
@@ -6701,7 +6701,7 @@ void Aura::PeriodicDummyTick()
                             }
                         }
                         else // ram is gone somehow
-                            GetHolder()->SetAuraDuration(1);  
+                            GetHolder()->SetAuraDuration(1);
                     }
                     return;
                 }
@@ -6913,7 +6913,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit* target, Uni
     else
     {
         // remove this assert when not unit casters will be supported
-        MANGOS_ASSERT(caster->IsType(TYPEMASK_UNIT))
+        MANGOS_ASSERT(caster->IsType(TYPEMASK_UNIT));
         m_casterGuid = caster->GetObjectGuid();
     }
 
@@ -6977,7 +6977,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit* target, Uni
         case 23312:                                         // Chromaggus Time Lapse
             m_makesTargetSecondaryFocus = true;
             break;
-        
+
     }
 
     if (m_auraScript)
@@ -7184,7 +7184,7 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
 
                 if (removeState && !foundAuraWithSameAuraState)
                     foundAuraWithSameAuraState = auraSpellInfo->IsFitToFamily(SpellFamily(m_spellProto->SpellFamilyName), removeFamilyFlag);
-                
+
                 if (m_spellProto->HasAttribute(SPELL_ATTR_EX_PREVENTS_ANIM) && !foundAuraWithPreventsAnimAttribute)
                     foundAuraWithPreventsAnimAttribute = auraSpellInfo->HasAttribute(SPELL_ATTR_EX_PREVENTS_ANIM);
 

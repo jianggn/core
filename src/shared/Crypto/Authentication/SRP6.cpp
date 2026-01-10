@@ -18,8 +18,9 @@
 
 #include "Common.h"
 #include "Log.h"
+#include "Errors.h"
 #include "Crypto/Hash/HMACSHA1.h"
-#include "Auth/base32.h"
+#include "Crypto/Encoding/Base32.h"
 #include "SRP6.h"
 
 #include <openssl/crypto.h>
@@ -65,7 +66,7 @@ void SRP6::CalculateProof(std::string username)
     M.SetBinary(hashM.data(), hashM.size());
 }
 
-bool SRP6::CalculateSessionKey(uint8* lp_A, int l)
+bool SRP6::CalculateSessionKey(uint8 const* lp_A, int l)
 {
     A.SetBinary(lp_A, l);
 
@@ -152,7 +153,7 @@ void SRP6::HashSessionKey(void)
     K.SetBinary(vK, 40);
 }
 
-bool SRP6::Proof(uint8* lp_M, int l)
+bool SRP6::Proof(uint8 const* lp_M, int l)
 {
     if (!memcmp(M.AsByteArray().data(), lp_M, l))
         return false;

@@ -197,7 +197,9 @@ set (game_SRCS
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
+    Protocol/WorldSocket.h
     Protocol/WorldSocket.cpp
+    Protocol/WorldSocketMgr.h
     Protocol/WorldSocketMgr.cpp
     Spells/Spell.cpp
     Spells/SpellAuras.cpp
@@ -420,8 +422,6 @@ set (game_SRCS
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h
-    Protocol/WorldSocket.h
-    Protocol/WorldSocketMgr.h
     Spells/Spell.h
     Spells/SpellAuraDefines.h
     Spells/SpellAuras.h
@@ -464,7 +464,6 @@ if(WIN32)
   #allow exceptions in destructors
   if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:implicitNoexcept-")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D__ACE_INLINE__")
   elseif(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
   endif()

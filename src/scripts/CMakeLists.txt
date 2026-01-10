@@ -1,7 +1,7 @@
 
 set(LIBRARY_NAME scripts)
 
-set (SCRIPTS_SRCS 
+set (SCRIPTS_SRCS
     ScriptLoader.h
     custom/custom.h
     custom/npc_j_eevee.h
@@ -339,7 +339,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/dep/recastnavigation/Detour/Include
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/src/shared
-  ${ACE_INCLUDE_DIR}
   ${MYSQL_INCLUDE_DIR}
 )
 
