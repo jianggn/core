@@ -2683,6 +2683,11 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
         {
             if(pPet->GetEntry() == 416)
             {
+                //Fire Emblem
+                if(pPet->GetLevel() >= 1 && pPet->GetLevel() <= 60)
+                {
+                    pPet->ToggleAutocast(34533, true);
+                }
                 //Firebolt
                 if(pPet->GetLevel() >= 1 && pPet->GetLevel() < 8)
                 {
@@ -2733,11 +2738,14 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(11767, true);
                 }
-                //Fire Emblem
-                pPet->ToggleAutocast(34533, true);
             }
             else if(pPet->GetEntry() == 1860)
             {
+                //Heartstopper Aura
+                if(pPet->GetLevel() >= 10)
+                {
+                    pPet->ToggleAutocast(34527, true);
+                }
                 //Torment
                 if(pPet->GetLevel() >= 10 && pPet->GetLevel() < 20)
                 {
@@ -2779,11 +2787,6 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 else if(pPet->GetLevel() >= 60)
                 {
                     pPet->ToggleAutocast(17752, true);
-                }
-                //Heartstopper Aura
-                if(pPet->GetLevel() >= 10)
-                {
-                    pPet->ToggleAutocast(34527, true);
                 }
             }
             else if(pPet->GetEntry() == 1863)
@@ -2893,6 +2896,11 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
             {
                 if(pPet->GetEntry() == 416)
                 {
+                    //Fire Emblem
+                    if(pPet->GetLevel() >= 1 && pPet->GetLevel() <= 60)
+                    {
+                        pPet->ToggleAutocast(34533, true);
+                    }
                     //Firebolt
                     if(pPet->GetLevel() >= 1 && pPet->GetLevel() < 8)
                     {
@@ -2943,11 +2951,14 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     {
                         pPet->ToggleAutocast(11767, true);
                     }
-                    //Fire Emblem
-                    pPet->ToggleAutocast(34533, true);
                 }
                 else if(pPet->GetEntry() == 1860)
                 {
+                    //Heartstopper Aura
+                    if(pPet->GetLevel() >= 10)
+                    {
+                        pPet->ToggleAutocast(34527, true);
+                    }
                     //Torment
                     if(pPet->GetLevel() >= 10 && pPet->GetLevel() < 20)
                     {
@@ -2989,11 +3000,6 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     else if(pPet->GetLevel() >= 60)
                     {
                         pPet->ToggleAutocast(17752, true);
-                    }
-                    //Heartstopper Aura
-                    if(pPet->GetLevel() >= 10)
-                    {
-                        pPet->ToggleAutocast(34527, true);
                     }
                 }
                 else if(pPet->GetEntry() == 1863)
