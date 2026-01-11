@@ -2751,11 +2751,6 @@ void PartyBotAI::UpdateOutOfCombatAI_Warlock()
         {
             if(pPet->GetEntry() == 416)
             {
-                //Fire Emblem
-                if(pPet->GetLevel() >= 1 && pPet->GetLevel() <= 60)
-                {
-                    pPet->ToggleAutocast(34533, true);
-                }
                 //Firebolt
                 if(pPet->GetLevel() >= 1 && pPet->GetLevel() < 8)
                 {
@@ -2964,11 +2959,6 @@ void PartyBotAI::UpdateInCombatAI_Warlock()
             {
                 if(pPet->GetEntry() == 416)
                 {
-                    //Fire Emblem
-                    if(pPet->GetLevel() >= 1 && pPet->GetLevel() <= 60)
-                    {
-                        pPet->ToggleAutocast(34533, true);
-                    }
                     //Firebolt
                     if(pPet->GetLevel() >= 1 && pPet->GetLevel() < 8)
                     {
