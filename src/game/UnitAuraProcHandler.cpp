@@ -977,6 +977,16 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34299;
                     break;                               // no hidden cooldown
                 }
+                // Succubus - Blood Bath
+                case 34529:
+                {
+                    // heal amount
+                    basepoints[0] = dither(30 * amount / 100);
+                    basepoints[1] = dither(20 * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34530;
+                    break;                               // no hidden cooldown
+                }
                 // melee blood drain + 1%
                 case 34144:
                 {
