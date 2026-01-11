@@ -363,6 +363,12 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                             damage = damage + m_casterUnit->GetMaxHealth() * 0.04f;
                         break;
                     }
+                    case 34528: // Voidwalker - Heartstopper Aura
+                    {
+                        if (m_casterUnit)
+                            damage = damage + m_casterUnit->GetMaxHealth() * 0.02f;
+                        break;
+                    }
                 }
                 break;
             }

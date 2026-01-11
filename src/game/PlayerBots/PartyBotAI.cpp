@@ -2846,6 +2846,11 @@ void PartyBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(17752, true);
                 }
+                //Heartstopper Aura
+                if(pPet->GetLevel() >= 10)
+                {
+                    pPet->ToggleAutocast(34527, true);
+                }
             }
             else if(pPet->GetEntry() == 1863)
             {
@@ -3048,6 +3053,11 @@ void PartyBotAI::UpdateInCombatAI_Warlock()
                     else if(pPet->GetLevel() >= 60)
                     {
                         pPet->ToggleAutocast(17752, true);
+                    }
+                    //Heartstopper Aura
+                    if(pPet->GetLevel() >= 10)
+                    {
+                        pPet->ToggleAutocast(34527, true);
                     }
                 }
                 else if(pPet->GetEntry() == 1863)
