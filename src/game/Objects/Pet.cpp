@@ -920,7 +920,7 @@ bool Pet::CanTakeMoreActiveSpells(uint32 spellId)
         if (Spells::IsPassiveSpell(itr.first))
             continue;
 
-        if (itr.first == 34527)
+        if (itr.first == 34527 || itr.first == 34533)
             continue;
 
         uint32 chainstart = sSpellMgr.GetFirstSpellInChain(itr.first);

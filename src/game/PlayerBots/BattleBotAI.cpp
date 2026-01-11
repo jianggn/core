@@ -2733,6 +2733,8 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
                 {
                     pPet->ToggleAutocast(11767, true);
                 }
+                //Fire Emblem
+                pPet->ToggleAutocast(34533, true);
             }
             else if(pPet->GetEntry() == 1860)
             {
@@ -2941,6 +2943,8 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                     {
                         pPet->ToggleAutocast(11767, true);
                     }
+                    //Fire Emblem
+                    pPet->ToggleAutocast(34533, true);
                 }
                 else if(pPet->GetEntry() == 1860)
                 {
