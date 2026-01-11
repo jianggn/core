@@ -987,6 +987,19 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34530;
                     break;                               // no hidden cooldown
                 }
+                // Felhunter - Mana Break
+                case 34531:
+                {
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (pVictim->GetPowerType() != POWER_MANA)
+                        return SPELL_AURA_PROC_FAILED;
+                    // mana burn amount
+                    basepoints[0] = dither(200 * amount / 100);
+                    target = pVictim;
+                    triggered_spell_id = 34532;
+                    break;                               // no hidden cooldown
+                }
                 // melee blood drain + 1%
                 case 34144:
                 {
