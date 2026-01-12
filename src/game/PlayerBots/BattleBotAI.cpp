@@ -2836,6 +2836,23 @@ void BattleBotAI::UpdateOutOfCombatAI_Warlock()
             }
             else if(pPet->GetEntry() == 417)
             {
+                //Tainted Blood
+                if(pPet->GetLevel() >= 32 && pPet->GetLevel() < 40)
+                {
+                    pPet->ToggleAutocast(19478, true);
+                }
+                else if(pPet->GetLevel() >= 40 && pPet->GetLevel() < 48)
+                {
+                    pPet->ToggleAutocast(19655, true);
+                }
+                else if(pPet->GetLevel() >= 48 && pPet->GetLevel() < 56)
+                {
+                    pPet->ToggleAutocast(19656, true);
+                }
+                else if(pPet->GetLevel() >= 56 && pPet->GetLevel() <= 60)
+                {
+                    pPet->ToggleAutocast(19660, true);
+                }
                 //Devour Magic
                 if(pPet->GetLevel() >= 30 && pPet->GetLevel() < 38)
                 {
@@ -3044,6 +3061,23 @@ void BattleBotAI::UpdateInCombatAI_Warlock()
                 }
                 else if(pPet->GetEntry() == 417)
                 {
+                    //Tainted Blood
+                    if(pPet->GetLevel() >= 32 && pPet->GetLevel() < 40)
+                    {
+                        pPet->ToggleAutocast(19478, true);
+                    }
+                    else if(pPet->GetLevel() >= 40 && pPet->GetLevel() < 48)
+                    {
+                        pPet->ToggleAutocast(19655, true);
+                    }
+                    else if(pPet->GetLevel() >= 48 && pPet->GetLevel() < 56)
+                    {
+                        pPet->ToggleAutocast(19656, true);
+                    }
+                    else if(pPet->GetLevel() >= 56 && pPet->GetLevel() <= 60)
+                    {
+                        pPet->ToggleAutocast(19660, true);
+                    }
                     //Devour Magic
                     if(pPet->GetLevel() >= 30 && pPet->GetLevel() < 38)
                     {
