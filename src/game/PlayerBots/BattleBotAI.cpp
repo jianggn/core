@@ -135,6 +135,10 @@ uint32 BattleBotAI::GetMountSpellId() const
                 return BB_SPELL_MOUNT_40_UNDEAD;
         }
     }
+    else if (me->GetLevel() >= 10)
+    {
+        return 34535;
+    }
 
     return 0;
 }
