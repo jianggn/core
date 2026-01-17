@@ -981,8 +981,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 case 34529:
                 {
                     // heal amount
-                    basepoints[0] = dither(45 * amount / 100);
-                    basepoints[1] = dither(30 * amount / 100);
+                    basepoints[0] = dither(35 * amount / 100);
+                    basepoints[1] = dither(25 * amount / 100);
                     target = this;
                     triggered_spell_id = 34530;
                     break;                               // no hidden cooldown
