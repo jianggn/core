@@ -1041,7 +1041,11 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         if (questId && player->GetQuestStatus(questId) == QUEST_STATUS_COMPLETE)
                         {
                             if (Pet* pet = player->GetPet())
+                            {
                                 pet->Unsummon(PET_SAVE_NOT_IN_SLOT);
+                                if (player->GetClass() == CLASS_WARLOCK && (pet->GetEntry() == 417 || pet->GetEntry() == 1860 || pet->GetEntry() == 1863))
+                                    player->AddItem(6265);
+                            }
                             player->SetCheatFly(true, false);
                             player->CastSpell(player, 34506, true);
                             player->SetObjectScale(0.5f);
@@ -1050,7 +1054,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         }
                         else
                         {
-                            player->SendSysMessage("Quest Incomplete : Dragon Awakens.");
+                            player->SendSysMessage("Only dragonborn can do.");
                         }
                     }
                     return;
