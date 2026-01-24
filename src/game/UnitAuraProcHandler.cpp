@@ -981,8 +981,16 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 case 34529:
                 {
                     // heal amount
-                    basepoints[0] = dither(35 * amount / 100);
-                    basepoints[1] = dither(25 * amount / 100);
+                    if (this->HasAura(23836))
+                    {
+                        basepoints[0] = dither(52.5f * amount / 100);
+                        basepoints[1] = dither(37.5f * amount / 100);
+                    }
+                    else
+                    {
+                        basepoints[0] = dither(35 * amount / 100);
+                        basepoints[1] = dither(25 * amount / 100);
+                    }
                     target = this;
                     triggered_spell_id = 34530;
                     break;                               // no hidden cooldown
@@ -995,7 +1003,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (pVictim->GetPowerType() != POWER_MANA)
                         return SPELL_AURA_PROC_FAILED;
                     // mana burn amount
-                    basepoints[0] = dither(200 * amount / 100);
+                    if (this->HasAura(23840))
+                        basepoints[0] = dither(300 * amount / 100);
+                    else
+                        basepoints[0] = dither(200 * amount / 100);
                     target = pVictim;
                     triggered_spell_id = 34532;
                     break;                               // no hidden cooldown

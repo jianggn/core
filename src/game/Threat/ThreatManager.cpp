@@ -476,17 +476,22 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
                          pThreatSpell->Id == 34509 ||
                          pThreatSpell->Id == 34514 ||
                          pThreatSpell->Id == 34522 ||
-                         pThreatSpell->Id == 34528 ||
                          pThreatSpell->Id == 34530))
         return;
 
-    // Improved Imp rank 3 - Firebolt no threat
-    /*
+    // Master Demonologist rank 5
+    // IMP - Firebolt no threat
+    // VOIDWALKER - Heartstopper Aura causes threat
     if (pThreatSpell && (pThreatSpell->Id == 3110 || pThreatSpell->Id == 7799 || pThreatSpell->Id == 7800 || pThreatSpell->Id == 7801 || pThreatSpell->Id == 7802 || pThreatSpell->Id == 11762 || pThreatSpell->Id == 11763))
-        if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
-            if (pOwner->HasAura(18696))
-                return;
-    */
+    {
+        if (pVictim->HasAura(23829))
+            return;
+    }
+    else if (pThreatSpell && pThreatSpell->Id == 34528)
+    {
+        if (!pVictim->HasAura(23844))
+            return;
+    }
 
     MANGOS_ASSERT(getOwner()->GetTypeId() == TYPEID_UNIT);
 
