@@ -6049,8 +6049,13 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 GetAuraScript()->OnPeriodicCalculateAmount(this, fdamage);
 
             // Consecration: recalculate the damage on each tick
+            // Born Equal bonus 0.5% max hp and mana
             if (spellProto->IsFitToFamily<SPELLFAMILY_PALADIN, CF_PALADIN_CONSECRATION>())
+            {
                 fdamage = pCaster->SpellDamageBonusDone(target, GetSpellProto(), GetEffIndex(), m_currentBasePoints, DOT, GetStackAmount());
+                if (pCaster->HasAura(34537))
+                    fdamage += (pCaster->GetMaxHealth() + pCaster->GetMaxPower(POWER_MANA)) * 0.005f;
+            }
             // Curse of Agony damage-per-tick calculation
             else if (spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_CURSE_OF_AGONY>())
                 fdamage += (-1 + ((int)GetAuraTicks() - 1) / 4) * (spellProto->CalculateSimpleValue(EFFECT_INDEX_0) / 2.0);
