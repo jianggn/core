@@ -480,12 +480,14 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
         return;
 
     // Master Demonologist rank 5
-    // IMP - Firebolt no threat
+    // IMP - Firebolt no threat if owner has aura 34533
     // VOIDWALKER - Heartstopper Aura causes threat
     if (pThreatSpell && (pThreatSpell->Id == 3110 || pThreatSpell->Id == 7799 || pThreatSpell->Id == 7800 || pThreatSpell->Id == 7801 || pThreatSpell->Id == 7802 || pThreatSpell->Id == 11762 || pThreatSpell->Id == 11763))
     {
         if (pVictim->HasAura(23829))
-            return;
+            if (Player* pOwner = ::ToPlayer(pVictim->GetOwner()))
+                if (pOwner->HasAura(34533))
+                    return;
     }
     else if (pThreatSpell && pThreatSpell->Id == 34528)
     {
