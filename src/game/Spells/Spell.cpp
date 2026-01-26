@@ -5750,6 +5750,17 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!m_caster->GetTerrain()->IsOutdoors(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ()) && !m_casterUnit->HasAura(34358))
                     return SPELL_FAILED_ONLY_OUTDOORS;
                 break;
+            // Warlock Demonic Circle : Summon
+            case 34294:
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                    return SPELL_FAILED_NOT_READY;
+                if (Player* pCaster = m_caster->ToPlayer())
+                {
+                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", pCaster->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
+                    if (result)
+                        return SPELL_FAILED_NOT_READY;
+                }
+                break;
             // Warlock Demonic Circle : Teleport
             case 34295:
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
@@ -5816,6 +5827,26 @@ SpellCastResult Spell::CheckCast(bool strict)
         {
             ((Player*)m_casterUnit)->SendPetTameFailure(PETTAME_ANOTHERSUMMONACTIVE);
             return SPELL_FAILED_DONT_REPORT;
+        }
+    }
+
+    // Eye of Kilrogg - Demonic Circle : Summon
+    if (m_spellInfo->Id == 34538)
+    {
+        if (m_caster->GetTypeId() != TYPEID_UNIT)
+            return SPELL_FAILED_NOT_READY;
+        if (Creature* creature = m_caster->ToCreature())
+        {
+            if (creature->GetEntry() != 4277)
+                return SPELL_FAILED_BAD_TARGETS;
+            if (Player* charmer = ::ToPlayer(creature->GetCharmer()))
+            {
+                if (!charmer->HasItemCount(6265, 1))
+                    return SPELL_FAILED_ITEM_NOT_READY;
+                std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", charmer->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
+                if (result)
+                    return SPELL_FAILED_NOT_READY;
+            }
         }
     }
 
