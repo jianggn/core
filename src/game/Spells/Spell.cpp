@@ -5774,7 +5774,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                         float x = fields[0].GetFloat();
                         float y = fields[1].GetFloat();
                         float z = fields[2].GetFloat();
-                        if (pCaster->GetDistance(x,y,z) > 50.0f)
+                        if (pCaster->GetDistance(x,y,z) > 60.0f)
                             return SPELL_FAILED_OUT_OF_RANGE;
                     }
                     else
@@ -5841,6 +5841,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                 return SPELL_FAILED_BAD_TARGETS;
             if (Player* charmer = ::ToPlayer(creature->GetCharmer()))
             {
+                if (charmer->GetClass() != CLASS_WARLOCK)
+                    return SPELL_FAILED_NOT_KNOWN;
                 if (!charmer->HasItemCount(6265, 1))
                     return SPELL_FAILED_ITEM_NOT_READY;
                 std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", charmer->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());

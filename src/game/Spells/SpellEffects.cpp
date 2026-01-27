@@ -781,7 +781,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                             float y = fields[1].GetFloat();
                             float z = fields[2].GetFloat();
                             float o = fields[3].GetFloat();
-                            if (pCaster->GetDistance(x,y,z) <= 50.0f)
+                            if (pCaster->GetDistance(x,y,z) <= 60.0f)
                             {
                                 pCaster->TeleportTo(pCaster->GetMapId(), x, y, z, o);
                                 pCaster->CastSpell(pCaster, 5579, true);
@@ -1110,12 +1110,12 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     // Eye of Kilrogg - Demonic Circle : Summon
                     if (Player* pCharmer = ::ToPlayer(m_casterUnit->GetCharmer()))
-                    {
-                        if (pCharmer->HasItemCount(6265, 1))
+                        if (pCharmer->GetClass() == CLASS_WARLOCK && pCharmer->HasItemCount(6265, 1))
+                        {
                             pCharmer->DestroyItemCount(6265, 1, true);
-                        CharacterDatabase.PExecute("replace into `character_warlock_demonic_circle` (`guid`, `map_id`, `instance_id`, `position_x`, `position_y`, `position_z`, `orientation`, `timer`) VALUES (%u, %u, %u, %f, %f, %f, %f, %u)", pCharmer->GetObjectGuid(), m_casterUnit->GetMapId(), m_casterUnit->GetInstanceId(), m_casterUnit->GetPositionX(), m_casterUnit->GetPositionY(), m_casterUnit->GetPositionZ(), m_casterUnit->GetOrientation(), getTimestamp());                        
-                    }
-                    m_casterUnit->DealDamage(m_casterUnit, m_casterUnit->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                            CharacterDatabase.PExecute("replace into `character_warlock_demonic_circle` (`guid`, `map_id`, `instance_id`, `position_x`, `position_y`, `position_z`, `orientation`, `timer`) VALUES (%u, %u, %u, %f, %f, %f, %f, %u)", pCharmer->GetObjectGuid(), m_casterUnit->GetMapId(), m_casterUnit->GetInstanceId(), m_casterUnit->GetPositionX(), m_casterUnit->GetPositionY(), m_casterUnit->GetPositionZ(), m_casterUnit->GetOrientation(), getTimestamp());                        
+                            m_casterUnit->DealDamage(m_casterUnit, m_casterUnit->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                        }
                     return;
                 }
                 case 8344: // Universal Remote
