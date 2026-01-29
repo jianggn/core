@@ -6054,7 +6054,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             {
                 fdamage = pCaster->SpellDamageBonusDone(target, GetSpellProto(), GetEffIndex(), m_currentBasePoints, DOT, GetStackAmount());
                 if (pCaster->HasAura(34537))
-                    fdamage += (pCaster->GetMaxHealth() + pCaster->GetMaxPower(POWER_MANA)) * 0.005f;
+                    fdamage += (pCaster->GetMaxHealth() + pCaster->GetMaxPower(POWER_MANA)) * 0.0075f;
             }
             // Curse of Agony damage-per-tick calculation
             else if (spellProto->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_CURSE_OF_AGONY>())
