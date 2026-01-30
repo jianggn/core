@@ -5847,7 +5847,10 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_ITEM_NOT_READY;
                 std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", charmer->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
                 if (result)
+                {
+                    creature->AddCooldown(*m_spellInfo, nullptr, false, 1.5 * IN_MILLISECONDS);
                     return SPELL_FAILED_NOT_READY;
+                }
             }
         }
     }
