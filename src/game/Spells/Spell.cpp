@@ -5758,7 +5758,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_NOT_READY;
                 if (Player* pCaster = m_caster->ToPlayer())
                 {
-                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", pCaster->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
+                    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `type`='1' and `timer`>='%u' and `timer`<='%u'", pCaster->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
                     if (result)
                         return SPELL_FAILED_NOT_READY;
                 }
@@ -5772,11 +5772,17 @@ SpellCastResult Spell::CheckCast(bool strict)
                     std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT position_x, position_y, position_z FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`='%u'", pCaster->GetObjectGuid(), pCaster->GetMapId(), getTimestamp_spell()-300, getTimestamp_spell(), pCaster->GetInstanceId());
                     if (result)
                     {
-                        Field* fields = result->Fetch();
-                        float x = fields[0].GetFloat();
-                        float y = fields[1].GetFloat();
-                        float z = fields[2].GetFloat();
-                        if (pCaster->GetDistance(x,y,z) > 60.0f)
+                        float minimumDistance = 100.0f;
+                        do
+                        {
+                            Field* fields = result->Fetch();
+                            float x = fields[0].GetFloat();
+                            float y = fields[1].GetFloat();
+                            float z = fields[2].GetFloat();
+                            minimumDistance = std::min(minimumDistance, pCaster->GetDistance(x,y,z));
+                        }
+                        while (result->NextRow());
+                        if (minimumDistance > 60.0f)
                             return SPELL_FAILED_OUT_OF_RANGE;
                     }
                     else
@@ -5847,7 +5853,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     return SPELL_FAILED_NOT_KNOWN;
                 if (!charmer->HasItemCount(6265, 1))
                     return SPELL_FAILED_ITEM_NOT_READY;
-                std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `timer`>='%u' and `timer`<='%u'", charmer->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
+                std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_warlock_demonic_circle` WHERE `guid`='%u' and `type`='2' and `timer`>='%u' and `timer`<='%u'", charmer->GetObjectGuid(), getTimestamp_spell()-300, getTimestamp_spell());
                 if (result)
                 {
                     creature->AddCooldown(*m_spellInfo, nullptr, false, 1.5 * IN_MILLISECONDS);
