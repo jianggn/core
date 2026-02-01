@@ -1004,9 +1004,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                         return SPELL_AURA_PROC_FAILED;
                     // mana burn amount
                     if (this->HasAura(23840))
-                        basepoints[0] = dither(300 * amount / 100);
+                    {
+                        if (urand(1, 100) < 33)
+                        {
+                            this->CastCustomSpell(pVictim, 34541, {}, {}, {}, true, castItem, triggeredByAura);
+                            return SPELL_AURA_PROC_OK;
+                        }
+                        else
+                        {
+                            basepoints[0] = dither(300 * amount / 100);
+                        }
+                    }
                     else
+                    {
                         basepoints[0] = dither(200 * amount / 100);
+                    }
                     target = pVictim;
                     triggered_spell_id = 34532;
                     break;                               // no hidden cooldown

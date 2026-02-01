@@ -458,6 +458,13 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         damage = damage + (m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT)) * 0.1f;
                     }
                 }
+                // Succubus - Lash of Pain
+                else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_SUCCUBUS_LASH_OF_PAIN>())
+                {
+                    if (m_casterUnit->HasAura(23836))
+                        if (urand(1, 100) < 25)
+                            m_casterUnit->CastSpell(unitTarget, 34542, true);
+                }
                 break;
             }
             case SPELLFAMILY_DRUID:

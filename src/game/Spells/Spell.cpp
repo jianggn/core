@@ -1926,7 +1926,9 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     // Improved Enslave Demon - talent 18825
     // Scream of Pain - talent 34469
     // Deep Freeze - talent 34508
-    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508)
+    // Mana Break - Felhunter spell 34541
+    // Lash of Pain - Succubus spell 34542
+    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508 || m_spellInfo->Id == 34541 || m_spellInfo->Id == 34542)
     {
         m_diminishGroup = DIMINISHING_NONE;
     }
