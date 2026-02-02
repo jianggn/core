@@ -983,13 +983,13 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     // heal amount
                     if (this->HasAura(23836))
                     {
-                        basepoints[0] = dither(52.5f * amount / 100);
-                        basepoints[1] = dither(37.5f * amount / 100);
+                        basepoints[0] = dither(45 * amount / 100);
+                        basepoints[1] = dither(30 * amount / 100);
                     }
                     else
                     {
-                        basepoints[0] = dither(35 * amount / 100);
-                        basepoints[1] = dither(25 * amount / 100);
+                        basepoints[0] = dither(30 * amount / 100);
+                        basepoints[1] = dither(20 * amount / 100);
                     }
                     target = this;
                     triggered_spell_id = 34530;
