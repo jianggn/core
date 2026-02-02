@@ -1007,7 +1007,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     {
                         if (urand(1, 100) < 33)
                         {
-                            this->CastCustomSpell(pVictim, 34541, {}, {}, {}, true, castItem, triggeredByAura);
+                            this->CastCustomSpell(pVictim, 34541, {}, dither(300 * amount / 100), {}, true, castItem, triggeredByAura);
                             return SPELL_AURA_PROC_OK;
                         }
                         else
