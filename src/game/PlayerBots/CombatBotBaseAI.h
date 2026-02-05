@@ -335,6 +335,7 @@ public:
             SpellEntry const* pWaterTotem;
             SpellEntry const* pManaTideTotem;
             SpellEntry const* pWeaponBuff;
+            SpellEntry const* pTotemicRecall;
         } shaman;
         struct
         {

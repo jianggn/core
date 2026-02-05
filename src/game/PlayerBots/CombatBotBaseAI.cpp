@@ -492,6 +492,12 @@ void CombatBotBaseAI::PopulateSpellData()
                     if (IsHigherRankSpell(pWindfuryWeapon))
                         pWindfuryWeapon = pSpellEntry;
                 }
+                else if (pSpellEntry->SpellName[0].find("Totemic Recall") != std::string::npos)
+                {
+                    if (!m_spells.shaman.pTotemicRecall ||
+                        m_spells.shaman.pTotemicRecall->Id < pSpellEntry->Id)
+                        m_spells.shaman.pTotemicRecall = pSpellEntry;
+                }
                 else if (pSpellEntry->SpellName[0].find("Grace of Air Totem") != std::string::npos)
                 {
                     if (IsHigherRankSpell(pGraceOfAirTotem))

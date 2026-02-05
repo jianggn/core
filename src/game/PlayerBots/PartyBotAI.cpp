@@ -1460,7 +1460,25 @@ void PartyBotAI::UpdateOutOfCombatAI_Shaman()
         UpdateInCombatAI_Shaman();
     }
     else
+    {
         SummonPetIfNeeded();
+
+        if (sWorld.getConfig(CONFIG_SHAMAN_BOT_TOTEM) == 1)
+        {
+            for (int slot = TOTEM_SLOT_FIRE; slot < MAX_TOTEM_SLOT; slot++)
+            {
+                if (me->GetTotem(TotemSlot(slot)))
+                {
+                    if (m_spells.shaman.pTotemicRecall &&
+                        CanTryToCastSpell(me, m_spells.shaman.pTotemicRecall))
+                    {
+                        if (DoCastSpell(me, m_spells.shaman.pTotemicRecall) == SPELL_CAST_OK)
+                            return;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void PartyBotAI::UpdateInCombatAI_Shaman()

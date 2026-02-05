@@ -1588,6 +1588,22 @@ void BattleBotAI::UpdateOutOfCombatAI_Shaman()
     {
         SummonPetIfNeeded();
 
+        if (sWorld.getConfig(CONFIG_SHAMAN_BOT_TOTEM) == 1)
+        {
+            for (int slot = TOTEM_SLOT_FIRE; slot < MAX_TOTEM_SLOT; slot++)
+            {
+                if (me->GetTotem(TotemSlot(slot)))
+                {
+                    if (m_spells.shaman.pTotemicRecall &&
+                        CanTryToCastSpell(me, m_spells.shaman.pTotemicRecall))
+                    {
+                        if (DoCastSpell(me, m_spells.shaman.pTotemicRecall) == SPELL_CAST_OK)
+                            return;
+                    }
+                }
+            }
+        }
+
         if (m_spells.shaman.pGhostWolf &&
            !me->IsMoving() && !me->IsMounted() &&
            (!GetMountSpellId() || me->HasAura(AURA_WARSONG_FLAG) || me->HasAura(AURA_SILVERWING_FLAG)) &&
