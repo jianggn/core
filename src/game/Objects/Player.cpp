@@ -10462,31 +10462,34 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
         //if (GetMap()->IsRaid() && (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM) && (pItem->GetProto()->Class == ITEM_CLASS_WEAPON || pItem->GetProto()->Class == ITEM_CLASS_ARMOR))
         if (GetMap()->IsRaid() && (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM))
         {
-            pItem->SetLootingTime(time(nullptr));
-            pItem->SetDurationRaidLooting(sWorld.getConfig(CONFIG_UINT32_TRADINGRAIDLOOT_TIME));
-
-            std::ostringstream ss;
-            if (Group* pGroup = GetGroup())
+            if (uint32(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(GetMap()->GetId()) - time(nullptr)) > sWorld.getConfig(CONFIG_UINT32_TRADINGRAIDLOOT_TIME))
             {
-                ss << ":";
-                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                pItem->SetLootingTime(time(nullptr));
+                pItem->SetDurationRaidLooting(sWorld.getConfig(CONFIG_UINT32_TRADINGRAIDLOOT_TIME));
+
+                std::ostringstream ss;
+                if (Group* pGroup = GetGroup())
                 {
-                    if (Player* pMember = itr->getSource())
+                    ss << ":";
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
                     {
-                        bool isPartybotLoad = false;
-                        if (pMember->IsBot())
+                        if (Player* pMember = itr->getSource())
                         {
-                            std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", pMember->GetObjectGuid(), pMember->GetName()));
-                            if (result)
-                                isPartybotLoad = true;
+                            bool isPartybotLoad = false;
+                            if (pMember->IsBot())
+                            {
+                                std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", pMember->GetObjectGuid(), pMember->GetName()));
+                                if (result)
+                                    isPartybotLoad = true;
+                            }
+                            if ((pMember->IsBot() && !isPartybotLoad) || !pMember->GetMap()->IsRaid() || pMember->GetMap()->GetInstanceId() != GetMap()->GetInstanceId())
+                                continue;
+                            ss << pMember->GetGUIDLow() << ":";
                         }
-                        if ((pMember->IsBot() && !isPartybotLoad) || !pMember->GetMap()->IsRaid() || pMember->GetMap()->GetInstanceId() != GetMap()->GetInstanceId())
-                            continue;
-                        ss << pMember->GetGUIDLow() << ":";
                     }
                 }
+                pItem->SetRaidGroup(ss.str().c_str());
             }
-            pItem->SetRaidGroup(ss.str().c_str());
         }
 
         ItemAddedQuestCheck(item, count);
