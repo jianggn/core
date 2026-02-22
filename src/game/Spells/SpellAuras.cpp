@@ -5651,6 +5651,12 @@ void Aura::HandleShapeshiftBoosts(bool apply)
                     if (i->GetSpellProto()->SpellIconID == 240 && i->GetModifier()->m_miscvalue == 3)
                     {
                         int32 HotWMod = i->GetModifier()->m_amount;
+                        // FORM_CAT
+                        if (HotWSpellId == 24900)
+                            HotWMod = dither(HotWMod * 2.0f);
+                        // FORM_BEAR & FORM_DIREBEAR
+                        else if (HotWSpellId == 24899)
+                            HotWMod = dither(HotWMod * 1.5f);
                         target->CastCustomSpell(target, HotWSpellId, HotWMod, {}, {}, true, nullptr, this);
                         break;
                     }
