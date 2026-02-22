@@ -861,7 +861,10 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Zi Ran Zhi Xu
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither((m_casterUnit->GetArmor() + m_casterUnit->GetMaxHealth()) * 0.01f), {}, {}, true);
+                    if (m_casterUnit->HasAura(768))
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither(m_casterUnit->GetArmor() * 0.025f + m_casterUnit->GetMaxHealth() * 0.0375f), {}, {}, true);
+                    else
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither(m_casterUnit->GetArmor() * 0.01f + m_casterUnit->GetMaxHealth() * 0.015f), {}, {}, true);
                     return;
                 }
                 case 34348:
