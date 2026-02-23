@@ -611,23 +611,16 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
     // rank1 : 8998
     // rank2 : 9000
     // rank3 : 9892
-    // Hunter - Disengage :
-    // rank1 : 781
-    // rank2 : 14272
-    // rank3 : 14273
     // Rogue - Feint
     // rank1 : 1966
     // rank2 : 6768
     // rank3 : 8637
     // rank4 : 11303
     // rank5 : 25302
-    // subtract 50% attackpower
+    // subtract 50% melee attackpower
     else if (pThreatSpell && (pThreatSpell->Id == 8998 ||
                               pThreatSpell->Id == 9000 ||
                               pThreatSpell->Id == 9892 ||
-                              pThreatSpell->Id == 781 ||
-                              pThreatSpell->Id == 14272 ||
-                              pThreatSpell->Id == 14273 ||
                               pThreatSpell->Id == 1966 ||
                               pThreatSpell->Id == 6768 ||
                               pThreatSpell->Id == 8637 ||
@@ -635,6 +628,17 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
                               pThreatSpell->Id == 25302))
     {
         threat -= pVictim->GetTotalAttackPowerValue(BASE_ATTACK)*0.5;
+    }
+    // Hunter - Disengage :
+    // rank1 : 781
+    // rank2 : 14272
+    // rank3 : 14273
+    // subtract 50% range attackpower
+    else if (pThreatSpell && (pThreatSpell->Id == 781 ||
+                              pThreatSpell->Id == 14272 ||
+                              pThreatSpell->Id == 14273))
+    {
+        threat -= pVictim->GetTotalAttackPowerValue(RANGED_ATTACK)*0.5;
     }
 
     float totalThreat = ThreatCalcHelper::CalcThreat(pVictim, threat, crit, schoolMask, pThreatSpell);
