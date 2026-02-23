@@ -3984,7 +3984,22 @@ void Aura::HandleAuraModTotalThreat(bool apply, bool Real)
     if (!caster || !caster->IsAlive())
         return;
 
-    target->GetHostileRefManager().addTempThreat(m_modifier.m_amount, apply);
+    int32 threat_value = m_modifier.m_amount;
+
+    switch (GetId())
+    {
+        // Priest - Fade
+        case 586:
+        case 9578:
+        case 9579:
+        case 9592:
+        case 10941:
+        case 10942:
+            threat_value -= (target->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) + dither(target->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) * 0.5f));
+            break;
+    }
+
+    target->GetHostileRefManager().addTempThreat(threat_value, apply);
 }
 
 void Aura::HandleModTaunt(bool apply, bool Real)
