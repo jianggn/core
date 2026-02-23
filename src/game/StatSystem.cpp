@@ -249,7 +249,7 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                 ShapeshiftForm form = GetShapeshiftForm();
 
                 //Check if Predatory Strikes is skilled
-                float mLevelMult = 0.0;
+                float mPredatoryStrikes = 0.0;
                 switch (form)
                 {
                     case FORM_CAT:
@@ -262,7 +262,17 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                             // Predatory Strikes
                             if (itr->GetSpellProto()->SpellIconID == 1563)
                             {
-                                mLevelMult = itr->GetModifier()->m_amount / 100.0f;
+                                if (Item* item = ((Player*)this)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+                                {
+                                    if (item->GetProto()->Class == ITEM_CLASS_WEAPON)
+                                    {
+                                        mPredatoryStrikes = item->GetProto()->ItemLevel * (itr->GetModifier()->m_amount / 100.0f);
+                                        if (item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_MACE2 || item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_STAFF || item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+                                            mPredatoryStrikes *= 17.5f;
+                                        else
+                                            mPredatoryStrikes *= 14.0f;
+                                    }
+                                }
                                 break;
                             }
                         }
@@ -278,12 +288,12 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                        // World of Warcraft Client Patch 1.7.0 (2005-09-13)
                        // - Cat Form - Each point of agility now adds 2 attack power.
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
-                        val2 = GetLevel() * mLevelMult + strength * 2.0f + agility * 2.0f - 20.0f;
+                        val2 = mPredatoryStrikes + strength * 2.0f + agility * 2.0f - 20.0f;
                         break;
 #endif
                     case FORM_BEAR:
                     case FORM_DIREBEAR:
-                        val2 = GetLevel() * mLevelMult + strength * 2.0f - 20.0f;
+                        val2 = mPredatoryStrikes + strength * 2.0f - 20.0f;
                         break;
                     default:
                         val2 = strength * 2.0f - 20.0f;
