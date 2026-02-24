@@ -1343,6 +1343,82 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 28848;
                     break;
                 }
+                // Mangle rank 1
+                case 16966:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    uint32 bleed_count = 0;
+                    for (const auto i : auras)
+                    {
+                        // Rip
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
+                    }
+                    for (const auto i : auras)
+                    {
+                        // Rake
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
+                    }
+                    if (!bleed_count)
+                        return SPELL_AURA_PROC_FAILED;
+                    // heal amount
+                    basepoints[0] = dither(25 * bleed_count * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34543;
+                    break;                               // no hidden cooldown
+                }
+                // Mangle rank 2
+                case 16968:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    uint32 bleed_count = 0;
+                    for (const auto i : auras)
+                    {
+                        // Rip
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
+                    }
+                    for (const auto i : auras)
+                    {
+                        // Rake
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
+                    }
+                    if (!bleed_count)
+                        return SPELL_AURA_PROC_FAILED;
+                    // heal amount
+                    if (pVictim->GetHealthPercent() < 50.0f)
+                        bleed_count *= 2;
+                    basepoints[0] = dither(25 * bleed_count * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34543;
+                    break;                               // no hidden cooldown
+                }
             }
             break;
         }
