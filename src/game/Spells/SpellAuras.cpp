@@ -1430,9 +1430,8 @@ void Aura::TriggerSpell()
                         if (lRage > 100)                    // rage stored as rage*10
                             lRage = 100;
                         target->ModifyPower(POWER_RAGE, -lRage);
-                        float FRTriggerBasePoints = lRage * LifePerRage / 10;
-                        // Frenzied Regeneration bonus 5% Druid armor per tick
-                        FRTriggerBasePoints += target->GetArmor() * 0.05f;
+                        // Frenzied Regeneration bonus 0.5% Druid armor per rage per tick
+                        float FRTriggerBasePoints = lRage * (LifePerRage + target->GetArmor() * 0.005f) / 10;
                         target->CastCustomSpell(target, 22845, dither(FRTriggerBasePoints), {}, {}, true, nullptr, this);
                         return;
                     }
