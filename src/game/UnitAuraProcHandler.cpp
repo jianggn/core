@@ -1357,39 +1357,33 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
                     if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    uint32 bleed_count = 0;
+                    for (const auto i : auras)
                     {
-                        // heal amount
-                        basepoints[0] = dither(this->GetMaxHealth() * 0.15f);
+                        // Rip
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
                     }
-                    else
+                    for (const auto i : auras)
                     {
-                        Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
-                        uint32 bleed_count = 0;
-                        for (const auto i : auras)
+                        // Rake
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
                         {
-                            // Rip
-                            if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
-                                i->GetCasterGuid() == this->GetObjectGuid())
-                            {
-                                bleed_count++;
-                                break;
-                            }
+                            bleed_count++;
+                            break;
                         }
-                        for (const auto i : auras)
-                        {
-                            // Rake
-                            if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
-                                i->GetCasterGuid() == this->GetObjectGuid())
-                            {
-                                bleed_count++;
-                                break;
-                            }
-                        }
-                        if (!bleed_count)
-                            return SPELL_AURA_PROC_FAILED;
-                        // heal amount
-                        basepoints[0] = dither(25 * bleed_count * amount / 100);
                     }
+                    if (!bleed_count)
+                        return SPELL_AURA_PROC_FAILED;
+                    // heal amount
+                    basepoints[0] = dither(25 * bleed_count * amount / 100);
                     target = this;
                     triggered_spell_id = 34543;
                     break;
@@ -1400,43 +1394,37 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
                     if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+                    uint32 bleed_count = 0;
+                    for (const auto i : auras)
                     {
-                        // heal amount
-                        basepoints[0] = dither(this->GetMaxHealth() * 0.15f);
-                        if (this->GetHealthPercent() < 50.0f)
-                            basepoints[0] *= 2;
+                        // Rip
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
+                        {
+                            bleed_count++;
+                            break;
+                        }
                     }
-                    else
+                    for (const auto i : auras)
                     {
-                        Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
-                        uint32 bleed_count = 0;
-                        for (const auto i : auras)
+                        // Rake
+                        if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
+                            i->GetCasterGuid() == this->GetObjectGuid())
                         {
-                            // Rip
-                            if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RIP_BITE>() &&
-                                i->GetCasterGuid() == this->GetObjectGuid())
-                            {
-                                bleed_count++;
-                                break;
-                            }
+                            bleed_count++;
+                            break;
                         }
-                        for (const auto i : auras)
-                        {
-                            // Rake
-                            if (i->GetSpellProto()->IsFitToFamily<SPELLFAMILY_DRUID, CF_DRUID_RAKE_CLAW>() &&
-                                i->GetCasterGuid() == this->GetObjectGuid())
-                            {
-                                bleed_count++;
-                                break;
-                            }
-                        }
-                        if (!bleed_count)
-                            return SPELL_AURA_PROC_FAILED;
-                        // heal amount
-                        if (pVictim->GetHealthPercent() < 50.0f)
-                            bleed_count *= 2;
-                        basepoints[0] = dither(25 * bleed_count * amount / 100);
                     }
+                    if (!bleed_count)
+                        return SPELL_AURA_PROC_FAILED;
+                    // heal amount
+                    if (pVictim->GetHealthPercent() < 50.0f)
+                        bleed_count++;
+                    if (this->GetHealthPercent() < 50.0f)
+                        bleed_count++;
+                    basepoints[0] = dither(25 * bleed_count * amount / 100);
                     target = this;
                     triggered_spell_id = 34543;
                     break;
