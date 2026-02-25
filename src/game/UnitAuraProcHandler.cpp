@@ -1343,6 +1343,14 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 28848;
                     break;
                 }
+                // Feline Swiftness
+                case 24864:
+                case 24867:
+                {
+                    target = this;
+                    triggered_spell_id = 34544;
+                    break;
+                }
                 // Mangle rank 1
                 case 16966:
                 {
