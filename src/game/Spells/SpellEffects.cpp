@@ -735,15 +735,6 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     m_casterUnit->CastCustomSpell(m_casterUnit, 34198, dither(m_casterUnit->GetArmor() * 0.05f), {}, {}, true);
                     return;
                 }
-                case 34202:
-                {
-                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
-                        return;
-                    // immediately finishes the cooldown on druid's Innervate/Hurricane
-                    auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return ((spellEntry.Id == 29166 || (spellEntry.SpellFamilyName == SPELLFAMILY_DRUID && spellEntry.SpellFamilyFlags == 0x400000)) && spellEntry.GetRecoveryTime() > 0); };
-                    static_cast<Player*>(m_caster)->RemoveSomeCooldown(cdCheck);
-                    return;
-                }
                 case 34204:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
