@@ -884,6 +884,9 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
+                    // immediately finishes the cooldown on druid's Innervate/Hurricane
+                    auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return ((spellEntry.Id == 29166 || (spellEntry.SpellFamilyName == SPELLFAMILY_DRUID && spellEntry.SpellFamilyFlags == 0x400000)) && spellEntry.GetRecoveryTime() > 0); };
+                    static_cast<Player*>(this)->RemoveSomeCooldown(cdCheck);
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
                     target = pVictim;
