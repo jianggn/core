@@ -268,9 +268,9 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                                     {
                                         mPredatoryStrikes = item->GetProto()->ItemLevel * (itr->GetModifier()->m_amount / 100.0f);
                                         if (item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_MACE2 || item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_STAFF || item->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-                                            mPredatoryStrikes *= 17.5f;
-                                        else
                                             mPredatoryStrikes *= 14.0f;
+                                        else
+                                            mPredatoryStrikes *= 11.2f;
                                     }
                                 }
                                 break;
