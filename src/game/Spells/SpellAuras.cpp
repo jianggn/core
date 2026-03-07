@@ -1611,7 +1611,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                 }
                             }
                             Aura* aura = NULL;
+                            Aura* pet_aura = NULL;
                             SpellAuraHolder* auraH = NULL;
+                            SpellAuraHolder* pet_auraH = NULL;
                             std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("select spell_24425,spell_22888,spell_34073,spell_34072,spell_34075,spell_34074,spell_34076,spell_34276 from `character_chromie_belongings` where `guid` = %u", player->GetGUIDLow());
                             if (castspells)
                             {
@@ -1620,13 +1622,33 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                     Field* fields = result->Fetch();
                                     for (int i = 0; i < 8; i++)
                                     {
-                                        if (fields[i].GetUInt32() != 0)
+                                        if (Pet* pet = player->GetPet())
                                         {
-                                            auraH = player->AddAura(spells[i], ADD_AURA_POSITIVE, player);
-                                            auraH->SetAuraDuration(fields[i].GetUInt32());
-                                            auraH->SetAuraMaxDuration(fields[i].GetUInt32());
-                                            auraH->RefreshHolder();
+                                            if (fields[i].GetUInt32() != 0)
+                                            {
+                                                auraH = player->AddAura(spells[i], ADD_AURA_POSITIVE, player);
+                                                auraH->SetAuraDuration(fields[i].GetUInt32());
+                                                auraH->SetAuraMaxDuration(fields[i].GetUInt32());
+                                                auraH->RefreshHolder();
+                                                if (pet->HasAura(spells[i]))
+                                                    pet->RemoveAurasDueToSpell(spells[i]);
+                                                pet_auraH = pet->AddAura(spells[i], ADD_AURA_POSITIVE, pet);
+                                                pet_auraH->SetAuraDuration(fields[i].GetUInt32());
+                                                pet_auraH->SetAuraMaxDuration(fields[i].GetUInt32());
+                                                pet_auraH->RefreshHolder();
+                                            }
                                         }
+                                        else
+                                        {
+                                            if (fields[i].GetUInt32() != 0)
+                                            {
+                                                auraH = player->AddAura(spells[i], ADD_AURA_POSITIVE, player);
+                                                auraH->SetAuraDuration(fields[i].GetUInt32());
+                                                auraH->SetAuraMaxDuration(fields[i].GetUInt32());
+                                                auraH->RefreshHolder();
+                                            }
+                                        }
+
                                     }
                                     CharacterDatabase.PExecute("delete from `character_chromie_belongings` where `guid` = '%u'", player->GetGUIDLow());
                                 }
@@ -1645,13 +1667,32 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                 }
                                 for (int i = 0; i < 8; i++)
                                 {
-                                    if (aura = player->GetAura(spells[i], EFFECT_INDEX_0))
+                                    if (Pet* pet = player->GetPet())
                                     {
-                                        times[i] += aura->GetAuraDuration();
-                                        if (times[i] > 7200000)
-                                            times[i] = 7200000;
-                                        aura->GetHolder()->SetAuraMaxDuration(0);
-                                        aura->GetHolder()->RefreshHolder();
+                                        if (aura = player->GetAura(spells[i], EFFECT_INDEX_0))
+                                        {
+                                            times[i] += aura->GetAuraDuration();
+                                            if (times[i] > 7200000)
+                                                times[i] = 7200000;
+                                            aura->GetHolder()->SetAuraMaxDuration(0);
+                                            aura->GetHolder()->RefreshHolder();
+                                            if (pet_aura = pet->GetAura(spells[i], EFFECT_INDEX_0))
+                                            {
+                                                pet_aura->GetHolder()->SetAuraMaxDuration(0);
+                                                pet_aura->GetHolder()->RefreshHolder();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (aura = player->GetAura(spells[i], EFFECT_INDEX_0))
+                                        {
+                                            times[i] += aura->GetAuraDuration();
+                                            if (times[i] > 7200000)
+                                                times[i] = 7200000;
+                                            aura->GetHolder()->SetAuraMaxDuration(0);
+                                            aura->GetHolder()->RefreshHolder();
+                                        }
                                     }
                                 }
                                 CharacterDatabase.PExecute("replace into `character_chromie_belongings` (`guid`, `spell_24425`, `spell_22888`, `spell_34073`, `spell_34072`, `spell_34075`, `spell_34074`, `spell_34076`, `spell_34276`) VALUES (%u, %u, %u, %u, %u, %u, %u, %u, %u)", player->GetGUIDLow(), times[0], times[1], times[2], times[3], times[4], times[5], times[6], times[7]);
