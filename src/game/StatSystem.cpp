@@ -271,6 +271,27 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                                             mPredatoryStrikes *= 14.0f;
                                         else
                                             mPredatoryStrikes *= 11.2f;
+                                        switch (item->GetProto()->Quality)
+                                        {
+                                            case ITEM_QUALITY_POOR:
+                                                mPredatoryStrikes *= 0.6f;
+                                                break;
+                                            case ITEM_QUALITY_NORMAL:
+                                                mPredatoryStrikes *= 0.8f;
+                                                break;
+                                            case ITEM_QUALITY_UNCOMMON:
+                                                mPredatoryStrikes *= 0.9f;
+                                                break;
+                                            case ITEM_QUALITY_RARE:
+                                                // mPredatoryStrikes *= 1.0f;
+                                                break;
+                                            case ITEM_QUALITY_EPIC:
+                                                mPredatoryStrikes *= 1.1f;
+                                                break;
+                                            case ITEM_QUALITY_LEGENDARY:
+                                                mPredatoryStrikes *= 1.2f;
+                                                break;
+                                        }
                                     }
                                 }
                                 break;
