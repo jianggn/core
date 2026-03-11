@@ -1424,9 +1424,9 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                         return SPELL_AURA_PROC_FAILED;
                     // heal amount
                     if (pVictim->GetHealthPercent() < 50.0f)
-                        bleed_count++;
+                        bleed_count *= 2;
                     if (this->GetHealthPercent() < 50.0f)
-                        bleed_count++;
+                        bleed_count *= 2;
                     basepoints[0] = dither(25 * bleed_count * amount / 100);
                     target = this;
                     triggered_spell_id = 34543;
