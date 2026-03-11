@@ -354,8 +354,6 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     if (spellInfo != originalSpellInfo)
         spell->m_originalSpellInfo = originalSpellInfo;
 
-    // Nostalrius : Ivina
-    spell->SetClientStarted(true);
     spell->prepare(std::move(targets));
 }
 
