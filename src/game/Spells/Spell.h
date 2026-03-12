@@ -122,6 +122,7 @@ class SpellCastTargets
         ObjectGuid getUnitTargetGuid() const { return m_unitTargetGUID; }
         Unit* getUnitTarget() const { return m_unitTarget; }
         void setUnitTarget(Unit* target);
+        void setUnitTarget_issues_3247(Unit* target);
         void setDestination(float x, float y, float z);
         void setSource(float x, float y, float z);
         void getDestination(float& x, float& y, float& z) const { x = m_destX; y = m_destY; z = m_destZ; }

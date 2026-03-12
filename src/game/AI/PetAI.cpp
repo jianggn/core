@@ -318,7 +318,10 @@ void PetAI::UpdateAI(uint32 const diff)
             targetSpellStore.erase(targetSpellStore.begin() + index);
 
             SpellCastTargets targets;
-            targets.setUnitTarget(target);
+            if (m_creature->GetObjectGuid() == target->GetObjectGuid())
+                targets.setUnitTarget_issues_3247(target);
+            else
+                targets.setUnitTarget(target);
 
             if (!m_creature->HasInArc(target))
             {
