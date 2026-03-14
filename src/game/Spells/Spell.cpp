@@ -90,18 +90,6 @@ void SpellCastTargets::setUnitTarget(Unit* target)
     m_targetMask |= TARGET_FLAG_UNIT;
 }
 
-void SpellCastTargets::setUnitTarget_issues_3247(Unit* target)
-{
-    if (!target)
-        return;
-
-    m_destX = target->GetPositionX();
-    m_destY = target->GetPositionY();
-    m_destZ = target->GetPositionZ();
-    m_unitTarget = target;
-    m_unitTargetGUID = target->GetObjectGuid();
-}
-
 void SpellCastTargets::setDestination(float x, float y, float z)
 {
     m_destX = x;
