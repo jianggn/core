@@ -445,6 +445,8 @@ class Spell
         void CleanupTargetList();
         void ClearCastItem();
 
+        bool m_isClientStarted = false;
+        void SetClientStarted(bool isClientStarted);
         bool IsTriggered() const       { return m_IsTriggeredSpell; }
         bool IsTriggeredByAura() const { return m_triggeredByAuraSpell; }
         bool IsTriggeredByProc() const;
