@@ -1035,12 +1035,6 @@ void Player::OnMirrorTimerExpirationPulse(MirrorTimer::Type timer)
         case MirrorTimer::ENVIRONMENTAL:
             if (IsInMagma() && GetMapId() != 557)
                 EnvironmentalDamage(DAMAGE_LAVA, urand(sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MIN), sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MAX)));
-            // NAXX Slime 34130
-            //if (IsInSlime() && m_zoneUpdateId == 3456)
-            //    CastSpell(this, 34130, true);
-            // Exclude Slime in Undercity
-            if (IsInSlime() && m_zoneUpdateId != 1497)
-                EnvironmentalDamage(DAMAGE_SLIME, urand(sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MIN), sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MAX)));
             break;
         case MirrorTimer::FEIGNDEATH:
             // Vanilla: kill player on feigning death for too long
