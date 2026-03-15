@@ -69,6 +69,7 @@ public:
     bool EnterStealthIfNeeded(SpellEntry const* pStealthSpell);
 
     bool CheckForDispelTargets();
+    bool CheckForDispelTargetsPet();
     void UpdateInCombatAI() final;
     void UpdateOutOfCombatAI() final;
     void UpdateInCombatAI_Paladin() final;

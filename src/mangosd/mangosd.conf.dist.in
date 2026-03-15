@@ -3069,6 +3069,9 @@ BotDurabilityPointsLoss   = 0
 BotLootMoney = 1
 BotLootRoll = 1
 
+BotDispelPetOutOfCombat = 1
+BotDispelPetInCombat = 0
+
 Buff.JieFuFuTi = 99
 
 Price.TravelBoots = 50000
