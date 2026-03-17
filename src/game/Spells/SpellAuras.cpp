@@ -7506,6 +7506,17 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
 
     switch (GetSpellProto()->SpellFamilyName)
     {
+        case SPELLFAMILY_GENERIC:
+        {
+            if (GetId() == 13750)
+                if (Unit* pCaster = GetCaster())
+                    if (pCaster->HasAura(34483))
+                    {
+                        auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return ((spellEntry.Id == 13877 || spellEntry.Id == 34373) && spellEntry.GetRecoveryTime() > 0); };
+                        static_cast<Player*>(pCaster)->RemoveSomeCooldown(cdCheck);
+                    }
+            break;
+        }
         case SPELLFAMILY_SHAMAN:
         {
             if (apply && GetSpellProto()->Id == 2645) // Check for Ghost Wolf
