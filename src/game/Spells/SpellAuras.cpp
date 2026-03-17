@@ -7508,7 +7508,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
     {
         case SPELLFAMILY_GENERIC:
         {
-            if (GetId() == 13750)
+            if (apply && GetId() == 13750)
                 if (Unit* pCaster = GetCaster())
                     if (pCaster->HasAura(34483))
                     {
