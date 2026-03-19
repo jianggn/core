@@ -3761,30 +3761,39 @@ enum Enchants
     WEP_HEAL,
     WEP2H_INT,
     WEP2H_SPIRIT,
+    WEP2H_IMPACT,
     OFFHAND_SPIRIT,
     OFFHAND_STAM,
     OFFHAND_FROSTRES,
     OFFHAND_SHIELDSPIKE,
+    OFFHAND_BLOCK,
     CHEST_STATS,
     CHEST_HEALTH,
+    CHEST_MANA,
     CLOAK_DODGE,
     CLOAK_SUB,
     CLOAK_ARMOR,
     CLOAK_AGILITY,
     CLOAK_GREATER_RES,
+    CLOAK_STEALTH,
     BRACER_STAM,
     BRACER_STR,
     BRACER_HEAL,
     BRACER_INT,
     BRACER_MP5,
+    BRACER_SPIRIT,
     GLOVES_AGI,
     GLOVES_FIRE,
     GLOVES_FROST,
     GLOVES_SHADOW,
     GLOVES_HEALING,
+    GLOVES_THREAT,
+    GLOVES_STRENGTH,
+    GLOVES_RIDING,
     BOOTS_AGI,
     BOOTS_SPEED,
     BOOTS_STAM,
+    BOOTS_SPIRIT,
     WEP_CRUSADER_OFFHAND,
     WEP_LIFESTEAL_OFFHAND,
     WEP_FIERY_OFFHAND,
@@ -3848,6 +3857,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
         case EQUIPMENT_SLOT_CHEST:
             player->ADD_GOSSIP_ITEM(5, "所有属性+4",      GOSSIP_SENDER_MAIN, CHEST_STATS);
             player->ADD_GOSSIP_ITEM(5, "生命值+100",     GOSSIP_SENDER_MAIN, CHEST_HEALTH);
+            player->ADD_GOSSIP_ITEM(5, "法力值+100",     GOSSIP_SENDER_MAIN, CHEST_MANA);
             break;
         case EQUIPMENT_SLOT_BACK:
             player->ADD_GOSSIP_ITEM(5, "敏捷+3",            GOSSIP_SENDER_MAIN, CLOAK_AGILITY);
@@ -3855,6 +3865,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             player->ADD_GOSSIP_ITEM(5, "躲闪+1%",              GOSSIP_SENDER_MAIN, CLOAK_DODGE);
             player->ADD_GOSSIP_ITEM(5, "仇恨-2%",           GOSSIP_SENDER_MAIN, CLOAK_SUB);
             player->ADD_GOSSIP_ITEM(5, "所有抗性+5", GOSSIP_SENDER_MAIN, CLOAK_GREATER_RES);
+            player->ADD_GOSSIP_ITEM(5, "潜行技能+5", GOSSIP_SENDER_MAIN, CLOAK_STEALTH);
         break;
         case EQUIPMENT_SLOT_WRISTS:
             player->ADD_GOSSIP_ITEM(5, "耐力+9",            GOSSIP_SENDER_MAIN, BRACER_STAM);
@@ -3862,6 +3873,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             player->ADD_GOSSIP_ITEM(5, "治疗法术+24",            GOSSIP_SENDER_MAIN, BRACER_HEAL);
             player->ADD_GOSSIP_ITEM(5, "智力+7",          GOSSIP_SENDER_MAIN, BRACER_INT);
             player->ADD_GOSSIP_ITEM(5, "每5秒回复4点法力值",                GOSSIP_SENDER_MAIN, BRACER_MP5);
+            player->ADD_GOSSIP_ITEM(5, "精神+9",                GOSSIP_SENDER_MAIN, BRACER_SPIRIT);
             break;
         case EQUIPMENT_SLOT_HANDS:
             player->ADD_GOSSIP_ITEM(5, "敏捷+15",            GOSSIP_SENDER_MAIN, GLOVES_AGI);
@@ -3869,11 +3881,15 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             player->ADD_GOSSIP_ITEM(5, "冰霜伤害+20",        GOSSIP_SENDER_MAIN, GLOVES_FROST);
             player->ADD_GOSSIP_ITEM(5, "暗影伤害+20",       GOSSIP_SENDER_MAIN, GLOVES_SHADOW);
             player->ADD_GOSSIP_ITEM(5, "治疗法术+30",            GOSSIP_SENDER_MAIN, GLOVES_HEALING);
+            player->ADD_GOSSIP_ITEM(5, "仇恨+2%",            GOSSIP_SENDER_MAIN, GLOVES_THREAT);
+            player->ADD_GOSSIP_ITEM(5, "力量+7",            GOSSIP_SENDER_MAIN, GLOVES_STRENGTH);
+            player->ADD_GOSSIP_ITEM(5, "坐骑移动速度+2%",            GOSSIP_SENDER_MAIN, GLOVES_RIDING);
             break;
         case EQUIPMENT_SLOT_FEET:
-            player->ADD_GOSSIP_ITEM(5, "耐力+7",            GOSSIP_SENDER_MAIN, BOOTS_STAM);
-            player->ADD_GOSSIP_ITEM(5, "移动速度+8%",        GOSSIP_SENDER_MAIN, BOOTS_SPEED);
             player->ADD_GOSSIP_ITEM(5, "敏捷+5",            GOSSIP_SENDER_MAIN, BOOTS_AGI);
+            player->ADD_GOSSIP_ITEM(5, "移动速度+8%",        GOSSIP_SENDER_MAIN, BOOTS_SPEED);
+            player->ADD_GOSSIP_ITEM(5, "耐力+7",            GOSSIP_SENDER_MAIN, BOOTS_STAM);
+            player->ADD_GOSSIP_ITEM(5, "精神+5",            GOSSIP_SENDER_MAIN, BOOTS_SPIRIT);
             break;
         case EQUIPMENT_SLOT_MAINHAND:
             player->ADD_GOSSIP_ITEM(5, "十字军",           GOSSIP_SENDER_MAIN, WEP_CRUSADER);
@@ -3881,6 +3897,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             player->ADD_GOSSIP_ITEM(5, "双手武器 敏捷+25",         GOSSIP_SENDER_MAIN, WEP2H_AGILITY);
             player->ADD_GOSSIP_ITEM(5, "双手武器 智力+22",             GOSSIP_SENDER_MAIN, WEP2H_INT);
             player->ADD_GOSSIP_ITEM(5, "双手武器 精神+20",          GOSSIP_SENDER_MAIN, WEP2H_SPIRIT);
+            player->ADD_GOSSIP_ITEM(5, "双手武器 伤害+9",          GOSSIP_SENDER_MAIN, WEP2H_IMPACT);
             player->ADD_GOSSIP_ITEM(5, "法术伤害+30",         GOSSIP_SENDER_MAIN, WEP_SPELLPOWER);
             player->ADD_GOSSIP_ITEM(5, "治疗法术+55",            GOSSIP_SENDER_MAIN, WEP_HEAL);
             player->ADD_GOSSIP_ITEM(5, "生命偷取",          GOSSIP_SENDER_MAIN, WEP_LIFESTEAL);
@@ -3894,6 +3911,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             player->ADD_GOSSIP_ITEM(5, "盾牌：耐力+7",            GOSSIP_SENDER_MAIN, OFFHAND_STAM);
             player->ADD_GOSSIP_ITEM(5, "盾牌：冰霜抗性+8",   GOSSIP_SENDER_MAIN, OFFHAND_FROSTRES);
             player->ADD_GOSSIP_ITEM(5, "盾牌：瑟银盾刺(20-30)",       GOSSIP_SENDER_MAIN, OFFHAND_SHIELDSPIKE);
+            player->ADD_GOSSIP_ITEM(5, "盾牌：格挡几率+2%",       GOSSIP_SENDER_MAIN, OFFHAND_BLOCK);
             player->ADD_GOSSIP_ITEM(5, "武器：十字军",       GOSSIP_SENDER_MAIN, WEP_CRUSADER_OFFHAND);
             player->ADD_GOSSIP_ITEM(5, "武器：生命偷取",       GOSSIP_SENDER_MAIN, WEP_LIFESTEAL_OFFHAND);
             player->ADD_GOSSIP_ITEM(5, "武器：灼热武器",       GOSSIP_SENDER_MAIN, WEP_FIERY_OFFHAND);
@@ -3917,8 +3935,9 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             case WEP2H_AGILITY:
             case WEP2H_INT:
             case WEP2H_SPIRIT:
+            case WEP2H_IMPACT:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
-                if (item && (action == WEP2H_AGILITY || action == WEP2H_SUPERIOR_IMPACT || action == WEP2H_INT || action == WEP2H_SPIRIT))
+                if (item && (action == WEP2H_AGILITY || action == WEP2H_SUPERIOR_IMPACT || action == WEP2H_INT || action == WEP2H_SPIRIT || action == WEP2H_IMPACT))
                 {
                     if (item->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_AXE2 && item->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_MACE2
                         && item->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_SWORD2 && item->GetProto()->SubClass != ITEM_SUBCLASS_WEAPON_POLEARM
@@ -3937,6 +3956,8 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
                     id = 2568;
                 else if (action == WEP2H_SPIRIT)
                     id = 2567;
+                else if (action == WEP2H_IMPACT)
+                    id = 1896;
                 break;
 
             case WEP_CRUSADER:
@@ -3980,6 +4001,7 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             case OFFHAND_STAM:
             case OFFHAND_FROSTRES:
             case OFFHAND_SHIELDSPIKE:
+            case OFFHAND_BLOCK:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
                 if (item && item->GetProto()->SubClass != ITEM_SUBCLASS_ARMOR_SHIELD)
                 {
@@ -3995,6 +4017,8 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
                     id = 929;
                 else if (action == OFFHAND_SHIELDSPIKE)
                     id = 1704;
+                else if (action == OFFHAND_BLOCK)
+                    id = 863;
                 break;
             case CHEST_STATS:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST);
@@ -4003,6 +4027,10 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             case CHEST_HEALTH:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST);
                 id = 1892;
+                break;
+            case CHEST_MANA:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_CHEST);
+                id = 1893;
                 break;
             case CLOAK_DODGE:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_BACK);
@@ -4024,6 +4052,10 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_BACK);
                 id = 1888;
                 break;
+            case CLOAK_STEALTH:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_BACK);
+                id = 910;
+                break;
             case BRACER_STAM:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_WRISTS);
                 id = 1886;
@@ -4043,6 +4075,10 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             case BRACER_MP5:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_WRISTS);
                 id = 2565;
+                break;
+            case BRACER_SPIRIT:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_WRISTS);
+                id = 1884;
                 break;
             case GLOVES_AGI:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS);
@@ -4064,6 +4100,18 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS);
                 id = 2617;
                 break;
+            case GLOVES_THREAT:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS);
+                id = 2613;
+                break;
+            case GLOVES_STRENGTH:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS);
+                id = 927;
+                break;
+            case GLOVES_RIDING:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HANDS);
+                id = 930;
+                break;
             case BOOTS_AGI:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FEET);
                 id = 904;
@@ -4075,6 +4123,10 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
             case BOOTS_STAM:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FEET);
                 id = 929;
+                break;
+            case BOOTS_SPIRIT:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_FEET);
+                id = 851;
                 break;
             case WEP_CRUSADER_OFFHAND:
             case WEP_LIFESTEAL_OFFHAND:
