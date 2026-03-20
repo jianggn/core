@@ -719,6 +719,13 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_RAID_RAQ, "Raid.RAQ", true);
     setConfig(CONFIG_BOOL_RAID_TAQ, "Raid.TAQ", true);
     setConfig(CONFIG_BOOL_RAID_NAXX, "Raid.NAXX", true);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_MC, "ItemLevel.MC", 55.0f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_OL, "ItemLevel.OL", 55.0f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_BWL, "ItemLevel.BWL", 64.5f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_ZG, "ItemLevel.ZG", 52.5f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_RAQ, "ItemLevel.RAQ", 60.0f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_TAQ, "ItemLevel.TAQ", 68.5f);
+    setConfig(CONFIG_FLOAT_ITEM_LEVEL_NAXX, "ItemLevel.NAXX", 72.0f);
 
     setConfig(CONFIG_UINT32_MAX_PRIMARY_TRADE_SKILL, "MaxPrimaryTradeSkill", 2);
     setConfigMinMax(CONFIG_UINT32_MIN_PETITION_SIGNS, "MinPetitionSigns", 9, 0, 9);

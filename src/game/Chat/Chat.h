@@ -929,6 +929,7 @@ class ChatHandler
         bool HandleWpExportCommand(char* args);
 
         bool HandleHelpCommand(char* args);
+        bool HandleItemLevelCommand(char* args);
         bool HandleCommandsCommand(char* args);
         bool HandleStartCommand(char* args);
         bool HandleMountCommand(char* args);

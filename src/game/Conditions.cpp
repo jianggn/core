@@ -254,18 +254,20 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         case CONDITION_LEVEL:
         {
             if ((conditionSourceType == CONDITION_FROM_AREATRIGGER) && (m_value3 == 2))
-                if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_OL) && (m_value4 == 249)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_ZG) && (m_value4 == 309)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_RAQ) && (m_value4 == 509)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_TAQ) && (m_value4 == 531)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_NAXX) && (m_value4 == 533)))
-                    return true;
+                if (Player const* pPlayer = target->ToPlayer())
+                    if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_MC))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_OL) && (m_value4 == 249) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_OL))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_BWL))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_ZG) && (m_value4 == 309) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_ZG))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_RAQ) && (m_value4 == 509) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_RAQ))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_TAQ) && (m_value4 == 531) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_TAQ))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_NAXX) && (m_value4 == 533) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_NAXX))))
+                        return true;
             if ((conditionSourceType == CONDITION_FROM_DBSCRIPTS) && (m_value3 == 2))
-                if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409)) ||
-                    (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469)))
-                    return true;
+                if (Player const* pPlayer = target->ToPlayer())
+                    if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_MC))) ||
+                        (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469) && (pPlayer->GetItemLevel() >= sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_BWL))))
+                        return true;
             auto const level = static_cast<int64>(target->ToUnit()->GetLevel());
             switch (m_value2)
             {

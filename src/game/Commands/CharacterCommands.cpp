@@ -5893,6 +5893,27 @@ bool ChatHandler::HandleListVisibleGuidsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleItemLevelCommand(char* args)
+{
+    Player* pPlayer = GetSelectedPlayer();
+    if (!pPlayer)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    if (GetAccessLevel() == SEC_PLAYER)
+        if (m_session->GetPlayer()->GetTeam() != pPlayer->GetTeam())
+        {
+            SendSysMessage(LANG_NO_CHAR_SELECTED);
+            SetSentErrorMessage(true);
+            return false;
+        }
+    float itemLevel = pPlayer->GetItemLevel();
+    PSendSysMessage("Item level for %s: %.2f", pPlayer->GetName(), itemLevel);
+    return true;
+}
+
 //Dual Talent Specialization
 bool ChatHandler::HandleSwapSpec(char* /*args*/)
 {

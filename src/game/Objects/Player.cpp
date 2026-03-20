@@ -10799,6 +10799,20 @@ void Player::SetVisibleItemSlot(uint8 slot, Item const* pItem)
     }
 }
 
+float Player::GetItemLevel() const
+{
+    float itemLevel = 0.0f;
+    // Equipment
+    for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+    {
+        if (i == EQUIPMENT_SLOT_BODY || i == EQUIPMENT_SLOT_OFFHAND || i == EQUIPMENT_SLOT_TABARD)
+            continue;
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            itemLevel += pItem->GetProto()->ItemLevel;
+    }
+    return itemLevel / 16;
+}
+
 void Player::ReplaceCharacterTransmog(uint64 guid, uint64 entry, uint64 character)
 {
     CharacterDatabase.PExecute("REPLACE INTO `character_transmog` (`guid`, `entry`, `character`) VALUES (%u, %u, %u)", guid, entry, character);

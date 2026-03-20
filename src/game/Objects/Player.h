@@ -886,6 +886,7 @@ class Player final: public Unit
         void SendItemDurations() const;
         uint32 CountFreeInventorySlots() const;
     public:
+        float GetItemLevel() const;
         void ReplaceCharacterTransmog(uint64 guid, uint64 entry, uint64 character);
         Item* AddItem(uint32 itemId, uint32 count = 1);
         void InterruptSpellsWithCastItem(Item const* item);
