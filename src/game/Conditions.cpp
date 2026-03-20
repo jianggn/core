@@ -242,7 +242,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_ACTIVE_GAME_EVENT:
         {
-            if (sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_AQ_GATE) && (conditionSourceType == 10) && (m_value1 == 83))
+            if (sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_AQ_GATE) && (conditionSourceType == CONDITION_FROM_AREATRIGGER) && (m_value1 == 83))
                 return false;
             return sGameEventMgr.IsActiveEvent(m_value1);
         }
@@ -253,7 +253,7 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_LEVEL:
         {
-            if ((conditionSourceType == 10) && (m_value3 == 2))
+            if ((conditionSourceType == CONDITION_FROM_AREATRIGGER) && (m_value3 == 2))
                 if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409)) ||
                     (sWorld.getConfig(CONFIG_BOOL_RAID_OL) && (m_value4 == 249)) ||
                     (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469)) ||
@@ -261,6 +261,10 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
                     (sWorld.getConfig(CONFIG_BOOL_RAID_RAQ) && (m_value4 == 509)) ||
                     (sWorld.getConfig(CONFIG_BOOL_RAID_TAQ) && (m_value4 == 531)) ||
                     (sWorld.getConfig(CONFIG_BOOL_RAID_NAXX) && (m_value4 == 533)))
+                    return true;
+            if ((conditionSourceType == CONDITION_FROM_DBSCRIPTS) && (m_value3 == 2))
+                if ((sWorld.getConfig(CONFIG_BOOL_RAID_MC) && (m_value4 == 409)) ||
+                    (sWorld.getConfig(CONFIG_BOOL_RAID_BWL) && (m_value4 == 469)))
                     return true;
             auto const level = static_cast<int64>(target->ToUnit()->GetLevel());
             switch (m_value2)
