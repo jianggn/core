@@ -1381,7 +1381,6 @@ void PartyBotAI::UpdateInCombatAI_Paladin()
     if (Unit* pFriend = me->FindLowestHpFriendlyUnit(30.0f, 70, true, me))
     {
         if (m_spells.paladin.pQuZhu &&
-            !pFriend->HasAura(34047) &&
             CanTryToCastSpell(pFriend, m_spells.paladin.pQuZhu))
         {
             if (DoCastSpell(pFriend, m_spells.paladin.pQuZhu) == SPELL_CAST_OK)
@@ -1574,15 +1573,6 @@ void PartyBotAI::UpdateInCombatAI_Paladin()
                 me->GetMotionMaster()->MoveChase(pVictim);
             }
         }
-    }
-
-    if (m_spells.paladin.pQuZhu &&
-        (me->HasUnitState(UNIT_STATE_CAN_NOT_REACT_OR_LOST_CONTROL) || me->HasAuraType(SPELL_AURA_MOD_SILENCE)) &&
-        !me->HasAura(34047) &&
-        CanTryToCastSpell(me, m_spells.paladin.pQuZhu))
-    {
-        if (DoCastSpell(me, m_spells.paladin.pQuZhu) == SPELL_CAST_OK)
-            return;
     }
 
     if (m_spells.paladin.pBlessingOfFreedom &&

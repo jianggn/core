@@ -1485,7 +1485,6 @@ void BattleBotAI::UpdateInCombatAI_Paladin()
     {
         if (m_spells.paladin.pQuZhu &&
             !pFriend->HasAura(AURA_WARSONG_FLAG) &&
-            !pFriend->HasAura(34047) &&
             CanTryToCastSpell(pFriend, m_spells.paladin.pQuZhu))
         {
             if (DoCastSpell(pFriend, m_spells.paladin.pQuZhu) == SPELL_CAST_OK)
@@ -1513,16 +1512,6 @@ void BattleBotAI::UpdateInCombatAI_Paladin()
             if (DoCastSpell(pFriend, m_spells.paladin.pLayOnHands) == SPELL_CAST_OK)
                 return;
         }
-    }
-
-    if (m_spells.paladin.pQuZhu &&
-        (me->HasUnitState(UNIT_STATE_CAN_NOT_REACT_OR_LOST_CONTROL) || me->HasAuraType(SPELL_AURA_MOD_SILENCE)) &&
-        !me->HasAura(AURA_WARSONG_FLAG) &&
-        !me->HasAura(34047) &&
-        CanTryToCastSpell(me, m_spells.paladin.pQuZhu))
-    {
-        if (DoCastSpell(me, m_spells.paladin.pQuZhu) == SPELL_CAST_OK)
-            return;
     }
 
     if (m_spells.paladin.pBlessingOfFreedom &&

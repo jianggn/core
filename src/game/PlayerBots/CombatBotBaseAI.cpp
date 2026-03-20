@@ -3264,6 +3264,14 @@ void CombatBotBaseAI::BreakCrowdControlEffects()
     {
         case CLASS_PALADIN:
         {
+            // AURA_WARSONG_FLAG
+            if (m_spells.paladin.pQuZhu &&
+                !me->HasAura(23333) &&
+                CanTryToCastSpell(me, m_spells.paladin.pQuZhu))
+            {
+                if (DoCastSpell(me, m_spells.paladin.pQuZhu) == SPELL_CAST_OK)
+                    return;
+            }
             if (m_spells.paladin.pDivineShield &&
                 CanTryToCastSpell(me, m_spells.paladin.pDivineShield))
             {
