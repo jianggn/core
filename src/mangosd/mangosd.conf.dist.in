@@ -1170,6 +1170,13 @@ ShowProgressBars = 0
 WaitAtStartupError = 5 # consider fixing your actual problem before changing this value!
 Motd = "Welcome to World of Warcraft!"
 Instance.IgnoreAQGate = 1
+Raid.MC = 1
+Raid.OL = 1
+Raid.BWL = 1
+Raid.ZG = 1
+Raid.RAQ = 1
+Raid.TAQ = 1
+Raid.NAXX = 1
 
 ###################################################################################################################
 # PLAYER INTERACTION
