@@ -3964,6 +3964,10 @@ bool GossipSelect_EnchantNPC(Player* player, Creature* creature, uint32 sender, 
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
                 id = 1900;
                 break;
+            case WEP1H_STRENGTH:
+                item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
+                id = 2563;
+                break;
             case WEP1H_AGILITY:
                 item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
                 id = 2564;
