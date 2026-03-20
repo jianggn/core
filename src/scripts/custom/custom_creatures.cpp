@@ -2171,7 +2171,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 break;
             }
             player->ModifyMoney(-travelboots);
-            player->TeleportTo(469, -7665.55f, -1102.49f, 400.679f, 0.0f);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -7667.166504f, -1216.538696f, 287.789f, 5.845046f);
             break;
         case 4004:// Ruins of Ahn'Qiraj
             player->CLOSE_GOSSIP_MENU();
