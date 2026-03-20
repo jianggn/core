@@ -2161,7 +2161,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 break;
             }
             player->ModifyMoney(-travelboots);
-            player->TeleportTo(230, 1121.451172f, -454.316772f, -101.329536f, 3.5f);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, -7511.454590f, -1042.253784f, 180.912f, 0.695956f);
             break;
         case 4003:// Teleport to Blackwing Lair
             player->CLOSE_GOSSIP_MENU();
