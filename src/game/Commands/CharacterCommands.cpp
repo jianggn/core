@@ -5910,7 +5910,14 @@ bool ChatHandler::HandleItemLevelCommand(char* args)
             return false;
         }
     float itemLevel = pPlayer->GetItemLevel();
-    PSendSysMessage("Item level for %s: %.2f", pPlayer->GetName(), itemLevel);
+    PSendSysMessage("Item level for player %s: %.1f", pPlayer->GetName(), itemLevel);
+    PSendSysMessage("Raid MC requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_MC));
+    PSendSysMessage("Raid OL requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_OL));
+    PSendSysMessage("Raid BWL requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_BWL));
+    PSendSysMessage("Raid ZG requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_ZG));
+    PSendSysMessage("Raid RAQ requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_RAQ));
+    PSendSysMessage("Raid TAQ requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_TAQ));
+    PSendSysMessage("Raid NAXX requirement: %.1f", sWorld.getConfig(CONFIG_FLOAT_ITEM_LEVEL_NAXX));
     return true;
 }
 

@@ -1177,13 +1177,13 @@ Raid.ZG = 1
 Raid.RAQ = 1
 Raid.TAQ = 1
 Raid.NAXX = 1
-ItemLevel.MC = 52.5
-ItemLevel.OL = 52.5
-ItemLevel.BWL = 61.5
+ItemLevel.MC = 54.0
+ItemLevel.OL = 54.0
+ItemLevel.BWL = 62.0
 ItemLevel.ZG = 50.0
-ItemLevel.RAQ = 57.5
-ItemLevel.TAQ = 64.5
-ItemLevel.NAXX = 66.5
+ItemLevel.RAQ = 58.0
+ItemLevel.TAQ = 66.0
+ItemLevel.NAXX = 70.0
 
 ###################################################################################################################
 # PLAYER INTERACTION

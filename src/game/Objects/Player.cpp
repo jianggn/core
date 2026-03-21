@@ -10810,7 +10810,7 @@ float Player::GetItemLevel() const
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             itemLevel += pItem->GetProto()->ItemLevel;
     }
-    return itemLevel / 16;
+    return itemLevel / 16.0f;
 }
 
 void Player::ReplaceCharacterTransmog(uint64 guid, uint64 entry, uint64 character)
