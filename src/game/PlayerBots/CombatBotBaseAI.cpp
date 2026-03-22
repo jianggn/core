@@ -3117,8 +3117,8 @@ void CombatBotBaseAI::EquipOrUseNewItem()
             {
                 case ITEM_CLASS_CONSUMABLE:
                 {
-                    // bot can not use Grey Rat's master key & Ice Cold Milk.
-                    if (pItem->GetProto()->ItemId == 26051 || pItem->GetProto()->ItemId == 26169)
+                    // bot can not use Pungent Blood Cocktail & Grey Rat's master key & Ice Cold Milk.
+                    if (pItem->GetProto()->ItemId == 26040 || pItem->GetProto()->ItemId == 26051 || pItem->GetProto()->ItemId == 26169)
                         break;
                     SpellCastTargets targets;
                     targets.setUnitTarget(me);
