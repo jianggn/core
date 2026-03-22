@@ -3254,6 +3254,231 @@ bool GossipSelect_Danath_Trollbane(Player *player, Creature *_Creature, uint32 s
     return true;
 }
 
+bool GossipHello_Portal_Sergeant_Bly(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 558)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "当心，冒险者！这里的熊怪异常躁动，我们的队伍在混乱中被冲散了。等等，我们在沙漠里是不是见过一面？",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Portal_Sergeant_Bly(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, 6818.529297f, -2077.303223f, 623.271118f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：木喉要塞",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(558, -7689.899902f, -3030.914551f, 307.193481f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Portal_Sergeant_Bly(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Portal_Sergeant_Bly(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Portal_Raven(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 558)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "啊，好险！我没命地跑才从木喉要塞侥幸逃生。希望同伴们没事……",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Portal_Raven(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, 4218.519043f, -5212.360352f, 115.982880f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：木喉要塞",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(558, -8122.055176f, -3445.790771f, 224.913391f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Portal_Raven(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Portal_Raven(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Portal_Gamon(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 559)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "别怕，加摩尔会保护大家的！",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Portal_Gamon(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, -4721.114258f, -2156.280029f, 84.474144f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：风角峡谷",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(559, -8030.655762f, -3513.534912f, 157.836395f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Portal_Gamon(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Portal_Gamon(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Portal_Baron_Revilgaz(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 560)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "石爪山脉是卡利姆多最具备投资价值的区域。风浪越大，鱼越贵。",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Portal_Baron_Revilgaz(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_KALIMDOR, 1645.961060f, 884.055908f, 132.793945f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：荆棘峡谷",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(560, 2174.221191f, 1569.235596f, 1160.456299f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Portal_Baron_Revilgaz(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Portal_Baron_Revilgaz(player, _Creature, action);
+
+    return true;
+}
+
+bool GossipHello_Portal_Liuhaizhu(Player *player, Creature *_Creature)   
+{
+    if (player->GetMapId() == 561)
+    {
+        player->ADD_GOSSIP_ITEM(5, "离开副本",               GOSSIP_SENDER_MAIN, 1);
+    }
+    else
+    {
+        player->ADD_GOSSIP_ITEM(7, "哎呀，你大爷呀，破逼传送器给我干哪儿来了？这还是诺莫瑞根吗，啊?",               GOSSIP_SENDER_MAIN, 2);
+    }
+    player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+    return true;
+}
+void SendDefaultMenu_Portal_Liuhaizhu(Player *player, Creature *_Creature, uint32 action)
+{
+    switch (action)
+    {
+        case 1:
+            player->CLOSE_GOSSIP_MENU();
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 376.538330f, -336.624207f, 185.115158f, 0.0f);
+            break;
+        case 2:
+            player->ADD_GOSSIP_ITEM(5, "传送：霜鬃谷",               GOSSIP_SENDER_MAIN, 3);
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 3:
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetLevel() < 60)
+            {
+                player->GetSession()->SendNotification("You must be at least level 60 to enter.");
+                break;
+            }
+            player->TeleportTo(561, -7531.476562f, -3580.057861f, 199.814941f, 0.0f);
+            break;
+    }
+}
+bool GossipSelect_Portal_Liuhaizhu(Player *player, Creature *_Creature, uint32 sender, uint32 action)
+{
+    // Main menu
+    if (sender == GOSSIP_SENDER_MAIN)
+        SendDefaultMenu_Portal_Liuhaizhu(player, _Creature, action);
+
+    return true;
+}
+
 bool GossipHello_Gwyn(Player *player, Creature *_Creature)   
 {
     player->ADD_GOSSIP_ITEM(7, "火已渐熄，位不见王影，而无火的余灰们将纷沓而至。那是无名，成不了薪，且被诅咒的不死人。但正因为如此，灰烬才会如此渴求余火吧。",  GOSSIP_SENDER_MAIN, 1);
@@ -4624,6 +4849,36 @@ void AddSC_custom_creatures()
     newscript->pGossipHello = &GossipHello_Danath_Trollbane;
     newscript->pGossipSelect = &GossipSelect_Danath_Trollbane;
     newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_portal_sergeant_bly";
+    newscript->pGossipHello = &GossipHello_Portal_Sergeant_Bly;
+    newscript->pGossipSelect = &GossipSelect_Portal_Sergeant_Bly;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_portal_raven";
+    newscript->pGossipHello = &GossipHello_Portal_Raven;
+    newscript->pGossipSelect = &GossipSelect_Portal_Raven;
+    newscript->RegisterSelf(false); 
+
+    newscript = new Script;
+    newscript->Name = "npc_portal_gamon";
+    newscript->pGossipHello = &GossipHello_Portal_Gamon;
+    newscript->pGossipSelect = &GossipSelect_Portal_Gamon;
+    newscript->RegisterSelf(false); 
+
+    newscript = new Script;
+    newscript->Name = "npc_portal_baron_revilgaz";
+    newscript->pGossipHello = &GossipHello_Portal_Baron_Revilgaz;
+    newscript->pGossipSelect = &GossipSelect_Portal_Baron_Revilgaz;
+    newscript->RegisterSelf(false); 
+
+    newscript = new Script;
+    newscript->Name = "npc_portal_liuhaizhu";
+    newscript->pGossipHello = &GossipHello_Portal_Liuhaizhu;
+    newscript->pGossipSelect = &GossipSelect_Portal_Liuhaizhu;
+    newscript->RegisterSelf(false); 
 
     newscript = new Script;
     newscript->Name = "custom_enchant_npc";
