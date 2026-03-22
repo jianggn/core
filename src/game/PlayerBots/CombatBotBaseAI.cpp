@@ -3104,6 +3104,10 @@ void CombatBotBaseAI::AddHunterAmmo()
 
 void CombatBotBaseAI::EquipOrUseNewItem()
 {
+    bool canSwap = true;
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", me->GetObjectGuid(), me->GetName()));
+    if (result)
+        canSwap = false;
     for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
     {
         Item* pItem = me->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
@@ -3113,6 +3117,9 @@ void CombatBotBaseAI::EquipOrUseNewItem()
             {
                 case ITEM_CLASS_CONSUMABLE:
                 {
+                    // bot can not use Grey Rat's master key & Ice Cold Milk.
+                    if (pItem->GetProto()->ItemId == 26051 || pItem->GetProto()->ItemId == 26169)
+                        break;
                     SpellCastTargets targets;
                     targets.setUnitTarget(me);
                     me->CastItemUseSpell(pItem, targets);
@@ -3121,12 +3128,13 @@ void CombatBotBaseAI::EquipOrUseNewItem()
                 case ITEM_CLASS_WEAPON:
                 case ITEM_CLASS_ARMOR:
                 {
-                    uint32 slot = me->FindEquipSlot(pItem->GetProto(), NULL_SLOT, true);
+                    uint32 slot = me->FindEquipSlot(pItem->GetProto(), NULL_SLOT, canSwap);
                     if (slot != NULL_SLOT)
                     {
                         if (Item* pItem2 = me->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
-                            me->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
-
+                            if (pItem->GetProto()->ItemLevel >= pItem2->GetProto()->ItemLevel && pItem->GetProto()->Quality >= pItem2->GetProto()->Quality)
+                                me->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
+                            else break;
                         // Learn required proficiency
                         if (uint32 proficiencySpellId = pItem->GetProto()->GetProficiencySpell())
                             if (!me->HasSpell(proficiencySpellId))
@@ -3518,12 +3526,8 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
             }
             else if (status == TRADE_STATUS_TRADE_COMPLETE)
             {
-                std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", me->GetObjectGuid(), me->GetName()));
-                if (!result)
-                {
-                    EquipOrUseNewItem();
-                    UpdateVisualHonorRankBasedOnItems();
-                }
+                EquipOrUseNewItem();
+                UpdateVisualHonorRankBasedOnItems();
             }
             break;
         }
