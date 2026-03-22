@@ -1033,7 +1033,7 @@ void Player::OnMirrorTimerExpirationPulse(MirrorTimer::Type timer)
             EnvironmentalDamage(DAMAGE_DROWNING, ((GetMaxHealth() / 5) + urand(0, (GetLevel() - 1))));
             break;
         case MirrorTimer::ENVIRONMENTAL:
-            if (IsInMagma() && GetMapId() != 557)
+            if (IsInMagma() && GetMapId() != 557 && GetMapId() != 558 && GetMapId() != 559)
                 EnvironmentalDamage(DAMAGE_LAVA, urand(sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MIN), sWorld.getConfig(CONFIG_UINT32_ENVIRONMENTAL_DAMAGE_MAX)));
             break;
         case MirrorTimer::FEIGNDEATH:

@@ -1430,6 +1430,18 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             player->ADD_GOSSIP_ITEM(5, "格瑞姆巴托 60级",   GOSSIP_SENDER_MAIN, 1281);
             player->ADD_GOSSIP_ITEM(5, "逐日者庭院 60级",   GOSSIP_SENDER_MAIN, 1282);
             player->ADD_GOSSIP_ITEM(5, "阿拉索废墟 60级",   GOSSIP_SENDER_MAIN, 1283);
+            player->ADD_GOSSIP_ITEM(5, "木喉要塞-费伍德 60级",   GOSSIP_SENDER_MAIN, 1284);
+            player->ADD_GOSSIP_ITEM(7, "[更多] ->",             GOSSIP_SENDER_MAIN, 5554);
+            player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5552);
+            player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
+
+            player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, _Creature->GetGUID());
+            break;
+        case 5554: // Instances [PAGE 5]
+            player->ADD_GOSSIP_ITEM(5, "木喉要塞-艾萨拉 60级",   GOSSIP_SENDER_MAIN, 1285);
+            player->ADD_GOSSIP_ITEM(5, "风角峡谷 60级",   GOSSIP_SENDER_MAIN, 1286);
+            player->ADD_GOSSIP_ITEM(5, "荆棘峡谷 60级",   GOSSIP_SENDER_MAIN, 1287);
+            player->ADD_GOSSIP_ITEM(5, "霜鬃谷 60级",   GOSSIP_SENDER_MAIN, 1288);
             player->ADD_GOSSIP_ITEM(7, "<- [后退]",           GOSSIP_SENDER_MAIN, 5552);
             player->ADD_GOSSIP_ITEM(7, "<-[主菜单]",       GOSSIP_SENDER_MAIN, 100);
 
@@ -2132,6 +2144,56 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             }
             player->ModifyMoney(-travelboots);
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -1528.809082f, -1805.616821f, 71.632103f, 0.00f);
+            break;
+        case 1284:// Teleport player to Timbermaw-Felwood
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, 6818.529297f, -2077.303223f, 623.271118f, 0.00f);
+            break;
+        case 1285:// Teleport player to Timbermaw-Azshara
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, 4218.519043f, -5212.360352f, 115.982880f, 0.00f);
+            break;
+        case 1286:// Teleport player to MooCanyon
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, -4721.114258f, -2156.280029f, 84.474144f, 0.00f);
+            break;
+        case 1287:// Teleport player to netherstormbg
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_KALIMDOR, 1645.961060f, 884.055908f, 132.793945f, 0.00f);
+            break;
+        case 1288:// Teleport player to FrostmaneCaverns
+            player->CLOSE_GOSSIP_MENU();
+            if(player->GetMoney() < travelboots)
+            {
+                player->GetSession()->SendNotification(costprice.c_str());
+                break;
+            }
+            player->ModifyMoney(-travelboots);
+            player->TeleportTo(MAP_EASTERN_KINGDOMS, 376.538330f, -336.624207f, 185.115158f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
             player->CLOSE_GOSSIP_MENU();
