@@ -441,9 +441,11 @@ void ThreatManager::addThreat(Unit* pVictim, float threat, bool crit, SpellSchoo
                          pThreatSpell->Id == 34091 ||
                          pThreatSpell->Id == 34099 ||
                          pThreatSpell->Id == 34105 ||
+                         pThreatSpell->Id == 34106 ||
                          pThreatSpell->Id == 34107 ||
                          pThreatSpell->Id == 34111 ||
                          pThreatSpell->Id == 34112 ||
+                         pThreatSpell->Id == 34113 ||
                          pThreatSpell->Id == 34116 ||
                          pThreatSpell->Id == 34117 ||
                          pThreatSpell->Id == 34123 ||
