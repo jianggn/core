@@ -142,7 +142,7 @@ void AuctionHouseBotMgr::AddItem(AuctionHouseBotEntry e, AuctionHouseObject *auc
         if (urand(1, 100) < 95)
             return; // 95% chance to not add this item
     }
-    else if (prototype->ItemId >= 26052 && prototype->ItemId <= 26135)
+    else if ((prototype->ItemId >= 26052 && prototype->ItemId <= 26135) || (prototype->ItemId >= 26236 && prototype->ItemId <= 26254))
     {
         if (urand(1, 100) < 90)
             return; // 90% chance to not add this item

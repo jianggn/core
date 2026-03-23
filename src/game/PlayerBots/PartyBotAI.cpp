@@ -850,7 +850,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                    me->CastSpell(me, urand(34385, 34462), true);
+                    me->CastSpell(me, (urand(1, 5) > 4 ? urand(34545, 34563) : urand(34385, 34462)), true);
                     me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                     me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                 }

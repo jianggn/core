@@ -106,7 +106,7 @@ uint32 BattleBotAI::GetMountSpellId() const
             }
         }
         else
-            return urand(34385, 34462);
+            return (urand(1, 5) > 4 ? urand(34545, 34563) : urand(34385, 34462));
     }
     else if (me->GetLevel() >= 40)
     {
