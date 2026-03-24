@@ -8311,12 +8311,12 @@ std::string ObjectMgr::GenerateFreePlayerName()
 {
     std::string name;
     bool CallGeneratePlayerName = false;
-    for (uint32 i = 0; i < 200; ++i)
+    for (uint32 i = 0; i < 5; ++i)
     {
         name = GeneratePetName(2000);
         if (!sObjectMgr.GetPlayerGuidByName(name))
             break;
-        if (i == 199)
+        if (i == 4)
             CallGeneratePlayerName = true;
     }
     if (CallGeneratePlayerName)
