@@ -784,6 +784,19 @@ void PartyBotAI::UpdateAI(uint32 const diff)
         // C'Thun room do not teleport
         if (!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150)))
         {
+            if (pLeader->GetMap()->IsRaid())
+            {
+                std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT 1 FROM `character_instance` a WHERE `guid` = '%u' AND `instance` <> '%u' AND `permanent` = 1 AND EXISTS ( SELECT 1 FROM `characters` WHERE `guid` = a.`guid` AND `name` = '%s' ) AND EXISTS ( SELECT 1 FROM `instance` WHERE `id` = a.`instance` AND `map` = '%u' AND DATA <> '' )", me->GetObjectGuid(), pLeader->GetInstanceId(), me->GetName(), pLeader->GetMapId()));
+                if (result)
+                {
+                    if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                    {
+                        me->GetMotionMaster()->Clear(false, true);
+                        me->GetMotionMaster()->MoveIdle();
+                    }
+                    return;
+                }
+            }
             if (!me->IsStopped())
                 me->StopMoving();
             me->GetMotionMaster()->Clear(false, true);
