@@ -131,6 +131,7 @@ void AuctionHouseBotMgr::AddItem(AuctionHouseBotEntry e, AuctionHouseObject *auc
         return;
     }
 
+    /*
     if (prototype->ItemId == 26010 || prototype->ItemId == 26020 || prototype->ItemId == 26021 ||
         prototype->ItemId == 26022 || prototype->ItemId == 26023 || prototype->ItemId == 26024 ||
         prototype->ItemId == 26027 || prototype->ItemId == 26028 || prototype->ItemId == 26029 ||
@@ -152,6 +153,7 @@ void AuctionHouseBotMgr::AddItem(AuctionHouseBotEntry e, AuctionHouseObject *auc
         if (urand(1, 100) < 80)
             return; // 80% chance to not add this item
     }
+    */
 
     Item* item = Item::CreateItem(e.item, 1);
     if (!item)
