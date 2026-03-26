@@ -131,7 +131,6 @@ void AuctionHouseBotMgr::AddItem(AuctionHouseBotEntry e, AuctionHouseObject *auc
         return;
     }
 
-    /*
     if (prototype->ItemId == 26010 || prototype->ItemId == 26020 || prototype->ItemId == 26021 ||
         prototype->ItemId == 26022 || prototype->ItemId == 26023 || prototype->ItemId == 26024 ||
         prototype->ItemId == 26027 || prototype->ItemId == 26028 || prototype->ItemId == 26029 ||
@@ -140,20 +139,19 @@ void AuctionHouseBotMgr::AddItem(AuctionHouseBotEntry e, AuctionHouseObject *auc
         prototype->ItemId == 26044 || prototype->ItemId == 26045 || prototype->ItemId == 26046 ||
         prototype->ItemId == 26047 || prototype->ItemId == 26049 || prototype->ItemId == 26050)
     {
-        if (urand(1, 100) < 95)
-            return; // 95% chance to not add this item
-    }
-    else if ((prototype->ItemId >= 26052 && prototype->ItemId <= 26135) || (prototype->ItemId >= 26236 && prototype->ItemId <= 26254))
-    {
         if (urand(1, 100) < 90)
             return; // 90% chance to not add this item
     }
-    else if (prototype->ItemId == 26030)
+    else if ((prototype->ItemId >= 26052 && prototype->ItemId <= 26135) || (prototype->ItemId >= 26236 && prototype->ItemId <= 26254))
     {
         if (urand(1, 100) < 80)
             return; // 80% chance to not add this item
     }
-    */
+    else if (prototype->ItemId == 26030)
+    {
+        if (urand(1, 100) < 75)
+            return; // 75% chance to not add this item
+    }
 
     Item* item = Item::CreateItem(e.item, 1);
     if (!item)
