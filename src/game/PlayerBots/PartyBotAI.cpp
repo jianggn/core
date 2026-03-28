@@ -2395,7 +2395,23 @@ void PartyBotAI::UpdateInCombatAI_Mage()
                 return;
         } 
 
-        if (m_spells.mage.pScorch &&
+        bool victimCanReflectFrost = false;
+        bool victimCanReflectFire = false;
+        Unit::AuraList const& reflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
+        for (const auto i : reflectSpellsSchool)
+        {
+            if (!victimCanReflectFrost &&
+                i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FROST)
+                victimCanReflectFrost = true;
+            if (!victimCanReflectFire &&
+                i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FIRE)
+                victimCanReflectFire = true;
+            if (victimCanReflectFrost && victimCanReflectFire)
+                break;
+        }
+
+        if (!victimCanReflectFire &&
+            m_spells.mage.pScorch &&
            (pVictim->GetHealthPercent() < 20.0f) &&
             CanTryToCastSpell(pVictim, m_spells.mage.pScorch))
         {
@@ -2403,21 +2419,24 @@ void PartyBotAI::UpdateInCombatAI_Mage()
                 return;
         }
 
-        if (m_spells.mage.pFrostbolt &&
+        if (!victimCanReflectFrost &&
+            m_spells.mage.pFrostbolt &&
             CanTryToCastSpell(pVictim, m_spells.mage.pFrostbolt))
         {
             if (DoCastSpell(pVictim, m_spells.mage.pFrostbolt) == SPELL_CAST_OK)
                 return;
         }
 
-        if (m_spells.mage.pFireBlast &&
+        if (!victimCanReflectFire &&
+            m_spells.mage.pFireBlast &&
             CanTryToCastSpell(pVictim, m_spells.mage.pFireBlast))
         {
             if (DoCastSpell(pVictim, m_spells.mage.pFireBlast) == SPELL_CAST_OK)
                 return;
         }
 
-        if (m_spells.mage.pFireball &&
+        if (!victimCanReflectFire &&
+            m_spells.mage.pFireball &&
             CanTryToCastSpell(pVictim, m_spells.mage.pFireball))
         {
             if (DoCastSpell(pVictim, m_spells.mage.pFireball) == SPELL_CAST_OK)
