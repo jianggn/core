@@ -2395,52 +2395,68 @@ void PartyBotAI::UpdateInCombatAI_Mage()
                 return;
         } 
 
-        bool victimCanReflectFrost = false;
-        bool victimCanReflectFire = false;
-        Unit::AuraList const& reflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
-        for (const auto i : reflectSpellsSchool)
+        bool victimCanReflectSpell = false;
+        Unit::AuraList const& reflectSpells = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS);
+        for (const auto i : reflectSpells)
         {
-            if (!victimCanReflectFrost &&
-                i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FROST)
-                victimCanReflectFrost = true;
-            if (!victimCanReflectFire &&
-                i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FIRE)
-                victimCanReflectFire = true;
-            if (victimCanReflectFrost && victimCanReflectFire)
+            if (i->GetModifier()->m_amount >= 99.0f)
+            {
+                victimCanReflectSpell = true;
                 break;
+            }
         }
 
-        if (!victimCanReflectFire &&
-            m_spells.mage.pScorch &&
-           (pVictim->GetHealthPercent() < 20.0f) &&
-            CanTryToCastSpell(pVictim, m_spells.mage.pScorch))
+        if (!victimCanReflectSpell)
         {
-            if (DoCastSpell(pVictim, m_spells.mage.pScorch) == SPELL_CAST_OK)
-                return;
-        }
+            bool victimCanReflectFrost = false;
+            bool victimCanReflectFire = false;
+            Unit::AuraList const& reflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
+            for (const auto i : reflectSpellsSchool)
+            {
+                if (!victimCanReflectFrost &&
+                    i->GetModifier()->m_amount >= 99.0f &&
+                    i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FROST)
+                    victimCanReflectFrost = true;
+                if (!victimCanReflectFire &&
+                    i->GetModifier()->m_amount >= 99.0f &&
+                    i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_FIRE)
+                    victimCanReflectFire = true;
+                if (victimCanReflectFrost && victimCanReflectFire)
+                    break;
+            }
 
-        if (!victimCanReflectFrost &&
-            m_spells.mage.pFrostbolt &&
-            CanTryToCastSpell(pVictim, m_spells.mage.pFrostbolt))
-        {
-            if (DoCastSpell(pVictim, m_spells.mage.pFrostbolt) == SPELL_CAST_OK)
-                return;
-        }
+            if (!victimCanReflectFire &&
+                m_spells.mage.pScorch &&
+               (pVictim->GetHealthPercent() < 20.0f) &&
+                CanTryToCastSpell(pVictim, m_spells.mage.pScorch))
+            {
+                if (DoCastSpell(pVictim, m_spells.mage.pScorch) == SPELL_CAST_OK)
+                    return;
+            }
 
-        if (!victimCanReflectFire &&
-            m_spells.mage.pFireBlast &&
-            CanTryToCastSpell(pVictim, m_spells.mage.pFireBlast))
-        {
-            if (DoCastSpell(pVictim, m_spells.mage.pFireBlast) == SPELL_CAST_OK)
-                return;
-        }
+            if (!victimCanReflectFrost &&
+                m_spells.mage.pFrostbolt &&
+                CanTryToCastSpell(pVictim, m_spells.mage.pFrostbolt))
+            {
+                if (DoCastSpell(pVictim, m_spells.mage.pFrostbolt) == SPELL_CAST_OK)
+                    return;
+            }
 
-        if (!victimCanReflectFire &&
-            m_spells.mage.pFireball &&
-            CanTryToCastSpell(pVictim, m_spells.mage.pFireball))
-        {
-            if (DoCastSpell(pVictim, m_spells.mage.pFireball) == SPELL_CAST_OK)
-                return;
+            if (!victimCanReflectFire &&
+                m_spells.mage.pFireBlast &&
+                CanTryToCastSpell(pVictim, m_spells.mage.pFireBlast))
+            {
+                if (DoCastSpell(pVictim, m_spells.mage.pFireBlast) == SPELL_CAST_OK)
+                    return;
+            }
+
+            if (!victimCanReflectFire &&
+                m_spells.mage.pFireball &&
+                CanTryToCastSpell(pVictim, m_spells.mage.pFireball))
+            {
+                if (DoCastSpell(pVictim, m_spells.mage.pFireball) == SPELL_CAST_OK)
+                    return;
+            }
         }
 
         if (m_spells.mage.pEvocation &&
