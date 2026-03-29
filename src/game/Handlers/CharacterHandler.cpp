@@ -454,7 +454,10 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->SetSession(this);
 
         // Need to attach packet bcaster to the new socket
-        pCurrChar->m_broadcaster->ChangeSocket(GetSocket());
+        if (pCurrChar->m_broadcaster)
+            pCurrChar->m_broadcaster->ChangeSocket(GetSocket());
+        else
+            pCurrChar->CreatePacketBroadcaster();
 
         // If the character had a logout request, then he is articifially stunned (in CMSG_LOGOUT_REQUEST handler). Fix it here.
         if (pCurrChar->CanFreeMove())

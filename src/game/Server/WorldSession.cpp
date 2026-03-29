@@ -448,6 +448,9 @@ bool WorldSession::Update(PacketFilter& updater)
                 m_warden = nullptr;
             }
 
+            if (GetPlayer())
+                GetPlayer()->DeletePacketBroadcaster();
+
             // Character stays IG for 2 minutes
             return ForcePlayerLogoutDelay();
         }
