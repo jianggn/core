@@ -54,7 +54,7 @@ bool WorldSession::SanitizeChatMessage(std::string& msg, uint32 lang, uint32 msg
 
     if (sWorld.getConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_SEVERITY) && !ChatHandler(this).isValidChatMessage(msg))
     {
-        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), msg);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), msg.c_str());
         if (sWorld.getConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_KICK))
             KickPlayer();
         return false;
@@ -220,7 +220,7 @@ void WorldSession::HandleChatMessageOpcode(WorldPackets::Chat::ChatMessage const
             }
         }
 
-        if (packet.type != CHAT_MSG_AFK && packet.type != CHAT_MSG_DND)
+        if (packet.type != CHAT_MSG_AFK && packet.type != CHAT_MSG_DND) // is not AFK or DND message update
         {
             if (packet.type != CHAT_MSG_WHISPER) // whisper checked later
             {
@@ -234,13 +234,14 @@ void WorldSession::HandleChatMessageOpcode(WorldPackets::Chat::ChatMessage const
                 }
             }
 
-            if (packet.lang != LANG_ADDON && GetMasterPlayer())
+            if (GetMasterPlayer())
                 GetMasterPlayer()->UpdateSpeakTime(); // Anti chat flood
+
+            // process message
+            if (!SanitizeChatMessageAndProcessCommand(const_cast<std::string&>(packet.message), packet.lang, packet.type)) // <-- includes `CheckChatMessageValidity`
+                return;
         }
     }
-
-    if (!SanitizeChatMessageAndProcessCommand(const_cast<std::string&>(packet.message), packet.lang, packet.type)) // <-- includes `CheckChatMessageValidity`
-        return;
 
     /** Enable various spam chat detections */
     if (packet.lang != LANG_ADDON)
