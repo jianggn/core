@@ -35,6 +35,30 @@ enum PartyBotSpells
     PB_SPELL_AUTO_SHOT = 75,
     PB_SPELL_SHOOT_WAND = 5019,
     PB_SPELL_HONORLESS_TARGET = 2479,
+
+    BB_SPELL_MOUNT_40_HUMAN = 470,
+    BB_SPELL_MOUNT_40_NELF = 10787,
+    BB_SPELL_MOUNT_40_DWARF = 6896,
+    BB_SPELL_MOUNT_40_GNOME = 17456,
+    BB_SPELL_MOUNT_40_TROLL = 10795,
+    BB_SPELL_MOUNT_40_ORC = 581,
+    BB_SPELL_MOUNT_40_TAUREN = 18363,
+    BB_SPELL_MOUNT_40_UNDEAD = 8980,
+
+    BB_SPELL_MOUNT_60_HUMAN = 22717,
+    BB_SPELL_MOUNT_60_NELF = 22723,
+    BB_SPELL_MOUNT_60_DWARF = 22720,
+    BB_SPELL_MOUNT_60_GNOME = 22719,
+    BB_SPELL_MOUNT_60_TROLL = 22721,
+    BB_SPELL_MOUNT_60_ORC = 22724,
+    BB_SPELL_MOUNT_60_TAUREN = 22718,
+    BB_SPELL_MOUNT_60_UNDEAD = 22722,
+
+    BB_SPELL_MOUNT_40_PALADIN = 13819,
+    BB_SPELL_MOUNT_60_PALADIN = 23214,
+
+    BB_SPELL_MOUNT_40_WARLOCK = 5784,
+    BB_SPELL_MOUNT_60_WARLOCK = 23161,
 };
 
 #define PB_UPDATE_INTERVAL 1000
@@ -178,6 +202,75 @@ bool PartyBotAI::RunAwayFromTarget(Unit* pEnemy)
     }
 
     return me->GetMotionMaster()->MoveDistance(pEnemy, 15.0f);
+}
+
+uint32 PartyBotAI::GetMountSpellId() const
+{
+    if (me->GetLevel() >= 60)
+    {
+        if (me->GetMapId() == MAP_AHN_QIRAJ_TEMPLE)
+            return (urand(1, 4) > 3 ? 25953 : urand(26054, 26056));
+        else
+        {
+            if (me->GetClass() == CLASS_PALADIN)
+                return BB_SPELL_MOUNT_60_PALADIN;
+            if (me->GetClass() == CLASS_WARLOCK)
+                return BB_SPELL_MOUNT_60_WARLOCK;
+
+            switch (me->GetRace())
+            {
+                case RACE_HUMAN:
+                    return BB_SPELL_MOUNT_60_HUMAN;
+                case RACE_NIGHTELF:
+                    return BB_SPELL_MOUNT_60_NELF;
+                case RACE_DWARF:
+                    return BB_SPELL_MOUNT_60_DWARF;
+                case RACE_GNOME:
+                    return BB_SPELL_MOUNT_60_GNOME;
+                case RACE_TROLL:
+                    return BB_SPELL_MOUNT_60_TROLL;
+                case RACE_ORC:
+                    return BB_SPELL_MOUNT_60_ORC;
+                case RACE_TAUREN:
+                    return BB_SPELL_MOUNT_60_TAUREN;
+                case RACE_UNDEAD:
+                    return BB_SPELL_MOUNT_60_UNDEAD;
+            }
+        }
+    }
+    else if (me->GetLevel() >= 40)
+    {
+        if (me->GetClass() == CLASS_PALADIN)
+            return BB_SPELL_MOUNT_40_PALADIN;
+        if (me->GetClass() == CLASS_WARLOCK)
+            return BB_SPELL_MOUNT_40_WARLOCK;
+
+        switch (me->GetRace())
+        {
+            case RACE_HUMAN:
+                return BB_SPELL_MOUNT_40_HUMAN;
+            case RACE_NIGHTELF:
+                return BB_SPELL_MOUNT_40_NELF;
+            case RACE_DWARF:
+                return BB_SPELL_MOUNT_40_DWARF;
+            case RACE_GNOME:
+                return BB_SPELL_MOUNT_40_GNOME;
+            case RACE_TROLL:
+                return BB_SPELL_MOUNT_40_TROLL;
+            case RACE_ORC:
+                return BB_SPELL_MOUNT_40_ORC;
+            case RACE_TAUREN:
+                return BB_SPELL_MOUNT_40_TAUREN;
+            case RACE_UNDEAD:
+                return BB_SPELL_MOUNT_40_UNDEAD;
+        }
+    }
+    else if (me->GetLevel() >= 10)
+    {
+        return 34535;
+    }
+
+    return 0;
 }
 
 bool PartyBotAI::DrinkAndEat()
@@ -897,7 +990,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                     me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
                     me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
 
-                if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 99) < 20)
+                if (me->GetLevel() >= 60 && me->GetMapId() != MAP_AHN_QIRAJ_TEMPLE && urand(0, 99) < 15)
                 {
                     bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
                     bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
@@ -909,14 +1002,14 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                 }
                 else
                 {
-                    auto auraList = pLeader->GetAurasByType(SPELL_AURA_MOUNTED);
-                    if (!auraList.empty())
+                    uint32 mountSpellId = GetMountSpellId();
+                    if (mountSpellId)
                     {
                         bool oldStateCastTime = me->HasCheatOption(PLAYER_CHEAT_NO_CAST_TIME);
                         bool oldStatePower = me->HasCheatOption(PLAYER_CHEAT_NO_POWER);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, true);
-                        me->CastSpell(me, (*auraList.begin())->GetId(), true);
+                        me->CastSpell(me, mountSpellId, true);
                         me->SetCheatOption(PLAYER_CHEAT_NO_CAST_TIME, oldStateCastTime);
                         me->SetCheatOption(PLAYER_CHEAT_NO_POWER, oldStatePower);
                     }
