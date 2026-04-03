@@ -242,7 +242,7 @@ float BattleBotAI::GetMaxAggroDistanceForMap() const
     BattleGround* bg = me->GetBattleGround();
     if (!bg || bg->GetTypeID() != BATTLEGROUND_AV)
         return 50.0f;
-    
+
     return 30.0f;
 }
 
@@ -500,7 +500,7 @@ void BattleBotAI::OnPacketReceived(WorldPacket const* packet)
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
                     *data << uint32(me->GetMapId());
 #endif
-                    me->GetSession()->QueuePacket(std::move(data));
+                    me->GetSession()->QueueBinaryPacket(std::move(data));
                 }
             }
             return;
@@ -546,7 +546,7 @@ void BattleBotAI::UpdateWaypointMovement()
             return;
 
     if (StartNewPathToObjective())
-        return; 
+        return;
 
     if (StartNewPathFromBeginning())
         return;
@@ -784,7 +784,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
             }
         }
     }
-    
+
     if (me->IsDead())
     {
         if (!m_wasDead)
@@ -793,7 +793,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
             OnJustDied();
             return;
         }
-        
+
         if (me->InBattleGround())
         {
             if (me->GetDeathState() == CORPSE)
@@ -811,7 +811,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
                 //me->SendCreateUpdateToPlayer(pLeader);
             }
         }
-        
+
         return;
     }
     else
@@ -853,7 +853,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
         me->ClearTarget();
 
     Unit* pVictim = me->GetVictim();
-    
+
     // Prevent battelbot from chasing target entered stealth mode
     if (pVictim && !pVictim->IsVisibleForOrDetect(me, me, false))
     {
@@ -925,7 +925,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
 
             if (UseMount())
                 return;
-            
+
             UpdateWaypointMovement();
         }
         return;
@@ -938,7 +938,7 @@ void BattleBotAI::UpdateAI(uint32 const diff)
         return;
     }
 
-    if (!pVictim || !IsValidHostileTarget(pVictim) || 
+    if (!pVictim || !IsValidHostileTarget(pVictim) ||
         !pVictim->IsWithinDist(me, VISIBILITY_DISTANCE_SMALL))
     {
         if (Unit* pNewVictim = SelectAttackTarget(pVictim))
@@ -1329,7 +1329,7 @@ void BattleBotAI::UpdateOutOfCombatAI_Paladin()
                         m_isBuffing = true;
                         return;
                     }
-                }  
+                }
             }
         }
     }
@@ -1383,7 +1383,7 @@ void BattleBotAI::UpdateInCombatAI_Paladin()
     {
         me->CastSpell(me, m_spells.paladin.pSeal, false);
     }
-    
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (hasSeal && m_spells.paladin.pJudgement &&
@@ -1697,7 +1697,7 @@ void BattleBotAI::UpdateInCombatAI_Shaman()
             if (DoCastSpell(pVictim, m_spells.shaman.pFlameShock) == SPELL_CAST_OK)
                 return;
         }
-        
+
         if (m_spells.shaman.pLightningBolt &&
            !me->CanReachWithMeleeAutoAttack(pVictim) &&
             CanTryToCastSpell(pVictim, m_spells.shaman.pLightningBolt))
@@ -4167,7 +4167,7 @@ void BattleBotAI::UpdateInCombatAI_Druid()
             me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
             me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
     }
-    
+
     if (Unit* pVictim = me->GetVictim())
     {
         if (Pet* pPet = me->GetPet())
@@ -4287,7 +4287,7 @@ void BattleBotAI::UpdateInCombatAI_Druid()
                     if (DoCastSpell(pVictim, m_spells.druid.pClaw) == SPELL_CAST_OK)
                         return;
                 }
-                
+
                 break;
             }
             case FORM_BEAR:
