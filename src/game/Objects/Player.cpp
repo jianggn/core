@@ -8630,11 +8630,33 @@ uint8 Player::FindEquipSlot(ItemPrototype const* proto, uint32 slot, bool swap) 
             }
         }
 
-        // if not found free and can swap return first appropriate from used
-        for (uint8 slot : slots)
+        if (proto->InventoryType == INVTYPE_FINGER || proto->InventoryType == INVTYPE_TRINKET)
         {
-            if (slot != NULL_SLOT && swap)
-                return slot;
+            if (GetItemByPos(INVENTORY_SLOT_BAG_0, slots[0]) && GetItemByPos(INVENTORY_SLOT_BAG_0, slots[1]) && swap)
+            {
+                uint32 IQ0 = GetItemByPos(INVENTORY_SLOT_BAG_0, slots[0])->GetProto()->Quality;
+                uint32 IQ1 = GetItemByPos(INVENTORY_SLOT_BAG_0, slots[1])->GetProto()->Quality;
+                if (IQ0 < IQ1)
+                    return slots[0];
+                else if (IQ0 > IQ1)
+                    return slots[1];
+                else if (IQ0 == IQ1)
+                {
+                    if (GetItemByPos(INVENTORY_SLOT_BAG_0, slots[0])->GetProto()->ItemLevel <= GetItemByPos(INVENTORY_SLOT_BAG_0, slots[1])->GetProto()->ItemLevel)
+                        return slots[0];
+                    else
+                        return slots[1];
+                }
+            }
+        }
+        else
+        {
+            // if not found free and can swap return first appropriate from used
+            for (uint8 slot : slots)
+            {
+                if (slot != NULL_SLOT && swap)
+                    return slot;
+            }
         }
     }
 
