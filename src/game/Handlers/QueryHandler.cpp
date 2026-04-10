@@ -184,7 +184,9 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature 
             + sizeof(uint32) // pet_spell_list_id
 #endif
             + sizeof(uint32)  // display_id
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
             + sizeof(uint8)  // civilian
+#endif
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
             + sizeof(uint8) // racial_leader
 #endif
@@ -212,7 +214,9 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature 
         data << uint32(ci->pet_spell_list_id);              // Id from CreatureSpellData.dbc
 #endif
         data << uint32(ci->display_id[0]);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
         data << uint8(ci->civilian);
+#endif
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
         data << uint8(ci->racial_leader);
 #endif

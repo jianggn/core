@@ -18,6 +18,7 @@ namespace WorldPackets { namespace Battleground
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
     class AreaSpiritHealerQuery final : public ClientPacket
     {
     public:
@@ -35,6 +36,7 @@ namespace WorldPackets { namespace Battleground
         explicit AreaSpiritHealerQueue() : ClientPacket(CMSG_AREA_SPIRIT_HEALER_QUEUE) {}
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
+#endif
 
     class BattlemasterHello final : public ClientPacket
     {
@@ -57,6 +59,7 @@ namespace WorldPackets { namespace Battleground
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
     class LeaveBattlefield final : public ClientPacket
     {
     public:
@@ -67,6 +70,7 @@ namespace WorldPackets { namespace Battleground
         explicit LeaveBattlefield() : ClientPacket(CMSG_LEAVE_BATTLEFIELD) {}
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
+#endif
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_6_1
     class BattlemasterJoin final : public ClientPacket

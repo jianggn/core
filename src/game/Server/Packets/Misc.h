@@ -121,6 +121,16 @@ namespace WorldPackets { namespace Misc
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
 
+    class SetTarget final : public ClientPacket
+    {
+    public:
+        ObjectGuid guid;
+
+        explicit SetTarget() : ClientPacket(CMSG_SET_TARGET_OBSOLETE) {}
+        void ReadFromWorldPacket(WorldPacket& recv_data) override;
+    };
+
+
     class FarSight final : public ClientPacket
     {
     public:

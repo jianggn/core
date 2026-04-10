@@ -780,6 +780,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
 }
 
 /*this procedure handles clients CMSG_REQUEST_PARTY_MEMBER_STATS request*/
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
 void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPackets::Group::RequestPartyMemberStats const& packet)
 {
     Player* player = HashMapHolder<Player>::Find(packet.guid);
@@ -810,6 +811,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPackets::Group::Requ
     BuildPartyMemberStatsPacket(player, &data, GROUP_UPDATE_FULL, true);
     SendPacket(&data);
 }
+#endif
 
 void WorldSession::HandleRequestRaidInfoOpcode(NullClientPacket const& /*packet*/)
 {

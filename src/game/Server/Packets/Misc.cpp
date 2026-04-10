@@ -67,6 +67,11 @@ void WorldPackets::Misc::SetSelection::ReadFromWorldPacket(WorldPacket& recv_dat
     recv_data >> guid;
 }
 
+void WorldPackets::Misc::SetTarget::ReadFromWorldPacket(WorldPacket& recv_data)
+{
+    recv_data >> guid;
+}
+
 void WorldPackets::Misc::FarSight::ReadFromWorldPacket(WorldPacket& recv_data)
 {
     recv_data >> op;

@@ -34,6 +34,7 @@ namespace WorldPackets { namespace Group
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
     class RequestPartyMemberStats final : public ClientPacket
     {
     public:
@@ -42,6 +43,7 @@ namespace WorldPackets { namespace Group
         explicit RequestPartyMemberStats() : ClientPacket(CMSG_REQUEST_PARTY_MEMBER_STATS) {}
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
+#endif
 
     class LootMethod final : public ClientPacket
     {

@@ -15,10 +15,12 @@ void WorldPackets::Group::GroupUninviteGuid::ReadFromWorldPacket(WorldPacket& re
     recv_data >> guid;
 }
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
 void WorldPackets::Group::RequestPartyMemberStats::ReadFromWorldPacket(WorldPacket& recv_data)
 {
     recv_data >> guid;
 }
+#endif
 
 void WorldPackets::Group::LootMethod::ReadFromWorldPacket(WorldPacket& recv_data)
 {

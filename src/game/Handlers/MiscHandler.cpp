@@ -431,6 +431,10 @@ void WorldSession::HandleSetSelectionOpcode(WorldPackets::Misc::SetSelection con
     }
 }
 
+void WorldSession::HandleSetMouseOverTargetOpcode(WorldPackets::Misc::SetTarget const& packet)
+{
+}
+
 void WorldSession::HandleStandStateChangeOpcode(WorldPackets::Misc::StandStateChange const& packet)
 {
     switch (packet.animState)

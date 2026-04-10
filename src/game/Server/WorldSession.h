@@ -543,6 +543,7 @@ class WorldSession
         void HandleTogglePvP(WorldPackets::Misc::TogglePvP const& packet);
         void HandleZoneUpdateOpcode(WorldPackets::Misc::ZoneUpdate const& packet);
         void HandleSetSelectionOpcode(WorldPackets::Misc::SetSelection const& packet);
+        void HandleSetMouseOverTargetOpcode(WorldPackets::Misc::SetTarget const& packet);
         void HandleStandStateChangeOpcode(WorldPackets::Misc::StandStateChange const& packet);
         void HandleEmoteOpcode(WorldPackets::Misc::Emote const& packet);
         void HandleFriendListOpcode(NullClientPacket const& packet);
@@ -585,7 +586,9 @@ class WorldSession
         void HandleGroupDisbandOpcode(NullClientPacket const& packet);
         void HandleLootMethodOpcode(WorldPackets::Group::LootMethod const& packet);
         void HandleLootRoll(WorldPackets::Loot::LootRoll const& packet);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
         void HandleRequestPartyMemberStatsOpcode(WorldPackets::Group::RequestPartyMemberStats const& packet);
+#endif
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_10_2
         void HandleRaidTargetUpdateOpcode(WorldPackets::Group::RaidTargetUpdate const& packet);
         void HandleRaidReadyCheckOpcode(WorldPackets::Group::RaidReadyCheck const& packet);
@@ -815,7 +818,9 @@ class WorldSession
         void HandleBattlefieldStatusOpcode(NullClientPacket const& packet);
         void HandleBattleFieldPortOpcode(WorldPackets::Battleground::BattleFieldPort const& packet);
         void HandleBattlefieldListOpcode(WorldPackets::Battleground::BattlefieldListRequest const& packet);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
         void HandleLeaveBattlefieldOpcode(WorldPackets::Battleground::LeaveBattlefield const& packet);
+#endif
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_5_1
         void HandleWardenDataOpcode(WorldPackets::Misc::WardenData const& packet);
@@ -826,8 +831,10 @@ class WorldSession
         void HandleWhoisOpcode(WorldPackets::Query::Whois const& packet);
         void HandleResetInstancesOpcode(NullClientPacket const& packet);
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
         void HandleAreaSpiritHealerQueryOpcode(WorldPackets::Battleground::AreaSpiritHealerQuery const& packet);
         void HandleAreaSpiritHealerQueueOpcode(WorldPackets::Battleground::AreaSpiritHealerQueue const& packet);
+#endif
         void HandleSelfResOpcode(NullClientPacket const& packet);
 
     private:
