@@ -326,7 +326,9 @@ void World::AddSession_(WorldSession* s)
     packet << uint32(0);                                    // BillingTimeRemaining
                                                             // BillingPlanFlags
     packet << uint8(s->HasTrialRestrictions() ? (BILLING_FLAG_TRIAL | BILLING_FLAG_RESTRICTED) : BILLING_FLAG_NONE);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     packet << uint32(0);                                    // BillingTimeRested
+#endif
     s->SendPacket(&packet);
 
     UpdateMaxSessionCounters();
@@ -373,7 +375,9 @@ void World::AddQueuedSession(WorldSession* sess)
     packet << uint32(0);                                    // BillingTimeRemaining
                                                             // BillingPlanFlags
     packet << uint8(sess->HasTrialRestrictions() ? (BILLING_FLAG_TRIAL | BILLING_FLAG_RESTRICTED) : BILLING_FLAG_NONE);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
     packet << uint32(0);                                    // BillingTimeRested
+#endif
     packet << uint32(GetQueuedSessionPos(sess));            // position in queue
     sess->SendPacket(&packet);
 
