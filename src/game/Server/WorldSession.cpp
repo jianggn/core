@@ -44,6 +44,8 @@
 #include "PlayerBroadcaster.h"
 #include "Crypto/Hash/MD5.h"
 
+#include <limits>
+
 // select opcodes appropriate for processing in Map::Update context for current session state
 static bool MapSessionFilterHelper(WorldSession* session, OpcodeHandler const& opHandle)
 {
@@ -74,7 +76,7 @@ WorldSession::WorldSession(uint32 id, std::shared_ptr<WorldSocket> sock, Account
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
     m_bot(nullptr), m_clientOS(CLIENT_OS_UNKNOWN), m_clientPlatform(CLIENT_PLATFORM_UNKNOWN), m_gameBuild(0), m_verifiedEmail(true),
-    m_charactersCount(10), m_characterMaxLevel(0), m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr), m_receivedPacketType{},
+    m_charactersCount(std::numeric_limits<uint32>::max()), m_characterMaxLevel(0), m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr), m_receivedPacketType{},
     m_floodPacketsCount{}, m_tutorials{}
 {
     m_remoteIpAddress = sock ? sock->GetRemoteIpString() : "<BOT>";
@@ -108,6 +110,34 @@ WorldSession::~WorldSession()
 char const* WorldSession::GetPlayerName() const
 {
     return GetPlayer() ? GetPlayer()->GetName() : "<none>";
+}
+
+// Sends a packet to the client.
+void WorldSession::SendPacket(std::unique_ptr<ServerPacket> packet)
+{
+    WorldPacket buffer;
+    { // TODO: This part will be offloaded to an IO thread soon. Only the IO thread will allocate a buffer.
+        buffer.SetOpcode(packet->GetOpcode());
+        buffer.FillPacketTime(WorldTimer::getMSTime());
+        packet->AppendBodyTo(buffer);
+    }
+
+    // There is a maximum size packet.
+    if (buffer.size() > 0x8000)
+    {
+        // Packet will be rejected by client
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[NETWORK] Packet %s size %u is too large. Not sent [Account %u Player %s]", LookupOpcodeName(buffer.GetOpcode()), buffer.size(), GetAccountId(), GetPlayerName());
+        return;
+    }
+
+    if (!m_socket)
+    {
+        if (GetBot() && GetBot()->ai)
+            GetBot()->ai->OnPacketReceived(&buffer); // TODO Direct forward `ServerPacket` to bot in next PR
+        return;
+    }
+
+    SendPacketImpl(&buffer); // TODO Queue `ServerPacket` and serialize it in IO thread
 }
 
 // Send a packet to the client
@@ -394,10 +424,10 @@ void WorldSession::CheckPlayedTimeLimit(time_t now)
 void WorldSession::SendPlayTimeWarning(PlayTimeFlag flag, int32 timeLeftInSeconds)
 {
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
-    WorldPacket data(SMSG_PLAY_TIME_WARNING, sizeof(uint32) + sizeof(int32));
-    data << uint32(flag);
-    data << int32(timeLeftInSeconds);
-    SendPacket(&data);
+    auto packet = std::make_unique<WorldPackets::Misc::PlayTimeWarning>();
+    packet->flag = static_cast<uint32>(flag);
+    packet->timeLeftInSeconds = timeLeftInSeconds;
+    SendPacket(std::move(packet));
 #endif
 }
 
@@ -812,8 +842,7 @@ void WorldSession::LogoutPlayer(bool Save)
         SetPlayer(nullptr);                                    // deleted in Remove/DeleteFromWorld call
 
         // Send the 'logout complete' packet to the client
-        WorldPacket data(SMSG_LOGOUT_COMPLETE, 0);
-        SendPacket(&data);
+        SendPacket(std::make_unique<WorldPackets::Misc::LogoutComplete>());
 
         sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
     }
