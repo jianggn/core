@@ -285,7 +285,7 @@ void WorldSession::HandleMovementOpcodes(WorldPackets::Movement::MovementPacket 
     uint32 opcode = packet.GetOpcode();
 
     // Do not accept packets sent before this time.
-    if (World::GetCurrentMSTime() <= m_moveRejectTime)
+    if (packet.movementInfo.stime <= m_moveRejectTime)
         return;
 
     Unit* pMover = _player->GetConfirmedMover();
@@ -304,8 +304,6 @@ void WorldSession::HandleMovementOpcodes(WorldPackets::Movement::MovementPacket 
     // ignore, waiting processing in WorldSession::HandleMoveWorldportAckOpcode and WorldSession::HandleMoveTeleportAck
     if (pPlayerMover && pPlayerMover->IsBeingTeleported())
         return;
-
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(World::GetCurrentMSTime());
 
     if (!VerifyMovementInfo(packet.movementInfo))
         return;
@@ -409,7 +407,6 @@ CMSG_FORCE_TURN_RATE_CHANGE_ACK
 */
 void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPackets::Movement::MoveSpeedAck const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
     uint32 opcode = packet.GetOpcode();
 
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
@@ -423,8 +420,6 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPackets::Movement::Move
 #else
     uint32 movementCounter = 0;
 #endif
-
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(timeNow);
 
     UnitMoveType move_type;
     switch (opcode)
@@ -484,7 +479,7 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPackets::Movement::Move
     Player* const pPlayerMover = pMover->ToPlayer();
 
     // Check if position and movement flags are fine before speed update.
-    bool canRelocate = timeNow > m_moveRejectTime && !pMover->HasPendingSplineDone() && VerifyMovementInfo(packet.movementInfo);
+    bool canRelocate = packet.movementInfo.stime > m_moveRejectTime && !pMover->HasPendingSplineDone() && VerifyMovementInfo(packet.movementInfo);
     if (canRelocate && pPlayerMover)
     {
         if ((m_moveRejectTime = _player->GetCheatData()->HandleFlagTests(pPlayerMover, const_cast<MovementInfo&>(packet.movementInfo), opcode)) ||
@@ -533,7 +528,6 @@ CMSG_MOVE_FEATHER_FALL_ACK
 */
 void WorldSession::HandleMovementFlagChangeToggleAck(WorldPackets::Movement::MoveFlagChangeAck const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
     uint32 opcode = packet.GetOpcode();
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     uint32 movementCounter = packet.movementCounter;
@@ -541,7 +535,6 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPackets::Movement::Mov
     uint32 movementCounter = 0;
 #endif
 
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(timeNow);
     bool const applyReceived = packet.apply;
 
     Unit* pMover = GetMoverFromGuid(packet.guid);
@@ -590,7 +583,7 @@ void WorldSession::HandleMovementFlagChangeToggleAck(WorldPackets::Movement::Mov
             break;
 
         // Do not accept packets sent before this time.
-        if (timeNow <= m_moveRejectTime)
+        if (packet.movementInfo.stime <= m_moveRejectTime)
             break;
 
         if (!VerifyMovementInfo(packet.movementInfo))
@@ -645,15 +638,12 @@ CMSG_FORCE_MOVE_UNROOT_ACK
 */
 void WorldSession::HandleMoveRootAck(WorldPackets::Movement::MoveRootAck const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
     uint32 opcode = packet.GetOpcode();
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     uint32 movementCounter = packet.movementCounter;
 #else
     uint32 movementCounter = 0;
 #endif
-
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(timeNow);
 
     Unit* pMover = GetMoverFromGuid(packet.guid);
     if (!pMover)
@@ -687,7 +677,7 @@ void WorldSession::HandleMoveRootAck(WorldPackets::Movement::MoveRootAck const& 
             break;
 
         // Do not accept packets sent before this time.
-        if (timeNow <= m_moveRejectTime)
+        if (packet.movementInfo.stime <= m_moveRejectTime)
             break;
 
         if (!VerifyMovementInfo(packet.movementInfo))
@@ -749,14 +739,11 @@ void WorldSession::HandleMoveRootAck(WorldPackets::Movement::MoveRootAck const& 
 
 void WorldSession::HandleMoveKnockBackAck(WorldPackets::Movement::MoveKnockBackAck const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     uint32 movementCounter = packet.movementCounter;
 #else
     uint32 movementCounter = 0;
 #endif
-
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(timeNow);
 
     Unit* pMover = GetMoverFromGuid(packet.guid);
     if (!pMover)
@@ -809,9 +796,6 @@ void WorldSession::HandleMoveKnockBackAck(WorldPackets::Movement::MoveKnockBackA
 
 void WorldSession::HandleMoveSplineDoneOpcode(WorldPackets::Movement::MoveSplineDone const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
-    const_cast<MovementInfo&>(packet.movementInfo).UpdateTime(timeNow);
-
     if (!VerifyMovementInfo(packet.movementInfo))
         return;
 
@@ -901,8 +885,6 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPackets::Misc::SetActiveMover
 
 void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPackets::Movement::MoveNotActiveMover const& packet)
 {
-    uint32 timeNow = World::GetCurrentMSTime();
-
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     ObjectGuid oldMoverGuid = packet.oldMoverGuid;
 
@@ -931,7 +913,7 @@ void WorldSession::HandleMoveNotActiveMoverOpcode(WorldPackets::Movement::MoveNo
     m_clientMoverGuid = ObjectGuid();
 
     // Do not accept packets sent before this time.
-    if (timeNow <= m_moveRejectTime)
+    if (packet.movementInfo.stime <= m_moveRejectTime)
         return;
 
     if (!VerifyMovementInfo(packet.movementInfo))
