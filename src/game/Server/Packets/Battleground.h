@@ -96,7 +96,7 @@ namespace WorldPackets { namespace Battleground
         void ReadFromWorldPacket(WorldPacket& recv_data) override;
     };
     // --- Server Packets ---
-
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
     class GroupJoinedBattleground final : public ServerPacket
     {
     public:
@@ -105,6 +105,7 @@ namespace WorldPackets { namespace Battleground
         explicit GroupJoinedBattleground() : ServerPacket(SMSG_GROUP_JOINED_BATTLEGROUND) {}
         void AppendBodyTo(ByteBuffer& buffer) const override;
     };
+#endif
 
 }} // namespace WorldPackets::Battleground
 

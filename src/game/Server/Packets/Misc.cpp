@@ -355,8 +355,13 @@ void WorldPackets::Misc::MeetingstoneJoinFailed::AppendBodyTo(ByteBuffer& buffer
 
 void WorldPackets::Misc::MeetingstoneSetQueue::AppendBodyTo(ByteBuffer& buffer) const
 {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
     buffer << areaId;
     buffer << status;
+#else
+    buffer << idempotencyToken;
+    buffer << areaId;
+#endif
 }
 
 

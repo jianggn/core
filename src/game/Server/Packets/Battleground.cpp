@@ -56,9 +56,10 @@ void WorldPackets::Battleground::BattlefieldJoin::ReadFromWorldPacket(WorldPacke
     recv_data >> mapId;
 }
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
 void WorldPackets::Battleground::GroupJoinedBattleground::AppendBodyTo(ByteBuffer& buffer) const
 {
     buffer << result;
 }
-
+#endif
 

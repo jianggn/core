@@ -220,9 +220,11 @@ void WorldSession::RequestBgJoinQueue(ObjectGuid battlemaster, uint32 instanceId
 
         if (err == BG_JOIN_ERR_GROUP_DESERTER)
         {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
             auto bgJoined = std::make_unique<WorldPackets::Battleground::GroupJoinedBattleground>();
             bgJoined->result = BG_GROUPJOIN_DESERTERS;
             _player->GetSession()->SendPacket(std::move(bgJoined));
+#endif
             SendBattleGroundJoinError(err);
             return;
         }
@@ -246,9 +248,11 @@ void WorldSession::RequestBgJoinQueue(ObjectGuid battlemaster, uint32 instanceId
 
             if (std::find(excludedMembers.begin(), excludedMembers.end(), member->GetGUIDLow()) != excludedMembers.end())
             {
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
                 auto bgJoined = std::make_unique<WorldPackets::Battleground::GroupJoinedBattleground>();
                 bgJoined->result = BG_GROUPJOIN_FAILED;
                 member->GetSession()->SendPacket(std::move(bgJoined));
+#endif
                 SendBattleGroundJoinError(err);
                 continue;
             }
@@ -260,9 +264,11 @@ void WorldSession::RequestBgJoinQueue(ObjectGuid battlemaster, uint32 instanceId
             // send status packet (in queue)
             sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_WAIT_QUEUE, avgTime, 0);
             member->GetSession()->SendPacket(&data);
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_4_2
             auto bgJoined = std::make_unique<WorldPackets::Battleground::GroupJoinedBattleground>();
             bgJoined->result = bg->GetMapId();
             member->GetSession()->SendPacket(std::move(bgJoined));
+#endif
             sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: player joined queue for bg queue type %u bg type %u: GUID %u, NAME %s", bgQueueTypeId, bgTypeId, member->GetGUIDLow(), member->GetName());
         }
         sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "Battleground: group end");
