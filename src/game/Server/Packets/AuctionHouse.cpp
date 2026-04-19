@@ -12,7 +12,7 @@ void WorldPackets::AuctionHouse::AuctionListBidderItem::ReadFromWorldPacket(Worl
 
     uint32 idsToRefresh;
     recv_data >> idsToRefresh;
-    for (int i = 0; i < idsToRefresh; i++)
+    for (uint32 i = 0; i < idsToRefresh; i++)
     {
         uint32 auctionId;
         recv_data >> auctionId;
