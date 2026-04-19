@@ -448,7 +448,7 @@ void PlayerMenu::SendQuestGiverQuestList(QuestNpcEmoteInfo fallbackEmote, std::s
     {
         QuestMenuItem const& qmi = mQuestMenu.GetItem(count);
         if (Quest const* pQuest = sObjectMgr.GetQuestTemplate(qmi.m_qId))
-            packet->quests.push_back({ pQuest, qmi.m_qIcon });
+            packet->quests.push_back(WorldPackets::Quest::QuestListEntry(pQuest, qmi.m_qIcon));
     }
     GetMenuSession()->SendPacket(std::move(packet));
 }

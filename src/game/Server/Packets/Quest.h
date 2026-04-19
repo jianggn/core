@@ -265,6 +265,7 @@ namespace WorldPackets { namespace Quest
 
     struct QuestListEntry
     {
+        QuestListEntry(::Quest const* quest_, uint32 icon_) : quest(quest_), icon(icon_) {};
         ::Quest const* quest = nullptr;
         uint32 icon = 0;
     };
