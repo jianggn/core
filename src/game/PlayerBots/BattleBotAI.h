@@ -67,7 +67,8 @@ public:
     void OnLeaveBattleGround();
 
     void UpdateFlagCarrierAI();
-    void UpdateBattleGroundAI();
+    bool UpdateBattleGroundAI();
+    bool TryUseBattleGroundFlag(uint32 entry);
     void UpdateInCombatAI() final;
     void UpdateOutOfCombatAI() final;
     void UpdateInCombatAI_Paladin() final;
