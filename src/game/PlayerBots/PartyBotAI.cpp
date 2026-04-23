@@ -832,7 +832,13 @@ void PartyBotAI::UpdateAI(uint32 const diff)
             else
                 UpdateInCombatAI_Hunter();
         }
-
+        else if (me->GetClass() == CLASS_MAGE ||
+                 me->GetClass() == CLASS_WARLOCK ||
+                 me->GetClass() == CLASS_PRIEST)
+        {
+            if (me->GetPowerPercent(POWER_MANA) >= 25.0f)
+                me->InterruptSpell(CURRENT_AUTOREPEAT_SPELL, true);
+        }
         return;
     }
 
@@ -875,7 +881,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
 
         // Teleport to leader if too far away.
         // C'Thun room do not teleport
-        if (!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150)))
+        if (!me->IsWithinDistInMap(pLeader, 100.0f) && !IsInDuel() && !((me->GetZoneId() == 3428) && (pLeader->GetZoneId() == 3428) && (me->GetPositionZ() - pLeader->GetPositionZ() > 150.0f)))
         {
             if (pLeader->GetMap()->IsRaid())
             {
@@ -934,8 +940,6 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                 me->StopMoving();
             me->GetMotionMaster()->Clear(false, true);
             me->GetMotionMaster()->MoveIdle();
-            if (me->GetPet())
-                me->RemovePet(PET_SAVE_REAGENTS);
             char name[128] = {};
             strcpy(name, pLeader->GetName());
             ChatHandler(me).HandleGonameCommand(name);
