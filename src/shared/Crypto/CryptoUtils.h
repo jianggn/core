@@ -1,9 +1,4 @@
 /*
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
- * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
- * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
- * Copyright (C) 2016-2017 Elysium Project <https://github.com/elysium-project>
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,21 +14,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#if !defined(DATABASEENV_H)
-#define DATABASEENV_H
+#pragma once
 
-#include "Common.h"
-#include "Database/Field.h"
-#include "Database/QueryResult.h"
-#include "Database/QueryResultMysql.h"
-#include "Database/Database.h"
-#include "Database/DatabaseMysql.h"
+#include <cstddef>
 
-typedef DatabaseMysql DatabaseType;
-
-extern DatabaseType WorldDatabase;
-extern DatabaseType CharacterDatabase;
-extern DatabaseType LoginDatabase;
-extern DatabaseType LogsDatabase;
-
-#endif
+namespace Crypto {
+    // Constant-time memory compare. Returns true iff the first `length` bytes
+    // of `a` and `b` are equal. Must be used for secret-dependent comparisons
+    // (proofs, hashes, MACs) to avoid timing side-channels.
+    bool ConstantTimeEquals(void const* a, void const* b, std::size_t length);
+}

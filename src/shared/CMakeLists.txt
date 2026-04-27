@@ -42,6 +42,8 @@ set (shared_SRCS
     Config/ConfigEnv.h
     Crypto/BigNumber.h
     Crypto/BigNumber.cpp
+    Crypto/CryptoUtils.h
+    Crypto/CryptoUtils.cpp
     Crypto/InitializeCrypto.h
     Crypto/InitializeCrypto.cpp
     Crypto/Authentication/SRP6.h
@@ -63,15 +65,12 @@ set (shared_SRCS
     Database/DatabaseEnv.h
     Database/DatabaseImpl.h
     Database/DatabaseMysql.h
-    Database/DatabasePostgre.h
     Database/DBCFileLoader.h
     Database/DBCStore.h
     Database/Field.h
     Database/MySQLDelayThread.h
-    Database/PGSQLDelayThread.h
     Database/QueryResult.h
     Database/QueryResultMysql.h
-    Database/QueryResultPostgre.h
     Database/SqlDelayThread.h
     Database/SqlOperations.h
     Database/SqlPreparedStatement.h
@@ -81,6 +80,7 @@ set (shared_SRCS
     nonstd/expected.hpp
     nonstd/nodiscard.hpp
     nonstd/optional.hpp
+    nonstd/saturating_cast.hpp
     TimePeriod.h
     ByteBuffer.cpp
     Common.cpp
@@ -97,11 +97,9 @@ set (shared_SRCS
     Config/Config.cpp
     Database/Database.cpp
     Database/DatabaseMysql.cpp
-    Database/DatabasePostgre.cpp
     Database/DBCFileLoader.cpp
     Database/Field.cpp
     Database/QueryResultMysql.cpp
-    Database/QueryResultPostgre.cpp
     Database/SqlDelayThread.cpp
     Database/SqlOperations.cpp
     Database/SqlPreparedStatement.cpp
