@@ -37,7 +37,6 @@ set (shared_SRCS
     ThreadSpecificPtr.cpp
     Timer.h
     Util.h
-    WheatyExceptionReport.h
     Config/Config.h
     Config/ConfigEnv.h
     Crypto/BigNumber.h
@@ -91,7 +90,6 @@ set (shared_SRCS
     ThreadPool.cpp
     Util.cpp
     Duration.h
-    WheatyExceptionReport.cpp
     Auth/AuthCrypt.h
     Auth/AuthCrypt.cpp
     Config/Config.cpp
@@ -185,17 +183,8 @@ if(WIN32) # For window build: Exclude Unix/MacOS files
     IO/Filesystem/impl/unix/FileSystem.cpp
     IO/Filesystem/impl/unix/FileHandle.cpp
   )
-
-  if (NOT MSVC)
-    list(REMOVE_ITEM shared_SRCS
-      WheatyExceptionReport.cpp
-      WheatyExceptionReport.h
-    )
-  endif()
 else()
   list(REMOVE_ITEM shared_SRCS
-    WheatyExceptionReport.cpp
-    WheatyExceptionReport.h
     ServiceWin32.cpp
     ServiceWin32.h
     revision.h
@@ -256,6 +245,7 @@ target_include_directories(shared PUBLIC
   ${OPENSSL_INCLUDE_DIR}
   ${ZLIB_INCLUDE_DIRS}
 )
+target_compile_definitions(shared PUBLIC OPENSSL_NO_DEPRECATED) # Disable the usage of deprecated OpenSSL functions
 
 if(WIN32)
   target_include_directories(shared PUBLIC
