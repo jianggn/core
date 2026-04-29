@@ -1347,6 +1347,33 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     }
                 }
             }
+            // Spiritual Healing
+            else if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PRIEST)
+            {
+                if (m_spellInfo->IsFitToFamilyMask<CF_PRIEST_HEAL>() || m_spellInfo->IsFitToFamilyMask<CF_PRIEST_FLASH_HEAL>() || m_spellInfo->IsFitToFamilyMask<CF_PRIEST_GREATER_HEAL>() || m_spellInfo->IsFitToFamilyMask<CF_PRIEST_LESSER_HEAL>())
+                {
+                    if (pRealUnitCaster->HasAura(14898))
+                    {
+                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.1f, (addhealth - gain) * 0.02f)), {}, {}, true);
+                    }
+                    else if (pRealUnitCaster->HasAura(15349))
+                    {
+                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.2f, (addhealth - gain) * 0.04f)), {}, {}, true);
+                    }
+                    else if (pRealUnitCaster->HasAura(15354))
+                    {
+                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.3f, (addhealth - gain) * 0.06f)), {}, {}, true);
+                    }
+                    else if (pRealUnitCaster->HasAura(15355))
+                    {
+                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.4f, (addhealth - gain) * 0.08f)), {}, {}, true);
+                    }
+                    else if (pRealUnitCaster->HasAura(15356))
+                    {
+                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.5f, (addhealth - gain) * 0.1f)), {}, {}, true);
+                    }
+                }
+            }
 
             float classThreatModifier = pRealUnitCaster->GetClass() == CLASS_PALADIN ? 0.25f : 0.5f;
             unitTarget->GetHostileRefManager().threatAssist(pRealUnitCaster, float(gain) * classThreatModifier * sSpellMgr.GetSpellThreatMultiplier(m_spellInfo), m_spellInfo);
