@@ -1354,23 +1354,28 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 {
                     if (pRealUnitCaster->HasAura(14898))
                     {
-                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.1f, (addhealth - gain) * 0.02f)), {}, {}, true);
+                        if ((addhealth - gain) > 50)
+                            pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.1f, (addhealth - gain) * 0.02f)), {}, {}, true);
                     }
                     else if (pRealUnitCaster->HasAura(15349))
                     {
-                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.2f, (addhealth - gain) * 0.04f)), {}, {}, true);
+                        if ((addhealth - gain) > 25)
+                            pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.2f, (addhealth - gain) * 0.04f)), {}, {}, true);
                     }
                     else if (pRealUnitCaster->HasAura(15354))
                     {
-                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.3f, (addhealth - gain) * 0.06f)), {}, {}, true);
+                        if ((addhealth - gain) > 17)
+                            pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.3f, (addhealth - gain) * 0.06f)), {}, {}, true);
                     }
                     else if (pRealUnitCaster->HasAura(15355))
                     {
-                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.4f, (addhealth - gain) * 0.08f)), {}, {}, true);
+                        if ((addhealth - gain) > 13)
+                            pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.4f, (addhealth - gain) * 0.08f)), {}, {}, true);
                     }
                     else if (pRealUnitCaster->HasAura(15356))
                     {
-                        pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.5f, (addhealth - gain) * 0.1f)), {}, {}, true);
+                        if ((addhealth - gain) > 10)
+                            pRealUnitCaster->CastCustomSpell(pRealUnitCaster, 34571, static_cast<uint32>(std::min(m_spellInfo->manaCost * 0.5f, (addhealth - gain) * 0.1f)), {}, {}, true);
                     }
                 }
             }
