@@ -6565,72 +6565,75 @@ int32 Player::CalculateReputationGain(ReputationSource source, int32 rep, int32 
 {
     float percent = 100.0f;
 
+    // Rep loss is not affected by the mob or quest being gray. Tested on classic.
     // Diplomacy racial does not affect rep loss. Tested on classic.
-    float repMod = rep < 0 ? 0.0f : (float)GetTotalAuraModifier(SPELL_AURA_MOD_REPUTATION_GAIN);
-
-    // Faction specific auras only seem to apply to kills.
-    if (source == REPUTATION_SOURCE_KILL)
-        repMod += GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_FACTION_REPUTATION_GAIN, faction);
-
-    percent += rep > 0 ? repMod : -repMod;
-
-    // Ustaag <Nostalrius> : apply reduction from difference lvl between mob/quest and player (since patch 1.9)
-    //  "When a monster is grey, or a quest is six levels below you, you lose 20%
-    // of the total Reputation experience possible for that kill or quest for each level.
-    // This descrease continues until you reach the minimum reputation gain of 20%."
-    // Example : for a lvl 50 quest (25 reputation reward)
-    // CharacterLvl     Reputation earned       Reputation rate
-    //      50                  25                  100 %
-    //      56                  20                  80 %
-    //      57                  15                  60 %
-    //      58                  10                  40 %
-    //      59                  5                   20 %
-    //      60                  5                   20 %
-
-    float rate;
-    switch (source)
+    if (rep > 0)
     {
-        case REPUTATION_SOURCE_KILL:
-            // Rep loss is not affected by the mob being gray. Tested on classic.
-            rate = rep > 0  && creatureOrQuestLevel <= MaNGOS::XP::GetGrayLevel(GetLevel())
-                ? sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_KILL) : 1.0f;
-            break;
-        case REPUTATION_SOURCE_QUEST:
+        float repMod = (float)GetTotalAuraModifier(SPELL_AURA_MOD_REPUTATION_GAIN);
+
+        // Faction specific auras only seem to apply to kills.
+        if (source == REPUTATION_SOURCE_KILL)
+            repMod += GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_FACTION_REPUTATION_GAIN, faction);
+
+        percent += repMod;
+
+        // Ustaag <Nostalrius> : apply reduction from difference lvl between mob/quest and player (since patch 1.9)
+        //  "When a monster is grey, or a quest is six levels below you, you lose 20%
+        // of the total Reputation experience possible for that kill or quest for each level.
+        // This descrease continues until you reach the minimum reputation gain of 20%."
+        // Example : for a lvl 50 quest (25 reputation reward)
+        // CharacterLvl     Reputation earned       Reputation rate
+        //      50                  25                  100 %
+        //      56                  20                  80 %
+        //      57                  15                  60 %
+        //      58                  10                  40 %
+        //      59                  5                   20 %
+        //      60                  5                   20 %
+
+        float rate;
+        switch (source)
         {
-            uint32 diffLvl = 0;
-            if (GetLevel() >= creatureOrQuestLevel + 5)
-                diffLvl = GetLevel() - creatureOrQuestLevel - 5;
-            else
-                diffLvl = 0;
-
-            switch (diffLvl)
+            case REPUTATION_SOURCE_KILL:
+                rate = creatureOrQuestLevel <= MaNGOS::XP::GetGrayLevel(GetLevel())
+                    ? sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_KILL) : 1.0f;
+                break;
+            case REPUTATION_SOURCE_QUEST:
             {
-                case 0:
-                    rate = 1.0f;
-                    break;
-                case 1:
-                    rate = 0.8f;
-                    break;
-                case 2:
-                    rate = 0.6f;
-                    break;
-                case 3:
-                    rate = 0.4f;
-                    break;
-                default:
-                    rate = 0.2f;
-                    break;
+                uint32 diffLvl = 0;
+                if (GetLevel() >= creatureOrQuestLevel + 5)
+                    diffLvl = GetLevel() - creatureOrQuestLevel - 5;
+                else
+                    diffLvl = 0;
+
+                switch (diffLvl)
+                {
+                    case 0:
+                        rate = 1.0f;
+                        break;
+                    case 1:
+                        rate = 0.8f;
+                        break;
+                    case 2:
+                        rate = 0.6f;
+                        break;
+                    case 3:
+                        rate = 0.4f;
+                        break;
+                    default:
+                        rate = 0.2f;
+                        break;
+                }
+
+                break;
             }
-
-            break;
+            case REPUTATION_SOURCE_SPELL:
+            default:
+                rate = 1.0f;
+                break;
         }
-        case REPUTATION_SOURCE_SPELL:
-        default:
-            rate = 1.0f;
-            break;
-    }
 
-    percent *= rate;
+        percent *= rate;
+    }
 
     if (percent <= 0.0f)
         return 0;
