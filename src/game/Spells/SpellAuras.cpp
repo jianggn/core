@@ -7631,7 +7631,7 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
         {
             if (mode == AURA_REMOVE_BY_EXPIRE)
                 if (Unit* pOwner = GetTarget()->GetOwner())
-                    if (!pOwner->IsInCombat())
+                    if (!pOwner->IsInCombat() && !pOwner->HasAura(23333) && !pOwner->HasAura(23335))
                         pOwner->CastSpell(pOwner, 34368, true);
             break;
         }
