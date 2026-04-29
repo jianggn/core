@@ -1472,7 +1472,25 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
             break;
         }
         case SPELLFAMILY_HUNTER:
+        {
+            switch (dummySpell->Id)
+            {
+                // Ranged Weapon Specialization
+                case 19507:
+                case 19508:
+                case 19509:
+                case 19510:
+                case 19511:
+                {
+                    // mana amount
+                    basepoints[0] = dither(triggerAmount * amount / 100);
+                    target = this;
+                    triggered_spell_id = 34570;
+                    break;                               // no hidden cooldown
+                }
+            }
             break;
+        }
         case SPELLFAMILY_PALADIN:
         {
             // Seal of Righteousness - melee proc dummy

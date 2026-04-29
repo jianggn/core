@@ -4220,6 +4220,16 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
     // Hunter - Split Shot - 34322
     if (m_spellInfo->Id == 75 && m_casterUnit->HasAura(34322))
         bonus *= 0.7f;
+    // Hunter - Tide Bringer - 34324
+    if (m_spellInfo->Id == 34324)
+    {
+        float tideBringerMod = 1.0f;
+        if (unitTarget->HasAuraType(SPELL_AURA_MOD_DECREASE_SPEED))
+            tideBringerMod = 1.5f;
+        if (unitTarget->HasAuraType(SPELL_AURA_MOD_ROOT))
+            tideBringerMod = 2.0f;
+        bonus *= tideBringerMod;
+    }
     // Morphling - Frostbolt Volley & Frost Nova
     // Spirit Bear - Radiance
     // Blessed Hammer - Divine Storm
