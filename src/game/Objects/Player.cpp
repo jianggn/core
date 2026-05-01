@@ -4885,6 +4885,35 @@ void Player::KillPlayer()
     {
         std::string str = "The fallen leaves tell a story. \nLevel ";
         str.append(std::to_string(GetLevel()));
+        std::string raceName = "";
+        switch (GetRace())
+        {
+          case 1:
+            raceName = "Human";
+            break;
+          case 2:
+            raceName = "Orc";
+            break;
+          case 3:
+            raceName = "Dwarf";
+            break;
+          case 4:
+            raceName = "Night Elf";
+            break;
+          case 5:
+            raceName = "Undead";
+            break;
+          case 6:
+            raceName = "Tauren";
+            break;
+          case 7:
+            raceName = "Gnome";
+            break;
+          case 8:
+            raceName = "Troll";
+            break;
+        }
+        str.append(" "+raceName+"");
         std::string className = "";
         switch (GetClass())
         {
