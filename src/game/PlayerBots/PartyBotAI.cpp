@@ -1044,7 +1044,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                 case IDLE_MOTION_TYPE:
                 case FOLLOW_MOTION_TYPE:
                     if (GetRole() == ROLE_RANGE_DPS)
-                        me->GetMotionMaster()->MoveChase(pVictim, 25.0f);
+                        me->GetMotionMaster()->MoveChase(pVictim, 15.0f);
                     else
                         me->GetMotionMaster()->MoveChase(pVictim);
                     break;
