@@ -241,7 +241,7 @@ void Creature::AddToWorld()
         if (GetDeathState() == ALIVE || GetDeathState() == JUST_ALIVED)
             m_creatureGroup->OnRespawn(this);
     }
-        
+
     Unit::AddToWorld();
 
     if (!m_AI)
@@ -625,7 +625,7 @@ bool Creature::UpdateEntry(uint32 entry, GameEventCreatureData const* eventData 
         SetVisibilityModifier(VISIBILITY_DISTANCE_GIGANTIC);
         if (sWorld.getConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS))
             SetActiveObjectState(true);
-    } 
+    }
     else if (HasExtraFlag(CREATURE_FLAG_EXTRA_INFINITE_AOI))
     {
         SetVisibilityModifier(MAX_VISIBILITY_DISTANCE);
@@ -1090,9 +1090,6 @@ void Creature::RegenerateHealth()
     {
         addvalue = maxValue / 3;
     }
-
-    if (addvalue < 0)
-        addvalue = 0;
 
     ModifyHealth(addvalue);
 }
@@ -1902,7 +1899,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map* map, bool force)
 
     if (data->spawn_flags & SPAWN_FLAG_ACTIVE)
         m_isActiveObject = true;
-    
+
     if (data->visibility_mod)
         m_visibilityModifier = data->visibility_mod;
 
@@ -2018,7 +2015,7 @@ void Creature::LoadDefaultEquipment(GameEventCreatureData const* eventData)
         if (HasStaticFlag(CREATURE_STATIC_FLAG_CAN_WIELD_LOOT))
         {
             GenerateLootForBody(nullptr, nullptr);
-            
+
             bool hasMainHand = false;
             bool hasOffHand = false;
             bool hasRanged = false;
@@ -2353,7 +2350,7 @@ void Creature::ForcedDespawn(uint32 msTimeToDespawn /*= 0*/, uint32 secsTimeToRe
         return;
     }
 
-    uint32 oldRespawnDelay;
+    uint32 oldRespawnDelay = 0;
     if (secsTimeToRespawn)
     {
         oldRespawnDelay = m_respawnDelay;
@@ -2486,7 +2483,7 @@ void Creature::CallForHelp(float radius)
 {
     if (radius <= 0.0f || !GetVictim() || IsPet() || IsCharmed())
         return;
-    
+
     MaNGOS::CallOfHelpCreatureInRangeDo u_do(this, GetVictim(), radius);
     MaNGOS::CreatureWorker<MaNGOS::CallOfHelpCreatureInRangeDo> worker(this, u_do);
     Cell::VisitGridObjects(this, worker, radius);
