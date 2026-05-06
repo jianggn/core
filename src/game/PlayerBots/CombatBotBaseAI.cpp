@@ -3644,7 +3644,7 @@ void CombatBotBaseAI::OnPacketReceived(WorldPacket const* packet)
                     bool armor_crossover = false;
                     if (pProto->Class == ITEM_CLASS_ARMOR && (pProto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE || pProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL || pProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER || pProto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH))
                     {
-                        uint32 armor_class;
+                        uint32 armor_class = 0;
                         switch (me->GetClass())
                         {
                             case CLASS_WARRIOR:
