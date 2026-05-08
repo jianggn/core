@@ -412,3 +412,25 @@ void WorldPackets::Misc::SetFactionVisible::AppendBodyTo(ByteBuffer& buffer) con
 {
     buffer << reputationListId;
 }
+
+void WorldPackets::Misc::PlayMusic::AppendBodyTo(ByteBuffer& buffer) const
+{
+    buffer << musicId;
+}
+
+void WorldPackets::Misc::PlaySound::AppendBodyTo(ByteBuffer& buffer) const
+{
+    buffer << soundId;
+}
+
+void WorldPackets::Misc::Notification::AppendBodyTo(ByteBuffer& buffer) const
+{
+    buffer << message;
+}
+
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
+void WorldPackets::Misc::InvalidatePlayer::AppendBodyTo(ByteBuffer& buffer) const
+{
+    buffer << playerGuid;
+}
+#endif

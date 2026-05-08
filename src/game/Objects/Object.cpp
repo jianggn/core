@@ -2177,6 +2177,15 @@ bool WorldObject::IsPositionValid() const
     return MaNGOS::IsValidMapCoord(m_position.x, m_position.y, m_position.z, m_position.o);
 }
 
+void WorldObject::SendMessageToSet(std::unique_ptr<ServerPacket const> packet, bool self) const
+{
+    // TODO Use broadcaster which does the binary conversion automatically
+    WorldPacket binaryPacket;
+    binaryPacket.SetOpcode(packet->GetOpcode());
+    packet->AppendBodyTo(binaryPacket);
+    SendMessageToSet(&binaryPacket, self);
+}
+
 void WorldObject::SendMessageToSet(WorldPacket* data, bool /*bToSelf*/) const
 {
     //if object is in world, map for it already created!
@@ -2821,22 +2830,22 @@ void WorldObject::PlayDistanceSound(uint32 sound_id, Player const* target /*= nu
 
 void WorldObject::PlayDirectSound(uint32 sound_id, Player const* target /*= nullptr*/) const
 {
-    WorldPacket data(SMSG_PLAY_SOUND, 4);
-    data << uint32(sound_id);
+    auto packet = std::make_unique<WorldPackets::Misc::PlaySound>();
+    packet->soundId = sound_id;
     if (target)
-        target->SendDirectMessage(&data);
+        target->GetSession()->SendPacket(std::move(packet));
     else
-        SendMessageToSet(&data, true);
+        SendMessageToSet(std::move(packet), true);
 }
 
 void WorldObject::PlayDirectMusic(uint32 music_id, Player const* target /*= nullptr*/) const
 {
-    WorldPacket data(SMSG_PLAY_MUSIC, 4);
-    data << uint32(music_id);
+    auto packet = std::make_unique<WorldPackets::Misc::PlayMusic>();
+    packet->musicId = music_id;
     if (target)
-        target->SendDirectMessage(&data);
+        target->GetSession()->SendPacket(std::move(packet));
     else
-        SendMessageToSet(&data, true);
+        SendMessageToSet(std::move(packet), true);
 }
 
 void WorldObject::UpdateVisibilityAndView()
