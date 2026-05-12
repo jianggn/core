@@ -6018,15 +6018,15 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
                         {
                             if (pOwner->HasAura(18705))
                             {
-                                DoneActualBenefit *= 1.10;
+                                DoneActualBenefit *= 1.10f;
                             }
                             else if (pOwner->HasAura(18706))
                             {
-                                DoneActualBenefit *= 1.20;
+                                DoneActualBenefit *= 1.20f;
                             }
                             else if (pOwner->HasAura(18707))
                             {
-                                DoneActualBenefit *= 1.30;
+                                DoneActualBenefit *= 1.30f;
                             }
                         }
                         break;

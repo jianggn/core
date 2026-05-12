@@ -832,7 +832,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Tie Lao Lv
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34331, -(m_casterUnit->GetShieldBlockValue()), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34331, -dither(m_casterUnit->GetShieldBlockValue() * 1.0f), {}, {}, true);
                     return;
                 }
                 case 34336:

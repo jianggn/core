@@ -1076,7 +1076,7 @@ bool ChatHandler::HandlePartyBotLoadCommand(char* args)
     }
 
     // Hardcore Challenger Can Not Be Loaded As Party Bot
-    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `account` FROM `characters` WHERE `guid` = '%u' AND `name` = '%s' AND `level` < 60 AND EXISTS(SELECT 1 FROM `character_queststatus` WHERE `guid` = '%u' AND `quest` = 10000 AND `status` = 1)", guid, name, guid));
+    std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT `account` FROM `characters` WHERE `guid` = '%u' AND `name` = '%s' AND `level` < 60 AND EXISTS(SELECT 1 FROM `character_queststatus` WHERE `guid` = '%u' AND `quest` = 10000 AND `status` = 1)", guid, name.c_str(), guid);
     if (result)
     {
         SendSysMessage("Hardcore Challenger Can Not Be Loaded As Party Bot.");
