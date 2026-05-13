@@ -6424,7 +6424,7 @@ void Spell::EffectTransmitted(SpellEffectIndex effIdx)
     if (m_spellInfo->Id == 18540 && m_casterUnit->HasAura(34358))
     {
         m_casterUnit->CastSpell(m_casterUnit, 18541, true);
-        m_casterUnit->AddCooldown(*m_spellInfo);
+        m_casterUnit->AddCooldown(m_spellInfo);
         return;
     }
 
