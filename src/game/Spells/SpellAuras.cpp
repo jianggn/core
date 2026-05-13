@@ -7270,7 +7270,7 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
         {
             // some spells need to start cooldown at aura fade (like stealth)
             if (SpellCaster* caster = GetRealCaster())
-                caster->AddCooldown(*GetSpellProto());
+                caster->AddCooldown(GetSpellProto());
         }
     }
 }
