@@ -800,11 +800,11 @@ void Pet::LooseHappiness()
     {
         if (pOwner->HasAura(34316))
         {
-            ModifyPower(POWER_HAPPINESS, dither(-addvalue * 0.5f));
+            ModifyPower(POWER_HAPPINESS, rand_dither(-addvalue * 0.5f));
         }
         else if (pOwner->HasAura(34317))
         {
-            ModifyPower(POWER_HAPPINESS, dither(-addvalue * 0.25f));
+            ModifyPower(POWER_HAPPINESS, rand_dither(-addvalue * 0.25f));
         }
         else
         {

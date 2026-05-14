@@ -1515,7 +1515,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 1437.0f, -4421.0f, 25.24f, 1.65f);
             break;
         case 21: // Undercity
@@ -1525,7 +1525,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
             break;
         case 22: // Thunderbluff
@@ -1535,7 +1535,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -1272.703735f, 116.886490f, 131.016861f, 0.0f);
             break;
 
@@ -1548,7 +1548,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -8828.231445f, 627.927490f, 94.055664f, 0.0f);
             break;
         case 24: // Ironforge
@@ -1558,7 +1558,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -4917.0f, -955.0f, 502.0f, 0.0f);
             break;
         case 25: // Darnassus
@@ -1568,7 +1568,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
             break;
 
@@ -1583,7 +1583,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 1663.517f, 1678.187744f, 120.5303f, 0.0f);
             break;
         case 41: // Valley of Trials
@@ -1593,7 +1593,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -602.1253f, -4262.4208f, 38.956341f, 0.0f);
             break;
         case 42: // Camp Narache
@@ -1603,7 +1603,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -2914.16992f, -266.061798f, 53.658211f, 0.0f);
             break;
 
@@ -1616,7 +1616,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -8943.133789f, -132.934921f, 83.704269f, 0.0f);
             break;
         case 44: // Coldridge Valley
@@ -1626,7 +1626,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -6231.106445f, 332.270477f, 383.153931f, 0.0f);
             break;
         case 45: // Shadowglen
@@ -1636,7 +1636,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 10329.918945f, 833.500305f, 1326.260620f, 0.0f);
             break;
 
@@ -1649,7 +1649,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -3762.340820f, 1216.537598f, 127.434608f, 0.0f);
             break;
         case 51: // Blackrock Spire
@@ -1659,7 +1659,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7528.554688f, -1222.907227f, 285.732941f, 0.0f);
             break;
         case 52: // Zul'Gurub
@@ -1669,7 +1669,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11916.179688f, -1190.977051f, 85.137901f, 0.0f);
             break;
         case 53: // Onyxia's Lair
@@ -1679,7 +1679,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4682.391602f, -3709.857422f, 46.792862f, 0.0f);
             break;
         case 54: // Searing Gorge (Moltencore, Blackwinglair)
@@ -1689,7 +1689,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7342.270020f, -1096.863892f, 277.06930f, 0.0f);
             break;
         case 55: // Naxxramas
@@ -1699,7 +1699,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3121.061768f, -3689.973389f, 133.458786f, 0.0f);
             break;
         case 56: // Stratholme Backdoor Entrance
@@ -1709,7 +1709,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3160.416992f, -4038.750244f, 104.177376f, 0.0f);
             break;
         case 57: // Stratholme Main Entrance
@@ -1719,7 +1719,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3357.214355f, -3379.713135f, 144.780853f, 0.0f);
             break;
         case 58: // Scholomance
@@ -1729,7 +1729,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 1252.319824f, -2587.151123f, 92.886772f, 0.0f);
             break;
 
@@ -1742,7 +1742,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -7430.070313f, 1002.554565f, 1.249787f, 0.0f);
             break;
         case 71: // Durotar
@@ -1752,7 +1752,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 1006.426819f, -4439.258789f, 11.352882f, 0.0f);
             break;
         case 72: // Ashenvale
@@ -1762,7 +1762,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 1922.842651f, -2169.429688f, 94.327400f, 0.0f);
             break;
         case 73: // Tanaris
@@ -1772,7 +1772,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -7180.401367f, -3773.328369f, 8.728320f, 0.0f);
             break;
         case 74: // Pretbc Mall
@@ -1782,7 +1782,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
             //    player->GetSession()->SendNotification(costprice.c_str());
             //    break;
             //}
-            //player->ModifyMoney(-dither(travelboots * 1.0f));
+            //player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             //player->TeleportTo(MAP_KALIMDOR, 16201.107422f, 16205.1875f, 0.140072f, 1.630427f);
             break;
         case 4015:// Gurubashi
@@ -1792,7 +1792,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -13261.3f, 168.294f, 35.0792f, 1.00688f);
             break;
         case 4017:// Razor Hill
@@ -1802,7 +1802,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 315.721f, -4743.4f, 10.4867f, 0.0f);
             break;
         case 4018:// Goldshire
@@ -1812,7 +1812,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -9464.0f, 62.0f, 56.0f, 0.0f);
             break;
         case 1249:// Teleport player to the Wailing Caverns
@@ -1822,7 +1822,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -722.53f, -2226.30f, 16.94f, 2.71f);
             break;
         case 1250:// Teleport player to the Deadmines
@@ -1832,7 +1832,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11212.04f, 1658.58f, 25.67f, 1.45f);
             break;
         case 1251:// Teleport player to Shadowfang Keep
@@ -1842,7 +1842,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -254.47f, 1524.68f, 76.89f, 1.56f);
             break;
         case 1252:// Teleport player to Blackfathom Deeps
@@ -1852,7 +1852,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 4254.58f, 664.74f, -29.04f, 1.97f);
             break;
         case 1254:// Teleport player to Razorfen Kraul
@@ -1862,7 +1862,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4484.04f, -1739.40f, 86.47f, 1.23f);
             break;
         case 1256:// Teleport player to Razorfen Downs
@@ -1872,7 +1872,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4645.08f, -2470.85f, 85.53f, 4.39f);
             break;
         case 1257:// Teleport player to the Scarlet Monastery
@@ -1882,7 +1882,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 2843.89f, -693.74f, 139.32f, 5.11f);
             break;
         case 1258:// Teleport player to Uldaman
@@ -1892,7 +1892,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -6119.70f, -2957.30f, 204.11f, 0.03f);
             break;
         case 1259:// Teleport player to Zul'Farrak
@@ -1902,7 +1902,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -6839.39f, -2911.03f, 8.87f, 0.41f);
             break;
         case 1260:// Teleport player to Maraudon
@@ -1912,7 +1912,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -1433.33f, 2955.34f, 96.21f, 4.82f);
             break;
         case 1261:// Teleport player to the Sunken Temple
@@ -1922,7 +1922,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -10346.92f, -3851.90f, -43.41f, 6.09f);
             break;
         case 1262:// Teleport player to Blackrock Depths
@@ -1932,7 +1932,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7301.03f, -913.19f, 165.37f, 0.08f);
             break;
         case 1263:// Teleport player to Dire Maul
@@ -1942,7 +1942,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -3982.47f, 1127.79f, 161.02f, 0.05f);
             break;
         case 1264:// Teleport player to Blackrock Spire
@@ -1952,7 +1952,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7535.43f, -1212.04f, 285.45f, 5.29f);
             break;
         case 1265:// Teleport player to Stratholme
@@ -1962,7 +1962,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3263.54f, -3379.46f, 143.59f, 0.00f);
             break;
         case 1266:// Teleport player to Scholomance
@@ -1972,7 +1972,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 1219.01f, -2604.66f, 85.61f, 0.50f);
             break;
         case 1267:// Teleport player to StormwindVault
@@ -1982,7 +1982,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -9362.088867f, 539.202637f, 47.111515f, 0.00f);
             break;
         case 1268:// Teleport player to CavernsOfTime
@@ -1992,7 +1992,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -8510.25f, -4391.74f, -218.636f, 0.00f);
             break;
         case 1269:// Teleport player to Karazahn
@@ -2002,7 +2002,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11120.826172f, -2012.403687f, 47.094982f, 0.00f);
             break;
         case 1270:// Teleport player to EmeraldSanctum
@@ -2012,7 +2012,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 7815.447266f, -2857.259766f, 459.636658f, 0.00f);
             break;
         case 1271:// Teleport player to Hateforge
@@ -2022,7 +2022,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -8149.071289f, -3020.921631f, 134.421799f, 0.00f);
             break;
         case 1272:// Teleport player to Winterveil
@@ -2032,7 +2032,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 6723.171387f, -5282.243652f, 779.779480f, 0.00f);
             break;
         case 1273:// Teleport player to Yharnam
@@ -2042,7 +2042,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -733.396729f, 1536.514160f, 16.620735f, 0.00f);
             break;
         case 1274:// Teleport player to DesolateMountain
@@ -2052,7 +2052,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 2948.08f, -4261.04f, 103.785f, 0.00f);
             break;
         case 1275:// Teleport player to Monastery
@@ -2062,7 +2062,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 2875.06f, -633.725f, 137.839f, 0.00f);
             break;
         case 1276:// Teleport player to Draenor
@@ -2072,7 +2072,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11865.1f, -3203.32f, -22.8171f, 0.00f);
             break;
         case 1277:// Teleport player to BloodRing
@@ -2082,7 +2082,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -492.673553f, -1570.729370f, 52.666183f, 0.00f);
             break;
         case 1278:// Teleport player to OldIronforge
@@ -2092,7 +2092,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -5618.981934f, -830.361633f, 483.534393f, 0.00f);
             break;
         case 1279:// Teleport player to StardewValley
@@ -2102,7 +2102,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -6560.617188f, -545.094299f, -254.334824f, 0.00f);
             break;
         case 1280:// Teleport player to CrescentGrove
@@ -2112,7 +2112,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -213.140915f, -2522.304688f, 118.503098f, 0.00f);
             break;
         case 1281:// Teleport player to Dragonmaw
@@ -2122,7 +2122,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -4062.725830f, -3451.427734f, 281.387482f, 0.00f);
             break;
         case 1282:// Teleport player to HighElfPVP
@@ -2132,7 +2132,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3373.121582f, -4490.019531f, 144.267410f, 0.00f);
             break;
         case 1283:// Teleport player to Balor
@@ -2142,7 +2142,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -1528.809082f, -1805.616821f, 71.632103f, 0.00f);
             break;
         case 1284:// Teleport player to Timbermaw-Felwood
@@ -2152,7 +2152,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 6818.529297f, -2077.303223f, 623.271118f, 0.00f);
             break;
         case 1285:// Teleport player to Timbermaw-Azshara
@@ -2162,7 +2162,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 4218.519043f, -5212.360352f, 115.982880f, 0.00f);
             break;
         case 1286:// Teleport player to MooCanyon
@@ -2172,7 +2172,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4721.114258f, -2156.280029f, 84.474144f, 0.00f);
             break;
         case 1287:// Teleport player to netherstormbg
@@ -2182,7 +2182,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 1645.961060f, 884.055908f, 132.793945f, 0.00f);
             break;
         case 1288:// Teleport player to FrostmaneCaverns
@@ -2192,7 +2192,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 376.538330f, -336.624207f, 185.115158f, 0.00f);
             break;
         case 4000:// Teleport to Zul'Gurub
@@ -2202,7 +2202,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11916.7f, -1212.82f, 92.2868f, 4.6095f);
             break;
         case 4001:// Teleport to Onyxia's Lair
@@ -2212,7 +2212,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4707.44f, -3726.82f, 54.6723f, 3.8f);
             break;
         case 4002:// Teleport to Molten Core
@@ -2222,7 +2222,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7511.454590f, -1042.253784f, 180.912f, 0.695956f);
             break;
         case 4003:// Teleport to Blackwing Lair
@@ -2232,7 +2232,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -7667.166504f, -1216.538696f, 287.789f, 5.845046f);
             break;
         case 4004:// Ruins of Ahn'Qiraj
@@ -2242,7 +2242,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -8409.032227f, 1498.830933f, 27.361542f, 2.497567f);
             break;
         case 4005:// Temple of Ahn'Qiraj
@@ -2252,7 +2252,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -8245.837891f, 1983.736206f, 129.071686f, 0.936195f);
             break;
         case 4006:// Naxxramas
@@ -2262,7 +2262,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 3081.08f, -3777.97f, 129.12f, 0.497555f);
             break;
         case 601: // Kalimdor -> Ashenvale
@@ -2272,7 +2272,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 3469.43f, 847.62f, 6.36476f, 0.0f);
             break;
         case 602: // Kalimdor -> Darkshore
@@ -2282,7 +2282,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 6207.5f, -152.833f, 80.8185f, 0.0f);
             break;
         case 603: // Kalimdor -> Desolace
@@ -2292,7 +2292,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -93.1614f, 1691.15f, 90.0649f, 0.0f);
             break;
         case 604: // Kalimdor -> Durotar
@@ -2302,7 +2302,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 341.42f, -4684.7f, 31.9493f, 0.0f);
             break;
         case 605: // Kalimdor -> Duswallow Marsh
@@ -2312,7 +2312,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -3463.26f, -4123.13f, 18.1043f, 0.0f);
             break;
         case 606: // Kalimdor -> Ferelas
@@ -2322,7 +2322,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4458.93f, 243.415f, 65.6136f, 0.0f);
             break;
         case 607: // Kalimdor -> Silithus
@@ -2332,7 +2332,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -6824.15f, 821.273f, 50.6675f, 0.0f);
             break;
         case 608: // Kalimdor -> Stonetalon Mountains
@@ -2342,7 +2342,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 1145.00f, 85.664f, -6.64f, 0.0f);
             break;
         case 609: // Kalimdor -> Tanaris
@@ -2352,7 +2352,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -7373.69f, -2950.2f, 11.7598f, 0.0f);
             break;
         case 610: // Kalimdor -> The Barrens
@@ -2362,7 +2362,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -456.263f, -2652.7f, 96.615f, 0.0f);
             break;
         case 611: // Kalimdor -> Thousand Needles
@@ -2372,7 +2372,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, -4941.66f, -1595.42f, -33.07f, 0.0f);
             break;
         case 612: // Kalimdor -> Winterspring
@@ -2382,7 +2382,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_KALIMDOR, 6107.62f, -4181.6f, 853.322f, 0.0f);
             break;
         case 613: // Eastern Kingdoms -> Arathi Highlands
@@ -2392,7 +2392,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -1544.93f, -2495.01f, 54.11f, 0.0f);
             break;
         case 614: // Eastern Kingdoms -> Badlands
@@ -2402,7 +2402,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -6084.95f, -3328.44f, 253.76f, 0.0f);
             break;
         case 615: // Eastern Kingdoms -> Dun Morogh
@@ -2412,7 +2412,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -5660.33f, 755.299f, 390.605f, 0.0f);
             break;
         case 616: // Eastern Kingdoms -> Duskwood
@@ -2422,7 +2422,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -10879.85f, -327.06f, 37.78f, 0.0f);
             break;
         case 617: // Eastern Kingdoms -> Eastern Plaguelands
@@ -2432,7 +2432,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 2280.12f, -5313.16f, 87.74f, 0.0f);
             break;
         case 618: // Eastern Kingdoms -> Elwynn Forest
@@ -2442,7 +2442,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -9545.78f, -51.81f, 56.72f, 0.0f);
             break;
         case 619: // Eastern Kingdoms -> Hillsbrad Foothills
@@ -2452,7 +2452,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -436.03f, -583.27f, 53.58f, 0.0f);
             break;
         case 620: // Eastern Kingdoms -> Reridge Mountains
@@ -2462,7 +2462,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -9633.80f, -1875.09f, 68.39f, 0.0f);
             break;
         case 621: // Eastern Kingdoms -> Silverpine Forest
@@ -2472,7 +2472,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 641.48f, 1297.84f, 85.45f, 0.0f);
             break;
         case 622: // Eastern Kingdoms -> Stranglethorn Vale
@@ -2482,7 +2482,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -11393.77f, -288.94f, 58.99f, 0.0f);
             break;
         case 623: // Eastern Kingdoms -> Swamp of Sorrows
@@ -2492,7 +2492,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -10522.55f, -3028.30f, 21.79f, 0.0f);
             break;
         case 624: // Eastern Kingdoms -> The Hinterlands
@@ -2502,7 +2502,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 155.14f, -2014.95f, 122.55f, 0.0f);
             break;
         case 625: // Eastern Kingdoms -> Tirishfal Glades
@@ -2512,7 +2512,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, 2255.5f, 288.511f, 35.1138f, 0.0f);
             break;
         case 626: // Eastern Kingdoms -> Westfall
@@ -2522,7 +2522,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -10919.09f, 998.47f, 35.47f, 0.0f);
             break;
         case 627: // Eastern Kingdoms -> Wetlands
@@ -2532,7 +2532,7 @@ void SendDefaultMenu_TeleportNPC(Player *player, Creature *_Creature, uint32 act
                 player->GetSession()->SendNotification(costprice.c_str());
                 break;
             }
-            player->ModifyMoney(-dither(travelboots * 1.0f));
+            player->ModifyMoney(-rand_dither(travelboots * 1.0f));
             player->TeleportTo(MAP_EASTERN_KINGDOMS, -4086.36f, -2610.95f, 47.0143f, 0.0f);
             break;
 

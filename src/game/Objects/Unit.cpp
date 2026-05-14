@@ -1786,7 +1786,7 @@ void Unit::TriggerDamageShields(Unit* pVictim)
                     if(pOwner->GetLevel() < 60 && pOwner->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
                         jiefufuti = 0;
                 }
-                damage = dither(damage * (100.0f - jiefufuti) / 100.0f);
+                damage = rand_dither(damage * (100.0f - jiefufuti) / 100.0f);
             }
 
             pVictim->DealDamageMods(this, damage, nullptr);

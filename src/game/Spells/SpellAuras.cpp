@@ -4035,7 +4035,7 @@ void Aura::HandleAuraModTotalThreat(bool apply, bool Real)
         case 9592:
         case 10941:
         case 10942:
-            threat_value -= (target->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) + dither(target->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) * 0.5f));
+            threat_value -= (target->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) + rand_dither(target->GetTotalAuraModifier(SPELL_AURA_MOD_HEALING_DONE) * 0.5f));
             break;
     }
 
@@ -5708,10 +5708,10 @@ void Aura::HandleShapeshiftBoosts(bool apply)
                         int32 HotWMod = i->GetModifier()->m_amount;
                         // FORM_CAT
                         if (HotWSpellId == 24900)
-                            HotWMod = dither(HotWMod * 2.0f);
+                            HotWMod = rand_dither(HotWMod * 2.0f);
                         // FORM_BEAR & FORM_DIREBEAR
                         else if (HotWSpellId == 24899)
-                            HotWMod = dither(HotWMod * 1.5f);
+                            HotWMod = rand_dither(HotWMod * 1.5f);
                         target->CastCustomSpell(target, HotWSpellId, HotWMod, {}, {}, true, nullptr, this);
                         break;
                     }
@@ -6951,7 +6951,7 @@ void Aura::HandleManaShield(bool apply, bool Real)
 
         m_modifier.m_amount += DoneActualBenefit;
 
-        m_modifier.m_amount = dither(m_modifier.m_amount);
+        m_modifier.m_amount = rand_dither(m_modifier.m_amount);
     }
 }
 

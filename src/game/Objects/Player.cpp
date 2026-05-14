@@ -2321,7 +2321,7 @@ void Player::RewardRage(uint32 damage, bool attacker)
             if (GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
                 jiefufuti = 0;
             if (damage > 1)
-                damage *= dither((100.0f / (100.0f - jiefufuti)));
+                damage *= rand_dither((100.0f / (100.0f - jiefufuti)));
         }
         addRage = damage / rageConversion * 2.5f;
 

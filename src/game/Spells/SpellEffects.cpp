@@ -325,9 +325,9 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         if (unitTarget->HasAura(21183) || unitTarget->HasAura(20188) || unitTarget->HasAura(20300) || unitTarget->HasAura(20301) || unitTarget->HasAura(20302) || unitTarget->HasAura(20303))
                             damage = damage * 1.5f;
                         if (unitTarget->HasAura(20185) || unitTarget->HasAura(20344) || unitTarget->HasAura(20345) || unitTarget->HasAura(20346))
-                            m_casterUnit->ModifyHealth(dither(m_casterUnit->GetMaxHealth() * 0.06f));
+                            m_casterUnit->ModifyHealth(rand_dither(m_casterUnit->GetMaxHealth() * 0.06f));
                         if (unitTarget->HasAura(20186) || unitTarget->HasAura(20354) || unitTarget->HasAura(20355))
-                            m_casterUnit->ModifyPower(POWER_MANA, (dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f) + 75));
+                            m_casterUnit->ModifyPower(POWER_MANA, (rand_dither(m_casterUnit->GetMaxPower(POWER_MANA) * 0.05f) + 75));
                         break;
                     }
                     case 21992: // Thunderfury, Blessed Blade of the Windseeker
@@ -736,7 +736,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Stoneform : restore hp based on armor (0.05*armor per second)
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34198, dither(m_casterUnit->GetArmor() * 0.05f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34198, rand_dither(m_casterUnit->GetArmor() * 0.05f), {}, {}, true);
                     return;
                 }
                 case 34204:
@@ -745,7 +745,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     if (m_casterUnit->GetPowerType() != POWER_MANA)
                         return;
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34205, dither(m_casterUnit->GetPower(POWER_MANA) * 0.1f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34205, rand_dither(m_casterUnit->GetPower(POWER_MANA) * 0.1f), {}, {}, true);
                     return;
                 }
                 case 34281:
@@ -836,7 +836,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Tie Lao Lv
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34331, -dither(m_casterUnit->GetShieldBlockValue() * 1.0f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34331, -rand_dither(m_casterUnit->GetShieldBlockValue() * 1.0f), {}, {}, true);
                     return;
                 }
                 case 34336:
@@ -846,7 +846,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Kang Mo Qi Shu
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34337, -dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.45f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34337, -rand_dither((m_casterUnit->GetStat(STAT_STRENGTH) + m_casterUnit->GetStat(STAT_AGILITY) + m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT) + m_casterUnit->GetStat(STAT_SPIRIT)) * 0.45f), {}, {}, true);
                     return;
                 }
                 case 34339:
@@ -857,9 +857,9 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     // Zi Ran Zhi Xu
                     if (m_casterUnit->HasAura(768))
-                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither(m_casterUnit->GetArmor() * 0.015f + m_casterUnit->GetMaxHealth() * 0.0225f), {}, {}, true);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -rand_dither(m_casterUnit->GetArmor() * 0.015f + m_casterUnit->GetMaxHealth() * 0.0225f), {}, {}, true);
                     else
-                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -dither(m_casterUnit->GetArmor() * 0.01f + m_casterUnit->GetMaxHealth() * 0.015f), {}, {}, true);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34340, -rand_dither(m_casterUnit->GetArmor() * 0.01f + m_casterUnit->GetMaxHealth() * 0.015f), {}, {}, true);
                     return;
                 }
                 case 34348:
@@ -872,7 +872,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     // 50% STAMINA
                     // 75% INTELLECT
                     // 100% STAT_SPIRIT
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34349, dither((m_casterUnit->GetStat(STAT_STAMINA) * 0.5f) + (m_casterUnit->GetStat(STAT_INTELLECT) * 0.75f) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34349, rand_dither((m_casterUnit->GetStat(STAT_STAMINA) * 0.5f) + (m_casterUnit->GetStat(STAT_INTELLECT) * 0.75f) + m_casterUnit->GetStat(STAT_SPIRIT)), {}, {}, true);
                     return;
                 }
                 case 34355:
@@ -882,7 +882,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Lightforge Armor
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34356, dither(m_casterUnit->GetArmor() * 0.08f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34356, rand_dither(m_casterUnit->GetArmor() * 0.08f), {}, {}, true);
                     return;
                 }
                 case 34362:
@@ -893,7 +893,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     // Ion Shell
                     if (m_casterUnit->HasAura(324) || m_casterUnit->HasAura(325) || m_casterUnit->HasAura(905) || m_casterUnit->HasAura(945) || m_casterUnit->HasAura(8134) || m_casterUnit->HasAura(10431) || m_casterUnit->HasAura(10432))
-                        m_casterUnit->CastCustomSpell(m_casterUnit, 34363, dither(m_casterUnit->GetPower(POWER_MANA) * 0.12f), {}, {}, true);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34363, rand_dither(m_casterUnit->GetPower(POWER_MANA) * 0.12f), {}, {}, true);
                     return;
                 }
                 case 34365:
@@ -1002,9 +1002,9 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         if (pet_hp_percent < 30.0f)
                             pet_damage_percent = -60;
                         else if (pet_hp_percent >= 30.0f && pet_hp_percent <= 90.0f)
-                            pet_damage_percent = dither(pet_hp_percent - 90.0f);
+                            pet_damage_percent = rand_dither(pet_hp_percent - 90.0f);
                         else if (pet_hp_percent > 90.0f)
-                            pet_damage_percent = dither(pet_hp_percent * 2 - 180.0f);
+                            pet_damage_percent = rand_dither(pet_hp_percent * 2 - 180.0f);
                         m_casterUnit->CastCustomSpell(m_casterUnit, 34344, pet_damage_percent, {}, {}, true);
                     }
                     return;
@@ -1028,9 +1028,9 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         return;
                     // Tong Ku Ya Zhi : Spirit Tap bonus half
                     if (m_casterUnit->HasAura(15271))
-                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.15f), {}, {}, true);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -rand_dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.15f), {}, {}, true);
                     else
-                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.2f), {}, {}, true);
+                        m_casterUnit->CastCustomSpell(m_casterUnit, 34498, -rand_dither(m_casterUnit->GetStat(STAT_SPIRIT) * 0.2f), {}, {}, true);
                     return;
                 }
                 case 34524:
@@ -1110,7 +1110,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Ming Zun Liu Li Ti
-                    m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.35f), {}, {}, true);
+                    m_casterUnit->CastCustomSpell(m_casterUnit, 34505, -rand_dither(m_casterUnit->GetStat(STAT_AGILITY) * 0.35f), {}, {}, true);
                     return;
                 }
                 case 34512:

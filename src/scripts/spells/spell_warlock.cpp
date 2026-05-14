@@ -280,7 +280,7 @@ struct WarlockDevourMagicScript : SpellScript
                     return;
             }
             // Devour Magic - 40% max mana bonus
-            uint32 modPoint = basePoint + dither(spell->m_casterUnit->GetMaxPower(POWER_MANA) * 0.40f);
+            uint32 modPoint = basePoint + rand_dither(spell->m_casterUnit->GetMaxPower(POWER_MANA) * 0.40f);
             //spell->m_casterUnit->CastSpell(spell->m_casterUnit, healSpell, true);
             spell->m_casterUnit->CastCustomSpell(spell->m_casterUnit, healSpell, modPoint, {}, {}, true, nullptr);
         }
