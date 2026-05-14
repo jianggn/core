@@ -134,7 +134,7 @@ public:
     void AddHunterAmmo();
     uint8 GetHighestHonorRankFromEquippedItems() const;
     void UpdateVisualHonorRankBasedOnItems();
-
+    void BeginChasing(Unit* pVictim) const;
     bool SummonShamanTotems();
     SpellCastResult CastWeaponBuff(SpellEntry const* pSpellEntry, EquipmentSlots slot);
     bool UseTrinketEffects(bool onlyToBreakCC = false);
