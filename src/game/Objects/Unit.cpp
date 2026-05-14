@@ -1357,7 +1357,7 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         float fdamage = CalculateDamage(damageInfo->attackType, false, i);
         // Add melee damage bonus
         fdamage = MeleeDamageBonusDone(damageInfo->target, fdamage, damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0);
-        subDamage->damage = rand_dither(damageInfo->target->MeleeDamageBonusTaken(this, rand_dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
+        subDamage->damage = rand_ditheru(damageInfo->target->MeleeDamageBonusTaken(this, rand_dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
 
         // Calculate armor reduction
         if (subDamage->damageSchoolMask == SPELL_SCHOOL_MASK_NORMAL)
@@ -1765,7 +1765,7 @@ void Unit::TriggerDamageShields(Unit* pVictim)
             //Immolation : bonus 0.5x fire resistance difference
             if (pSpellProto->Id == 21142)
             {
-                int32 fireResistanceDiff = rand_ditheru((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.5f);
+                int32 fireResistanceDiff = rand_dither((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.5f);
                 if (fireResistanceDiff > 0)
                     damage += fireResistanceDiff; // increase damage by 0.5x fire resistance difference
             }
@@ -1786,7 +1786,7 @@ void Unit::TriggerDamageShields(Unit* pVictim)
                     if(pOwner->GetLevel() < 60 && pOwner->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
                         jiefufuti = 0;
                 }
-                damage = rand_dither(damage * (100.0f - jiefufuti) / 100.0f);
+                damage = rand_ditheru(damage * (100.0f - jiefufuti) / 100.0f);
             }
 
             pVictim->DealDamageMods(this, damage, nullptr);
