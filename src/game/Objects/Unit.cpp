@@ -58,6 +58,7 @@
 #include "InstanceStatistics.h"
 #include "MovementPacketSender.h"
 #include "Errors.h"
+#include "Utilities/Random.h"
 #include "ScriptMgr.h"
 
 //#define DEBUG_DEBUFF_LIMIT
@@ -1356,13 +1357,13 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         float fdamage = CalculateDamage(damageInfo->attackType, false, i);
         // Add melee damage bonus
         fdamage = MeleeDamageBonusDone(damageInfo->target, fdamage, damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0);
-        subDamage->damage = dither(damageInfo->target->MeleeDamageBonusTaken(this, dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
+        subDamage->damage = rand_dither(damageInfo->target->MeleeDamageBonusTaken(this, rand_dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
 
         // Calculate armor reduction
         if (subDamage->damageSchoolMask == SPELL_SCHOOL_MASK_NORMAL)
         {
             damageInfo->cleanDamage += subDamage->damage;
-            subDamage->damage = ditheru(CalcArmorReducedDamage(damageInfo->target, subDamage->damage));
+            subDamage->damage = rand_ditheru(CalcArmorReducedDamage(damageInfo->target, subDamage->damage));
             damageInfo->cleanDamage -= subDamage->damage;
         }
 
@@ -1757,14 +1758,14 @@ void Unit::TriggerDamageShields(Unit* pVictim)
             //CalcAbsorbResist(pVictim, SpellSchools(spellProto->School), SPELL_DIRECT_DAMAGE, damage, &absorb, &resist);
             //damage-=absorb + resist;
 
-            uint32 damage = ditheru(fdamage);
+            uint32 damage = rand_ditheru(fdamage);
 
             //Cloak of Flames
             //Sulfuras, Hand of Ragnaros
             //Immolation : bonus 0.5x fire resistance difference
             if (pSpellProto->Id == 21142)
             {
-                int32 fireResistanceDiff = ditheru((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.5f);
+                int32 fireResistanceDiff = rand_ditheru((pVictim->GetResistance(SPELL_SCHOOL_FIRE) - this->GetResistance(SPELL_SCHOOL_FIRE)) * 0.5f);
                 if (fireResistanceDiff > 0)
                     damage += fireResistanceDiff; // increase damage by 0.5x fire resistance difference
             }
@@ -1909,7 +1910,7 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
     if (canResist || (resistanceChance < 0))
     {
         float const multiplier = RollMagicResistanceMultiplierOutcomeAgainst(resistanceChance, schoolMask, damagetype, spellProto);
-        *resist = dither(int64(damage) * multiplier);
+        *resist = rand_dither(int64(damage) * multiplier);
         remainingDamage -= *resist;
     }
     else
@@ -2022,11 +2023,11 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
                 if (Player* modOwner = GetSpellModOwner())
                     modOwner->ApplySpellMod((*i)->GetId(), SPELLMOD_MULTIPLE_VALUE, manaMultiplier, spell);
 
-                int32 maxAbsorb = dither(GetPower(POWER_MANA) / manaMultiplier);
+                int32 maxAbsorb = rand_dither(GetPower(POWER_MANA) / manaMultiplier);
                 if (currentAbsorb > maxAbsorb)
                     currentAbsorb = maxAbsorb;
 
-                int32 manaReduction = dither(currentAbsorb * manaMultiplier);
+                int32 manaReduction = rand_dither(currentAbsorb * manaMultiplier);
                 ApplyPowerMod(POWER_MANA, manaReduction, false);
             }
 

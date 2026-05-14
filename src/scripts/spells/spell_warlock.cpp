@@ -187,7 +187,7 @@ struct WarlockLifeTapScript : SpellScript
                 }
                 dmg = (100.0f / (100.0f - jiefufuti)) * dmg;
             }
-            int32 idmg = dither(dmg);
+            int32 idmg = rand_dither(dmg);
 
             if (int32(spell->m_casterUnit->GetHealth()) > idmg)
             {
