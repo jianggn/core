@@ -37,6 +37,7 @@
 #include "LFGQueue.h"
 #include "LockedQueue.h"
 
+#include <atomic>
 #include <map>
 #include <set>
 #include <list>
@@ -729,7 +730,7 @@ class ThreadPool;
 class World
 {
     public:
-        static volatile uint32 m_worldLoopCounter;
+        static std::atomic<uint32> m_worldLoopCounter;
 
         World();
         ~World();
