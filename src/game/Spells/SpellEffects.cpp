@@ -5742,8 +5742,21 @@ void Spell::EffectSummonTotem(SpellEffectIndex effIdx)
     {
         if (m_casterUnit->IsPlayer() && (m_spellInfo->Id == 5730 || m_spellInfo->Id == 6390 || m_spellInfo->Id == 6391 || m_spellInfo->Id == 6392 || m_spellInfo->Id == 10427 || m_spellInfo->Id == 10428))
         {
-            pTotem->SetMaxHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
-            pTotem->SetHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
+            if (m_casterUnit->HasAura(16043))
+            {
+                pTotem->SetMaxHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.1875f + damage);
+                pTotem->SetHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.1875f + damage);
+            }
+            else if (m_casterUnit->HasAura(16130))
+            {
+                pTotem->SetMaxHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.225f + damage);
+                pTotem->SetHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.225f + damage);
+            }
+            else
+            {
+                pTotem->SetMaxHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
+                pTotem->SetHealth((m_casterUnit->GetMaxHealth() + m_casterUnit->GetMaxPower(POWER_MANA)) * 0.15f + damage);
+            }
         }
         else
         {
