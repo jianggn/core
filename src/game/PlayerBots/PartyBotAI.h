@@ -68,7 +68,6 @@ public:
     bool EnterCombatDruidForm(bool inCombat);
     bool ShouldEnterStealth() const;
     bool EnterStealthIfNeeded(SpellEntry const* pStealthSpell);
-    void LootCorpsesForMe();
 
     bool CheckForDispelTargets();
     bool CheckForDispelTargetsPet();
@@ -93,7 +92,6 @@ public:
     void UpdateInCombatAI_Druid() final;
     void UpdateOutOfCombatAI_Druid() final;
 
-    ObjectGuidSet m_corpsesToLoot;
     std::vector<RaidTargetIcon> m_marksToCC;
     std::vector<RaidTargetIcon> m_marksToFocus;
     ShortTimeTracker m_updateTimer;
