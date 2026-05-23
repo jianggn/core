@@ -54,6 +54,12 @@ struct instance_emerald_sanctum : public ScriptedInstance
             return;
         if (pPlayer->HasAura(34291))
             return;
+        if (pPlayer->GetQuestStatus(10015) != QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(10016) != QUEST_STATUS_COMPLETE || pPlayer->GetQuestStatus(10017) != QUEST_STATUS_COMPLETE)
+        {
+            pPlayer->AddAura(34291);
+            pPlayer->GetSession()->SendNotification("%s must complete quests 10015, 10016 and 10017 to enter map %u.", pPlayer->GetName(), pPlayer->GetMapId());
+            return;
+        }
         uint32 todayStart = getTodayStartTimestamp();
         uint32 todayEnd = todayStart + 86399;
         std::unique_ptr<QueryResult> result = CharacterDatabase.PQuery("SELECT 1 FROM `character_dota_instance` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`<>'%u'", pPlayer->GetObjectGuid(), pPlayer->GetMapId(), todayStart, todayEnd, pPlayer->GetInstanceId());

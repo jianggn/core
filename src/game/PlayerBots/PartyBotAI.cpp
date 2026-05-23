@@ -694,6 +694,16 @@ void PartyBotAI::OnPlayerLogin()
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
+uint32 getTodayStartTimestamp()
+{
+    time_t rawtime = time(NULL);
+    struct tm *timeinfo = localtime(&rawtime);
+    timeinfo->tm_hour = 0;
+    timeinfo->tm_min = 0;
+    timeinfo->tm_sec = 0;
+    return mktime(timeinfo);
+}
+
 void PartyBotAI::UpdateAI(uint32 const diff)
 {
     m_updateTimer.Update(diff);
@@ -950,6 +960,34 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                             break;
                     }
                     if (me->GetItemLevel() < raid_item_level)
+                    {
+                        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                        {
+                            me->GetMotionMaster()->Clear(false, true);
+                            me->GetMotionMaster()->MoveIdle();
+                        }
+                        return;
+                    }
+                }
+            }
+            if (pLeader->GetMapId() == 542 || pLeader->GetMapId() == 545)
+            {
+                std::unique_ptr<QueryResult> result2(CharacterDatabase.PQuery("SELECT 1 FROM `characters` WHERE `guid` = '%u' and `name` = '%s'", me->GetObjectGuid(), me->GetName()));
+                if (result2)
+                {
+                    if (me->GetQuestStatus(10015) != QUEST_STATUS_COMPLETE || me->GetQuestStatus(10016) != QUEST_STATUS_COMPLETE || me->GetQuestStatus(10017) != QUEST_STATUS_COMPLETE)
+                    {
+                        if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                        {
+                            me->GetMotionMaster()->Clear(false, true);
+                            me->GetMotionMaster()->MoveIdle();
+                        }
+                        return;
+                    }
+                    uint32 todayStart = getTodayStartTimestamp();
+                    uint32 todayEnd = todayStart + 86399;
+                    std::unique_ptr<QueryResult> result3(CharacterDatabase.PQuery("SELECT 1 FROM `character_dota_instance` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`<>'%u'", me->GetObjectGuid(), pLeader->GetMapId(), todayStart, todayEnd, pLeader->GetInstanceId()));
+                    if (result3)
                     {
                         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
                         {
