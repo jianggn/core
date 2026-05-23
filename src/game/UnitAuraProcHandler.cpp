@@ -2193,7 +2193,7 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit* pVictim, uint32 
     }
 #endif
 
-    SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
+    SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, static_cast<SpellSchools>(spellInfo->School));
     float fdamage = CalculateSpellEffectValue(pVictim, spellInfo, triggeredByAura->GetEffIndex());
 
     // Paladin - Holy Shield : damage bonus 7.5% max health and 5% armor
