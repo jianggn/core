@@ -694,7 +694,7 @@ void PartyBotAI::OnPlayerLogin()
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
-uint32 getTodayStartTimestamp()
+uint32 getTodayStartTimestampPBAI()
 {
     time_t rawtime = time(NULL);
     struct tm *timeinfo = localtime(&rawtime);
@@ -984,7 +984,7 @@ void PartyBotAI::UpdateAI(uint32 const diff)
                         }
                         return;
                     }
-                    uint32 todayStart = getTodayStartTimestamp();
+                    uint32 todayStart = getTodayStartTimestampPBAI();
                     uint32 todayEnd = todayStart + 86399;
                     std::unique_ptr<QueryResult> result3(CharacterDatabase.PQuery("SELECT 1 FROM `character_dota_instance` WHERE `guid`='%u' and `map_id`='%u' and `timer`>='%u' and `timer`<='%u' and `instance_id`<>'%u'", me->GetObjectGuid(), pLeader->GetMapId(), todayStart, todayEnd, pLeader->GetInstanceId()));
                     if (result3)
