@@ -5700,7 +5700,10 @@ SpellCastResult Spell::CheckCast(bool strict)
         if (m_spellInfo->Id == 2855)
             if (!(target->IsPlayer() || (target->IsPet() && target->GetOwnerGuid().IsPlayer())))
                 return SPELL_FAILED_BAD_TARGETS;
-
+        // Arcane Orb mod
+        if (m_spellInfo->Id == 34085)
+            if (target->HasAura(34086))
+                return SPELL_FAILED_BAD_TARGETS;
         if (m_spellInfo->IsSpellAppliesAura() && !m_spellInfo->IsAreaOfEffectSpell())
         {
             // A more powerful spell is already active
