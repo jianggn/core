@@ -5702,8 +5702,37 @@ SpellCastResult Spell::CheckCast(bool strict)
                 return SPELL_FAILED_BAD_TARGETS;
         // Arcane Orb mod
         if (m_spellInfo->Id == 34085)
+        {
             if (target->HasAura(34086))
                 return SPELL_FAILED_BAD_TARGETS;
+
+            bool targetCanReflectSpell = false;
+            Unit::AuraList const& reflectSpells = target->GetAurasByType(SPELL_AURA_REFLECT_SPELLS);
+            for (const auto i : reflectSpells)
+            {
+                if (i->GetModifier()->m_amount >= 99.0f)
+                {
+                    targetCanReflectSpell = true;
+                    break;
+                }
+            }
+            if (targetCanReflectSpell)
+                return SPELL_FAILED_BAD_TARGETS;
+
+            bool targetCanReflectArcane = false;
+            Unit::AuraList const& reflectSpellsSchool = target->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
+            for (const auto i : reflectSpellsSchool)
+            {
+                if (i->GetModifier()->m_amount >= 99.0f &&
+                    i->GetModifier()->m_miscvalue & SPELL_SCHOOL_MASK_ARCANE)
+                {
+                    targetCanReflectArcane = true;
+                    break;
+                }
+            }
+            if (targetCanReflectArcane)
+                return SPELL_FAILED_BAD_TARGETS;
+        }
         if (m_spellInfo->IsSpellAppliesAura() && !m_spellInfo->IsAreaOfEffectSpell())
         {
             // A more powerful spell is already active
