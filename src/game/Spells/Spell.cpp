@@ -1751,7 +1751,10 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     // Timber Chain - Timbersaw spell 34101
     // Bartuc's Cut-Throat - item spell 34055
     // Blackout - talent 15269
-    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508 || m_spellInfo->Id == 34541 || m_spellInfo->Id == 34542 || m_spellInfo->Id == 5530 || m_spellInfo->Id == 34011 || m_spellInfo->Id == 34304 || m_spellInfo->Id == 34305 || m_spellInfo->Id == 34306 || m_spellInfo->Id == 34307 || m_spellInfo->Id == 34308 || m_spellInfo->Id == 34309 || m_spellInfo->Id == 34101 || m_spellInfo->Id == 34055 || m_spellInfo->Id == 15269)
+    // Starfire Stun - talent 16922
+    // Pyroclasm - talent 18093
+    // Impact - talent 12355
+    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508 || m_spellInfo->Id == 34541 || m_spellInfo->Id == 34542 || m_spellInfo->Id == 5530 || m_spellInfo->Id == 34011 || m_spellInfo->Id == 34304 || m_spellInfo->Id == 34305 || m_spellInfo->Id == 34306 || m_spellInfo->Id == 34307 || m_spellInfo->Id == 34308 || m_spellInfo->Id == 34309 || m_spellInfo->Id == 34101 || m_spellInfo->Id == 34055 || m_spellInfo->Id == 15269 || m_spellInfo->Id == 16922 || m_spellInfo->Id == 18093 || m_spellInfo->Id == 12355)
     {
         m_diminishGroup = DIMINISHING_NONE;
     }
