@@ -29,6 +29,7 @@
 #include "Player.h"
 #include "Path.h"
 #include "WaypointMovementGenerator.h"
+#include "Database/DBCStores.h"
 
 void WorldSession::HandleTaxiNodeStatusQueryOpcode(WorldPackets::Taxi::TaxiNodeStatusQuery const& packet)
 {
@@ -87,12 +88,48 @@ void WorldSession::SendTaxiMenu(Creature* unit)
     if (curloc == 0)
         return;
 
-    WorldPacket data(SMSG_SHOWTAXINODES, (4 + 8 + 4 + 8 * 4));
-    data << uint32(1);
-    data << unit->GetObjectGuid();
-    data << uint32(curloc);
-    GetPlayer()->m_taxi.AppendTaximaskTo(data, GetPlayer()->IsTaxiCheater(), GetPlayer()->GetRace());
-    SendPacket(&data);
+    auto packet = std::make_unique<WorldPackets::Taxi::ShowTaxiNodes>();
+    packet->flightmasterGuid = unit->GetObjectGuid();
+    packet->currentNode = curloc;
+
+    if (GetPlayer()->IsTaxiCheater())
+    { // player is able to use all taxi nodes
+        if (GetPlayer()->GetRace() == RACE_GNOME)
+        {
+            packet->knownNodesMask[0] = uint32(3456411898);
+            packet->knownNodesMask[1] = uint32(2148078929);
+            packet->knownNodesMask[2] = uint32(49991);
+            packet->knownNodesMask[3] = uint32(0);
+            packet->knownNodesMask[4] = uint32(0);
+            packet->knownNodesMask[5] = uint32(0);
+            packet->knownNodesMask[6] = uint32(0);
+            packet->knownNodesMask[7] = uint32(0);
+        }
+        else if (GetPlayer()->GetRace() == RACE_TROLL)
+        {
+            packet->knownNodesMask[0] = uint32(830166528);
+            packet->knownNodesMask[1] = uint32(315656872);
+            packet->knownNodesMask[2] = uint32(56504);
+            packet->knownNodesMask[3] = uint32(0);
+            packet->knownNodesMask[4] = uint32(0);
+            packet->knownNodesMask[5] = uint32(0);
+            packet->knownNodesMask[6] = uint32(0);
+            packet->knownNodesMask[7] = uint32(0);
+        }
+        else
+        {
+            for (uint32 i = 0; i < 8; ++i)
+                packet->knownNodesMask[i] = sTaxiNodesMask[i];
+        }
+    }
+    else
+    {
+        TaxiMask const& taxiMask = GetPlayer()->m_taxi.GetTaxiMask();
+        for (uint32 i = 0; i < 8; ++i)
+            packet->knownNodesMask[i] = taxiMask[i];
+    }
+
+    SendPacket(std::move(packet));
 }
 
 void WorldSession::SendDoFlight(uint32 mountDisplayId, uint32 path, uint32 pathNode)
