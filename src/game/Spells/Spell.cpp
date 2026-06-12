@@ -1755,7 +1755,9 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
     // Pyroclasm - talent 18093
     // Impact - talent 12355
     // Seal of Justice Stun - paladin spell 20170
-    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508 || m_spellInfo->Id == 34541 || m_spellInfo->Id == 34542 || m_spellInfo->Id == 5530 || m_spellInfo->Id == 34011 || m_spellInfo->Id == 34304 || m_spellInfo->Id == 34305 || m_spellInfo->Id == 34306 || m_spellInfo->Id == 34307 || m_spellInfo->Id == 34308 || m_spellInfo->Id == 34309 || m_spellInfo->Id == 34101 || m_spellInfo->Id == 34055 || m_spellInfo->Id == 15269 || m_spellInfo->Id == 16922 || m_spellInfo->Id == 18093 || m_spellInfo->Id == 12355 || m_spellInfo->Id == 20170)
+    // Revenge Stun - talent 12798
+    // Improved Concussive Shot - tanlent 19410
+    if ((m_spellInfo->IsFitToFamily<SPELLFAMILY_WARLOCK, CF_WARLOCK_ENSLAVE_DEMON>() && pRealUnitCaster->HasAura(18825)) || ((m_spellInfo->Id == 5782 || m_spellInfo->Id == 6213 || m_spellInfo->Id == 6215 || m_spellInfo->Id == 5484 || m_spellInfo->Id == 17928) && pRealUnitCaster->HasAura(34469)) || m_spellInfo->Id == 34508 || m_spellInfo->Id == 34541 || m_spellInfo->Id == 34542 || m_spellInfo->Id == 5530 || m_spellInfo->Id == 34011 || m_spellInfo->Id == 34304 || m_spellInfo->Id == 34305 || m_spellInfo->Id == 34306 || m_spellInfo->Id == 34307 || m_spellInfo->Id == 34308 || m_spellInfo->Id == 34309 || m_spellInfo->Id == 34101 || m_spellInfo->Id == 34055 || m_spellInfo->Id == 15269 || m_spellInfo->Id == 16922 || m_spellInfo->Id == 18093 || m_spellInfo->Id == 12355 || m_spellInfo->Id == 20170 || m_spellInfo->Id == 12798 || m_spellInfo->Id == 19410)
     {
         m_diminishGroup = DIMINISHING_NONE;
     }
