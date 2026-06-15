@@ -1693,6 +1693,10 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit const* owner)
         SetPvP(owner->IsPvP());
     }
 
+    if (GetPetType() == SUMMON_PET || GetPetType() == HUNTER_PET)
+        if (owner->IsPlayer() && !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_USE_SWIM_ANIMATION))
+            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_USE_SWIM_ANIMATION);
+
     UpdateAllStats();
 
     SetHealth(GetMaxHealth());

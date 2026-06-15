@@ -130,7 +130,7 @@ void GameObject::AddToWorld()
         {
             GetMap()->InsertGameObjectModel(*m_model);
 
-            if (GetGoType() == GAMEOBJECT_TYPE_DOOR)
+            if (GetGoType() == GAMEOBJECT_TYPE_DOOR && GetGOInfo()->id != 146085 && GetGOInfo()->id != 146086)
                 GetMap()->AddVolumeCacheEntry(GetObjectGuid(), m_model->getBounds(), m_model->collisionEnabled());
         }
     }
