@@ -129,8 +129,19 @@ void GameObject::AddToWorld()
         if (m_model)
         {
             GetMap()->InsertGameObjectModel(*m_model);
-
-            if (GetGoType() == GAMEOBJECT_TYPE_DOOR && GetGOInfo()->id != 146085 && GetGOInfo()->id != 146086 && GetGOInfo()->id != 179503)
+            /*
+            guid	id	map
+            35698	21099	47
+            6447	146085	90
+            6910	142207	90
+            17633	146086	90
+            15607	170569	230
+            15640	161462	230
+            35665	177000	409
+            264399	179503	429
+            234839	179365	469
+            */
+            if (GetGoType() == GAMEOBJECT_TYPE_DOOR && GetGOInfo()->id != 21099 && GetGOInfo()->id != 146085 && GetGOInfo()->id != 142207 && GetGOInfo()->id != 146086 && GetGOInfo()->id != 170569 && GetGOInfo()->id != 161462 && GetGOInfo()->id != 177000 && GetGOInfo()->id != 179503 && GetGOInfo()->id != 179365)
                 GetMap()->AddVolumeCacheEntry(GetObjectGuid(), m_model->getBounds(), m_model->collisionEnabled());
         }
     }
