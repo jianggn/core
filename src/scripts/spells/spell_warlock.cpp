@@ -177,7 +177,24 @@ struct WarlockLifeTapScript : SpellScript
             dmg = spell->m_casterUnit->SpellDamageBonusTaken(spell->m_casterUnit, spell->m_spellInfo, effIdx, dmg, SPELL_DIRECT_DAMAGE);
             //JieFuFuTi(34001) reduce taken damage do not work on life tap.
             if(spell->m_casterUnit->HasAura(34001)){
-                uint32 jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI);
+                uint32 jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_COMMON);
+                if (MapEntry const* mapEntry = spell->m_casterUnit->GetMap()->GetMapEntry())
+                {
+                    switch (mapEntry->mapType)
+                    {
+                        case MAP_INSTANCE:
+                            jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_INSTANCE);
+                            break;
+                        case MAP_RAID:
+                            jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_RAID);
+                            break;
+                        case MAP_BATTLEGROUND:
+                            jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_BATTLEGROUND);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 if (jiefufuti > 99)
                     jiefufuti = 99;
                 if(Player* pCasterUnit = ::ToPlayer(spell->m_casterUnit))

@@ -2298,7 +2298,24 @@ void Player::RewardRage(uint32 damage, bool attacker)
         //JieFuFuTi(34001) taken damage
         if (HasAura(34001))
         {
-            uint32 jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI);
+            uint32 jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_COMMON);
+            if (MapEntry const* mapEntry = GetMap()->GetMapEntry())
+            {
+                switch (mapEntry->mapType)
+                {
+                    case MAP_INSTANCE:
+                        jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_INSTANCE);
+                        break;
+                    case MAP_RAID:
+                        jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_RAID);
+                        break;
+                    case MAP_BATTLEGROUND:
+                        jiefufuti = sWorld.getConfig(CONFIG_UINT32_BUFF_JIEFUFUTI_BATTLEGROUND);
+                        break;
+                    default:
+                        break;
+                }
+            }
             if (jiefufuti > 99)
                 jiefufuti = 99;
             if (GetLevel() < 60 && GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)

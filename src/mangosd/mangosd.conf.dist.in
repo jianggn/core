@@ -3078,7 +3078,10 @@ BotLootRoll = 1
 BotDispelPetOutOfCombat = 1
 BotDispelPetInCombat = 0
 
-Buff.JieFuFuTi = 99
+Buff.JieFuFuTi.Common = 99
+Buff.JieFuFuTi.Instance = 99
+Buff.JieFuFuTi.Raid = 99
+Buff.JieFuFuTi.BattleGround = 99
 
 Price.TravelBoots = 50000
 
