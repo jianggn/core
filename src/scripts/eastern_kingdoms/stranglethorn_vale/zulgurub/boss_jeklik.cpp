@@ -121,6 +121,7 @@ struct boss_jeklikAI : public ScriptedAI
         m_creature->AddAura(SPELL_BAT_FORM);
         m_creature->SetFly(true);
         m_creature->SetObjectScale(2.0f);
+        m_creature->NearTeleportTo(-12288.81f, -1386.18f, 134.28f, 5.483f);
 
         if (m_pInstance)
             m_pInstance->SetData(TYPE_JEKLIK, IN_PROGRESS);
@@ -168,7 +169,8 @@ struct boss_jeklikAI : public ScriptedAI
                 DoScriptText(TEXT_SUMMON_BATS, m_creature);
                 for (uint8 i = 0; i < 6; ++i)
                 {
-                    Creature* Bat = m_creature->SummonCreature(11368, -12294.0f + frand(0.0f, 5.0f), -1382.0f + frand(0.0f, 5.0f), 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                    //Creature* Bat = m_creature->SummonCreature(11368, -12294.0f + frand(0.0f, 5.0f), -1382.0f + frand(0.0f, 5.0f), 144.8304f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                    Creature* Bat = m_creature->SummonCreature(11368, -12288.8f + frand(0.0f, 5.0f), -1386.2f + frand(0.0f, 5.0f), 134.28f, 5.483f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                     if (Bat && Bat->AI())
                     {
                         if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
