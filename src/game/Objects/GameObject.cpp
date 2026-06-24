@@ -127,28 +127,12 @@ void GameObject::AddToWorld()
             m_zoneScript->OnGameObjectCreate(this);
 
         if (m_model)
-        {
             GetMap()->InsertGameObjectModel(*m_model);
-            /*
-            guid	id	map
-            35698	21099	47
-            6447	146085	90
-            6910	142207	90
-            17633	146086	90
-            15607	170569	230
-            15640	161462	230
-            35665	177000	409
-            264399	179503	429
-            234839	179365	469
-            */
-            if (GetGoType() == GAMEOBJECT_TYPE_DOOR && GetGOInfo()->id != 21099 && GetGOInfo()->id != 146085 && GetGOInfo()->id != 142207 && GetGOInfo()->id != 146086 && GetGOInfo()->id != 170569 && GetGOInfo()->id != 161462 && GetGOInfo()->id != 177000 && GetGOInfo()->id != 179503 && GetGOInfo()->id != 179365)
-                GetMap()->AddVolumeCacheEntry(GetObjectGuid(), m_model->getBounds(), m_model->collisionEnabled());
-        }
     }
     Object::AddToWorld();
 
     // After Object::AddToWorld so that for initial state the GO is added to the world (and hence handled correctly)
-    UpdateCollisionState(true);
+    UpdateCollisionState();
 
     if (!m_AI)
         AIM_Initialize();
@@ -173,9 +157,6 @@ void GameObject::RemoveFromWorld()
 
         if (m_zoneScript)
             m_zoneScript->OnGameObjectRemove(this);
-
-        if (GetGoType() == GAMEOBJECT_TYPE_DOOR)
-            GetMap()->RemoveVolumeCacheEntry(GetObjectGuid());
 
         RemoveAllDynObjects();
 
@@ -2275,7 +2256,7 @@ void GameObject::SetLootState(LootState state)
     }
 
     m_lootState = state;
-    UpdateCollisionState(false);
+    UpdateCollisionState();
 
     // Call for GameObjectAI script
     if (m_AI)
@@ -2286,7 +2267,7 @@ void GameObject::SetGoState(GOState state)
 {
     //SetByteValue(GAMEOBJECT_BYTES_1, 0, state); // 3.3.5
     SetUInt32Value(GAMEOBJECT_STATE, state);
-    UpdateCollisionState(true);
+    UpdateCollisionState();
 }
 
 void GameObject::SetDisplayId(uint32 modelId)
@@ -2377,24 +2358,13 @@ bool GameObject::HasStaticDBSpawnData() const
     return sObjectMgr.GetGOData(GetGUIDLow()) != nullptr;
 }
 
-void GameObject::UpdateCollisionState(bool polyCull)
+void GameObject::UpdateCollisionState()
 {
     if (!m_model || !IsInWorld())
         return;
 
     bool enabled = GetGoType() == GAMEOBJECT_TYPE_CHEST ? getLootState() == GO_READY : GetGoState() == GO_STATE_READY;
     m_model->enable(enabled);
-
-    if (polyCull)
-    {
-        if (GetGoType() == GAMEOBJECT_TYPE_DOOR && GetMap()) // Currently we only use this system for doors
-        {
-            if (GetGoState() == GO_STATE_READY)
-                GetMap()->SetVolumeCollisionState(GetObjectGuid(), true);
-            else
-                GetMap()->SetVolumeCollisionState(GetObjectGuid(), false);
-        }
-    }
 }
 
 void GameObject::UpdateModel()
