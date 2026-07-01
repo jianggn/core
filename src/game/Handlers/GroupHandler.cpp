@@ -166,6 +166,13 @@ void WorldSession::HandleGroupInviteOpcode(WorldPackets::Group::GroupInvite cons
 
 void WorldSession::HandleGroupAcceptOpcode(NullClientPacket const& /*packet*/)
 {
+    // Hardcore Challenger Can Not Accept
+    if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_INVITE) == 1 && GetPlayer()->GetLevel()<60 && GetPlayer()->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
+    {
+        SendPartyResult(PARTY_OP_INVITE, "", ERR_GROUP_FULL);
+        return;
+    }
+
     Group* group = GetPlayer()->GetGroupInvite();
     if (!group)
         return;
@@ -191,6 +198,13 @@ void WorldSession::HandleGroupAcceptOpcode(NullClientPacket const& /*packet*/)
     }
 
     Player* leader = sObjectMgr.GetPlayer(group->GetLeaderGuid());
+
+    // Hardcore Challenger Can Not Be Accepted
+    if (sWorld.getConfig(CONFIG_HARDCORECHALLENGER_BAN_INVITE) == 1 && leader->GetLevel()<60 && leader->GetQuestStatus(10000) == QUEST_STATUS_COMPLETE)
+    {
+        SendPartyResult(PARTY_OP_INVITE, "", ERR_GROUP_FULL);
+        return;
+    }
 
     // forming a new group, create it
     if (!group->IsCreated())
