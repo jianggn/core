@@ -77,13 +77,13 @@ struct boss_gluthAI : public ScriptedAI
     {
         m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
         Reset();
-        five_percent = uint32(m_creature->GetMaxHealth() * 0.05f);
+        one_percent = uint32(m_creature->GetMaxHealth() * 0.01f);
     }
 
     instance_naxxramas* m_pInstance;
     EventMap m_events;
 
-    uint32 five_percent;
+    uint32 one_percent;
 
     void Reset() override
     {
@@ -275,8 +275,8 @@ struct boss_gluthAI : public ScriptedAI
                 m_creature->SetFacingToObject(chowableZombie);
                 m_creature->DealDamage(chowableZombie, chowableZombie->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                // heals gluth for 5%. SetHealth truncates to maxhealth internally
-                m_creature->SetHealth(m_creature->GetHealth() + five_percent);
+                // heals gluth for 1%. SetHealth truncates to maxhealth internally
+                m_creature->SetHealth(m_creature->GetHealth() + one_percent);
             }
         }
     }
