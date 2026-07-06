@@ -5028,8 +5028,8 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
 
-                    // Select maintank + 4 random targets
-                    std::vector<Unit*> viableTargets;
+                    // Select maintank + 1 random targets
+                    std::vector<Player*> viableTargets;
                     ThreatList const& tl = m_casterUnit->GetThreatManager().getThreatList();
                     for (auto const& itr : tl)
                     {
@@ -5040,10 +5040,10 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                         }
                     }
 
-                    int numTargets = std::min(int(viableTargets.size()), 5)-1; // leaving 1 target not MCed to avoid reset due to all MCed
+                    int numTargets = std::min(int(viableTargets.size())-1, 2); // leaving 1 target not MCed to avoid reset due to all MCed
 
                     // always MC maintank
-                    if (Unit* maintank = m_casterUnit->GetVictim())
+                    if (Player* maintank = m_casterUnit->GetVictim()->ToPlayer())
                     {
                         auto it = std::find(viableTargets.begin(), viableTargets.end(), maintank);
                         if (it != viableTargets.end())
@@ -5056,7 +5056,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex effIdx)
                     for (int i = 0; i < numTargets; i++)
                     {
                         int rand = irand(0, viableTargets.size() - 1);
-                        Unit* target = viableTargets[rand];
+                        Player* target = viableTargets[rand];
                         viableTargets.erase(viableTargets.begin() + rand);
 
                         target->CastSpell(target, 28409, true); // modifies scale
