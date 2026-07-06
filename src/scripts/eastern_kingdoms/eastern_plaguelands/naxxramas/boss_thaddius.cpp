@@ -132,7 +132,7 @@ enum thaddiusEvents
 
 //static constexpr uint32 ADDS_RESPAWN_TIMER = 5000;      // adds respawn after 5 sec if not both area killed in that window.
 
-static constexpr uint32 ENRAGE_TIMER = 1000 * 60 * 5;   // 5 min enrage once p2 starts
+static constexpr uint32 ENRAGE_TIMER = 1000 * 60 * 8;   // 8 min enrage once p2 starts
 
                                                         // Initial polarity shift is 10s, after that every 30 sec
 static uint32 PolarityShiftTimer(bool initial = false) { return initial ? 1000 * 10 : 1000 * 30; }
