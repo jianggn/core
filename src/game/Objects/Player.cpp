@@ -10474,8 +10474,8 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
     if (pItem)
     {
         // Modification - trading in loot for two hours.
-        //if (GetMap()->IsRaid() && (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM) && (pItem->GetProto()->Class == ITEM_CLASS_WEAPON || pItem->GetProto()->Class == ITEM_CLASS_ARMOR))
-        if (GetMap()->IsRaid() && (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM))
+        //if (GetMap()->IsRaid() && (pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP || pItem->GetProto()->Bonding == BIND_QUEST_ITEM))
+        if (GetMap()->IsRaid() && pItem->GetProto()->Bonding == BIND_WHEN_PICKED_UP && (pItem->GetProto()->Class == ITEM_CLASS_WEAPON || pItem->GetProto()->Class == ITEM_CLASS_ARMOR))
         {
             if (uint32(sMapPersistentStateMgr.GetScheduler().GetResetTimeFor(GetMap()->GetId()) - time(nullptr)) > sWorld.getConfig(CONFIG_UINT32_TRADINGRAIDLOOT_TIME))
             {
