@@ -218,6 +218,7 @@ struct npc_watcher_blombergAI : ScriptedAI
     bool m_bIsEngaged;
     uint32 m_uiSayTimer;
     ObjectGuid m_doddsGuid;
+    ObjectGuid m_paigeGuid;
 
     void Reset() override
     {
@@ -234,9 +235,22 @@ struct npc_watcher_blombergAI : ScriptedAI
     {
         if (auto pDodds = m_creature->GetMap()->GetCreature(m_doddsGuid))
         {
-            pDodds->SetUInt32Value(UNIT_NPC_FLAGS, pDodds->GetCreatureInfo()->npc_flags);
-            pDodds->ClearTemporaryFaction();
-            pDodds->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            if (pDodds->IsAlive() && !pDodds->GetVictim())
+            {
+                pDodds->SetUInt32Value(UNIT_NPC_FLAGS, pDodds->GetCreatureInfo()->npc_flags);
+                pDodds->ClearTemporaryFaction();
+                pDodds->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                if (pDodds->GetMotionMaster()->GetCurrentMovementGeneratorType() != HOME_MOTION_TYPE)
+                    pDodds->GetMotionMaster()->MoveTargetedHome();
+            }
+        }
+        if (auto pPaige = m_creature->GetMap()->GetCreature(m_paigeGuid))
+        {
+            if (pPaige->IsAlive() && !pPaige->GetVictim())
+            {
+                if (pPaige->GetMotionMaster()->GetCurrentMovementGeneratorType() != HOME_MOTION_TYPE)
+                    pPaige->GetMotionMaster()->MoveTargetedHome();
+            }
         }
     }
 
@@ -259,7 +273,10 @@ struct npc_watcher_blombergAI : ScriptedAI
                 }
 
                 if (auto pPaige = m_creature->FindNearestCreature(NPC_WATCHER_PAIGE, 200.0f))
+                {
                     pPaige->GetMotionMaster()->MovePoint(0, -10906.221680f, -375.957214f, 39.960278f, MOVE_PATHFINDING, 0, 1.19f);
+                    m_paigeGuid = pPaige->GetObjectGuid();
+                }
             }
             else
                 m_uiSayTimer -= uiDiff;
@@ -462,7 +479,7 @@ struct npc_stitchesAI : npc_escortAI
         npc_stitchesAI::Reset();
     }
 
-    std::list<ObjectGuid> m_lWatchman;
+    ObjectGuidSet m_watchmenGuids;
     ObjectGuid m_townCrierGuid, m_sirraVonIndiGuide;
     uint32 m_uiAuraOfRotTimer;
     uint32 m_uiLaunchTimer;
@@ -481,7 +498,7 @@ struct npc_stitchesAI : npc_escortAI
         if (pTownCrier && pTownCrier->IsAlive())
             pTownCrier->MonsterYellToZone(TOWNCRIER_YELL_5);
 
-        DespawnWatcher();
+        DespawnWatchers();
 
         if (auto pSirra = m_creature->GetMap()->GetCreature(m_sirraVonIndiGuide))
         {
@@ -500,25 +517,29 @@ struct npc_stitchesAI : npc_escortAI
         }
     }
 
-    void DespawnWatcher()
+    void DespawnWatchers()
     {
-        for (const auto& guid : m_lWatchman)
+        for (const auto& guid : m_watchmenGuids)
         {
             if (auto pWatchman = m_creature->GetMap()->GetCreature(guid))
-            {
-                if (pWatchman->IsAlive())
-                    pWatchman->DisappearAndDie();
-            }
+                pWatchman->DespawnOrUnsummon();
         }
+        m_watchmenGuids.clear();
     }
 
     Creature* SummonWatchman(uint8 index) const
     {
-        return m_creature->SummonCreature(Watchman[index].entry, 
+        Creature* pWatchman = m_creature->SummonCreature(Watchman[index].entry,
             Watchman[index].x,
             Watchman[index].y,
             Watchman[index].z,
-            Watchman[index].o, TEMPSUMMON_DEAD_DESPAWN, 10000, true);
+            Watchman[index].o, TEMPSUMMON_DEAD_DESPAWN, WEEK * IN_MILLISECONDS, true);
+        if (pWatchman)
+        {
+            pWatchman->SetCorpseDelay(HOUR);
+            pWatchman->SetRespawnDelay(WEEK);
+        }
+        return pWatchman;
     }
 
     void AddToFormation(Creature* pLeader, Creature* pAdd) const
@@ -532,7 +553,7 @@ struct npc_stitchesAI : npc_escortAI
 
     void JustSummoned(Creature* pSummoned) override
     {
-        m_lWatchman.push_back(pSummoned->GetObjectGuid());
+        m_watchmenGuids.insert(pSummoned->GetObjectGuid());
 
         switch (pSummoned->GetEntry())
         {
@@ -557,7 +578,7 @@ struct npc_stitchesAI : npc_escortAI
 
     void SummonedCreatureJustDied(Creature* pSummoned) override
     {
-        m_lWatchman.remove(pSummoned->GetObjectGuid());
+        m_watchmenGuids.erase(pSummoned->GetObjectGuid());
     }
 
     void WaypointReached(uint32 uiPoint) override
@@ -582,7 +603,7 @@ struct npc_stitchesAI : npc_escortAI
             case 34:
                 if (Creature* pCatford = m_creature->FindNearestCreature(NPC_WATCHER_CUTFORD, 300.0f))
                 {
-                    m_lWatchman.push_back(pCatford->GetObjectGuid());
+                    m_watchmenGuids.insert(pCatford->GetObjectGuid());
                     pCatford->SetWalk(false);
                     if (pCatford->GetDistance2d(m_creature) > 40.0f)
                     {
