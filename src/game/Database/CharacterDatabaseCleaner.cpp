@@ -152,6 +152,13 @@ void CharacterDatabaseCleaner::CleanOrphanedCharacterData()
     RemoveOrphanedRows("petition_sign", "owner_guid", "characters", "guid");
     RemoveOrphanedRows("petition_sign", "player_guid", "characters", "guid");
     //RemoveOrphanedRows("pet_aura", "caster_guid", "characters", "guid");
+    RemoveOrphanedRows("character_swap_spec", "guid", "characters", "guid");
+    RemoveOrphanedRows("character_transmog", "character", "characters", "guid");
+    RemoveOrphanedRows("character_chromie_belongings", "guid", "characters", "guid");
+    RemoveOrphanedRows("character_dota_instance", "guid", "characters", "guid");
+    RemoveOrphanedRows("character_warlock_demonic_circle", "guid", "characters", "guid");
+    RemoveOrphanedRows("hunter_pet_train_points", "owner_guid", "characters", "guid");
+    RemoveOrphanedRows("character_partybot_authorize", "guid", "characters", "guid");
 }
 
 void CharacterDatabaseCleaner::CleanOrphanedPetData()
