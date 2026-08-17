@@ -1795,7 +1795,7 @@ void Creature::SelectLevel(float percentHealth, float percentMana)
     uint32 const level = minLevel == maxLevel ? minLevel : urand(minLevel, maxLevel);
 
     SetLevel(level);
-    InitStatsForLevel();
+    InitStatsForLevel(percentHealth, percentMana);
 }
 
 void Creature::InitStatsForLevel(float percentHealth, float percentMana)
