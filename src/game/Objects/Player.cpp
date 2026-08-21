@@ -15620,7 +15620,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     if (HasAura(34524))
     {
-        SetObjectScale(0.5f);
+        //SetObjectScale(0.5f);
         UpdateModelData();
         SetCheatFly(true, false);
     }

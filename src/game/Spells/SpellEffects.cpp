@@ -1069,7 +1069,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                             }
                             player->SetCheatFly(true, false);
                             player->CastSpell(player, 34506, true);
-                            player->SetObjectScale(0.5f);
+                            //player->SetObjectScale(0.5f);
                             player->UpdateModelData();
                             player->SendSysMessage("Jump to switch from flying to running.");
                         }
