@@ -839,11 +839,25 @@ void Spell::CleanupTargetList()
     m_delayMoment = 0;
 }
 
+bool Spell::CanDelaySpellDueToBatching() const
+{
+    if (!m_spellInfo->IsSpellWithDelayableEffects())
+        return false;
+
+    // Always!
+    if (m_spellInfo->IsEffectDelayMandatory())
+        return true;
+
+    // Delay is turned off so don't even set spell as delayed.
+    if (!sWorld.getConfig(CONFIG_UINT32_SPELL_EFFECT_DELAY))
+        return false;
+
+    return !m_IsTriggeredSpell && m_caster->IsPlayer();
+}
+
 uint32 Spell::GetSpellBatchingEffectDelay(SpellCaster const* pTarget, SpellEffectIndex effIndex) const
 {
-    if (!sWorld.getConfig(CONFIG_UINT32_SPELL_EFFECT_DELAY))
-        return 0;
-
+    // No delay on self.
     if (pTarget == m_casterUnit && !m_spellInfo->EffectChainTarget[effIndex])
         return 0;
 
@@ -853,7 +867,13 @@ uint32 Spell::GetSpellBatchingEffectDelay(SpellCaster const* pTarget, SpellEffec
 
     // This tries to recreate the feeling of spell effect execution being done in batches,
     // by syncing the delay of effects to the world timer so they happen simultaneously.
-    return sWorld.GetDelayUntilNextSpellBatchingInterval();
+    uint32 const delay = sWorld.GetDelayUntilNextSpellBatchingInterval();
+
+    // These spells need to be delayed to work as intended, so force the delay.
+    if (!delay && m_spellInfo->IsEffectDelayMandatory())
+        return sWorld.getConfig(CONFIG_UINT32_SPELL_EFFECT_DELAY) ? sWorld.getConfig(CONFIG_UINT32_SPELL_EFFECT_DELAY) : BATCHING_INTERVAL;
+    
+    return delay;
 }
 
 void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
@@ -3402,8 +3422,7 @@ SpellCastResult Spell::prepare(SpellCastTargets targets, Aura* triggeredByAura, 
 SpellCastResult Spell::prepare(Aura* triggeredByAura, uint32 chance)
 {
     m_spellState = SPELL_STATE_PREPARING;
-    m_delayed = m_spellInfo->speed > 0.0f
-        || (!m_IsTriggeredSpell && m_caster->IsPlayer() && m_spellInfo->IsSpellWithDelayableEffects());
+    m_delayed = m_spellInfo->speed > 0.0f || CanDelaySpellDueToBatching();
 
     UpdateCastStartPosition();
 
@@ -5003,17 +5022,20 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
 
     if (!time)
     {
-        if (interrupted)
+        if (m_casterUnit->GetUInt32Value(UNIT_CHANNEL_SPELL) || m_casterUnit->GetChannelObjectGuid())
         {
-            // Send update directly on interrupt to fix animation if recasting channeled spell
-            m_casterUnit->CancelSpellChannelingAnimationInstantly();
-        }
-        else
-        {
-            // Reset of channel values has to be done after a few delay.
-            // Else, we have some visual bugs (arcane projectile, last tick)
-            ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
-            m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
+            if (interrupted)
+            {
+                // Send update directly on interrupt to fix animation if recasting channeled spell
+                m_casterUnit->CancelSpellChannelingAnimationInstantly();
+            }
+            else
+            {
+                // Reset of channel values has to be done after a few delay.
+                // Else, we have some visual bugs (arcane projectile, last tick)
+                ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
+                m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
+            }
         }
     }
     else if (Player* pPlayer = m_casterUnit->ToPlayer())
@@ -5543,9 +5565,9 @@ SpellCastResult Spell::CheckCast(bool strict)
             return SPELL_FAILED_CASTER_DEAD;
     }
 
-    // check global cooldown
     if (!m_IsTriggeredSpell)
     {
+        // check global cooldown
         // Activated spells will get stuck if we return SPELL_FAILED_NOT_READY during GCD
         if (strict && m_caster->HasGCD(m_spellInfo))
             return m_spellInfo->HasAttribute(SPELL_ATTR_COOLDOWN_ON_EVENT) ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_NOT_READY;
@@ -5570,6 +5592,26 @@ SpellCastResult Spell::CheckCast(bool strict)
 
             if ((m_spellInfo->Attributes & SPELL_ATTR_ONLY_STEALTHED) && !(m_casterUnit->HasStealthAura()))
                 return SPELL_FAILED_ONLY_STEALTHED;
+        }
+        
+        if ((m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_UNDER_WATER_CANCELS))
+        {
+            // Client checks only swimming flag.
+            if (m_caster->IsSwimming())
+                return SPELL_FAILED_ONLY_ABOVEWATER;
+
+            if (m_caster->IsInWater() && (!m_caster->IsPlayer() || static_cast<Player*>(m_caster)->IsInHighLiquid()))
+                return SPELL_FAILED_ONLY_ABOVEWATER;
+        }
+
+        if ((m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_ABOVE_WATER_CANCELS))
+        {
+            // Client checks only swimming flag.
+            if (!m_caster->IsSwimming())
+                return SPELL_FAILED_ONLY_UNDERWATER;
+
+            if (!m_caster->IsInWater() || (m_caster->IsPlayer() && !static_cast<Player*>(m_caster)->IsInHighLiquid()))
+                return SPELL_FAILED_ONLY_UNDERWATER;
         }
     }
 
@@ -5819,7 +5861,8 @@ SpellCastResult Spell::CheckCast(bool strict)
                 return SPELL_FAILED_BAD_TARGETS;
         }
 
-        if (!m_IsTriggeredSpell && m_spellInfo->IsDeathOnlySpell() && target->IsAlive())
+        if (!m_IsTriggeredSpell && m_spellInfo->IsDeathOnlySpell() && target->IsAlive() &&
+            IsExplicitlySelectedUnitTarget(m_spellInfo->EffectImplicitTargetA[0]))
             return SPELL_FAILED_TARGET_NOT_DEAD;
 
         // Check spell min target level
@@ -6748,9 +6791,6 @@ SpellCastResult Spell::CheckCast(bool strict)
             {
                 if (!m_casterUnit)
                     return SPELL_FAILED_BAD_TARGETS;
-
-                if (m_casterUnit->IsInWater() && (!m_casterUnit->IsPlayer() || static_cast<Player*>(m_casterUnit)->IsInHighLiquid()))
-                    return SPELL_FAILED_ONLY_ABOVEWATER;
 
                 if (m_casterUnit->IsPlayer() && m_casterUnit->GetTransport() && !static_cast<Player*>(m_casterUnit)->IsOutdoorOnTransport())
                     return SPELL_FAILED_NO_MOUNTS_ALLOWED;
