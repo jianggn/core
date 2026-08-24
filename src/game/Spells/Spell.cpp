@@ -5042,7 +5042,7 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
         pPlayer->SendChannelUpdate(time);
 }
 
-void Spell::SendChannelStart(uint32 duration)
+WorldObject* Spell::GetChannelTarget() const
 {
     WorldObject* target = nullptr;
 
@@ -5058,7 +5058,7 @@ void Spell::SendChannelStart(uint32 duration)
                 continue;
 
             if ((itr.effectMask & (1 << EFFECT_INDEX_0)) && itr.reflectResult == SPELL_MISS_NONE &&
-                    itr.targetGUID != m_caster->GetObjectGuid())
+                itr.targetGUID != m_caster->GetObjectGuid())
             {
                 target = ObjectAccessor::GetUnit(*m_caster, itr.targetGUID);
                 break;
@@ -5080,6 +5080,11 @@ void Spell::SendChannelStart(uint32 duration)
         }
     }
 
+    return target;
+}
+
+void Spell::SendChannelStart(uint32 duration)
+{
     if (m_caster->IsPlayer())
     {
         WorldPacket data(MSG_CHANNEL_START, (4 + 4));
@@ -5129,7 +5134,7 @@ void Spell::SendChannelStart(uint32 duration)
 
     if (m_casterUnit)
     {
-        if (target)
+        if (WorldObject* target = GetChannelTarget())
             m_casterUnit->SetChannelObjectGuid(target->GetObjectGuid());
         m_casterUnit->SetUInt32Value(UNIT_CHANNEL_SPELL, m_spellInfo->Id);
     }
