@@ -1118,6 +1118,19 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34514;
                     break;                               // no hidden cooldown
                 }
+                // Hunter - Moment of Courage
+                case 34665:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    // health amount
+                    basepoints[0] = rand_dither(this->GetTotalAttackPowerValue(BASE_ATTACK) * 0.25f);
+                    // mana amount
+                    basepoints[1] = rand_dither(this->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.15f);
+                    target = this;
+                    triggered_spell_id = 34666;
+                    break;                               // no hidden cooldown
+                }
                 // Obsidian Armor (Justice Bearer`s Pauldrons shoulder)
                 case 27539:
                 {
