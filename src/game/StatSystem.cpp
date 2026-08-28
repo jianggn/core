@@ -241,6 +241,16 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
                 break;
             case CLASS_HUNTER:
                 val2 = level * 2.0f + strength + agility - 20.0f;
+                if (HasAura(19168))
+                    val2 += agility * 0.1f;
+                else if (HasAura(19180))
+                    val2 += agility * 0.2f;
+                else if (HasAura(19181))
+                    val2 += agility * 0.3f;
+                else if (HasAura(24296))
+                    val2 += agility * 0.4f;
+                else if (HasAura(24297))
+                    val2 += agility * 0.5f;
                 break;
             case CLASS_SHAMAN:
                 val2 = level * 2.0f + strength * 2.0f    - 20.0f;
@@ -662,6 +672,19 @@ void Player::UpdateDodgePercentage()
     }
     // Dodge from agility
     value += GetDodgeFromAgility();
+    if (GetClass() == CLASS_HUNTER)
+    {
+        if (HasAura(19168))
+            value *= 1.1f;
+        else if (HasAura(19180))
+            value *= 1.2f;
+        else if (HasAura(19181))
+            value *= 1.3f;
+        else if (HasAura(24296))
+            value *= 1.4f;
+        else if (HasAura(24297))
+            value *= 1.5f;
+    }
     // Modify value from defense skill
     value += (int32(GetDefenseSkillValue()) - int32(GetSkillMaxForLevel())) * 0.04f;
     // Dodge from SPELL_AURA_MOD_DODGE_PERCENT aura
