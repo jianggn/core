@@ -1124,9 +1124,9 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
                     // health amount
-                    basepoints[0] = rand_dither(this->GetTotalAttackPowerValue(BASE_ATTACK) * 0.25f);
+                    basepoints[0] = rand_dither(this->GetTotalAttackPowerValue(BASE_ATTACK) * 0.45f);
                     // mana amount
-                    basepoints[1] = rand_dither(this->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.15f);
+                    basepoints[1] = rand_dither(this->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.30f);
                     target = this;
                     triggered_spell_id = 34666;
                     break;                               // no hidden cooldown
