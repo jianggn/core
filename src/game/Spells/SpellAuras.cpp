@@ -4561,11 +4561,10 @@ float Aura::CalculateDotDamage() const
                 if (caster->HasAura(19468))
                     damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.1f;
             }
-            // HUNTER - talent - Improved Serpent Sting - rank 5 : Wyvern Sting dot damage bonus 12.5% Range AP per trigger
+            // HUNTER - Wyvern Sting : dot damage bonus 12.5% Range AP per trigger
             else if (spellProto->Id == 24131 || spellProto->Id == 24134 || spellProto->Id == 24135)
             {
-                if (caster->HasAura(19468))
-                    damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.125f;
+                damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.125f;
             }
             break;
         }
