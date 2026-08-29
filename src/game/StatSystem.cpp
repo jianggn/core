@@ -201,6 +201,16 @@ float Unit::GetAttackPowerFromStrengthAndAgility(bool ranged, float strength, fl
         {
             case CLASS_HUNTER:
                 val2 = level * 2.0f + agility * 2.0f - 10.0f;
+                if (HasAura(19168))
+                    val2 += agility * 0.2f;
+                else if (HasAura(19180))
+                    val2 += agility * 0.4f;
+                else if (HasAura(19181))
+                    val2 += agility * 0.6f;
+                else if (HasAura(24296))
+                    val2 += agility * 0.8f;
+                else if (HasAura(24297))
+                    val2 += agility;
                 break;
             case CLASS_ROGUE:
                 val2 = level        + agility - 10.0f;
