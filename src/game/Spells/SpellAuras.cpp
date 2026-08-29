@@ -4876,9 +4876,9 @@ void Aura::HandleAuraModStat(bool apply, bool /*Real*/)
                     bool exitLoop = false;
                     switch (aura->GetModifier()->m_miscvalue)
                     {
-                        case 2388: staminaToRemove = m_modifier.m_amount * 10 / 100; exitLoop = true; break; // Rank 1
-                        case 2389: staminaToRemove = m_modifier.m_amount * 20 / 100; exitLoop = true; break; // Rank 2
-                        case 2390: staminaToRemove = m_modifier.m_amount * 30 / 100; exitLoop = true; break; // Rank 3
+                        case 2388: staminaToRemove = m_modifier.m_amount * 33 / 100; exitLoop = true; break; // Rank 1
+                        case 2389: staminaToRemove = m_modifier.m_amount * 66 / 100; exitLoop = true; break; // Rank 2
+                        case 2390: staminaToRemove = m_modifier.m_amount; exitLoop = true; break; // Rank 3
                     }
                     if (exitLoop)
                         break;
