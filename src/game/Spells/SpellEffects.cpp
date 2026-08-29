@@ -531,6 +531,12 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     if (m_casterUnit)
                         damage = damage + (m_casterUnit->GetMaxHealth() * 0.15f);
                 }
+                // HUNTER - talent - Improved Arcane Shot - rank 5 : Arcane Shot damage bonus 33% Range AP
+                else if (m_spellInfo->IsFitToFamilyMask<CF_HUNTER_ARCANE_SHOT>())
+                {
+                    if (m_casterUnit->HasAura(19458))
+                        damage = damage + (m_casterUnit->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.33f);
+                }
                 break;
             }
         }

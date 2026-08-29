@@ -4549,6 +4549,24 @@ float Aura::CalculateDotDamage() const
             {
                 damage += caster->GetMaxHealth() * 0.05f;
             }
+            // HUNTER - talent - Improved Arcane Shot - rank 5 : Volley dot damage bonus 6.5% Range AP per trigger
+            else if (spellProto->IsFitToFamilyMask<CF_HUNTER_VOLLEY>())
+            {
+                if (caster->HasAura(19458))
+                    damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.065f;
+            }
+            // HUNTER - talent - Improved Serpent Sting - rank 5 : Serpent Sting dot damage bonus 10% Range AP per trigger
+            else if (spellProto->IsFitToFamilyMask<CF_HUNTER_SERPENT_STING>())
+            {
+                if (caster->HasAura(19468))
+                    damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.1f;
+            }
+            // HUNTER - talent - Improved Serpent Sting - rank 5 : Wyvern Sting dot damage bonus 12.5% Range AP per trigger
+            else if (spellProto->Id == 24131 || spellProto->Id == 24134 || spellProto->Id == 24135)
+            {
+                if (caster->HasAura(19468))
+                    damage += caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.125f;
+            }
             break;
         }
         case SPELLFAMILY_ROGUE:
