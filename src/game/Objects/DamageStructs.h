@@ -96,7 +96,7 @@ enum HitInfo
     HITINFO_UNK10               = 0x00000400,               // 10 seen in sniffs
     HITINFO_UNK11               = 0x00000800,               // 11 seen in sniffs
     HITINFO_NO_FLOATING_TEXT    = 0x00001000,               // 12 used with melee spells
-    HITINFO_UNK13               = 0x00002000,               // 13 seen in sniffs
+    HITINFO_BLOOD_SPURT         = 0x00002000,               // 13 sprays extra blood
     HITINFO_GLANCING            = 0x00004000,               // 14
     HITINFO_CRUSHING            = 0x00008000,               // 15
     HITINFO_NOACTION            = 0x00010000,               // 16
@@ -115,7 +115,7 @@ enum HitInfo
     HITINFO_UNK7                = 0x00000080,               // 7 seen in sniffs
     HITINFO_UNK8                = 0x00000100,               // 8
     HITINFO_LEFTSWING           = 0x00000200,               // 9
-    HITINFO_UNK10               = 0x00000400,               // 10 seen in sniffs
+    HITINFO_BLOOD_SPURT         = 0x00000400,               // 10 sprays extra blood
     HITINFO_UNK11               = 0x00000800,               // 11 seen in sniffs
     HITINFO_NOACTION            = 0x00001000,               // 12
     HITINFO_DEBUG               = 0x00002000,               // 13
@@ -127,8 +127,8 @@ enum HitInfo
     HITINFO_UNK19               = 0x00080000,               // 19 seen in sniffs
     HITINFO_GLANCING            = 0x00100000,               // 20
     HITINFO_CRUSHING            = 0x00200000,               // 21
-    HITINFO_UNK22               = 0x00400000,               // 22 seen in sniffs
-    HITINFO_SWINGNOHITSOUND     = 0x00800000                // 23
+    HITINFO_SWINGNOHITSOUND     = 0x00400000,               // 22 seen in sniffs
+    HITINFO_UNK23               = 0x00800000                // 23
 #endif
 };
 

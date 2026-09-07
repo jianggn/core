@@ -105,19 +105,19 @@ void WorldPackets::Combat::MeleeAttackingStateUpdate::AppendBodyTo(ByteBuffer& b
 
     if ((hitInfo & HITINFO_DEBUG) && debugInfo.has_value())
     {
-        buffer << debugInfo->debugField1;
-        buffer << debugInfo->debugField2;
-        buffer << debugInfo->debugField3;
-        buffer << debugInfo->debugField4;
-        buffer << debugInfo->debugField5;
-        buffer << debugInfo->debugField6;
-        buffer << debugInfo->debugField7;
-        buffer << debugInfo->debugField8;
-        buffer << debugInfo->debugField9;
-        for (auto const& pair : debugInfo->debugPairs)
+        buffer << debugInfo->armor;
+        buffer << debugInfo->critChance;
+        buffer << debugInfo->combatRoll;
+        buffer << debugInfo->missChance;
+        buffer << debugInfo->dodgeChance;
+        buffer << debugInfo->parryChance;
+        buffer << debugInfo->blockChance;
+        buffer << debugInfo->glanceChance;
+        buffer << debugInfo->crushChance;
+        for (auto const& pair : debugInfo->damage)
         {
-            buffer << float(pair.first);
-            buffer << float(pair.second);
+            buffer << float(pair.first); // min
+            buffer << float(pair.second); // max
         }
         buffer << debugInfo->debugField10;
     }

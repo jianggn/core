@@ -1597,6 +1597,9 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
     // No animation on victim in this case.
     if (!damageInfo->totalDamage && (damageInfo->HitInfo & (HITINFO_MISS | HITINFO_ABSORB)))
         damageInfo->HitInfo &= ~HITINFO_AFFECTS_VICTIM;
+    // Heavy hits cause more blood to spurt out
+    else if (damageInfo->cleanDamage > (damageInfo->target->GetHealth() * 25 / 100))
+        damageInfo->HitInfo |= HITINFO_BLOOD_SPURT;
 }
 
 void Unit::DealMeleeDamage(CalcDamageInfo const* damageInfo, bool durabilityLoss)
