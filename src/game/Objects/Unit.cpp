@@ -1325,9 +1325,6 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         case RANGED_ATTACK:
             damageInfo->procAttacker = PROC_FLAG_DEAL_RANGED_ATTACK;
             damageInfo->procVictim   = PROC_FLAG_TAKE_RANGED_ATTACK;
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-            damageInfo->HitInfo      = HITINFO_UNK3;             // test (dev note: test what? HitInfo flag possibly not confirmed.)
-#endif
             break;
         default:
             break;
@@ -1341,16 +1338,16 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
     uint8 actualDamageCount = feral ? 1 : m_weaponDamageCount[damageInfo->attackType];
     for (uint8 i = 0; i < actualDamageCount; i++)
     {
-        SubDamageInfo* subDamage = &damageInfo->subDamage[i];
+        SubDamageInfo& subDamage = damageInfo->subDamage[i];
 
         // feral only allowed melee school
-        subDamage->damageSchoolMask = IsPlayer() && !feral
+        subDamage.damageSchoolMask = IsPlayer() && !feral
             ? GetSchoolMask(GetWeaponDamageSchool(damageInfo->attackType, i))
             : GetMeleeDamageSchoolMask();
 
-        if (damageInfo->target->IsImmuneToDamage(subDamage->damageSchoolMask))
+        if (damageInfo->target->IsImmuneToDamage(subDamage.damageSchoolMask))
         {
-            subDamage->damage = 0;
+            subDamage.damage = 0;
             continue;
         }
         else
@@ -1359,17 +1356,17 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         float fdamage = CalculateDamage(damageInfo->attackType, false, i);
         // Add melee damage bonus
         fdamage = MeleeDamageBonusDone(damageInfo->target, fdamage, damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0);
-        subDamage->damage = rand_ditheru(damageInfo->target->MeleeDamageBonusTaken(this, rand_dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
+        subDamage.damage = rand_dither(damageInfo->target->MeleeDamageBonusTaken(this, rand_dither(fdamage), damageInfo->attackType, nullptr, EFFECT_INDEX_0, DIRECT_DAMAGE, 1, nullptr, i == 0));
 
         // Calculate armor reduction
-        if (subDamage->damageSchoolMask == SPELL_SCHOOL_MASK_NORMAL)
+        if (subDamage.damageSchoolMask == SPELL_SCHOOL_MASK_NORMAL)
         {
-            damageInfo->cleanDamage += subDamage->damage;
-            subDamage->damage = rand_ditheru(CalcArmorReducedDamage(damageInfo->target, subDamage->damage));
-            damageInfo->cleanDamage -= subDamage->damage;
+            damageInfo->cleanDamage += subDamage.damage;
+            subDamage.damage = rand_ditheru(CalcArmorReducedDamage(damageInfo->target, subDamage.damage));
+            damageInfo->cleanDamage -= subDamage.damage;
         }
 
-        damageInfo->totalDamage += subDamage->damage;
+        damageInfo->totalDamage += subDamage.damage;
     }
 
     // Physical Immune check
@@ -1384,7 +1381,8 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         return;
     }
 
-    damageInfo->hitOutCome = RollMeleeOutcomeAgainst(damageInfo->target, damageInfo->attackType);
+    // Sets damageInfo->hitOutCome
+    RollMeleeOutcomeAgainst(damageInfo);
 
     // Disable parry or dodge for ranged attack
     if (damageInfo->attackType == RANGED_ATTACK)
@@ -1557,49 +1555,108 @@ void Unit::CalculateMeleeDamage(Unit* pVictim, uint32 damage, CalcDamageInfo* da
         // Calculate absorb & resists
         for (uint8 i = 0; i < m_weaponDamageCount[damageInfo->attackType]; i++)
         {
-            SubDamageInfo* subDamage = &damageInfo->subDamage[i];
+            SubDamageInfo& subDamage = damageInfo->subDamage[i];
 
-            damageInfo->target->CalculateDamageAbsorbAndResist(this, subDamage->damageSchoolMask, DIRECT_DAMAGE, subDamage->damage, &subDamage->absorb, &subDamage->resist, nullptr);
+            damageInfo->target->CalculateDamageAbsorbAndResist(this, subDamage.damageSchoolMask, DIRECT_DAMAGE, subDamage.damage, &subDamage.absorb, &subDamage.resist, nullptr);
 
-            uint32 const bonus = (subDamage->resist < 0 ? uint32(std::abs(subDamage->resist)) : 0);
-            subDamage->damage += bonus;
+            uint32 const bonus = (subDamage.resist < 0 ? uint32(std::abs(subDamage.resist)) : 0);
+            subDamage.damage += bonus;
             damageInfo->totalDamage += bonus;
 
-            uint32 const malus = (subDamage->resist > 0 ? (subDamage->absorb + uint32(subDamage->resist)) : subDamage->absorb);
+            uint32 const malus = subDamage.absorb + uint32(std::max(subDamage.resist, 0));
 
-            if (subDamage->damage <= malus)
+            if (subDamage.damage <= malus)
             {
-                damageInfo->totalDamage -= subDamage->damage;
-                subDamage->damage = 0;
+                damageInfo->totalDamage -= subDamage.damage;
+                subDamage.damage = 0;
             }
             else
             {
                 damageInfo->totalDamage -= malus;
-                subDamage->damage -= malus;
+                subDamage.damage -= malus;
             }
 
-            damageInfo->totalAbsorb += subDamage->absorb;
-            damageInfo->totalResist += subDamage->resist;
+            // script hooks
+            damageInfo->totalDamage -= subDamage.damage;
+            DealDamageMods(pVictim, subDamage.damage, &subDamage.absorb);
+            damageInfo->totalDamage += subDamage.damage;
 
-            if (subDamage->absorb)
+            damageInfo->totalAbsorb += subDamage.absorb;
+            damageInfo->totalResist += subDamage.resist;
+
+            if (subDamage.absorb)
             {
                 damageInfo->HitInfo |= HITINFO_ABSORB;
                 damageInfo->procEx |= PROC_EX_ABSORB;
             }
 
-            if (subDamage->resist)
+            if (subDamage.resist)
                 damageInfo->HitInfo |= HITINFO_RESIST;
         }
     }
     else
         damageInfo->totalDamage = 0;
 
+#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
+    if (IsPlayer() && damageInfo->target->IsPlayer())
+        damageInfo->HitInfo |= HITINFO_PVP;
+#endif
+
     // No animation on victim in this case.
     if (!damageInfo->totalDamage && (damageInfo->HitInfo & (HITINFO_MISS | HITINFO_ABSORB)))
         damageInfo->HitInfo &= ~HITINFO_AFFECTS_VICTIM;
-    // Heavy hits cause more blood to spurt out
+    // Flag used as animation hint in alpha client, not sure if vanilla client uses it.
+    else if (damageInfo->totalDamage >= damageInfo->target->GetHealth())
+        damageInfo->HitInfo |= HITINFO_KILLING_BLOW;
+    // Heavy hits cause more blood to spurt out.
     else if (damageInfo->cleanDamage > (damageInfo->target->GetHealth() * 25 / 100))
         damageInfo->HitInfo |= HITINFO_BLOOD_SPURT;
+}
+
+void Unit::RollDazeOutcome(CalcDamageInfo* damageInfo)
+{
+    Unit* pVictim = damageInfo->target;
+
+    // If this is a creature and it attacks from behind it has a probability to daze it's victim
+    if (damageInfo->totalDamage && !IsPlayer() &&
+        !GetCharmerOrOwnerGuid() && !pVictim->HasInArc(this) &&
+        !(pVictim->IsPlayer() && pVictim->GetInvincibilityHpThreshold())) // dont daze player in god mode
+    {
+        // -probability is between 0% and 40%
+        // 20% base chance
+        uint32 victimDefense = pVictim->GetDefenseSkillValue();
+        uint32 attackerMeleeSkill = GetUnitMeleeSkill();
+
+        float probability = 0.0f;
+
+        // there is a newbie protection, at level 10 just 7% base chance; assuming linear function
+        if (pVictim->GetLevel() < 30)
+            probability = 0.65f * pVictim->GetLevel() + 0.5f + ((float)attackerMeleeSkill - (float)victimDefense) * 0.2f;
+        else
+            probability = 20.0f + ((float)attackerMeleeSkill - (float)victimDefense) * 0.2f;
+
+        if (probability > 40.0f)
+            probability = 40.0f;
+
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
+        damageInfo->HitInfo |= HITINFO_ROLLED_DAZE;
+#endif
+
+        if (roll_chance_f(probability))
+        {
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
+            damageInfo->HitInfo |= HITINFO_DAZE;
+#endif
+
+            uint32 spellId = SPELL_ID_DAZE;
+
+            if (pVictim->IsPlayer())
+                if (ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(pVictim->GetRace()))
+                    spellId = raceEntry->dazeSpellId;
+
+            CastSpell(pVictim, spellId, true);
+        }
+    }
 }
 
 void Unit::DealMeleeDamage(CalcDamageInfo const* damageInfo, bool durabilityLoss)
@@ -1659,39 +1716,6 @@ void Unit::DealMeleeDamage(CalcDamageInfo const* damageInfo, bool durabilityLoss
     // Call default DealDamage
     CleanDamage cleanDamage(damageInfo->cleanDamage, damageInfo->attackType, damageInfo->hitOutCome, damageInfo->totalAbsorb, damageInfo->totalResist);
     DealDamage(pVictim, damageInfo->totalDamage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->subDamage[0].damageSchoolMask), nullptr, durabilityLoss);
-
-    // If this is a creature and it attacks from behind it has a probability to daze it's victim
-    if (damageInfo->totalDamage && !IsPlayer() &&
-        !((Creature*)this)->GetCharmerOrOwnerGuid() && !pVictim->HasInArc(this) &&
-        !(pVictim->IsPlayer() && pVictim->GetInvincibilityHpThreshold())) // dont daze player in god mode
-    {
-        // -probability is between 0% and 40%
-        // 20% base chance
-        uint32 victimDefense = pVictim->GetDefenseSkillValue();
-        uint32 attackerMeleeSkill = GetUnitMeleeSkill();
-
-        float probability = 0.0f;
-
-        // there is a newbie protection, at level 10 just 7% base chance; assuming linear function
-        if (pVictim->GetLevel() < 30)
-            probability = 0.65f * pVictim->GetLevel() + 0.5f + ((float)attackerMeleeSkill - (float)victimDefense) * 0.2f;
-        else
-            probability = 20.0f + ((float)attackerMeleeSkill - (float)victimDefense) * 0.2f;
-
-        if (probability > 40.0f)
-            probability = 40.0f;
-
-        if (roll_chance_f(probability))
-        {
-            uint32 spellId = SPELL_ID_DAZE;
-
-            if (pVictim->IsPlayer())
-                if (ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(pVictim->GetRace()))
-                    spellId = raceEntry->dazeSpellId;
-
-            CastSpell(pVictim, spellId, true);
-        }
-    }
 
     // update at damage Judgement aura duration that applied by attacker at victim
     if (damageInfo->totalDamage)
@@ -2248,15 +2272,11 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
 
     CalcDamageInfo damageInfo;
     CalculateMeleeDamage(pVictim, 0, &damageInfo, attType);
-    // Send log damage message to client
-    for (uint8 i = 0; i < m_weaponDamageCount[attType]; i++)
-    {
-        damageInfo.totalDamage -= damageInfo.subDamage[i].damage;
-        DealDamageMods(pVictim, damageInfo.subDamage[i].damage, &damageInfo.subDamage[i].absorb);
-        damageInfo.totalDamage += damageInfo.subDamage[i].damage;
-    }
 
     ProcDamageAndSpell(ProcSystemArguments(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.totalDamage, damageInfo.totalDamage + damageInfo.totalAbsorb + damageInfo.totalResist, damageInfo.attackType));
+
+    // Daze cast happens before SMSG_ATTACKERSTATEUPDATE in sniffs.
+    RollDazeOutcome(&damageInfo);
 
     // In sniffs SMSG_ATTACKERSTATEUPDATE is sent after chance on hit spell casts from CastItemCombatSpell. This fixes animation for Frostbrand Attack.
     // Send it before lethal damage so the client can still resolve the victim
@@ -2278,39 +2298,25 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool ext
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_ATTACKING_CANCELS);
 }
 
-MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackType attType) const
-{
-    // This is only wrapper
-
-    // Miss chance based on melee
-    float const missChance = MeleeMissChanceCalc(pVictim, attType);
-
-    // Critical hit chance
-    float const critChance = GetUnitCriticalChance(attType, pVictim);
-
-    // stunned target cannot dodge and this is check in GetUnitDodgeChance() (returned 0 in this case)
-    float const dodgeChance = pVictim->GetUnitDodgeChance();
-    float const blockChance = pVictim->GetUnitBlockChance();
-    float const parryChance = pVictim->GetUnitParryChance();
-
-    // Useful if want to specify crit & miss chances for melee, else it could be removed
-    //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "MELEE OUTCOME: miss %f crit %f dodge %f parry %f block %f", missChance, critChance, dodgeChance, parryChance, blockChance);
-
-    return RollMeleeOutcomeAgainst(pVictim, attType, int32(critChance * 100), int32(missChance * 100), int32(dodgeChance * 100), int32(parryChance * 100), int32(blockChance * 100), false);
-}
-
-MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackType attType, int32 critChance, int32 missChance, int32 dodgeChance, int32 parryChance, int32 blockChance, bool SpellCasted) const
+void Unit::RollMeleeOutcomeAgainst(CalcDamageInfo* damageInfo) const
 {
     if (IsPlayer() && ToPlayer()->HasCheatOption(PLAYER_CHEAT_ALWAYS_CRIT))
-        return MELEE_HIT_CRIT;
+    {
+        damageInfo->hitOutCome = MELEE_HIT_CRIT;
+        return;
+    }
 
+    Unit const* pVictim = damageInfo->target;
     if (pVictim->IsCreature() && ((Creature*)pVictim)->IsInEvadeMode())
-        return MELEE_HIT_EVADE;
+    {
+        damageInfo->hitOutCome = MELEE_HIT_EVADE;
+        return;
+    }
 
     int32 attackerMaxSkillValueForLevel = GetSkillMaxForLevel(pVictim);
     int32 victimMaxSkillValueForLevel = pVictim->GetSkillMaxForLevel(this);
 
-    int32 attackerWeaponSkill = GetWeaponSkillValue(attType, pVictim);
+    int32 attackerWeaponSkill = GetWeaponSkillValue(damageInfo->attackType, pVictim);
     int32 victimDefenseSkill = pVictim->GetDefenseSkillValue(this);
 
     // bonus from skills is 0.04%
@@ -2321,6 +2327,13 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
     int32    parrySkillBonus = pVictim->IsPlayer() ? 4 * skillDiff : cappedSkillDiff < -10 ? 60 * cappedSkillDiff : 20 * cappedSkillDiff;
     int32    sum = 0, tmp = 0;
     int32    roll = urand(0, 9999);
+
+    bool const spellCasted = false;
+    int32 missChance = int32(MeleeMissChanceCalc(pVictim, damageInfo->attackType) * 100);
+    int32 critChance = int32(GetUnitCriticalChance(damageInfo->attackType, pVictim) * 100);
+    int32 dodgeChance = int32(pVictim->GetUnitDodgeChance() * 100);
+    int32 blockChance = int32(pVictim->GetUnitBlockChance() * 100);
+    int32 parryChance = int32(pVictim->GetUnitParryChance() * 100);
 
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: skill bonus of %d for attacker", skillBonus);
     //DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: rolled %d, miss %d, dodge %d, parry %d, block %d, crit %d", roll, missChance, dodgeChance, parryChance, blockChance, critChance);
@@ -2334,14 +2347,16 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
         if (tmp > 0 && roll < (sum += tmp))
         {
             DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: MISS");
-            return MELEE_HIT_MISS;
+            damageInfo->hitOutCome = MELEE_HIT_MISS;
+            return;
         }
 
         // always crit against a sitting target (except 0 crit chance)
         if (pVictim->IsPlayer() && (critChance > 0 || IsCreature()) && !pVictim->IsStandingUp())
         {
             DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: CRIT (sitting victim)");
-            return MELEE_HIT_CRIT;
+            damageInfo->hitOutCome = MELEE_HIT_CRIT;
+            return;
         }
 
         bool fromBehind = !pVictim->HasInArc(this);
@@ -2360,11 +2375,15 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
             if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
                 dodgeChance *= pVictim->GetLevel() / 10.0f;
 
-            if (dodgeChance > 0 &&                         // check if unit _can_ dodge
-                (roll < (sum += dodgeChance)))
+            if (dodgeChance > 0)
             {
-                DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: DODGE <%d, %d)", sum - tmp, sum);
-                return MELEE_HIT_DODGE;
+                damageInfo->HitInfo |= HITINFO_ROLLED_DODGE;
+                if (roll < (sum += dodgeChance))
+                {
+                    DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: DODGE <%d, %d)", sum - tmp, sum);
+                    damageInfo->hitOutCome = MELEE_HIT_DODGE;
+                    return;
+                }
             }
         }
 
@@ -2380,40 +2399,44 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
                 if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
                     parryChance *= pVictim->GetLevel() / 10.0f;
 
-                if (parryChance > 0 &&                         // check if unit _can_ parry
-                        (roll < (sum += parryChance)))
+                if (parryChance > 0)
                 {
-                    DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: PARRY <%d, %d)", sum - parryChance, sum);
-                    return MELEE_HIT_PARRY;
+                    damageInfo->HitInfo |= HITINFO_ROLLED_PARRY;
+                    if (roll < (sum += parryChance))
+                    {
+                        DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: PARRY <%d, %d)", sum - parryChance, sum);
+                        damageInfo->hitOutCome = MELEE_HIT_PARRY;
+                        return;
+                    }
                 }
             }
         }
 
         // Max 40% chance to score a glancing blow against mobs that are higher level (can do only players and pets and not with ranged weapon)
-        if (attType != RANGED_ATTACK && !SpellCasted &&
-                (IsPlayer() || ((Creature*)this)->IsPet()) &&
-                !pVictim->IsPlayer() && !((Creature*)pVictim)->IsPet() && !((Creature*)pVictim)->IsTotem())
+        if (damageInfo->attackType != RANGED_ATTACK && !spellCasted &&
+            IsCharmerOrOwnerPlayerOrPlayerItself() && !pVictim->IsCharmerOrOwnerPlayerOrPlayerItself())
         {
             // cap possible value (with bonuses > max skill)
             int32 skill = attackerWeaponSkill;
             int32 maxskill = attackerMaxSkillValueForLevel;
             skill = (skill > maxskill) ? maxskill : skill;
 
-        // (Youfie) The +skill before BC does not reduce the frequency of glancing blows once it is equal to the player's level*5
-        if (attackerWeaponSkill > maxskill)
-            attackerWeaponSkill = maxskill;
+            // (Youfie) The +skill before BC does not reduce the frequency of glancing blows once it is equal to the player's level*5
+            if (attackerWeaponSkill > maxskill)
+                attackerWeaponSkill = maxskill;
 
-        // (Youfie) Chance of glance in Vanilla (unchanged by +skill beyond maxskill, see above):
-        tmp = (10 + ((victimDefenseSkill - attackerWeaponSkill) * 2)) * 100;
-        tmp = tmp > 4000 ? 4000 : tmp;
-        if (tmp < 0)
-            tmp = 0;
-        // sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "tmp = %i, Skill = %i, Max Skill = %i", tmp, attackerWeaponSkill, attackerMaxSkillValueForLevel); //For testing & debugging via the console
+            // (Youfie) Chance of glance in Vanilla (unchanged by +skill beyond maxskill, see above):
+            tmp = (10 + ((victimDefenseSkill - attackerWeaponSkill) * 2)) * 100;
+            tmp = tmp > 4000 ? 4000 : tmp;
+            if (tmp < 0)
+                tmp = 0;
+            // sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "tmp = %i, Skill = %i, Max Skill = %i", tmp, attackerWeaponSkill, attackerMaxSkillValueForLevel); //For testing & debugging via the console
 
             if (roll < (sum += tmp))
             {
                 DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: GLANCING <%d, %d)", sum - 4000, sum);
-                return MELEE_HIT_GLANCING;
+                damageInfo->hitOutCome = MELEE_HIT_GLANCING;
+                return;
             }
         }
 
@@ -2434,21 +2457,27 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
                 if (!pVictim->IsPlayer() && pVictim->GetLevel() < 10)
                     blockChance *= pVictim->GetLevel() / 10.0f;
 
-                if (blockChance > 0 &&                         // check if unit _can_ block
-                    (roll < (sum += blockChance)))
+                if (blockChance > 0)
                 {
-                    // Critical chance
-                    tmp = critChance;
-                    if (IsPlayer() && SpellCasted && tmp > 0)
+                    damageInfo->HitInfo |= HITINFO_ROLLED_BLOCK;
+                    if (roll < (sum += blockChance))
                     {
-                        if (roll_chance_i(tmp / 100))
+                        // Critical chance
+                        tmp = critChance;
+                        damageInfo->HitInfo |= HITINFO_BLOCK;
+                        if (IsPlayer() && spellCasted && tmp > 0)
                         {
-                            sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "RollMeleeOutcomeAgainst: BLOCKED CRIT");
-                            return MELEE_HIT_BLOCK_CRIT;
+                            if (roll_chance_i(tmp / 100))
+                            {
+                                sLog.Out(LOG_BASIC, LOG_LVL_DEBUG, "RollMeleeOutcomeAgainst: BLOCKED CRIT");
+                                damageInfo->hitOutCome = MELEE_HIT_BLOCK_CRIT;
+                                return;
+                            }
                         }
+                        DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: BLOCK <%d, %d)", sum - tmp, sum);
+                        damageInfo->hitOutCome = MELEE_HIT_BLOCK;
+                        return;
                     }
-                    DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: BLOCK <%d, %d)", sum - tmp, sum);
-                    return MELEE_HIT_BLOCK;
                 }
             }
         }
@@ -2460,17 +2489,20 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
     if (tmp > 0 && roll < (sum += tmp))
     {
         DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: CRIT <%d, %d)", sum - tmp, sum);
-        return MELEE_HIT_CRIT;
+        damageInfo->hitOutCome = MELEE_HIT_CRIT;
+        return;
     }
 
-    if ((!IsPlayer() && !IsPet()) &&
+    if (!IsPlayer() && !IsPet() &&
         !((Creature*)this)->HasStaticFlag(CREATURE_STATIC_FLAG_2_NO_CRUSHING_BLOWS) &&
-        !SpellCasted /*Only autoattack can be crashing blow*/)
+        !spellCasted /*Only autoattack can be crashing blow*/)
     {
         if (((Creature*)this)->HasExtraFlag(CREATURE_FLAG_EXTRA_ALWAYS_CRUSH))
         {
-            return MELEE_HIT_CRUSHING;
+            damageInfo->hitOutCome = MELEE_HIT_CRUSHING;
+            return;
         }
+
         // mobs can score crushing blows if they're 3 or more levels above victim
         // or when their weapon skill is 15 or more above victim's defense skill
         tmp = victimDefenseSkill;
@@ -2486,13 +2518,14 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
             if (roll < (sum += tmp))
             {
                 DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: CRUSHING <%d, %d)", sum - tmp, sum);
-                return MELEE_HIT_CRUSHING;
+                damageInfo->hitOutCome = MELEE_HIT_CRUSHING;
+                return;
             }
         }
     }
 
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: NORMAL");
-    return MELEE_HIT_NORMAL;
+    damageInfo->hitOutCome = MELEE_HIT_NORMAL;
 }
 
 float Unit::CalculateDamage(WeaponAttackType attType, bool normalized, uint8 index) const
