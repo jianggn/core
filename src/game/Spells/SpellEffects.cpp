@@ -4295,7 +4295,7 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
         if (unitTarget->HasAuraType(SPELL_AURA_MOD_ROOT))
             tideBringerMod = 2.0f;
         if (unitTarget->IsNonMeleeSpellCasted(false))
-            tideBringerMod *= 2;
+            tideBringerMod *= 1.5f;
         bonus *= tideBringerMod;
     }
     // Morphling - Frostbolt Volley & Frost Nova
