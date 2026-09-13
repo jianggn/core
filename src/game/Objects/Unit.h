@@ -322,6 +322,9 @@ class Unit : public SpellCaster
         void CleanupsBeforeDelete() override;               // used in ~Creature/~Player (or before mass creature delete to remove cross-references to already deleted units)
         void Update(uint32 update_diff, uint32 time) override;
 
+        void Heartbeat() override;
+        void TriggerAuraHeartbeat();
+
         /*********************************************************/
         /***                   STAT SYSTEM                     ***/
         /*********************************************************/

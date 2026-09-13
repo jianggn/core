@@ -344,6 +344,27 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
         m_damageTakenHistory.clear();
 }
 
+void Unit::Heartbeat()
+{
+    WorldObject::Heartbeat();
+
+    // Trigger heartbeat procs and generic aura behavior such as food/drink visuals
+    TriggerAuraHeartbeat();
+}
+
+void Unit::TriggerAuraHeartbeat()
+{
+    for (auto data : m_spellAuraHolders)
+    {
+        SpellAuraHolder* holder = data.second;
+        for (Aura* aura : holder->m_auras)
+            if (aura)
+                aura->Heartbeat();
+    }
+
+    ProcDamageAndSpell(ProcSystemArguments(this, PROC_FLAG_NONE, PROC_FLAG_HEARTBEAT, PROC_EX_NONE, 0, 0));
+}
+
 bool Unit::UsesPvPCombatTimer() const
 {
     if (IsPlayer())
