@@ -528,11 +528,14 @@ void SpellCaster::RollMeleeOutcomeAgainst(MeleeHitOutcome& outHitOutcome, uint32
 
     // The attacker is not necessarily a Unit, since GameObjects can cast spells too.
     Creature const* pCreatureAttacker = ToCreature();
+    Player const* pPlayerAttacker = ToPlayer();
 
-    if (attType == RANGED_ATTACK)
+    if (attType == RANGED_ATTACK || (pPlayerAttacker && (pPlayerAttacker->HasAura(34131) || (pPlayerAttacker->HasAura(34483) && pPlayerAttacker->HasAura(13750)))))
     {
         // Intentional: ranged attacks only roll for miss and crit in our implementation.
         // Dodge, parry, block, glancing and crushing blows are all disabled for them.
+        //Shaman - Monkey King Bar
+        //Rogue - Blinkstrike
         canDodge = false;
         canParry = false;
         canBlock = false;
