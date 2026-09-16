@@ -3126,11 +3126,7 @@ void Aura::HandleModPossess(bool apply, bool Real)
             UpdateData newData;
             pTarget->BuildValuesUpdateBlockForPlayerWithFlags(newData, pPlayerCaster, UF_FLAG_OWNER_ONLY);
             if (newData.HasData())
-            {
-                WorldPacket newDataPacket;
-                newData.BuildPacket(&newDataPacket);
-                pPlayerCaster->SendDirectMessage(&newDataPacket);
-            }
+                newData.Send(pPlayerCaster->GetSession());
         }
     }
 }
@@ -3460,11 +3456,7 @@ void Aura::HandleModCharm(bool apply, bool Real)
             UpdateData newData;
             target->BuildValuesUpdateBlockForPlayerWithFlags(newData, pPlayerCaster, UF_FLAG_OWNER_ONLY);
             if (newData.HasData())
-            {
-                WorldPacket newDataPacket;
-                newData.BuildPacket(&newDataPacket);
-                pPlayerCaster->SendDirectMessage(&newDataPacket);
-            }
+                newData.Send(pPlayerCaster->GetSession());
         }
         else
             target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
@@ -5880,11 +5872,7 @@ void Aura::HandleAuraEmpathy(bool apply, bool /*Real*/)
             UpdateData newData;
             target->BuildValuesUpdateBlockForPlayerWithFlags(newData, pPlayerCaster, UpdateFieldFlags(UF_FLAG_SPECIAL_INFO | UF_FLAG_DYNAMIC));
             if (newData.HasData())
-            {
-                WorldPacket newDataPacket;
-                newData.BuildPacket(&newDataPacket);
-                pPlayerCaster->SendDirectMessage(&newDataPacket);
-            }
+                newData.Send(pPlayerCaster->GetSession());
         }
     }
 }

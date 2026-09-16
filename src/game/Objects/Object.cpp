@@ -442,9 +442,9 @@ void WorldObject::DirectSendPublicValueUpdate(UpdateMask& updateMask)
         }
     }
 
-    WorldPacket packet;
-    data.BuildPacket(&packet);
-    SendObjectMessageToSet(&packet, true);
+    auto packet = std::make_unique<WorldPackets::ObjectUpdate::UpdateObject>();
+    data.BuildPacket(packet);
+    SendObjectMessageToSet(std::move(packet), true);
 }
 
 void Object::BuildValuesUpdateBlockForPlayer(UpdateData& data, Player* target) const
@@ -489,16 +489,16 @@ void Object::SendOutOfRangeUpdateToPlayer(Player const* player)
 {
     UpdateData data;
     BuildOutOfRangeUpdateBlock(data);
-    WorldPacket packet;
-    data.BuildPacket(&packet);
-    player->SendDirectMessage(&packet);
+    auto packet = std::make_unique<WorldPackets::ObjectUpdate::UpdateObject>();
+    data.BuildPacket(packet);
+    player->GetSession()->SendPacket(std::move(packet));
 }
 
 void Object::DestroyForPlayer(Player const* target) const
 {
     MANGOS_ASSERT(target);
 
-    auto packet = std::make_unique<WorldPackets::Misc::DestroyObject>();
+    auto packet = std::make_unique<WorldPackets::ObjectUpdate::DestroyObject>();
     packet->objectGuid = GetObjectGuid();
     target->GetSession()->SendPacket(std::move(packet));
 }
@@ -2226,8 +2226,7 @@ void WorldObject::SendMessageToSet(std::unique_ptr<ServerPacket const> packet, b
 {
     // TODO Use broadcaster which does the binary conversion automatically
     WorldPacket binaryPacket;
-    binaryPacket.SetOpcode(packet->GetOpcode());
-    packet->AppendBodyTo(binaryPacket);
+    packet->WritePacket(binaryPacket);
     SendMessageToSet(&binaryPacket, self);
 }
 
@@ -2300,8 +2299,8 @@ void WorldObject::SendObjectMessageToSetImpl(WorldPacket* data, bool self, World
 
 void WorldObject::SendObjectMessageToSet(std::unique_ptr<ServerPacket const> packet, bool self, WorldObject const* except) const
 {
-    WorldPacket binaryPacket(packet->GetOpcode());
-    packet->AppendBodyTo(binaryPacket);
+    WorldPacket binaryPacket;
+    packet->WritePacket(binaryPacket);
     SendObjectMessageToSet(&binaryPacket, self, except);
 }
 
@@ -2312,8 +2311,8 @@ void WorldObject::SendObjectMessageToSet(WorldPacket* data, bool self, WorldObje
 
 void WorldObject::SendMovementMessageToSet(std::unique_ptr<ServerPacket const> packet, bool self, WorldObject const* except)
 {
-    WorldPacket binaryPacket(packet->GetOpcode());
-    packet->AppendBodyTo(binaryPacket);
+    WorldPacket binaryPacket;
+    packet->WritePacket(binaryPacket);
     SendMovementMessageToSet(std::move(binaryPacket), self, except);
 }
 

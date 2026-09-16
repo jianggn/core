@@ -1880,7 +1880,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
 
     for (const auto& guid : m_visibleGUIDs)
     {
-        auto packet = std::make_unique<WorldPackets::Misc::DestroyObject>();
+        auto packet = std::make_unique<WorldPackets::ObjectUpdate::DestroyObject>();
         packet->objectGuid = guid;
         GetSession()->SendPacket(std::move(packet));
     }
@@ -2979,11 +2979,7 @@ void Player::SetCheatDebugTargetInfo(bool on, bool notify)
             UpdateData newData;
             pUnit->BuildValuesUpdateBlockForPlayerWithFlags(newData, this, UpdateFieldFlags(updateFlags), true);
             if (newData.HasData())
-            {
-                WorldPacket newDataPacket;
-                newData.BuildPacket(&newDataPacket);
-                SendDirectMessage(&newDataPacket);
-            }
+                newData.Send(GetSession());
         }
     }
 }
@@ -6212,8 +6208,8 @@ void Player::SaveRecallPosition()
 
 void Player::SendMessageToSet(std::unique_ptr<ServerPacket const> packet, bool self) const
 {
-    WorldPacket binaryPacket(packet->GetOpcode());
-    packet->AppendBodyTo(binaryPacket);
+    WorldPacket binaryPacket;
+    packet->WritePacket(binaryPacket);
     SendMessageToSet(&binaryPacket, self);
 }
 
@@ -15000,7 +14996,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     // prevent login to locked character
     m_characterFlags = fields[15].GetUInt32();
-    if (m_characterFlags & (CHARACTER_FLAG_LOCKED_FOR_TRANSFER | CHARACTER_FLAG_DELETED_BY_TRANSFER))
+    if (m_characterFlags & (CHARACTER_FLAG_RENAME | CHARACTER_FLAG_LOCKED_FOR_TRANSFER | CHARACTER_FLAG_DELETED_BY_TRANSFER))
     {
         sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "%s attempts to login but character is locked!", guid.GetString().c_str());
         return false;
@@ -22182,7 +22178,7 @@ void Player::SendDestroyGroupMembers(bool includingSelf)
         {
             if (!includingSelf && itr.guid == GetObjectGuid())
                 continue;
-            auto packet = std::make_unique<WorldPackets::Misc::DestroyObject>();
+            auto packet = std::make_unique<WorldPackets::ObjectUpdate::DestroyObject>();
             packet->objectGuid = itr.guid;
             GetSession()->SendPacket(std::move(packet));
             m_visibleGUIDs.erase(itr.guid);
