@@ -738,11 +738,11 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     {
                         if (item->GetProto()->InventoryType == INVTYPE_2HWEAPON)
                         {
-                            m_casterUnit->CastSpell(unitTarget, 34668, true);
+                            m_casterUnit->CastSpell(m_casterUnit, 34668, true);
                         }
                         else
                         {
-                            m_casterUnit->CastSpell(unitTarget, 34667, true);
+                            m_casterUnit->CastSpell(m_casterUnit, 34667, true);
                         }
                     }
                     return;
