@@ -240,15 +240,31 @@ void Spell::EffectResurrectNew(SpellEffectIndex effIdx)
 
         // Remove Demonic Sacrifice auras (Blizzlike - cf patchnote 1.12)
         Unit::AuraList const& auraClassScripts = owner->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
-        for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+        if (owner->HasAura(34669))
         {
-            if ((*itr)->GetModifier()->m_miscvalue == 2228)
+            for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
             {
-                owner->RemoveAurasDueToSpell((*itr)->GetId());
-                itr = auraClassScripts.begin();
+                if (((*itr)->GetId() == 18789 && pet->GetEntry() == 416) || ((*itr)->GetId() == 18792 && pet->GetEntry() == 417) || ((*itr)->GetId() == 18790 && pet->GetEntry() == 1860) || ((*itr)->GetId() == 18791 && pet->GetEntry() == 1863))
+                {
+                    owner->RemoveAurasDueToSpell((*itr)->GetId());
+                    itr = auraClassScripts.begin();
+                }
+                else
+                    ++itr;
             }
-            else
-                ++itr;
+        }
+        else
+        {
+            for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+            {
+                if ((*itr)->GetModifier()->m_miscvalue == 2228)
+                {
+                    owner->RemoveAurasDueToSpell((*itr)->GetId());
+                    itr = auraClassScripts.begin();
+                }
+                else
+                    ++itr;
+            }
         }
         return;
     }
@@ -4027,15 +4043,31 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
         {
             // Remove Demonic Sacrifice auras (known pet)
             Unit::AuraList const& auraClassScripts = GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
-            for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+            if (HasAura(34669))
             {
-                if ((*itr)->GetModifier()->m_miscvalue == 2228)
+                for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
                 {
-                    RemoveAurasDueToSpell((*itr)->GetId());
-                    itr = auraClassScripts.begin();
+                    if (((*itr)->GetId() == 18789 && newSummon->GetEntry() == 416) || ((*itr)->GetId() == 18792 && newSummon->GetEntry() == 417) || ((*itr)->GetId() == 18790 && newSummon->GetEntry() == 1860) || ((*itr)->GetId() == 18791 && newSummon->GetEntry() == 1863))
+                    {
+                        RemoveAurasDueToSpell((*itr)->GetId());
+                        itr = auraClassScripts.begin();
+                    }
+                    else
+                        ++itr;
                 }
-                else
-                    ++itr;
+            }
+            else
+            {
+                for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+                {
+                    if ((*itr)->GetModifier()->m_miscvalue == 2228)
+                    {
+                        RemoveAurasDueToSpell((*itr)->GetId());
+                        itr = auraClassScripts.begin();
+                    }
+                    else
+                        ++itr;
+                }
             }
         }
         return newSummon->GetObjectGuid();
@@ -4081,15 +4113,31 @@ ObjectGuid Unit::EffectSummonPet(uint32 spellId, uint32 petEntry, uint32 petLeve
     {
         // Remove Demonic Sacrifice auras (new pet)
         Unit::AuraList const& auraClassScripts = GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
-        for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+        if (HasAura(34669))
         {
-            if ((*itr)->GetModifier()->m_miscvalue == 2228)
+            for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
             {
-                RemoveAurasDueToSpell((*itr)->GetId());
-                itr = auraClassScripts.begin();
+                if (((*itr)->GetId() == 18789 && newSummon->GetEntry() == 416) || ((*itr)->GetId() == 18792 && newSummon->GetEntry() == 417) || ((*itr)->GetId() == 18790 && newSummon->GetEntry() == 1860) || ((*itr)->GetId() == 18791 && newSummon->GetEntry() == 1863))
+                {
+                    RemoveAurasDueToSpell((*itr)->GetId());
+                    itr = auraClassScripts.begin();
+                }
+                else
+                    ++itr;
             }
-            else
-                ++itr;
+        }
+        else
+        {
+            for (Unit::AuraList::const_iterator itr = auraClassScripts.begin(); itr != auraClassScripts.end();)
+            {
+                if ((*itr)->GetModifier()->m_miscvalue == 2228)
+                {
+                    RemoveAurasDueToSpell((*itr)->GetId());
+                    itr = auraClassScripts.begin();
+                }
+                else
+                    ++itr;
+            }
         }
 
         // generate new name for summon pet
