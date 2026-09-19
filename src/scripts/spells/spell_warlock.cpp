@@ -43,7 +43,10 @@ struct WarlockDemonicSacrificeScript : SpellScript
                     sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Demonic Sacrifice: Unhandled creature entry (%u) case.", entry);
                     return true;
             }
-
+            spell->m_casterUnit->RemoveAurasDueToSpell(18789);
+            spell->m_casterUnit->RemoveAurasDueToSpell(18792);
+            spell->m_casterUnit->RemoveAurasDueToSpell(18790);
+            spell->m_casterUnit->RemoveAurasDueToSpell(18791);
             spell->m_casterUnit->CastSpell(spell->m_casterUnit, spellId, true);
         }
         return true;
