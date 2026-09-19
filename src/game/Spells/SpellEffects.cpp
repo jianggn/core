@@ -728,6 +728,25 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 12964: // Unbridled Wrath
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    if (Item* item = ((Player*)m_casterUnit)->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+                    {
+                        if (item->GetProto()->InventoryType == INVTYPE_2HWEAPON)
+                        {
+                            m_casterUnit->CastSpell(unitTarget, 34668, true);
+                        }
+                        else
+                        {
+                            m_casterUnit->CastSpell(unitTarget, 34667, true);
+                        }
+                    }
+                    return;
+                }
                 case 34188:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
