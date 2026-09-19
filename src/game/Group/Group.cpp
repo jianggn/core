@@ -2336,16 +2336,16 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
         {
             uint32 itr_xp = (member_with_max_level == not_gray_member_with_max_level) ? uint32(xp * rate) : uint32((xp * rate / 2) + 1);
 
-            //Double Experience
-            if (pGroupGuy->HasItemCount(26002, 1))
+            // 150% Experience Card
+            if (pGroupGuy->HasItemCount(26002, 1) || pGroupGuy->HasItemCount(26048, 1))
             {
-                itr_xp = itr_xp * 2;
+                itr_xp *= 1.5f;
             }
-            else if (pGroupGuy->HasItemCount(26048, 1))
+            // Instance 50% Experience
+            if (pGroupGuy->GetMap()->Instanceable())
             {
-                itr_xp = itr_xp * 1.5f;
+                itr_xp *= 0.5f;
             }
-
             if (pGroupGuy->GetLevel() <= not_gray_member_with_max_level->GetLevel())
                 pGroupGuy->GiveXP(itr_xp, pVictim);
             if (Pet* pet = pGroupGuy->GetPet())
