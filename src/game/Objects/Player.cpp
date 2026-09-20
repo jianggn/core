@@ -20419,10 +20419,10 @@ void Player::RewardSinglePlayerAtKill(Unit const* pVictim)
     {
         xp *= 1.5f;
     }
-    // Instance 50% Experience
+    // Instance 25% Experience
     if (GetMap()->Instanceable())
     {
-        xp *= 0.5f;
+        xp *= 0.25f;
     }
     // honor can be in PvP and !PvP (racial leader) cases
     RewardHonor(pVictim, 1);
@@ -20444,10 +20444,10 @@ void Player::RewardSinglePlayerAtKill(Unit const* pVictim)
                 {
                     xp_pet *= 1.5f;
                 }
-                // Instance 50% Experience
+                // Instance 25% Experience
                 if (GetMap()->Instanceable())
                 {
-                    xp_pet *= 0.5f;
+                    xp_pet *= 0.25f;
                 }
                 pet->GivePetXP(xp_pet);
             }   

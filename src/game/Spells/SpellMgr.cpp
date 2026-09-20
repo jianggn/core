@@ -2659,6 +2659,18 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
 
     switch (spellInfo->Id)
     {
+        // Buff Machine's World Buffs banned in raid
+        case 34486:
+        case 34487:
+        case 34073:
+        case 34072:
+        case 34075:
+        case 34074:
+        case 34076:
+        case 34276:
+        {
+            return player && !player->GetMap()->IsRaid() ? SPELL_CAST_OK : SPELL_FAILED_NOT_HERE;
+        }
         // Alterac Valley
         case 22564:                                         // Recall (Alliance)
         case 22563:                                         // Recall (Horde)

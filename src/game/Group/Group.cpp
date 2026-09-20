@@ -2341,10 +2341,10 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
             {
                 itr_xp *= 1.5f;
             }
-            // Instance 50% Experience
+            // Instance 25% Experience
             if (pGroupGuy->GetMap()->Instanceable())
             {
-                itr_xp *= 0.5f;
+                itr_xp *= 0.25f;
             }
             if (pGroupGuy->GetLevel() <= not_gray_member_with_max_level->GetLevel())
                 pGroupGuy->GiveXP(itr_xp, pVictim);

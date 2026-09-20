@@ -422,6 +422,19 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petNumber, bool c
         owner->m_petSpell = GetUInt32Value(UNIT_CREATED_BY_SPELL);
     }
 
+    // Buff Machine's World Buffs banned in raid
+    if (GetMap()->IsRaid())
+    {
+        RemoveAurasDueToSpell(34486);
+        RemoveAurasDueToSpell(34487);
+        RemoveAurasDueToSpell(34073);
+        RemoveAurasDueToSpell(34072);
+        RemoveAurasDueToSpell(34075);
+        RemoveAurasDueToSpell(34074);
+        RemoveAurasDueToSpell(34076);
+        RemoveAurasDueToSpell(34276);
+    }
+
     m_pTmpCache = nullptr;
     return true;
 }
