@@ -2383,6 +2383,7 @@ SpellAuraProcResult Unit::HandleAddTargetTriggerAuraProc(Unit* pVictim, uint32 /
             case 17768: // Casque tete de loup
             case 24392: // Gelee soudaine
             case 14179: // Frappes implacables
+            case 34670: // Restless Blades
                 bTarget = false;
                 break;
         }

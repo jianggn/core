@@ -1181,6 +1181,38 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         }
                     return;
                 }
+                case 34671:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    if (Player* player = m_casterUnit->ToPlayer())
+                    {
+                        // Evasion      : CF_ROGUE_EVASION      0x00000020
+                        // Sprint       : CF_ROGUE_SPRINT       0x00000040
+                        // Vanish       : CF_ROGUE_VANISH       0x00000800
+                        // Blind        : CF_ROGUE_BLIND        0x01000000
+                        uint32 spellMask[4] = {0x00000020, 0x00000040, 0x00000800, 0x01000000};
+                        std::string spellName[4] = {{"EVASION"}, {"SPRINT"}, {"VANISH"}, {"BLIND"}};
+                        std::string tips;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (roll_chance_u(33))
+                            {
+                                auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == SPELLFAMILY_ROGUE && spellEntry.SpellFamilyFlags == spellMask[i] && spellEntry.GetRecoveryTime() > 0); };
+                                player->RemoveSomeCooldown(cdCheck);
+                                tips.append(spellName[i]+" ");
+                            }
+                        }
+                        if (!tips.empty())
+                        {
+                            tips.append(" cooldown removed.");
+                            player->GetSession()->SendNotification(tips);
+                        }
+                    }
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
