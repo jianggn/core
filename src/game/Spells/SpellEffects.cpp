@@ -1200,7 +1200,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         {
                             if (roll_chance_u(33))
                             {
-                                auto cdCheck = [](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == SPELLFAMILY_ROGUE && spellEntry.SpellFamilyFlags == spellMask[i] && spellEntry.GetRecoveryTime() > 0); };
+                                auto cdCheck = [&](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == SPELLFAMILY_ROGUE && spellEntry.SpellFamilyFlags == spellMask[i] && spellEntry.GetRecoveryTime() > 0); };
                                 player->RemoveSomeCooldown(cdCheck);
                                 tips.append(spellName[i]+" ");
                             }
@@ -1208,7 +1208,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         if (!tips.empty())
                         {
                             tips.append(" cooldown removed.");
-                            player->GetSession()->SendNotification(tips);
+                            player->GetSession()->SendNotification(tips.c_str());
                         }
                     }
                     return;
