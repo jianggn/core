@@ -1198,7 +1198,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                         std::string tips;
                         for (int i = 0; i < 4; i++)
                         {
-                            if (roll_chance_u(33))
+                            if (roll_chance_u(35))
                             {
                                 auto cdCheck = [&](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == SPELLFAMILY_ROGUE && spellEntry.SpellFamilyFlags == spellMask[i] && spellEntry.GetRecoveryTime() > 0); };
                                 player->RemoveSomeCooldown(cdCheck);
