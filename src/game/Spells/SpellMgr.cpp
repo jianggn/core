@@ -2669,7 +2669,7 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const* spell
         case 34076:
         case 34276:
         {
-            return player && !player->GetMap()->IsRaid() ? SPELL_CAST_OK : SPELL_FAILED_NOT_HERE;
+            return player && (!sWorld.getConfig(CONFIG_BOOL_WORLDBUFFSBANNEDINRAID) || !player->GetMap()->IsRaid()) ? SPELL_CAST_OK : SPELL_FAILED_NOT_HERE;
         }
         // Alterac Valley
         case 22564:                                         // Recall (Alliance)

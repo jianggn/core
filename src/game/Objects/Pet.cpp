@@ -423,7 +423,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petNumber, bool c
     }
 
     // Buff Machine's World Buffs banned in raid
-    if (GetMap()->IsRaid())
+    if (sWorld.getConfig(CONFIG_BOOL_WORLDBUFFSBANNEDINRAID) && GetMap()->IsRaid())
     {
         RemoveAurasDueToSpell(34486);
         RemoveAurasDueToSpell(34487);

@@ -3312,6 +3312,9 @@ HardcoreChallenger.Ban.Trade = 1
 HardcoreChallenger.Ban.Mail = 1
 HardcoreChallenger.Ban.Auction = 1
 
+WorldBuffsBannedInRaid = 1
+Rate.XP.Instance = 0.25
+
 ###################################################################################################################
 # MAIL FLOODING MITIGATION
 #

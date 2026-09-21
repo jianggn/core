@@ -1676,7 +1676,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                             if (castspells)
                             {
                                 // Buff Machine's World Buffs banned in raid
-                                if (!player->GetMap()->IsRaid())
+                                if (!sWorld.getConfig(CONFIG_BOOL_WORLDBUFFSBANNEDINRAID) || !player->GetMap()->IsRaid())
                                 {
                                     if (result)
                                     {

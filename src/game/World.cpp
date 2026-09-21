@@ -675,6 +675,10 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_HARDCORECHALLENGER_BAN_MAIL,    "HardcoreChallenger.Ban.Mail",  1);
     setConfig(CONFIG_HARDCORECHALLENGER_BAN_AUCTION,    "HardcoreChallenger.Ban.Auction",  1);
 
+    setConfig(CONFIG_BOOL_WORLDBUFFSBANNEDINRAID,    "WorldBuffsBannedInRaid",  true);
+
+    setConfig(CONFIG_FLOAT_XP_INSTANCE, "Rate.XP.Instance", 0.25f);
+
     setConfig(CONFIG_UINT32_STRICT_PLAYER_NAMES,  "StrictPlayerNames",  0);
     setConfig(CONFIG_UINT32_STRICT_CHARTER_NAMES, "StrictCharterNames", 0);
     setConfig(CONFIG_UINT32_STRICT_PET_NAMES,     "StrictPetNames",     0);
