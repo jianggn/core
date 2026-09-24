@@ -852,6 +852,10 @@ int32 SpellCaster::MagicSpellHitChance(Unit const* pVictim, SpellEntry const* pS
     if (pSpellEntry->IsAreaOfEffectSpell())
     {
         modHitChance -= pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE);
+        // Mod Pet AoE Damage Avoidance
+        if (GetTypeId() == TYPEID_UNIT && !(IsPet() && ((Creature*)this)->GetOwnerGuid().IsPlayer()))
+            if (pVictim->IsPet() && ((Creature*)pVictim)->GetOwnerGuid().IsPlayer())
+                modHitChance -= 50.0f;
     }
 
     // Chance resist mechanic for spell (effect resistance handled later)
