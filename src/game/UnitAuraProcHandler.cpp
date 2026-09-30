@@ -1140,7 +1140,27 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                         return SPELL_AURA_PROC_FAILED;
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
-                    basepoints[0] = rand_dither(this->GetPower(POWER_MANA) * 0.05f);
+                    basepoints[0] = rand_dither(this->GetPower(POWER_MANA) * 0.05f + this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.5f);
+                    if (this->HasAura(18271))
+                    {
+                        basepoints[0] = int32(basepoints[0] * 1.05f);
+                    }
+                    else if (this->HasAura(18272))
+                    {
+                        basepoints[0] = int32(basepoints[0] * 1.1f);
+                    }
+                    else if (this->HasAura(18273))
+                    {
+                        basepoints[0] = int32(basepoints[0] * 1.15f);
+                    }
+                    else if (this->HasAura(18274))
+                    {
+                        basepoints[0] = int32(basepoints[0] * 1.2f);
+                    }
+                    else if (this->HasAura(18275))
+                    {
+                        basepoints[0] = int32(basepoints[0] * 1.25f);
+                    }
                     target = pVictim;
                     triggered_spell_id = 34673;
                     break;                               // no hidden cooldown
