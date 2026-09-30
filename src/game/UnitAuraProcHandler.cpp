@@ -1133,6 +1133,18 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     triggered_spell_id = 34666;
                     break;                               // no hidden cooldown
                 }
+                // Warlock: Gift of Nurgle
+                case 34672:
+                {
+                    if (this->GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+                    basepoints[0] = rand_dither(this->GetPower(POWER_MANA) * 0.05f);
+                    target = pVictim;
+                    triggered_spell_id = 34673;
+                    break;                               // no hidden cooldown
+                }
                 // Obsidian Armor (Justice Bearer`s Pauldrons shoulder)
                 case 27539:
                 {
