@@ -1340,7 +1340,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (pVictim->HasAura(34341))
                     {
                         // mana amount
-                        basepoints[1] = rand_dither(amount / 20);
+                        basepoints[1] = rand_dither(amount * 0.08f);
                         if (basepoints[1] < 1)
                             basepoints[1] = 1;
                         pVictim->CastCustomSpell(pVictim, 34342, basepoints[0], basepoints[1], {}, true, castItem, triggeredByAura);
