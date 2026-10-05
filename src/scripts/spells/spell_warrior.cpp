@@ -102,6 +102,15 @@ struct WarriorExecuteDummyScript : SpellScript
         
         int32 basePoints0 = spell->m_currentBasePoints[0] + rand_dither(spell->m_casterUnit->GetPower(POWER_RAGE) * spell->m_spellInfo->DmgMultiplier[0]);
         // m_casterUnit->SetPower(POWER_RAGE, 0); // Done in spell 20647
+        // Improved Execute talent
+        if (spell->m_casterUnit->HasAura(20502))
+        {
+            basePoints0 = int32(basePoints0 * 1.05f);
+        }
+        else if (spell->m_casterUnit->HasAura(20503))
+        {
+            basePoints0 = int32(basePoints0 * 1.1f);
+        }
         spell->m_casterUnit->CastCustomSpell(spell->GetUnitTarget(), 20647, basePoints0, {}, {}, true, nullptr);
     }
 };
