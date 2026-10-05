@@ -1244,6 +1244,27 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 23690:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Berserker Rage Effect - rank 1
+                    if (roll_chance_u(50))
+                        m_casterUnit->CastSpell(m_casterUnit, 34369, true);
+                    return;
+                }
+                case 23691:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    // Berserker Rage Effect - rank 2
+                    m_casterUnit->CastSpell(m_casterUnit, 34369, true);
+                    return;
+                }
                 case 8344: // Universal Remote
                 {
                     if (!m_originalCaster)
