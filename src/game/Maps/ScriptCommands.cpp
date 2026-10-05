@@ -1749,7 +1749,53 @@ bool Map::ScriptCommand_RemoveSpellCooldown(ScriptInfo const& script, WorldObjec
             pSource->RemoveSpellCooldown(spellEntry, true);
     }
     else
-        pSource->RemoveAllCooldowns();
+    {
+        if (script.condition == 2000009)
+        {
+            if (Player* pPlayer = pSource->ToPlayer())
+            {
+                uint32  spellfamily = 0;
+                switch (pPlayer->GetClass())
+                {
+                    case CLASS_WARRIOR:
+                        spellfamily = SPELLFAMILY_WARRIOR;
+                        break;
+                    case CLASS_PALADIN:
+                        spellfamily = SPELLFAMILY_PALADIN;
+                        break;
+                    case CLASS_HUNTER:
+                        spellfamily = SPELLFAMILY_HUNTER;
+                        break;
+                    case CLASS_ROGUE:
+                        spellfamily = SPELLFAMILY_ROGUE;
+                        break;
+                    case CLASS_PRIEST:
+                        spellfamily = SPELLFAMILY_PRIEST;
+                        break;
+                    case CLASS_SHAMAN:
+                        spellfamily = SPELLFAMILY_SHAMAN;
+                        break;
+                    case CLASS_MAGE:
+                        spellfamily = SPELLFAMILY_MAGE;
+                        break;
+                    case CLASS_WARLOCK:
+                        spellfamily = SPELLFAMILY_WARLOCK;
+                        break;
+                    case CLASS_DRUID:
+                        spellfamily = SPELLFAMILY_DRUID;
+                        break;
+                }
+                if (!spellfamily)
+                    return ShouldAbortScript(script);
+                auto cdCheck = [&](SpellEntry const & spellEntry) -> bool { return (spellEntry.SpellFamilyName == spellfamily && spellEntry.GetRecoveryTime() > 0); };
+                pPlayer->RemoveSomeCooldown(cdCheck);
+            }
+            else
+                return ShouldAbortScript(script);
+        }
+        else
+            pSource->RemoveAllCooldowns();
+    }
 
     return false;
 }
