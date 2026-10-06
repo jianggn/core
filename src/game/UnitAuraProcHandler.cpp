@@ -1136,11 +1136,17 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 // Warlock: Gift of Nurgle
                 case 34672:
                 {
+                    if (!procSpell)
+                        return SPELL_AURA_PROC_FAILED;
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
                     if (!pVictim)
                         return SPELL_AURA_PROC_FAILED;
-                    basepoints[0] = rand_dither(this->GetPower(POWER_MANA) * 0.05f + this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.5f);
+                    float coefficientGiftOfNurgle = 0.0f;
+                    coefficientGiftOfNurgle = float(procSpell->spellLevel) / float(this->GetLevel());
+                    if (coefficientGiftOfNurgle > 1.0f)
+                        coefficientGiftOfNurgle = 1.0f;
+                    basepoints[0] = rand_dither((this->GetPower(POWER_MANA) * 0.05f + this->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_HOLY) * 0.5f) * coefficientGiftOfNurgle);
                     if (this->HasAura(18271))
                     {
                         basepoints[0] = int32(basepoints[0] * 1.05f);
