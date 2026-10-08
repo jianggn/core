@@ -2219,6 +2219,23 @@ void Unit::CalculateDamageAbsorbAndResist(SpellCaster* pCaster, SpellSchoolMask 
 
             remainingDamage -=  int32(splitted);
 
+            // Warrior - Intervene
+            if ((*i)->GetId() == 34675)
+            {
+                float dr = float(caster->GetArmor()) / float(caster->GetArmor() + pCaster->GetLevel() * 85 + 400);
+                if (dr > 0.75f)
+                    dr = 0.75f;
+                splitted = uint32(splitted * (1.0f - dr));
+                // Warrior - Tie Lao Lv
+                if (caster->HasAura(34329))
+                {
+                    if (splitted <= caster->GetShieldBlockValue())
+                        splitted = 1;
+                    else
+                        splitted -= caster->GetShieldBlockValue();
+                }
+            }
+
             uint32 split_absorb = 0;
             pCaster->DealDamageMods(caster, splitted, &split_absorb);
 
