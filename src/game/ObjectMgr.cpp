@@ -12386,11 +12386,16 @@ void ObjectMgr::ApplyPremadeGearTemplateToPlayer(uint32 entry, Player* pPlayer) 
         return;
     }
 
-    if (pPlayer->GetLevel() < itr->second.level)
+    if (pPlayer->GetLevel() < itr->second.level && sWorld.getConfig(CONFIG_BOOL_PARTY_BOT_SKIP_CHECKS))
     {
         pPlayer->GiveLevel(itr->second.level);
         pPlayer->InitTalentForLevel();
         pPlayer->SetUInt32Value(PLAYER_XP, 0);
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to apply premade gear template (%u) to a player with low level", entry);
+        return;
     }
 
     // Unequip current gear
@@ -12429,11 +12434,16 @@ void ObjectMgr::ApplyPremadeSpecTemplateToPlayer(uint32 entry, Player* pPlayer) 
         return;
     }
 
-    if (pPlayer->GetLevel() < itr->second.level)
+    if (pPlayer->GetLevel() < itr->second.level && sWorld.getConfig(CONFIG_BOOL_PARTY_BOT_SKIP_CHECKS))
     {
         pPlayer->GiveLevel(itr->second.level);
         pPlayer->InitTalentForLevel();
         pPlayer->SetUInt32Value(PLAYER_XP, 0);
+    }
+    else
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to apply premade spec template (%u) to a player with low level", entry);
+        return;
     }
 
     // Learn Dual Wield Specialization
