@@ -2823,7 +2823,16 @@ void CombatBotBaseAI::EquipRandomGearInEmptySlots()
             pProto->ItemId == 26184 || pProto->ItemId == 26202 || pProto->ItemId == 26220 ||
             pProto->ItemId == 26185 || pProto->ItemId == 26203 || pProto->ItemId == 26221 ||
             pProto->ItemId == 26186 || pProto->ItemId == 26204 || pProto->ItemId == 26222 ||
-            pProto->ItemId == 26187 || pProto->ItemId == 26205 || pProto->ItemId == 26223)
+            pProto->ItemId == 26187 || pProto->ItemId == 26205 || pProto->ItemId == 26223 ||
+            pProto->ItemId == 26322 || pProto->ItemId == 26323 || pProto->ItemId == 26324 ||
+            pProto->ItemId == 26325 || pProto->ItemId == 26326 || pProto->ItemId == 26327 ||
+            pProto->ItemId == 26328 || pProto->ItemId == 26329 || pProto->ItemId == 26330 ||
+            pProto->ItemId == 26331 || pProto->ItemId == 26332 || pProto->ItemId == 26333 ||
+            pProto->ItemId == 26334 || pProto->ItemId == 26335 || pProto->ItemId == 26336 ||
+            pProto->ItemId == 26337 || pProto->ItemId == 26338 || pProto->ItemId == 26339 ||
+            pProto->ItemId == 26340 || pProto->ItemId == 26341 || pProto->ItemId == 26342 ||
+            pProto->ItemId == 26343 || pProto->ItemId == 26344 || pProto->ItemId == 26345 ||
+            pProto->ItemId == 26346)
             continue;
 
         if (pProto->SourceQuestRaces && !(pProto->SourceQuestRaces & me->GetRaceMask()))
