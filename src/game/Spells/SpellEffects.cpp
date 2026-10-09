@@ -1244,6 +1244,17 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     }
                     return;
                 }
+                case 23602:
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+                    if (!m_casterUnit)
+                        return;
+                    if (Item* item = m_casterUnit->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+                        if (item->GetProto()->Class == ITEM_CLASS_ARMOR && item->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_SHIELD)
+                            m_casterUnit->CastSpell(m_casterUnit, 34676, true);
+                    return;
+                }
                 case 23690:
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
