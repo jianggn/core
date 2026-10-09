@@ -5520,6 +5520,8 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 16979:
             // Goblin Rocket Helmet & Horned Viking Helmet - Reckless Charge
             case 22641:
+            // Warrior - Intervene
+            case 34675:
                 if (m_casterUnit->HasAura(34524) || m_casterUnit->HasAura(34499))
                     return SPELL_FAILED_NOPATH;
                 break;
