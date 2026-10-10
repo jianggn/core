@@ -1415,6 +1415,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     // kill : heal 12% max hp
                     if (!pVictim)
                     {
+                        if (!amount)
+                            return SPELL_AURA_PROC_FAILED;
                         this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.12f), {}, {}, true, castItem, triggeredByAura);
                         return SPELL_AURA_PROC_OK;
                     }
@@ -1456,6 +1458,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     // kill : heal 24% max hp
                     if (!pVictim)
                     {
+                        if (!amount)
+                            return SPELL_AURA_PROC_FAILED;
                         this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.24f), {}, {}, true, castItem, triggeredByAura);
                         return SPELL_AURA_PROC_OK;
                     }
