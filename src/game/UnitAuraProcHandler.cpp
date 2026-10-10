@@ -1412,8 +1412,12 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
+                    // kill : heal 12% max hp
                     if (!pVictim)
-                        return SPELL_AURA_PROC_FAILED;
+                    {
+                        this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.12f), {}, {}, true, castItem, triggeredByAura);
+                        return SPELL_AURA_PROC_OK;
+                    }
                     Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
                     uint32 bleed_count = 0;
                     for (const auto i : auras)
@@ -1449,8 +1453,12 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
+                    // kill : heal 24% max hp
                     if (!pVictim)
-                        return SPELL_AURA_PROC_FAILED;
+                    {
+                        this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.24f), {}, {}, true, castItem, triggeredByAura);
+                        return SPELL_AURA_PROC_OK;
+                    }
                     Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
                     uint32 bleed_count = 0;
                     for (const auto i : auras)
@@ -1476,9 +1484,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                     if (!bleed_count)
                         return SPELL_AURA_PROC_FAILED;
                     // heal amount
-                    if (pVictim->GetHealthPercent() < 50.0f)
-                        bleed_count *= 2;
-                    if (this->GetHealthPercent() < 50.0f)
+                    if (pVictim->GetHealthPercent() < 50.0f || this->GetHealthPercent() < 50.0f)
                         bleed_count *= 2;
                     basepoints[0] = rand_dither(25 * bleed_count * amount / 100);
                     target = this;
