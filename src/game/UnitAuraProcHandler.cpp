@@ -1412,14 +1412,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
-                    // kill : heal 12% max hp
                     if (!pVictim)
-                    {
-                        if (!amount)
-                            return SPELL_AURA_PROC_FAILED;
-                        this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.12f), {}, {}, true, castItem, triggeredByAura);
-                        return SPELL_AURA_PROC_OK;
-                    }
+                        return SPELL_AURA_PROC_FAILED;
                     Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
                     uint32 bleed_count = 0;
                     for (const auto i : auras)
@@ -1455,14 +1449,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 amount, uint
                 {
                     if (this->GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
-                    // kill : heal 24% max hp
                     if (!pVictim)
-                    {
-                        if (!amount)
-                            return SPELL_AURA_PROC_FAILED;
-                        this->CastCustomSpell(this, 34543, rand_dither(this->GetMaxHealth() * 0.24f), {}, {}, true, castItem, triggeredByAura);
-                        return SPELL_AURA_PROC_OK;
-                    }
+                        return SPELL_AURA_PROC_FAILED;
                     Unit::AuraList const& auras = pVictim->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
                     uint32 bleed_count = 0;
                     for (const auto i : auras)
