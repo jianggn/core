@@ -5708,7 +5708,7 @@ SpellCastResult Spell::CheckCast(bool strict)
         }
         // Astral Imprisonment mod
         if (m_spellInfo->Id == 34086)
-            if (target->GetMap()->IsRaid() && !target->IsImmuneToSpell(sSpellMgr.GetSpellEntry(34086), false))
+            if (target->GetMap()->IsRaid() && !target->IsImmuneToSpell(m_spellInfo, false))
                 return SPELL_FAILED_BAD_TARGETS;
         if (m_spellInfo->IsSpellAppliesAura() && !m_spellInfo->IsAreaOfEffectSpell())
         {
