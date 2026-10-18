@@ -3434,7 +3434,30 @@ void Spell::EffectDispel(SpellEffectIndex effIdx)
             {
                 SpellAuraHolder* dispelledHolder = j.first;
                 data << uint32(dispelledHolder->GetId());   // Spell Id
-                unitTarget->RemoveAuraHolderDueToSpellByDispel(dispelledHolder->GetId(), j.second, dispelledHolder->GetCasterGuid());
+                // Mage - Spellsteal
+                if (m_spellInfo->Id == 34677)
+                {
+                    if (m_casterUnit && m_casterUnit->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        if (!dispelledHolder->IsPassive() && !dispelledHolder->IsPermanent())
+                        {
+                            m_casterUnit->RemoveAurasDueToSpell(dispelledHolder->GetId());
+                            int32 duration = dispelledHolder->GetAuraMaxDuration();
+                            if (duration > 120000)
+                                duration = 120000;
+                            SpellAuraHolder* auraH = NULL;
+                            auraH = m_casterUnit->AddAura(dispelledHolder->GetId(), ADD_AURA_POSITIVE, m_casterUnit);
+                            auraH->SetAuraDuration(duration);
+                            auraH->SetAuraMaxDuration(duration);
+                            auraH->RefreshHolder();
+                            unitTarget->RemoveAuraHolderDueToSpellByDispel(dispelledHolder->GetId(), j.second, dispelledHolder->GetCasterGuid());
+                        }
+                        else
+                            ToPlayer(m_casterUnit)->GetSession()->SendNotification("Spellsteal failed.");
+                    }
+                }
+                else
+                    unitTarget->RemoveAuraHolderDueToSpellByDispel(dispelledHolder->GetId(), j.second, dispelledHolder->GetCasterGuid());
             }
             m_caster->SendMessageToSet(&data, true);
 
