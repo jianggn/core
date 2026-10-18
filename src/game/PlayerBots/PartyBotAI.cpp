@@ -1825,10 +1825,7 @@ void PartyBotAI::UpdateOutOfCombatAI_Shaman()
         if (Pet* pPet = me->GetPet())
         {
             pPet->ToggleAutocast(34085, true);
-            if((sWorld.getConfig(CONFIG_PARTYBOT_ASTRALIMPRISONMENT_RAID) == 1) || !(me->GetMap()->IsRaid()))
-            {
-                pPet->ToggleAutocast(34086, true);
-            }
+            pPet->ToggleAutocast(34086, true);
             pPet->ToggleAutocast(34089, true);
             pPet->ToggleAutocast(34091, true);
             if (!pPet->GetVictim())
@@ -1887,10 +1884,7 @@ void PartyBotAI::UpdateInCombatAI_Shaman()
                 if (pPet->IsAlive())
                 {
                     pPet->ToggleAutocast(34085, true);
-                    if((sWorld.getConfig(CONFIG_PARTYBOT_ASTRALIMPRISONMENT_RAID) == 1) || !(me->GetMap()->IsRaid()))
-                    {
-                        pPet->ToggleAutocast(34086, true);
-                    }
+                    pPet->ToggleAutocast(34086, true);
                     pPet->ToggleAutocast(34089, true);
                     pPet->ToggleAutocast(34091, true);
                     if (!pPet->GetVictim())

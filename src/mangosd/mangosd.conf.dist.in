@@ -3258,7 +3258,6 @@ PartyBot.AutoEquip = 1
 PartyBot.RandomGearLevelDifference = 10
 
 PartyBot.EtherealBlade.Raid = 1
-PartyBot.AstralImprisonment.Raid = 1
 
 PartyBot.BanToggleCastingCommand = 1
 

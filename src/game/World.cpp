@@ -619,7 +619,6 @@ void World::LoadConfigSettings(bool reload)
 
     //EtherealBlade & AstralImprisonment In Raid
     setConfig(CONFIG_PARTYBOT_ETHEREALBLADE_RAID,       "PartyBot.EtherealBlade.Raid",  1);
-    setConfig(CONFIG_PARTYBOT_ASTRALIMPRISONMENT_RAID,  "PartyBot.AstralImprisonment.Raid",  1);
 
     //BanToggleCastingCommand
     setConfig(CONFIG_PARTYBOT_BANTOGGLECASTINGCOMMAND,  "PartyBot.BanToggleCastingCommand",  1);
