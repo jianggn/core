@@ -2530,7 +2530,7 @@ void PartyBotAI::UpdateInCombatAI_Mage()
         {
             if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
             {
-                if (pTarget->GetHealthPercent() > 30.0f &&
+                if (pTarget->GetHealthPercent() > 20.0f &&
                     CanTryToCastSpell(pTarget, m_spells.mage.pPolymorph) &&
                     CanUseCrowdControl(m_spells.mage.pPolymorph, pTarget))
                 {
@@ -4786,7 +4786,7 @@ void PartyBotAI::UpdateInCombatAI_Druid()
                 if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
                 {
                     if (CanTryToCastSpell(pTarget, m_spells.druid.pCycloneWind) &&
-                        !pTarget->HasAura(34674))
+                        CanUseCrowdControl(m_spells.druid.pCycloneWind, pTarget))
                     {
                         if (DoCastSpell(pTarget, m_spells.druid.pCycloneWind) == SPELL_CAST_OK)
                             return;
