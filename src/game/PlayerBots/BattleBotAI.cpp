@@ -2265,8 +2265,7 @@ void BattleBotAI::UpdateInCombatAI_Mage()
             if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
             {
                 if (pTarget->GetHealthPercent() > 30.0f &&
-                    CanTryToCastSpell(pTarget, m_spells.mage.pPolymorph) &&
-                    CanUseCrowdControl(m_spells.mage.pPolymorph, pTarget))
+                    CanTryToCastSpell(pTarget, m_spells.mage.pPolymorph))
                 {
                     if (DoCastSpell(pTarget, m_spells.mage.pPolymorph) == SPELL_CAST_OK)
                         return;
@@ -4473,7 +4472,7 @@ void BattleBotAI::UpdateInCombatAI_Druid()
                     if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
                     {
                         if (CanTryToCastSpell(pTarget, m_spells.druid.pCycloneWind) &&
-                            CanUseCrowdControl(m_spells.druid.pCycloneWind, pTarget))
+                            !pTarget->HasAura(34674))
                         {
                             if (DoCastSpell(pTarget, m_spells.druid.pCycloneWind) == SPELL_CAST_OK)
                                 return;

@@ -4786,7 +4786,7 @@ void PartyBotAI::UpdateInCombatAI_Druid()
                 if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
                 {
                     if (CanTryToCastSpell(pTarget, m_spells.druid.pCycloneWind) &&
-                        CanUseCrowdControl(m_spells.druid.pCycloneWind, pTarget))
+                        !pTarget->HasAura(34674))
                     {
                         if (DoCastSpell(pTarget, m_spells.druid.pCycloneWind) == SPELL_CAST_OK)
                             return;
