@@ -3506,9 +3506,9 @@ void BattleBotAI::UpdateInCombatAI_Warrior()
             }
 
             if (m_spells.warrior.pShieldSlam &&
-                CanTryToCastSpell(me, m_spells.warrior.pShieldSlam))
+                CanTryToCastSpell(pVictim, m_spells.warrior.pShieldSlam))
             {
-                if (DoCastSpell(me, m_spells.warrior.pShieldSlam) == SPELL_CAST_OK)
+                if (DoCastSpell(pVictim, m_spells.warrior.pShieldSlam) == SPELL_CAST_OK)
                     return;
             }
 
