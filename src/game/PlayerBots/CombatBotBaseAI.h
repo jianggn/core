@@ -362,6 +362,8 @@ public:
             SpellEntry const* pScatterShot;
             SpellEntry const* pTranquilizingShot;
             SpellEntry const* pViperSting;
+            SpellEntry const* pSplitShot;
+            SpellEntry const* pTideBringer;
         } hunter;
         struct
         {
@@ -392,6 +394,7 @@ public:
             SpellEntry const* pBlastWave;
             SpellEntry const* pCombustion;
             SpellEntry const* pDetectMagic;
+            SpellEntry const* pSpellsteal;
         } mage;
         struct
         {
@@ -487,6 +490,7 @@ public:
             SpellEntry const* pSunderArmor;
             SpellEntry const* pConcussionBlow;
             SpellEntry const* pPiercingHowl;
+            SpellEntry const* pIntervene;
         } warrior;
         struct
         {
@@ -546,6 +550,7 @@ public:
             SpellEntry const* pEntanglingRoots;
             SpellEntry const* pHibernate;
             SpellEntry const* pOmenOfClarity;
+            SpellEntry const* pCycloneWind;
             // Cat
             SpellEntry const* pProwl;
             SpellEntry const* pPounce;

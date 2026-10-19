@@ -2002,6 +2002,13 @@ void PartyBotAI::UpdateOutOfCombatAI_Hunter()
         }
     }
 
+    if (m_spells.hunter.pTideBringer &&
+        CanTryToCastSpell(me, m_spells.hunter.pTideBringer))
+    {
+        if (DoCastSpell(me, m_spells.hunter.pTideBringer) == SPELL_CAST_OK)
+            return;
+    }
+
     if (m_spells.hunter.pAspectOfTheHawk &&
         CanTryToCastSpell(me, m_spells.hunter.pAspectOfTheHawk))
     {
@@ -2258,11 +2265,23 @@ void PartyBotAI::UpdateInCombatAI_Hunter()
         }
         else
         {
-            if (m_spells.hunter.pAspectOfTheHawk &&
-                CanTryToCastSpell(me, m_spells.hunter.pAspectOfTheHawk))
+            if (me->GetEnemyCountInRadiusAround(pVictim, 10.0f) > 2)
             {
-                if (DoCastSpell(me, m_spells.hunter.pAspectOfTheHawk) == SPELL_CAST_OK)
-                    return;
+                if (m_spells.hunter.pSplitShot &&
+                    CanTryToCastSpell(me, m_spells.hunter.pSplitShot))
+                {
+                    if (DoCastSpell(me, m_spells.hunter.pSplitShot) == SPELL_CAST_OK)
+                        return;
+                }
+            }
+            else
+            {
+                if (m_spells.hunter.pAspectOfTheHawk &&
+                    CanTryToCastSpell(me, m_spells.hunter.pAspectOfTheHawk))
+                {
+                    if (DoCastSpell(me, m_spells.hunter.pAspectOfTheHawk) == SPELL_CAST_OK)
+                        return;
+                }
             }
         }
 
@@ -2511,7 +2530,7 @@ void PartyBotAI::UpdateInCombatAI_Mage()
         {
             if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
             {
-                if (pTarget->GetHealthPercent() > 20.0f &&
+                if (pTarget->GetHealthPercent() > 30.0f &&
                     CanTryToCastSpell(pTarget, m_spells.mage.pPolymorph) &&
                     CanUseCrowdControl(m_spells.mage.pPolymorph, pTarget))
                 {
@@ -2519,6 +2538,15 @@ void PartyBotAI::UpdateInCombatAI_Mage()
                         return;
                 }
             }
+        }
+
+        if (m_spells.mage.pSpellsteal &&
+            (me->GetPowerPercent(POWER_MANA) > 30.0f) &&
+            IsValidDispelTarget(pVictim, m_spells.mage.pSpellsteal) &&
+            CanTryToCastSpell(pVictim, m_spells.mage.pSpellsteal))
+        {
+            if (DoCastSpell(pVictim, m_spells.mage.pSpellsteal) == SPELL_CAST_OK)
+                return;
         }
 
         if (m_spells.mage.pArcanePower &&
@@ -2830,7 +2858,7 @@ void PartyBotAI::UpdateInCombatAI_Priest()
         if (m_spells.priest.pXuLingZhiRen &&
             CanTryToCastSpell(pVictim, m_spells.priest.pXuLingZhiRen) &&
             ((sWorld.getConfig(CONFIG_PARTYBOT_ETHEREALBLADE_RAID) == 1) || !(me->GetMap()->IsRaid())) &&
-            (me->GetDistance(pVictim) < 30.0f) &&
+            (me->GetDistance(pVictim) < 20.0f) &&
             (pVictim->GetVictim() == me) &&
             !pVictim->HasAura(34019) &&
             IsPhysicalDamageClass(pVictim->GetClass()))
@@ -3710,6 +3738,19 @@ void PartyBotAI::UpdateInCombatAI_Warrior()
         if (me->GetShapeshiftForm() == FORM_DEFENSIVESTANCE &&
             IsWearingShield(me))
         {
+            if (m_spells.warrior.pIntervene)
+            {
+                if (Unit* pFriend = me->FindLowestHpFriendlyUnit(25.0f, 50, true, me))
+                {
+                    if (!pFriend->HasAura(34675) &&
+                        CanTryToCastSpell(pFriend, m_spells.warrior.pIntervene))
+                    {
+                        if (DoCastSpell(pFriend, m_spells.warrior.pIntervene) == SPELL_CAST_OK)
+                            return;
+                    }
+                }
+            }
+
             if (!me->GetAttackers().empty())
             {
                 if (m_spells.warrior.pShieldBlock &&
@@ -4738,6 +4779,19 @@ void PartyBotAI::UpdateInCombatAI_Druid()
             {
                 if (DoCastSpell(pVictim, m_spells.druid.pHurricane) == SPELL_CAST_OK)
                     return;
+            }
+
+            if (m_spells.druid.pCycloneWind)
+            {
+                if (Unit* pTarget = SelectAttackerDifferentFrom(pVictim))
+                {
+                    if (CanTryToCastSpell(pTarget, m_spells.druid.pCycloneWind) &&
+                        CanUseCrowdControl(m_spells.druid.pCycloneWind, pTarget))
+                    {
+                        if (DoCastSpell(pTarget, m_spells.druid.pCycloneWind) == SPELL_CAST_OK)
+                            return;
+                    }
+                }
             }
 
             if (m_spells.druid.pMoonfire &&
