@@ -1943,6 +1943,7 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
 
         if (m_spells.hunter.pViperSting &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pViperSting) &&
+            (pVictim->GetPowerPercent(POWER_MANA) > 10.0f) &&
             pVictim->GetPowerType() == POWER_MANA)
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pViperSting) == SPELL_CAST_OK)
@@ -1951,6 +1952,7 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
 
         if (m_spells.hunter.pSerpentSting &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pSerpentSting) &&
+            (me->GetPowerPercent(POWER_MANA) > 30.0f) &&
             pVictim->GetPowerType() != POWER_MANA)
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pSerpentSting) == SPELL_CAST_OK)
@@ -1978,7 +1980,7 @@ void BattleBotAI::UpdateInCombatAI_Hunter()
             }
             else
             {
-                if (me->GetEnemyCountInRadiusAround(pVictim, 10.0f) > 2)
+                if (me->GetEnemyCountInRadiusAround(pVictim, 10.0f) > 1)
                 {
                     if (m_spells.hunter.pSplitShot &&
                         CanTryToCastSpell(me, m_spells.hunter.pSplitShot))
@@ -3484,19 +3486,6 @@ void BattleBotAI::UpdateInCombatAI_Warrior()
         if (me->GetShapeshiftForm() == FORM_DEFENSIVESTANCE &&
             IsWearingShield(me))
         {
-            if (m_spells.warrior.pIntervene)
-            {
-                if (Unit* pFriend = me->FindLowestHpFriendlyUnit(25.0f, 50, true, me))
-                {
-                    if (!pFriend->HasAura(34675) &&
-                        CanTryToCastSpell(pFriend, m_spells.warrior.pIntervene))
-                    {
-                        if (DoCastSpell(pFriend, m_spells.warrior.pIntervene) == SPELL_CAST_OK)
-                            return;
-                    }
-                }
-            }
-
             if (!me->GetAttackers().empty() &&
                 IsPhysicalDamageClass(pVictim->GetClass()))
             {
@@ -3521,6 +3510,19 @@ void BattleBotAI::UpdateInCombatAI_Warrior()
             {
                 if (DoCastSpell(me, m_spells.warrior.pShieldSlam) == SPELL_CAST_OK)
                     return;
+            }
+
+            if (m_spells.warrior.pIntervene)
+            {
+                if (Unit* pVictimTarget = pVictim->GetVictim())
+                {
+                    if (pVictimTarget != me &&
+                        CanTryToCastSpell(pVictimTarget, m_spells.warrior.pIntervene))
+                    {
+                        if (DoCastSpell(pVictimTarget, m_spells.warrior.pIntervene) == SPELL_CAST_OK)
+                            return;
+                    }
+                }
             }
         }
 
