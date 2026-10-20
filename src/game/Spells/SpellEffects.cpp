@@ -388,7 +388,12 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     case 34528: // Voidwalker - Heartstopper Aura
                     {
                         if (m_casterUnit)
-                            damage = damage + m_casterUnit->GetMaxHealth() * 0.01f;
+                        {
+                            if (unitTarget->HasAura(118) || unitTarget->HasAura(12824) || unitTarget->HasAura(12825) || unitTarget->HasAura(12826) || unitTarget->HasAura(28271) || unitTarget->HasAura(28272) || unitTarget->HasAura(28270) || unitTarget->HasAura(13327) || unitTarget->HasAura(1090) || unitTarget->HasAura(2637) || unitTarget->HasAura(18657) || unitTarget->HasAura(18658) || unitTarget->HasAura(19503) || unitTarget->HasAura(1499) || unitTarget->HasAura(14310) || unitTarget->HasAura(14311) || unitTarget->HasAura(19386) || unitTarget->HasAura(24132) || unitTarget->HasAura(24133) || unitTarget->HasAura(2878) || unitTarget->HasAura(5627) || unitTarget->HasAura(10326) || unitTarget->HasAura(20066) || unitTarget->HasAura(9484) || unitTarget->HasAura(9485) || unitTarget->HasAura(10955) || unitTarget->HasAura(1776) || unitTarget->HasAura(1777) || unitTarget->HasAura(8629) || unitTarget->HasAura(11285) || unitTarget->HasAura(11286) || unitTarget->HasAura(2094) || unitTarget->HasAura(6770) || unitTarget->HasAura(2070) || unitTarget->HasAura(11297) || unitTarget->HasAura(6358))
+                                damage = 0;
+                            else
+                                damage = damage + m_casterUnit->GetMaxHealth() * 0.01f;
+                        }
                         break;
                     }
                 }
@@ -479,6 +484,14 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                     {
                         damage = damage + (m_casterUnit->GetStat(STAT_STAMINA) + m_casterUnit->GetStat(STAT_INTELLECT)) * 0.1f;
                     }
+                }
+                // Imp - Firebolt
+                else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_IMP_FIREBOLT>())
+                {
+                    if (Player* pOwner = ToPlayer(m_casterUnit->GetOwner()))
+                        if (pOwner->HasAura(34533))
+                            if (unitTarget->HasAura(118) || unitTarget->HasAura(12824) || unitTarget->HasAura(12825) || unitTarget->HasAura(12826) || unitTarget->HasAura(28271) || unitTarget->HasAura(28272) || unitTarget->HasAura(28270) || unitTarget->HasAura(13327) || unitTarget->HasAura(1090) || unitTarget->HasAura(2637) || unitTarget->HasAura(18657) || unitTarget->HasAura(18658) || unitTarget->HasAura(19503) || unitTarget->HasAura(1499) || unitTarget->HasAura(14310) || unitTarget->HasAura(14311) || unitTarget->HasAura(19386) || unitTarget->HasAura(24132) || unitTarget->HasAura(24133) || unitTarget->HasAura(2878) || unitTarget->HasAura(5627) || unitTarget->HasAura(10326) || unitTarget->HasAura(20066) || unitTarget->HasAura(9484) || unitTarget->HasAura(9485) || unitTarget->HasAura(10955) || unitTarget->HasAura(1776) || unitTarget->HasAura(1777) || unitTarget->HasAura(8629) || unitTarget->HasAura(11285) || unitTarget->HasAura(11286) || unitTarget->HasAura(2094) || unitTarget->HasAura(6770) || unitTarget->HasAura(2070) || unitTarget->HasAura(11297) || unitTarget->HasAura(6358))
+                                damage = 0;
                 }
                 // Succubus - Lash of Pain
                 else if (m_spellInfo->IsFitToFamilyMask<CF_WARLOCK_SUCCUBUS_LASH_OF_PAIN>())
@@ -1203,7 +1216,7 @@ void Spell::EffectDummy(SpellEffectIndex effIdx)
                     if (!m_casterUnit)
                         return;
                     // Eye of Kilrogg - Demonic Circle : Summon
-                    if (Player* pCharmer = ::ToPlayer(m_casterUnit->GetCharmer()))
+                    if (Player* pCharmer = ToPlayer(m_casterUnit->GetCharmer()))
                         if (pCharmer->GetClass() == CLASS_WARLOCK && pCharmer->HasItemCount(6265, 1))
                         {
                             pCharmer->DestroyItemCount(6265, 1, true);
@@ -4486,7 +4499,8 @@ void Spell::EffectWeaponDmg(SpellEffectIndex effIdx)
     // Morphling - Frostbolt Volley & Frost Nova
     // Spirit Bear - Radiance
     // Blessed Hammer - Divine Storm
-    if ((m_spellInfo->Id == 34060 || m_spellInfo->Id == 34061 || m_spellInfo->Id == 34078 || m_spellInfo->Id == 34522) && (unitTarget->HasAura(118) || unitTarget->HasAura(12824) || unitTarget->HasAura(12825) || unitTarget->HasAura(12826) || unitTarget->HasAura(28271) || unitTarget->HasAura(28272) || unitTarget->HasAura(28270) || unitTarget->HasAura(13327) || unitTarget->HasAura(1090) || unitTarget->HasAura(2637) || unitTarget->HasAura(18657) || unitTarget->HasAura(18658) || unitTarget->HasAura(19503) || unitTarget->HasAura(1499) || unitTarget->HasAura(14310) || unitTarget->HasAura(14311) || unitTarget->HasAura(19386) || unitTarget->HasAura(24132) || unitTarget->HasAura(24133) || unitTarget->HasAura(2878) || unitTarget->HasAura(5627) || unitTarget->HasAura(10326) || unitTarget->HasAura(20066) || unitTarget->HasAura(9484) || unitTarget->HasAura(9485) || unitTarget->HasAura(10955) || unitTarget->HasAura(1776) || unitTarget->HasAura(1777) || unitTarget->HasAura(8629) || unitTarget->HasAura(11285) || unitTarget->HasAura(11286) || unitTarget->HasAura(2094) || unitTarget->HasAura(6770) || unitTarget->HasAura(2070) || unitTarget->HasAura(11297) || unitTarget->HasAura(6358)))
+    // Hunter - Tide Bringer
+    if ((m_spellInfo->Id == 34060 || m_spellInfo->Id == 34061 || m_spellInfo->Id == 34078 || m_spellInfo->Id == 34522 || m_spellInfo->Id == 34324) && (unitTarget->HasAura(118) || unitTarget->HasAura(12824) || unitTarget->HasAura(12825) || unitTarget->HasAura(12826) || unitTarget->HasAura(28271) || unitTarget->HasAura(28272) || unitTarget->HasAura(28270) || unitTarget->HasAura(13327) || unitTarget->HasAura(1090) || unitTarget->HasAura(2637) || unitTarget->HasAura(18657) || unitTarget->HasAura(18658) || unitTarget->HasAura(19503) || unitTarget->HasAura(1499) || unitTarget->HasAura(14310) || unitTarget->HasAura(14311) || unitTarget->HasAura(19386) || unitTarget->HasAura(24132) || unitTarget->HasAura(24133) || unitTarget->HasAura(2878) || unitTarget->HasAura(5627) || unitTarget->HasAura(10326) || unitTarget->HasAura(20066) || unitTarget->HasAura(9484) || unitTarget->HasAura(9485) || unitTarget->HasAura(10955) || unitTarget->HasAura(1776) || unitTarget->HasAura(1777) || unitTarget->HasAura(8629) || unitTarget->HasAura(11285) || unitTarget->HasAura(11286) || unitTarget->HasAura(2094) || unitTarget->HasAura(6770) || unitTarget->HasAura(2070) || unitTarget->HasAura(11297) || unitTarget->HasAura(6358)))
         bonus = 0.f;
     // prevent negative damage
     m_damage += bonus > 0.f ? bonus : 0.f;
