@@ -79,7 +79,7 @@ uint32 BattleBotAI::GetMountSpellId() const
 {
     if (me->GetLevel() >= 60)
     {
-        if (urand(0, 99) < 85) // 85% chance
+        if (urand(0, 99) < 90) // 90% chance
         {
             if (me->GetClass() == CLASS_PALADIN)
                 return BB_SPELL_MOUNT_60_PALADIN;
