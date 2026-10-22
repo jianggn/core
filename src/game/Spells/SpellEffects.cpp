@@ -3454,7 +3454,19 @@ void Spell::EffectDispel(SpellEffectIndex effIdx)
                     {
                         if (!dispelledHolder->IsPassive() && !dispelledHolder->IsPermanent())
                         {
-                            m_casterUnit->RemoveAurasDueToSpell(dispelledHolder->GetId());
+                            std::unique_ptr<QueryResult> result = WorldDatabase.PQuery("SELECT DISTINCT `spell_id` FROM `spell_chain` WHERE `first_spell` in (SELECT DISTINCT `first_spell` FROM `spell_chain` WHERE `spell_id`='%u')", dispelledHolder->GetId());
+                            if (result)
+                            {
+                                do
+                                {
+                                    Field* fields = result->Fetch();
+                                    uint32 spellId = fields[0].GetUInt32();
+                                    m_casterUnit->RemoveAurasDueToSpell(spellId);
+                                }
+                                while (result->NextRow());
+                            }
+                            else
+                                m_casterUnit->RemoveAurasDueToSpell(dispelledHolder->GetId());
                             int32 duration = dispelledHolder->GetAuraMaxDuration();
                             if (duration > 120000)
                                 duration = 120000;
