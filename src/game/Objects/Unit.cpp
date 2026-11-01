@@ -1706,7 +1706,8 @@ void Unit::RollDazeOutcome(CalcDamageInfo* damageInfo)
                 if (ChrRacesEntry const* raceEntry = sChrRacesStore.LookupEntry(pVictim->GetRace()))
                     spellId = raceEntry->dazeSpellId;
 
-            CastSpell(pVictim, spellId, true);
+            if (!pVictim->HasAura(34186))
+                CastSpell(pVictim, spellId, true);
         }
     }
 }
