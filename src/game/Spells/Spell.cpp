@@ -5524,6 +5524,13 @@ SpellCastResult Spell::CheckCast(bool strict)
             case 34675:
                 if (m_casterUnit->HasAura(34524) || m_casterUnit->HasAura(34499))
                     return SPELL_FAILED_NOPATH;
+                if (Unit* target_34675 = m_targets.getUnitTarget())
+                {
+                    if (target_34675 == m_casterUnit)
+                        return SPELL_FAILED_BAD_TARGETS;
+                }
+                else
+                    return SPELL_FAILED_BAD_TARGETS;
                 break;
             // Druid - Aquatic Form
             case 1066:
