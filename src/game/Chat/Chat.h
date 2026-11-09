@@ -596,6 +596,7 @@ class ChatHandler
         bool HandleLearnAllMyTaxisCommand(char* args);
         bool HandleLearnAllTrainerCommand(char* args);
         bool HandleLearnAllItemsCommand(char* args);
+        bool HandleLearnAllQuestsCommand(char* args);
 
         bool HandleListAurasCommand(char* args);
         bool HandleListCreatureCommand(char* args);

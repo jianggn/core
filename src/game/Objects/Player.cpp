@@ -4574,12 +4574,14 @@ void Player::DeleteFromDB(ObjectGuid playerGuid, uint32 accountId, bool updateRe
             }
 
             CharacterDatabase.PExecute("DELETE FROM `characters` WHERE `guid` = '%u'", lowGuid);
+            CharacterDatabase.PExecute("DELETE FROM `character_account_data` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_action` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_aura` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_battleground_data` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_deleted_items` WHERE `player_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_gifts` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_homebind` WHERE `guid` = '%u'", lowGuid);
+            CharacterDatabase.PExecute("DELETE FROM `character_honor_cp` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_instance` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `group_instance` WHERE `leader_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_inventory` WHERE `guid` = '%u'", lowGuid);
@@ -4589,12 +4591,15 @@ void Player::DeleteFromDB(ObjectGuid playerGuid, uint32 accountId, bool updateRe
             CharacterDatabase.PExecute("DELETE FROM `character_forgotten_skills` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_spell` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_spell_cooldown` WHERE `guid` = '%u'", lowGuid);
+            CharacterDatabase.PExecute("DELETE FROM `character_stats` WHERE `guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `item_instance` WHERE `owner_guid` = '%u'", lowGuid);
+            CharacterDatabase.PExecute("DELETE FROM `item_loot` WHERE `owner_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_social` WHERE `guid` = '%u' OR `friend`='%u'", lowGuid, lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `mail` WHERE `receiver_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `mail_items` WHERE `receiver_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `character_pet` WHERE `owner_guid` = '%u'", lowGuid);
             CharacterDatabase.PExecute("DELETE FROM `guild_eventlog` WHERE `player_guid1` = '%u' OR `player_guid2` = '%u'", lowGuid, lowGuid);
+            sTicketMgr->RemovePlayerReferences(playerGuid);
             CharacterDatabase.CommitTransaction();
             break;
         }
@@ -10538,8 +10543,8 @@ Item* Player::_StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool
             pItem2->SetBinding(true);
 
         pItem2->SetCount(pItem2->GetCount() + count);
-        if (IsInWorld() && update)
-            pItem2->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld() && update)
+        //    pItem2->SendValuesUpdateToPlayer(this);
 
         if (!clone)
         {
@@ -10646,8 +10651,8 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
     else
     {
         pItem2->SetCount(pItem2->GetCount() + pItem->GetCount());
-        if (IsInWorld() && update)
-            pItem2->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld() && update)
+        //    pItem2->SendValuesUpdateToPlayer(this);
 
         // delete item (it not in any slot currently)
         //pItem->DeleteFromDB();
@@ -10998,8 +11003,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() && update)
-                        pItem->SendCreateUpdateToPlayer(this);
+                    //if (IsInWorld() && update)
+                    //    pItem->SendValuesUpdateToPlayer(this);
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11026,8 +11031,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() && update)
-                        pItem->SendCreateUpdateToPlayer(this);
+                    //if (IsInWorld() && update)
+                    //    pItem->SendValuesUpdateToPlayer(this);
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11059,8 +11064,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                         {
                             ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                             pItem->SetCount(pItem->GetCount() - count + remcount);
-                            if (IsInWorld() && update)
-                                pItem->SendCreateUpdateToPlayer(this);
+                            //if (IsInWorld() && update)
+                            //    pItem->SendValuesUpdateToPlayer(this);
                             pItem->SetState(ITEM_CHANGED, this);
                             return;
                         }
@@ -11092,8 +11097,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() && update)
-                        pItem->SendCreateUpdateToPlayer(this);
+                    //if (IsInWorld() && update)
+                    //    pItem->SendValuesUpdateToPlayer(this);
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11121,8 +11126,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                     else
                     {
                         pItem->SetCount(pItem->GetCount() - count + remcount);
-                        if (IsInWorld() && update)
-                            pItem->SendCreateUpdateToPlayer(this);
+                        //if (IsInWorld() && update)
+                        //    pItem->SendValuesUpdateToPlayer(this);
                         pItem->SetState(ITEM_CHANGED, this);
                         return;
                     }
@@ -11152,8 +11157,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                             else
                             {
                                 pItem->SetCount(pItem->GetCount() - count + remcount);
-                                if (IsInWorld() && update)
-                                    pItem->SendCreateUpdateToPlayer(this);
+                                //if (IsInWorld() && update)
+                                //    pItem->SendValuesUpdateToPlayer(this);
                                 pItem->SetState(ITEM_CHANGED, this);
                                 return;
                             }
@@ -11256,8 +11261,8 @@ void Player::DestroyItemCount(Item* pItem, uint32& count, bool update)
         ItemRemovedQuestCheck(pItem->GetEntry(), count);
         pItem->SetCount(pItem->GetCount() - count);
         count = 0;
-        if (IsInWorld() && update)
-            pItem->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld() && update)
+        //    pItem->SendValuesUpdateToPlayer(this);
         pItem->SetState(ITEM_CHANGED, this);
     }
 }
@@ -11335,8 +11340,8 @@ void Player::SplitItem(uint16 src, uint16 dst, uint32 count)
             return;
         }
 
-        if (IsInWorld())
-            pSrcItem->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld())
+        //    pSrcItem->SendValuesUpdateToPlayer(this);
         pSrcItem->SetState(ITEM_CHANGED, this);
         StoreItem(dest, pNewItem, true);
     }
@@ -11356,8 +11361,8 @@ void Player::SplitItem(uint16 src, uint16 dst, uint32 count)
             return;
         }
 
-        if (IsInWorld())
-            pSrcItem->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld())
+        //    pSrcItem->SendValuesUpdateToPlayer(this);
         pSrcItem->SetState(ITEM_CHANGED, this);
         BankItem(dest, pNewItem, true);
     }
@@ -11376,8 +11381,8 @@ void Player::SplitItem(uint16 src, uint16 dst, uint32 count)
             return;
         }
 
-        if (IsInWorld())
-            pSrcItem->SendCreateUpdateToPlayer(this);
+        //if (IsInWorld())
+        //    pSrcItem->SendValuesUpdateToPlayer(this);
         pSrcItem->SetState(ITEM_CHANGED, this);
         EquipItem(dest, pNewItem, true);
         AutoUnequipOffhandIfNeed();
@@ -11544,11 +11549,11 @@ void Player::SwapItem(uint16 src, uint16 dst)
                 pDstItem->SetCount(pSrcItem->GetProto()->GetMaxStackSize());
                 pSrcItem->SetState(ITEM_CHANGED, this);
                 pDstItem->SetState(ITEM_CHANGED, this);
-                if (IsInWorld())
-                {
-                    pSrcItem->SendCreateUpdateToPlayer(this);
-                    pDstItem->SendCreateUpdateToPlayer(this);
-                }
+                //if (IsInWorld())
+                //{
+                //    pSrcItem->SendValuesUpdateToPlayer(this);
+                //    pDstItem->SendValuesUpdateToPlayer(this);
+                //}
             }
             return;
         }
@@ -14273,7 +14278,7 @@ void Player::GroupEventFailHappens(uint32 questId)
         FailQuest(questId);
 }
 
-void Player::ItemAddedQuestCheck(uint32 entry, uint32 count)
+void Player::ItemAddedQuestCheck(uint32 entry, uint32 count, bool sendQuestUpdate)
 {
     for (int i = 0; i < MAX_QUEST_LOG_SIZE; ++i)
     {
@@ -14304,7 +14309,7 @@ void Player::ItemAddedQuestCheck(uint32 entry, uint32 count)
                     if (q_status.uState != QUEST_NEW)
                         q_status.uState = QUEST_CHANGED;
 
-                    if (entry != qInfo->GetSrcItemId())
+                    if (sendQuestUpdate && entry != qInfo->GetSrcItemId())
                         SendQuestUpdateAddItem(qInfo, j, curItemCount, newItemCount - curItemCount);
                 }
 
@@ -18887,7 +18892,14 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
 
         LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
 
-        pItem = StoreNewItem(dest, item, true, Item::GenerateItemRandomPropertyId(item));
+        // the client shows the quest item progress from SMSG_BUY_ITEM
+        if (Item* newItem = Item::CreateItem(item, totalCount, GetObjectGuid()))
+        {
+            ItemAddedQuestCheck(item, totalCount, false);
+            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(item))
+                pItem->SetItemRandomProperties(randomPropertyId);
+            pItem = StoreItem(dest, newItem, true);
+        }
     }
     else if (IsEquipmentPos(bag, slot))
     {
@@ -18907,7 +18919,14 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
 
         LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
 
-        pItem = EquipNewItem(dest, item, true);
+        // the client shows the quest item progress from SMSG_BUY_ITEM
+        if (Item* newItem = Item::CreateItem(item, 1, GetObjectGuid()))
+        {
+            ItemAddedQuestCheck(item, 1, false);
+            if (uint32 randomPropertyId = Item::GenerateItemRandomPropertyId(item))
+                pItem->SetItemRandomProperties(randomPropertyId);
+            pItem = EquipItem(dest, newItem, true);
+        }
 
         if (pItem)
             AutoUnequipOffhandIfNeed();
@@ -18938,7 +18957,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
     packet->vendorGuid = pCreature->GetObjectGuid();
     packet->vendorSlot = clientVendorSlot;
     packet->newCount = crItem->maxcount > 0 ? new_count : 0xFFFFFFFF;
-    packet->purchaseCount = count;
+    packet->purchaseCount = totalCount;
     GetSession()->SendPacket(std::move(packet));
 
     SendNewItem(pItem, totalCount, true, false, false);
