@@ -120,7 +120,7 @@ void WorldSession::HandleUseItemOpcode(WorldPackets::Spell::UseItem const& packe
 
     // Goblin Rocket Helmet & Horned Viking Helmet - Reckless Charge
     // Hook of the Master Angler - Master Angler
-    if ((pUser->HasAura(34524) || pUser->HasAura(34499)) && (proto->ItemId == 9394 || proto->ItemId == 10588 || proto->ItemId == 19979))
+    if ((_player->HasAura(34524) || _player->HasAura(34499)) && (proto->ItemId == 9394 || proto->ItemId == 10588 || proto->ItemId == 19979))
     {
         itemCastCheckResult = SPELL_FAILED_NOT_HERE;
     }
