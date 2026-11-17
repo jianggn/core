@@ -2416,14 +2416,21 @@ void Unit::SendMeleeAttackStart(Unit const* pVictim) const
     SendObjectMessageToSet(std::move(packet), true);
 }
 
-void Unit::SendMeleeAttackStop(Unit const* pVictim) const
+std::unique_ptr<ServerPacket const> Unit::BuildMeleeAttackStopPacket(ObjectGuid victimGuid) const
 {
     auto packet = std::make_unique<WorldPackets::Combat::AttackStop>();
     packet->attackerGuid = GetObjectGuid();
-    if (pVictim)
-        packet->victimGuid = pVictim->GetObjectGuid();
-    packet->isDead = GetHealth() == 0;
-    SendObjectMessageToSet(std::move(packet), true);
+    if (!victimGuid.IsEmpty())
+    {
+        packet->victimGuid = victimGuid;
+        packet->isDead = GetHealth() == 0; // the client uses it only with a victim
+    }
+    return std::move(packet);
+}
+
+void Unit::SendMeleeAttackStop(Unit const* pVictim) const
+{
+    SendObjectMessageToSet(BuildMeleeAttackStopPacket(pVictim ? pVictim->GetObjectGuid() : ObjectGuid()), true);
 }
 
 bool Unit::IsSpellPartiallyBlocked(SpellCaster const* pCaster, SpellEntry const* spellEntry, WeaponAttackType attackType) const
@@ -9335,7 +9342,7 @@ void Unit::SendPetCastFail(uint32 spellId, SpellCastResult msg)
 
 void Unit::SendPetActionFeedback(uint8 msg)
 {
-    if (Player* pOwner = GetOwnerPlayer())
+    if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
     {
         auto packet = std::make_unique<WorldPackets::Pet::PetActionFeedback>();
         packet->message = msg;
