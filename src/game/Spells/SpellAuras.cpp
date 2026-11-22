@@ -7751,7 +7751,7 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
             if (Player* player = GetTarget()->ToPlayer())
             {
                 player->SetCheatFly(false, false);
-                player->RemoveAurasDueToSpell(34506);
+                //player->RemoveAurasDueToSpell(34506);
                 //player->SetObjectScale(1.0f);
                 player->UpdateModelData();
                 player->m_movementInfo.moveFlags = (MOVEFLAG_JUMPING);
@@ -7765,7 +7765,7 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
             if (Player* player = GetTarget()->ToPlayer())
             {
                 player->SetCheatFly(false, false);
-                player->RemoveAurasDueToSpell(34506);
+                //player->RemoveAurasDueToSpell(34506);
                 player->m_movementInfo.moveFlags = (MOVEFLAG_JUMPING);
                 player->GetSession()->RejectMovementPacketsFor(100);
                 player->SendHeartBeat(true);
