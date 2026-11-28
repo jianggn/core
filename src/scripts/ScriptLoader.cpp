@@ -216,7 +216,6 @@ void AddSC_boss_twinemperors();
 void AddSC_mob_anubisath_sentinel();
 void AddSC_instance_temple_of_ahnqiraj();
 void AddSC_instance_wailing_caverns();               //Wailing caverns
-void AddSC_wailing_caverns();
 void AddSC_zulfarrak();                              //zulfarrak
 void AddSC_instance_zulfarrak();
 
@@ -465,7 +464,6 @@ void AddScripts()
     AddSC_boss_twinemperors();
     AddSC_mob_anubisath_sentinel();
     AddSC_instance_temple_of_ahnqiraj();
-    AddSC_wailing_caverns();                               //Wailing caverns
     AddSC_instance_wailing_caverns();
     AddSC_zulfarrak();                                      //zulfarrak
     AddSC_instance_zulfarrak();
